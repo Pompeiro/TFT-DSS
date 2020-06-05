@@ -32,9 +32,9 @@ content = driver.find_elements_by_css_selector('a')
 pStart = 0
 pStop = 0
 for i in range(0,len(content),1):
-    if content[i].text == 'Ahri': ############ First champion sorted by DPS
+    if content[i].text == 'Ahri': ############ First champion sorted by name
         pStart = i
-    if content[i].text =='Zoe':############ Last champion sorted by DPS
+    if content[i].text =='Zoe':############ Last champion sorted by name
         pStop = i+1####  +1 because for loop stops at i +1
         
 championList = [0] * (pStop-pStart)
@@ -68,8 +68,11 @@ def stats_gathering(resultslist,flag):
                 result[i] = float(links[j].text[u-1:])
                 # print("Last result is:",result)
             
-            if i >0:
+            if i == 0:
+                result[i] = result[i].replace(" ", "")
+            elif i > 0:
                 result[i] = float(result[i])
+
             i=i+1
         # print(links[j].text)
         # print("Thats j",j)
@@ -112,6 +115,11 @@ Champion = namedtuple('Champ', ['Champion', 'DPS', 'AS', 'DMG', 'Range', 'HP', '
 
 z = pd.DataFrame.from_records(step2, columns=['Champion', 'DPS', 'AS', 'DMG', 'Range', 'HP', 'Mana', 'Armor', 'MR'])
 
+
+z.to_csv('championsData.csv', encoding='utf-8')
+
+
+
 championNamesList =z.Champion.to_list()
 
 for i,name in enumerate(championNamesList): ######## wasted 2 hours for searching answer how to create variable variable
@@ -120,7 +128,7 @@ for i,name in enumerate(championNamesList): ######## wasted 2 hours for searchin
     
     
     
-
+z.to_csv('file_name.csv', encoding='utf-8')
 Ahri = Champion(*step2[0])
 Annie = Champion(*step2[1])
 Ashe = Champion(*step2[2])
