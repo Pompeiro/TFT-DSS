@@ -12,7 +12,7 @@ from collections import namedtuple
 
 data = pd.read_csv("championsData.csv") 
 
-Champion = namedtuple('Champ', ['Champion', 'DPS', 'AS', 'DMG', 'Range', 'HP', 'Mana', 'Armor', 'MR'])
+Champion = namedtuple('Champ', ['Champion', 'DPS', 'AS', 'DMG', 'Range', 'HP', 'Mana', 'Armor', 'MR', 'Origin', 'ClassPrimary', 'ClassSecondary', 'Cost'])
 
 dataList = data.T.values.tolist()
 
