@@ -12,7 +12,38 @@ from collections import namedtuple
 
 data = pd.read_csv("championsData.csv") 
 
-Champion = namedtuple('Champ', ['Champion', 'DPS', 'AS', 'DMG', 'Range', 'HP', 'Mana', 'Armor', 'MR', 'Origin', 'ClassPrimary', 'ClassSecondary', 'Cost'])
+
+
+############### Need to add effective HP
+
+#### formula for dmg reduction is: armor/(100+armor)
+
+
+
+## from lol wiki
+
+###physical effective health =  health  × (1 + 0.01 × armor)
+###magical effective health =  health  × (1 + 0.01 × MR)
+
+
+PHP = []
+MHP = []
+MEANHP = []
+for i in range(0,len(data),1):
+    PHP.append(data.HP[i] * (1 + 0.01 * data.Armor[i]))
+    MHP.append(data.HP[i] * (1 + 0.01 * data.MR[i]))
+    MEANHP.append((PHP[i]+MHP[i])/2)
+
+
+data.insert(7,"PHP",PHP)
+data.insert(8,"MHP",MHP)
+data.insert(9,"MEANHP",MEANHP)
+
+
+
+Champion = namedtuple('Champ', ['Champion', 'DPS', 'AS', 'DMG', 'Range', 'HP', 
+                                'PHP', 'MHP', 'MEANHP', 'Mana', 'Armor', 'MR', 
+                                'Origin', 'ClassPrimary', 'ClassSecondary', 'Cost'])
 
 dataList = data.T.values.tolist()
 
@@ -115,6 +146,13 @@ championList = [Ahri, Annie, Ashe, AurelionSol, Bard, Blitzcrank, Caitlyn,
 ##############################################
 
 
+
+
+
+
+
+
+
 #### Max stats
 
 ### misconception
@@ -148,6 +186,12 @@ RANGEMAX = max(data.Range)
 
 HPMAX = max(data.HP)
 
+PHPMAX = max(data.PHP)
+
+MHPMAX = max(data.MHP)
+
+MEANHPMAX = max(data.MEANHP)
+
 MANAMAX = max(data.Mana)
 
 ARMORMAX = max(data.Armor)
@@ -157,7 +201,8 @@ MRMAX = max(data.MR)
 
 ##### Max stats list
 
-maxStatsList = [DPSMAX, ASMAX, DMGMAX, RANGEMAX, HPMAX, MANAMAX, ARMORMAX, MRMAX]
+maxStatsList = [DPSMAX, ASMAX, DMGMAX, RANGEMAX, HPMAX, PHPMAX, MHPMAX, 
+                MEANHPMAX, MANAMAX, ARMORMAX, MRMAX]
 
 
 ############################################
@@ -177,7 +222,10 @@ for i,maxstat in enumerate(maxStatsList):
 
 
 
-ScaledChampion = namedtuple('ScaledChamp', ['Champion', 'DPS', 'AS', 'DMG', 'Range', 'HP', 'Mana', 'Armor', 'MR', 'Origin', 'ClassPrimary', 'ClassSecondary', 'Cost'])
+ScaledChampion = namedtuple('ScaledChamp', ['Champion', 'DPS', 'AS', 'DMG', 
+                                            'Range', 'HP', 'PHP', 'MHP', 'MEANHP',
+                                            'Mana', 'Armor', 'MR', 'Origin', 
+                                            'ClassPrimary', 'ClassSecondary', 'Cost'])
 
 
 
@@ -256,12 +304,17 @@ SZoe = ScaledChampion(*data.loc[56][1:])
 
 
 
-#### formula for dmg reduction is: armor/(100+armor)
 
 
 
-
-
+SchampionList = [SAhri, SAnnie, SAshe, SAurelionSol, SBard, SBlitzcrank, SCaitlyn, 
+                SCassiopeia, SDarius, SEkko, SEzreal, SFiora, SFizz, SGangplank, 
+                SGnar, SGraves, SIllaoi, SIrelia, SJanna, SJarvanIV, SJayce, SJhin, 
+                SJinx, SKarma, SKogMaw, SLeona, SLucian, SLulu, SMalphite, SMasterYi, 
+                SMordekaiser, SNautilus, SNeeko, SNocturne, SPoppy, SRakan, SRiven, 
+                SRumble, SShaco, SShen, SSoraka, SSyndra, STeemo, SThresh, 
+                STwistedFate, SUrgot, SVayne, SVi, SViktor, SWukong, SXayah, 
+                SXerath, SXinZhao, SYasuo, SZed, SZiggs, SZoe]
 
 
 
