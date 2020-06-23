@@ -5,6 +5,8 @@ Created on Tue Jun 23 12:09:11 2020
 @author: Janusz
 """
 
+import pandas as pd
+
 import numpy as np
 
 import matplotlib.pyplot as plt
@@ -14,6 +16,10 @@ from matplotlib.projections.polar import PolarAxes
 from matplotlib.projections import register_projection
 from matplotlib.spines import Spine
 from matplotlib.transforms import Affine2D
+
+
+df = pd.read_csv("scaledChampionsData.csv") 
+
 
 
 def radar_factory(num_vars, frame='circle'):
@@ -104,14 +110,11 @@ def radar_factory(num_vars, frame='circle'):
     register_projection(RadarAxes)
     return theta
 
-
-data = [['Sulfate', 'Nitrate', 'EC', 'OC1', 'OC2', 'OC3', 'OP', 'CO', 'O3'],
-        ('Basecase', [
-            [0.88, 0.01, 0.03, 0.03, 0.00, 0.06, 0.01, 0.00, 0.00],
-            [0.07, 0.95, 0.04, 0.05, 0.00, 0.02, 0.01, 0.00, 0.00],
-            [0.01, 0.02, 0.85, 0.19, 0.05, 0.10, 0.00, 0.00, 0.00],
-            [0.02, 0.01, 0.07, 0.01, 0.21, 0.12, 0.98, 0.00, 0.00],
-            [0.01, 0.01, 0.02, 0.71, 0.74, 0.70, 0.00, 0.00, 0.00]])]
+i=0
+data = [['AS','DMG','DPS', 'HP', 'MEANHP'],
+        (r"$\bf{" + df.Champion[0] + "}$", [
+            [df.AS[i], df.DMG[i], df.DPS[i], df.DMG[i], df.DPS[i]]
+            ])]
 
 N = len(data[0])
 theta = radar_factory(N, frame='polygon')
@@ -122,12 +125,17 @@ title, case_data = data[0]
 fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(projection='radar'))
 fig.subplots_adjust(top=0.85, bottom=0.05)
 
-ax.set_rgrids([0.2, 0.4, 0.6, 0.8])
-ax.set_title(title,  position=(0.5, 1.1), ha='center')
+ax.set_rgrids([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+# ax.set_rgrids([ 0.2, 0.4, 0.6, 0.8, 1.0])
 
+ax.set_title(title,  position=(0.5, 1.1), ha='center')
 for d in case_data:
+    ax.set_ylim(bottom=0)
+
     line = ax.plot(theta, d)
+    
     ax.fill(theta, d,  alpha=0.25)
+    
 ax.set_varlabels(spoke_labels)
 
 plt.show()
