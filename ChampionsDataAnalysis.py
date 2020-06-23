@@ -110,11 +110,15 @@ def radar_factory(num_vars, frame='circle'):
     register_projection(RadarAxes)
     return theta
 
-i=0
+
 data = [['AS','DMG','DPS', 'HP', 'MEANHP'],
-        (r"$\bf{" + df.Champion[0] + "}$", [
-            [df.AS[i], df.DMG[i], df.DPS[i], df.DMG[i], df.DPS[i]]
-            ])]
+        ]
+
+
+for i in range(0,8,1):
+    data.append((r"$\bf{" + df.Champion[i] + "}$", [
+            [df.AS[i], df.DMG[i], df.DPS[i], df.HP[i], df.MEANHP[i]]
+            ]))
 
 N = len(data[0])
 theta = radar_factory(N, frame='polygon')
@@ -122,20 +126,35 @@ theta = radar_factory(N, frame='polygon')
 spoke_labels = data.pop(0)
 title, case_data = data[0]
 
-fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(projection='radar'))
-fig.subplots_adjust(top=0.85, bottom=0.05)
 
-ax.set_rgrids([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
-# ax.set_rgrids([ 0.2, 0.4, 0.6, 0.8, 1.0])
 
-ax.set_title(title,  position=(0.5, 1.1), ha='center')
-for d in case_data:
-    ax.set_ylim(bottom=0)
+fig, axes = plt.subplots(figsize=(20, 10), nrows=2, ncols=4,
+                         subplot_kw=dict(projection='radar'))
+fig.subplots_adjust(wspace=0.25, hspace=0.20, top=0.85, bottom=0.05)
 
-    line = ax.plot(theta, d)
-    
-    ax.fill(theta, d,  alpha=0.25)
-    
-ax.set_varlabels(spoke_labels)
+colors = ['m', 'r', 'g', 'b', 'y']
+# Plot the four cases from the example data on separate axes
+for ax, (title, case_data) in zip(axes.flat, data):
+    ax.set_rgrids([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+    ax.set_title(title, weight='bold', size='medium', position=(0.5, 1.1),
+                 horizontalalignment='center', verticalalignment='center')
+    for d, color in zip(case_data, colors):
+        ax.set_ylim(bottom=0)
+
+        line = ax.plot(theta, d,color=color)
+        
+        ax.fill(theta, d,facecolor='y',  alpha=0.25)
+        
+    ax.set_varlabels(spoke_labels)
+
+# add legend relative to top-left plot
+ax = axes[0, 0]
+
+
+fig.text(0.5, 0.965, 'Eight different champions stats',
+         horizontalalignment='center', color='black', weight='bold',
+         size='large')
 
 plt.show()
+
+
