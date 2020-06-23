@@ -120,7 +120,7 @@ ChampionsThatCostOneList = ChampionsThatCostOne.T.values.tolist()
 
 
 ChampionsThatCostOneDF =pd.DataFrame(ChampionsThatCostOneList).transpose()
-ChampionsThatCostOneDF.columns=list(ChampionsThatCostOneDF.columns)
+ChampionsThatCostOneDF.columns=list(df.columns)
 
 
 ChampionsThatCostTwo = df.query('Cost == 2.0')
@@ -128,7 +128,7 @@ ChampionsThatCostTwoList = ChampionsThatCostTwo.T.values.tolist()
 
 
 ChampionsThatCostTwoDF =pd.DataFrame(ChampionsThatCostTwoList).transpose()
-ChampionsThatCostTwoDF.columns=list(ChampionsThatCostTwoDF.columns)
+ChampionsThatCostTwoDF.columns=list(df.columns)
 
 
 ChampionsThatCostThree = df.query('Cost == 3.0')
@@ -136,7 +136,7 @@ ChampionsThatCostThreeList = ChampionsThatCostThree.T.values.tolist()
 
 
 ChampionsThatCostThreeDF =pd.DataFrame(ChampionsThatCostThreeList).transpose()
-ChampionsThatCostThreeDF.columns=list(ChampionsThatCostThreeDF.columns)
+ChampionsThatCostThreeDF.columns=list(df.columns)
 
 
 ChampionsThatCostFour = df.query('Cost == 4.0')
@@ -144,7 +144,7 @@ ChampionsThatCostFourList = ChampionsThatCostFour.T.values.tolist()
 
 
 ChampionsThatCostFourDF =pd.DataFrame(ChampionsThatCostFourList).transpose()
-ChampionsThatCostFourDF.columns=list(ChampionsThatCostFourDF.columns)
+ChampionsThatCostFourDF.columns=list(df.columns)
 
 
 ChampionsThatCostFive = df.query('Cost == 5.0')
@@ -152,11 +152,11 @@ ChampionsThatCostFiveList = ChampionsThatCostFive.T.values.tolist()
 
 
 ChampionsThatCostFiveDF =pd.DataFrame(ChampionsThatCostFiveList).transpose()
-ChampionsThatCostFiveDF.columns=list(ChampionsThatCostFiveDF.columns)
+ChampionsThatCostFiveDF.columns=list(df.columns)
 
 
 
-
+##########################
 
 
 
@@ -175,9 +175,9 @@ data = [['AS','DMG','DPS', 'HP', 'MEANHP'],
         ]
 
 
-for i in range(0,8,1):
-    data.append((r"$\bf{" + df.Champion[i] + "}$", [
-            [df.AS[i], df.DMG[i], df.DPS[i], df.HP[i], df.MEANHP[i]]
+for i in range(0,7,1):
+    data.append((r"$\bf{" + ChampionsThatCostFiveDF.Champion[i] + "}$", [
+            [ChampionsThatCostFiveDF.AS[i], ChampionsThatCostFiveDF.DMG[i], ChampionsThatCostFiveDF.DPS[i], ChampionsThatCostFiveDF.HP[i], ChampionsThatCostFiveDF.MEANHP[i]]
             ]))
 
 N = len(data[0])
@@ -207,11 +207,11 @@ for ax, (title, case_data) in zip(axes.flat, data):
         
     ax.set_varlabels(spoke_labels)
 
-# add legend relative to top-left plot
-ax = axes[0, 0]
+# delete last plot because there are odd number of champions
+ax = axes[1, 3]
+ax.axis('off')
 
-
-fig.text(0.5, 0.965, 'Eight different champions stats',
+fig.text(0.5, 0.965, 'Tier 5 champions stats',
          horizontalalignment='center', color='black', weight='bold',
          size='large')
 
