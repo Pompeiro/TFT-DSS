@@ -20,6 +20,7 @@ from matplotlib.transforms import Affine2D
 
 df = pd.read_csv("scaledChampionsData.csv") 
 
+df.drop('Unnamed: 0', axis=1, inplace=True)
 
 
 def radar_factory(num_vars, frame='circle'):
@@ -109,6 +110,65 @@ def radar_factory(num_vars, frame='circle'):
 
     register_projection(RadarAxes)
     return theta
+
+
+
+#################### Frames with champions that cost x
+
+ChampionsThatCostOne = df.query('Cost == 1.0')
+ChampionsThatCostOneList = ChampionsThatCostOne.T.values.tolist()
+
+
+ChampionsThatCostOneDF =pd.DataFrame(ChampionsThatCostOneList).transpose()
+ChampionsThatCostOneDF.columns=list(ChampionsThatCostOneDF.columns)
+
+
+ChampionsThatCostTwo = df.query('Cost == 2.0')
+ChampionsThatCostTwoList = ChampionsThatCostTwo.T.values.tolist()
+
+
+ChampionsThatCostTwoDF =pd.DataFrame(ChampionsThatCostTwoList).transpose()
+ChampionsThatCostTwoDF.columns=list(ChampionsThatCostTwoDF.columns)
+
+
+ChampionsThatCostThree = df.query('Cost == 3.0')
+ChampionsThatCostThreeList = ChampionsThatCostThree.T.values.tolist()
+
+
+ChampionsThatCostThreeDF =pd.DataFrame(ChampionsThatCostThreeList).transpose()
+ChampionsThatCostThreeDF.columns=list(ChampionsThatCostThreeDF.columns)
+
+
+ChampionsThatCostFour = df.query('Cost == 4.0')
+ChampionsThatCostFourList = ChampionsThatCostFour.T.values.tolist()
+
+
+ChampionsThatCostFourDF =pd.DataFrame(ChampionsThatCostFourList).transpose()
+ChampionsThatCostFourDF.columns=list(ChampionsThatCostFourDF.columns)
+
+
+ChampionsThatCostFive = df.query('Cost == 5.0')
+ChampionsThatCostFiveList = ChampionsThatCostFive.T.values.tolist()
+
+
+ChampionsThatCostFiveDF =pd.DataFrame(ChampionsThatCostFiveList).transpose()
+ChampionsThatCostFiveDF.columns=list(ChampionsThatCostFiveDF.columns)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 data = [['AS','DMG','DPS', 'HP', 'MEANHP'],
