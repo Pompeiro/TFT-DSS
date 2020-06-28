@@ -137,33 +137,71 @@ for champ in step3:
 
 
 
+
+
+driver.get('https://tftactics.gg/tierlist/champions')
+
+
+
+
+
+image_elements = driver.find_elements_by_xpath('//div[@class="character-wrapper"]/img')
+#### count how many champs are in each tier
+ChampionTier = namedtuple('ChampTier', ['Champion', 'Tier'])
+Stier = 6
+Atier = 19
+Btier = 23
+Ctier = 7
+Dtier = 2
+ChampionTierList =[]
+for i in range(0,Stier,1):
+    ChampionTierList.append(ChampionTier(image_elements[i].get_attribute('alt'),5))
+    
+for i in range(Stier,Atier+Stier,1):
+    ChampionTierList.append(ChampionTier(image_elements[i].get_attribute('alt'),4))
+
+
+for i in range(Atier+Stier,Btier+Atier+Stier,1):
+    ChampionTierList.append(ChampionTier(image_elements[i].get_attribute('alt'),3))
+    
+for i in range(Btier+Atier+Stier,Ctier+Btier+Atier+Stier,1):
+    ChampionTierList.append(ChampionTier(image_elements[i].get_attribute('alt'),2))
+
+for i in range(Ctier+Btier+Atier+Stier,Dtier+Ctier+Btier+Atier+Stier,1):
+    ChampionTierList.append(ChampionTier(image_elements[i].get_attribute('alt'),1))    
+    
+    
+ChampionTierList.sort()    
+
+
 driver.close()
 
+for i,champ in enumerate(step3):
+    champ.insert(13,ChampionTierList[i].Tier)
 
 
-
-Champion = namedtuple('Champ', ['Champion', 'DPS', 'AS', 'DMG', 'Range', 'HP', 'Mana', 'Armor', 'MR', 'Origin', 'ClassPrimary', 'ClassSecondary', 'Cost'])
-
-
-
-
-
+Champion = namedtuple('Champ', ['Champion', 'DPS', 'AS', 'DMG', 'Range', 'HP', 'Mana', 'Armor', 'MR', 'Origin', 'ClassPrimary', 'ClassSecondary', 'Cost', 'Tier'])
 
 
 
 
-z = pd.DataFrame.from_records(step3, columns=['Champion', 'DPS', 'AS', 'DMG', 'Range', 'HP', 'Mana', 'Armor', 'MR', 'Origin', 'ClassPrimary', 'ClassSecondary', 'Cost'])
+
+
+
+
+
+z = pd.DataFrame.from_records(step3, columns=['Champion', 'DPS', 'AS', 'DMG', 'Range', 'HP', 'Mana', 'Armor', 'MR', 'Origin', 'ClassPrimary', 'ClassSecondary', 'Cost', 'Tier'])
 
 
 z.to_csv('championsData.csv', encoding='utf-8')
 
 
 
-# championNamesList =z.Champion.to_list()
+championNamesList =z.Champion.to_list()
 
-# for i,name in enumerate(championNamesList): ######## wasted 2 hours for searching answer how to create variable variable
-#     print(name.replace(" ", ""), end='')
-#     print(' = Champion(*step2[%d])'%i)
+for i,name in enumerate(championNamesList): ######## wasted 2 hours for searching answer how to create variable variable
+    print(name.replace(" ", ""), end='')
+    print(' = Champion(*step3[%d])'%i)
     
     
     
