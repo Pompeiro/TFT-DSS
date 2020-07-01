@@ -47,13 +47,13 @@ df.drop('Unnamed: 0', axis=1, inplace=True)
 originList = list(set(df.Origin))
 originList.sort()
 
-for origin in originList:
-    print(origin+"Champs = list(df.query("+"'Origin == "+'"'+"%s"%origin+'"'+"').Champion)")
+# for origin in originList:
+#     print(origin+"Champs = list(df.query("+"'Origin == "+'"'+"%s"%origin+'"'+"').Champion)")
 
-print("OriginChampsFromDFList = [", end = ' ')
-for origin in originList:
-    print(origin+"Champs", end = ', ')
-print("]")  
+# print("OriginChampsFromDFList = [", end = ' ')
+# for origin in originList:
+#     print(origin+"Champs", end = ', ')
+# print("]")  
 
 AstroChamps = list(df.query('Origin == "Astro"').Champion)
 BattlecastChamps = list(df.query('Origin == "Battlecast"').Champion)
@@ -88,103 +88,103 @@ MainWindow.title('TFTDSS')
 
 ############### COUNTERS FOR HEARTS CARDS $$$$$$$$$$$$$$$$$$
 
-for champ in AstroChamps:
-    print("counter"+champ+"= tk.IntVar()")
+# for champ in AstroChamps:
+#     print("counter"+champ+"= tk.IntVar()")
 
-print("AstroCounters = [")
-for champ in AstroChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
+# print("AstroCounters = [")
+# for champ in AstroChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
     
-for champ in BattlecastChamps:
-    print("counter"+champ+"= tk.IntVar()")
+# for champ in BattlecastChamps:
+#     print("counter"+champ+"= tk.IntVar()")
 
-print("BattlecastCounters = [")
-for champ in BattlecastChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
-
-    
-for champ in CelestialChamps:
-    print("counter"+champ+"= tk.IntVar()")
-
-print("CelestialCounters = [")
-for champ in CelestialChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
+# print("BattlecastCounters = [")
+# for champ in BattlecastChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
 
     
-for champ in ChronoChamps:
-    print("counter"+champ+"= tk.IntVar()")
+# for champ in CelestialChamps:
+#     print("counter"+champ+"= tk.IntVar()")
 
-print("ChronoCounters = [")
-for champ in ChronoChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
-
-    
-for champ in CyberneticChamps:
-    print("counter"+champ+"= tk.IntVar()")
-
-print("CyberneticCounters = [")
-for champ in CyberneticChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
+# print("CelestialCounters = [")
+# for champ in CelestialChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
 
     
-for champ in DarkStarChamps:
-    print("counter"+champ+"= tk.IntVar()")
+# for champ in ChronoChamps:
+#     print("counter"+champ+"= tk.IntVar()")
 
-print("DarkStarCounters = [")
-for champ in DarkStarChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
-
-    
-for champ in MechPilotChamps:
-    print("counter"+champ+"= tk.IntVar()")
-
-print("MechPilotCounters = [")
-for champ in MechPilotChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
+# print("ChronoCounters = [")
+# for champ in ChronoChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
 
     
-for champ in RebelChamps:
-    print("counter"+champ+"= tk.IntVar()")
+# for champ in CyberneticChamps:
+#     print("counter"+champ+"= tk.IntVar()")
 
-print("RebelCounters = [")
-for champ in RebelChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
-
-    
-for champ in SpacePirateChamps:
-    print("counter"+champ+"= tk.IntVar()")
-
-print("SpacePirateCounters = [")
-for champ in SpacePirateChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
+# print("CyberneticCounters = [")
+# for champ in CyberneticChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
 
     
-for champ in StarGuardianChamps:
-    print("counter"+champ+"= tk.IntVar()")
+# for champ in DarkStarChamps:
+#     print("counter"+champ+"= tk.IntVar()")
 
-print("StarGuardianCounters = [")
-for champ in StarGuardianChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
+# print("DarkStarCounters = [")
+# for champ in DarkStarChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
+
+    
+# for champ in MechPilotChamps:
+#     print("counter"+champ+"= tk.IntVar()")
+
+# print("MechPilotCounters = [")
+# for champ in MechPilotChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
+
+    
+# for champ in RebelChamps:
+#     print("counter"+champ+"= tk.IntVar()")
+
+# print("RebelCounters = [")
+# for champ in RebelChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
+
+    
+# for champ in SpacePirateChamps:
+#     print("counter"+champ+"= tk.IntVar()")
+
+# print("SpacePirateCounters = [")
+# for champ in SpacePirateChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
+
+    
+# for champ in StarGuardianChamps:
+#     print("counter"+champ+"= tk.IntVar()")
+
+# print("StarGuardianCounters = [")
+# for champ in StarGuardianChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
 
     
 
@@ -437,12 +437,24 @@ StarGuardianCountersBuy = [counterBuyAhri, counterBuyJanna, counterBuyNeeko, cou
 
 
 
+counterAstro= tk.IntVar()
+counterBattlecast= tk.IntVar()
+counterCelestial= tk.IntVar()
+counterChrono= tk.IntVar()
+counterCybernetic= tk.IntVar()
+counterDarkStar= tk.IntVar()
+counterMechPilot= tk.IntVar()
+counterRebel= tk.IntVar()
+counterSpacePirate= tk.IntVar()
+counterStarGuardian= tk.IntVar()
+
+OriginCounters = [counterAstro, counterBattlecast, counterCelestial, counterChrono,
+                  counterCybernetic, counterDarkStar, counterMechPilot, counterRebel,
+                  counterSpacePirate, counterStarGuardian]
 
 
 
-
-
-
+OriginNames = sorted(list(set(df.Origin)))
 
 
 
@@ -479,8 +491,26 @@ OriginChampsCountersBuyList = [AstroCountersBuy, BattlecastCountersBuy, Celestia
                           StarGuardianCountersBuy ]
 
 
-def show_champions_from_origin(originPositionInOriginList, OriginChampsFromDF, OriginCounterList, shiftBetweenUpsideDownside):
-    labelTitle = tk.Label(MainWindow, text=originList[originPositionInOriginList]).grid(row=1+shiftBetweenUpsideDownside, column=OriginLabelPositionColumn*ShiftBetweenOrigins*originPositionInOriginList)
+ChampsNames  = sum(OriginChampsFromDFList, [])
+
+OriginChampsCountersList1d = sum(OriginChampsCountersList, [])
+
+OriginChampsCountersBuyList1d = sum(OriginChampsCountersBuyList, [])
+
+
+CHAMPIONFLAG =1
+ORIGINFLAG =0
+
+
+
+######### order as in GUI
+df.sort_values(by=['Origin', 'Champion'], inplace = True)
+df.reset_index(drop=True, inplace = True)
+
+def show_champions_from_origin(originPositionInOriginList, OriginChampsFromDF, OriginCounterList, shiftBetweenUpsideDownside, flag = CHAMPIONFLAG):
+    """Adding buttons and text labels for single Origin."""
+    if flag == 1:
+        labelTitle = tk.Label(MainWindow, text=originList[originPositionInOriginList]).grid(row=1+shiftBetweenUpsideDownside, column=OriginLabelPositionColumn*ShiftBetweenOrigins*originPositionInOriginList)
 
     for i,champ in enumerate(OriginChampsFromDF):
         labelTitle = tk.Label(MainWindow, text=champ).grid(row=2+i+shiftBetweenUpsideDownside, column=OriginLabelPositionColumn*ShiftBetweenOrigins*originPositionInOriginList)
@@ -491,15 +521,95 @@ def show_champions_from_origin(originPositionInOriginList, OriginChampsFromDF, O
 
 
 
+
+
+
+
+def reset_counters_2dlist(list2d=OriginChampsCountersBuyList):
+    """Reset counters, used when roll or new round starts."""
+    list1d = sum(list2d, [])
+    for champCounter in list1d:
+        champCounter.set(0)
+        
+    delete_all_buttons()
+    return
+
+def check_nonzero_counters(list2d=OriginChampsCountersBuyList):
+    nonzeroCountersList = []
+    nonzeroCountersNumberList = []
+    list1d = sum(list2d, [])
+    for i,champCounter in enumerate(list1d):
+        if champCounter.get() >= 1:
+            nonzeroCountersList.append(champCounter)
+            nonzeroCountersNumberList.append(i)
+            if champCounter.get() >= 2:
+                nonzeroCountersList.append(champCounter) 
+                nonzeroCountersNumberList.append(i)
+                if champCounter.get() >= 3:
+                    nonzeroCountersList.append(champCounter)
+                    nonzeroCountersNumberList.append(i)
+                    if champCounter.get() >= 4:
+                        nonzeroCountersList.append(champCounter)
+                        nonzeroCountersNumberList.append(i)
+    print("This is nonzero Counter list:")
+    print(nonzeroCountersList)
+    print(nonzeroCountersNumberList)
+    return nonzeroCountersNumberList
+    
+
+
+
+
+
+def show_nonzero_counters(rowOffset=0):
+    global buttonCalcList
+    buttonCalcList =[0] *5
+    u =check_nonzero_counters()
+    print("THIS IS U ", u)
+    for i in range(0,len(u),1):
+        # print("Thats the input to add",select_counter(cardsLeft[i]))
+        buttonCalcList[i] = tk.Button(MainWindow, text=(ChampsNames[u[i]]), command=lambda i = i:[add(OriginChampsCountersList1d[u[i]]), delete_button(i), sub(OriginChampsCountersBuyList1d[u[i]])])
+        buttonCalcList[i].grid(row=12+rowOffset, column=ShiftBetweenOrigins*(i+1))
+        
+    # print(pd.DataFrame(cardsToBeButtons, columns=Card._fields))
+    return    
+    
+
+
+
+
+def show_points_for_nonzero_counters(rowOffset=2):
+    global textLabelList
+    textLabelList =[0] *5
+    u =check_nonzero_counters()
+    for i in range(0,len(u),1):
+        textLabelList[i] = tk.Label(MainWindow, text=df.Points[u[i]]).grid(row=12+rowOffset, column=ShiftBetweenOrigins*(i+1))
+
+
+def update_origins():
+    for i,origin in enumerate(OriginChampsCountersList):
+        count = 0
+        for champ in origin:
+            if champ.get() >= 1:
+                count = count + 1
+        OriginCounters[i].set(count)        
+            
+
+    
+def delete_button(position):
+    buttonCalcList[position].destroy()
+
+def delete_all_buttons():
+    for button in buttonCalcList:
+        button.destroy()
+
 ShiftBetweenOrigins = 6
 
 OriginLabelPositionColumn = 1
 
 
 UPSIDE = 0 ############# champion pool
-DOWNSIDE = 15################ champions to buy
-
-
+DOWNSIDE = 16################ champions to buy
 
 
 
@@ -539,15 +649,37 @@ labelTitle = tk.Label(MainWindow, text=originList[0]).grid(row=1, column=OriginL
 #     buttonCal = tk.Button(MainWindow, text="-", command=lambda counter=CelestialCounters[i]:sub(counter)).grid(row=2+i, column=ShiftBetweenOrigins*2+3)
 
 
-labelTitle = tk.Label(MainWindow, text="Champions to buy").grid(row=DOWNSIDE, column=ShiftBetweenOrigins*5)
+labelTitle = tk.Label(MainWindow, text="Champions to buy").grid(row=DOWNSIDE-1, column=ShiftBetweenOrigins*5)
 
 
-
+###### champions
 for i in range(0, len(OriginChampsFromDFList),1):
     show_champions_from_origin(i, OriginChampsFromDFList[i], OriginChampsCountersList[i], UPSIDE)
 
 for i in range(0, len(OriginChampsFromDFList),1):
     show_champions_from_origin(i, OriginChampsFromDFList[i], OriginChampsCountersBuyList[i], DOWNSIDE)
+    
+    
+show_champions_from_origin(11,OriginNames, OriginCounters, UPSIDE,ORIGINFLAG)    
+
+labeling = tk.Label(MainWindow, text="Left to buy").grid(row=12+0, column=0)
+
+labeling = tk.Label(MainWindow, text="Points").grid(row=14+0, column=0)
+
+
+
+buttonCal = tk.Button(MainWindow, text="reset", command=lambda:reset_counters_2dlist(OriginChampsCountersBuyList)).grid(row=DOWNSIDE, column=6)
+
+
+buttonCal = tk.Button(MainWindow, text="nonzero", command=lambda:check_nonzero_counters(OriginChampsCountersBuyList)).grid(row=DOWNSIDE, column=12)
+
+buttonCal = tk.Button(MainWindow, text="Shownonzero", command=lambda:show_nonzero_counters(0)).grid(row=DOWNSIDE, column=18)
+
+buttonCal = tk.Button(MainWindow, text="Showpoints", command=lambda:show_points_for_nonzero_counters(2)).grid(row=DOWNSIDE, column=24)
+
+buttonCal = tk.Button(MainWindow, text="update", command=lambda:update_origins()).grid(row=DOWNSIDE, column=30)
+
+
 
 
 MainWindow.mainloop()
