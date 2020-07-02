@@ -714,9 +714,18 @@ def show_points_for_nonzero_counters(rowOffset=2):
     textLabelList =[0] *5
     u =check_nonzero_counters()
     for i in range(0,len(u),1):
-        points = df.Points[u[i]] + additional_points_from_origin_combo(u[i]) + additional_points_from_class_combo(u[i])
+        points = (df.Points[u[i]] + additional_points_from_origin_combo(u[i]) 
+                  + additional_points_from_class_combo(u[i]) + additional_points_from_champions_in_pool(u[i]))
         # if u
         textLabelList[i] = tk.Label(MainWindow, text=points).grid(row=12+rowOffset, column=ShiftBetweenOrigins*(i+1))
+
+
+
+def show_nonzero_counters_with_points(rowOffset1= 0, rowOffset2 =2):
+    update_classes_and_origins()
+    show_nonzero_counters(rowOffset1)
+    show_points_for_nonzero_counters(rowOffset2)
+
 
 
 def update_origins():
@@ -753,7 +762,9 @@ def update_classes():
         bonusPointsFromClass[i] = count * 0.2 
 
         
-        
+def update_classes_and_origins():
+    update_origins()
+    update_classes()        
         
 
 def additional_points_from_origin_combo(championNumber):
@@ -772,7 +783,10 @@ def additional_points_from_class_combo(championNumber):
 
 
 
-
+def additional_points_from_champions_in_pool(championNumber):
+    bonusPointsFromChampionPool = (OriginChampsCountersList1d[championNumber].get() -1) * 0.2
+    print("bonusPointsFromChampionPool[pos] ",bonusPointsFromChampionPool)
+    return bonusPointsFromChampionPool
 
     
 def delete_button(position):
@@ -852,16 +866,24 @@ labeling = tk.Label(MainWindow, text="Points").grid(row=14+0, column=0)
 buttonCal = tk.Button(MainWindow, text="reset", command=lambda:reset_counters_2dlist(OriginChampsCountersBuyList)).grid(row=DOWNSIDE, column=6)
 
 
-buttonCal = tk.Button(MainWindow, text="nonzero", command=lambda:check_nonzero_counters(OriginChampsCountersBuyList)).grid(row=DOWNSIDE, column=12)
+# buttonCal = tk.Button(MainWindow, text="nonzero", command=lambda:check_nonzero_counters(OriginChampsCountersBuyList)).grid(row=DOWNSIDE, column=12)
 
-buttonCal = tk.Button(MainWindow, text="Shownonzero", command=lambda:show_nonzero_counters(0)).grid(row=DOWNSIDE, column=18)
+# buttonCal = tk.Button(MainWindow, text="Shownonzero", command=lambda:show_nonzero_counters(0)).grid(row=DOWNSIDE, column=18)
 
-buttonCal = tk.Button(MainWindow, text="Showpoints", command=lambda:show_points_for_nonzero_counters(2)).grid(row=DOWNSIDE, column=24)
+# buttonCal = tk.Button(MainWindow, text="Showpoints", command=lambda:show_points_for_nonzero_counters(2)).grid(row=DOWNSIDE, column=24)
 
-buttonCal = tk.Button(MainWindow, text="update", command=lambda:update_origins()).grid(row=DOWNSIDE, column=30)
+# buttonCal = tk.Button(MainWindow, text="update", command=lambda:update_origins()).grid(row=DOWNSIDE, column=30)
 
 
 
-buttonCal = tk.Button(MainWindow, text="updateC", command=lambda:update_classes()).grid(row=DOWNSIDE, column=36)
+# buttonCal = tk.Button(MainWindow, text="updateC", command=lambda:update_classes()).grid(row=DOWNSIDE, column=36)
 
+
+buttonCal = tk.Button(MainWindow, text="update classes", command=lambda:update_classes_and_origins()).grid(row=DOWNSIDE, column=12)
+
+buttonCal = tk.Button(MainWindow, text="show points", command=lambda:show_nonzero_counters_with_points()).grid(row=DOWNSIDE, column=18)
+
+
+
+MainWindow.attributes('-alpha', 0.9)
 MainWindow.mainloop()
