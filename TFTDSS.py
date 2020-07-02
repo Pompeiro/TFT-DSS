@@ -23,6 +23,9 @@ import skfuzzy as fuzz
 from skfuzzy import control as ctrl
 import numpy as np
 
+from collections import namedtuple
+
+
 
 def add(intVariable):
     intVariable.set(intVariable.get() + 1)
@@ -67,11 +70,38 @@ SpacePirateChamps = list(df.query('Origin == "SpacePirate"').Champion)
 StarGuardianChamps = list(df.query('Origin == "StarGuardian"').Champion)
 
 
+classList = list(set(df.ClassPrimary))
+classList.sort()
+
+# for clas in classList:
+#     print(clas+"Champs = list(df.query("+"'class == "+'"'+"%s"%clas+'"'+"').Champion)")
+
+# print("classChampsFromDFList = [", end = ' ')
+# for clas in classList:
+#     print(clas+"Champs", end = ', ')
+# print("]")  
 
 
 
 
-
+BlademasterChamps = list(df.query('ClassPrimary == "Blademaster"').Champion)
+BlasterChamps = list(df.query('ClassPrimary == "Blaster"').Champion)
+BrawlerChamps = list(df.query('ClassPrimary == "Brawler"').Champion)
+DemolitionistChamps = list(df.query('ClassPrimary == "Demolitionist"').Champion)
+InfiltratorChamps = list(df.query('ClassPrimary == "Infiltrator"').Champion)
+ManaReaverChamps = list(df.query('ClassPrimary == "Mana-Reaver"').Champion)
+MercenaryChamps = list(df.query('ClassPrimary == "Mercenary"').Champion)
+MysticChamps = list(df.query('ClassPrimary == "Mystic"').Champion)
+ParagonChamps = list(df.query('ClassPrimary == "Paragon"').Champion)
+ProtectorChamps = list(df.query('ClassPrimary == "Protector"').Champion)
+SniperChamps = list(df.query('ClassPrimary == "Sniper"').Champion)
+SorcererChamps = list(df.query('ClassPrimary == "Sorcerer"').Champion)
+StarshipChamps = list(df.query('ClassPrimary == "Starship"').Champion)
+VanguardChamps = list(df.query('ClassPrimary == "Vanguard"').Champion)
+classChampsFromDFList = [BlademasterChamps, BlasterChamps, BrawlerChamps, 
+                         DemolitionistChamps, InfiltratorChamps, ManaReaverChamps,
+                         MercenaryChamps, MysticChamps, ParagonChamps, ProtectorChamps, 
+                         SniperChamps, SorcererChamps, StarshipChamps, VanguardChamps ]
 
 
 
@@ -456,13 +486,112 @@ OriginCounters = [counterAstro, counterBattlecast, counterCelestial, counterChro
 
 OriginNames = sorted(list(set(df.Origin)))
 
+ClassPrimaryNames = sorted(list(set(df.ClassPrimary)))
+
+
+counterBlademaster = tk.IntVar()
+counterBlaster = tk.IntVar()
+counterBrawler = tk.IntVar()
+counterDemolitionist = tk.IntVar()
+counterInfiltrator = tk.IntVar()
+counterManaReaver = tk.IntVar()
+counterMercenary = tk.IntVar()
+counterMystic = tk.IntVar()
+counterParagon = tk.IntVar()
+counterProtector = tk.IntVar()
+counterSniper = tk.IntVar()
+counterSorcerer = tk.IntVar()
+counterStarship = tk.IntVar()
+counterVanguard = tk.IntVar()
 
 
 
 
 
+############# manually added secondary counters
+
+BlademasterCounters = [counterFiora, counterMasterYi, counterRiven, counterShen, 
+                      counterXayah, counterYasuo ]
+
+BlasterCounters = [counterEzreal, counterGraves, counterJinx, counterKogMaw, counterLucian ]
+
+BrawlerCounters = [counterBlitzcrank, counterGnar, counterIllaoi, counterMalphite, 
+                  counterVi ]
+
+DemolitionistCounters = [counterRumble, counterZiggs, counterGangplank ]
+
+InfiltratorCounters = [counterEkko, counterFizz, counterNocturne, counterShaco,
+                      counterZed ]
+
+ManaReaverCounters = [counterDarius, counterIrelia, counterThresh ]
+
+MercenaryCounters = [counterGangplank ]
+
+MysticCounters = [counterBard, counterCassiopeia, counterKarma, counterLulu,
+                 counterSoraka ]
+
+ParagonCounters = [counterJanna ]
+
+ProtectorCounters = [counterJarvanIV, counterNeeko, counterRakan, counterUrgot,
+                    counterXinZhao ]
+
+SniperCounters = [counterAshe, counterCaitlyn, counterJhin, counterTeemo,
+                 counterVayne ]
+
+SorcererCounters = [counterAhri, counterAnnie, counterSyndra, counterTwistedFate,
+                   counterViktor, counterXerath, counterZoe ]
+
+StarshipCounters = [counterAurelionSol ]
+
+VanguardCounters = [counterJayce, counterLeona, counterMordekaiser, 
+                   counterNautilus, counterPoppy, counterWukong ]
 
 
+
+ClassPrimaryCounters = [counterBlademaster, counterBlaster, counterBrawler, 
+                        counterDemolitionist, counterInfiltrator, counterManaReaver, 
+                        counterMercenary, counterMystic, counterParagon, counterProtector, 
+                        counterSniper, counterSorcerer, counterStarship, counterVanguard ]
+
+
+ClassPrimaryCountersList = [BlademasterCounters, BlasterCounters, BrawlerCounters, 
+                        DemolitionistCounters, InfiltratorCounters, ManaReaverCounters, 
+                        MercenaryCounters, MysticCounters, ParagonCounters, ProtectorCounters, 
+                        SniperCounters, SorcererCounters, StarshipCounters, VanguardCounters ]
+# for i,championlist in enumerate(classChampsFromDFList):
+#     print(ClassPrimaryNames[i]+"Counters" + " = [")
+#     for champ in championlist:
+#         print("counter"+champ,end = ", ")
+#     print("]")
+#     print()
+
+
+
+# print("ClassPrimaryCounters = [")
+# for clas in ClassPrimaryNames:
+#     print("counter" + clas, end = ", ")
+# print("]")
+
+# for clas in ClassPrimaryNames:
+#     print("counter" + clas +" = tk.IntVar()")
+
+
+# ClassSecondaryNames = sorted(list(set(df.ClassSecondary)))
+
+
+# ClassSecondaryCounters = [counterBlademaster, counterDemolitionist]
+# print("ClassSecondaryCounters = [")
+# for clas in ClassSecondaryNames:
+#     print("counter" + clas, end = ", ")
+# print("]")
+
+# for clas in ClassSecondaryNames:
+#     print("counter" + clas +" = tk.IntVar()")
+
+Origin = namedtuple("Origin", ["Name", "Counter"])
+
+
+Astro = Origin(OriginNames[0], OriginCounters[0])
 
 
 
@@ -501,7 +630,9 @@ OriginChampsCountersBuyList1d = sum(OriginChampsCountersBuyList, [])
 CHAMPIONFLAG =1
 ORIGINFLAG =0
 
+bonusPointsFromOrigin =[0] * 10
 
+bonusPointsFromClass = [0] * 14
 
 ######### order as in GUI
 df.sort_values(by=['Origin', 'Champion'], inplace = True)
@@ -568,7 +699,7 @@ def show_nonzero_counters(rowOffset=0):
     print("THIS IS U ", u)
     for i in range(0,len(u),1):
         # print("Thats the input to add",select_counter(cardsLeft[i]))
-        buttonCalcList[i] = tk.Button(MainWindow, text=(ChampsNames[u[i]]), command=lambda i = i:[add(OriginChampsCountersList1d[u[i]]), delete_button(i), sub(OriginChampsCountersBuyList1d[u[i]])])
+        buttonCalcList[i] = tk.Button(MainWindow, text=(df.Champion[u[i]]), command=lambda i = i:[add(OriginChampsCountersList1d[u[i]]), delete_button(i), sub(OriginChampsCountersBuyList1d[u[i]])])
         buttonCalcList[i].grid(row=12+rowOffset, column=ShiftBetweenOrigins*(i+1))
         
     # print(pd.DataFrame(cardsToBeButtons, columns=Card._fields))
@@ -583,7 +714,9 @@ def show_points_for_nonzero_counters(rowOffset=2):
     textLabelList =[0] *5
     u =check_nonzero_counters()
     for i in range(0,len(u),1):
-        textLabelList[i] = tk.Label(MainWindow, text=df.Points[u[i]]).grid(row=12+rowOffset, column=ShiftBetweenOrigins*(i+1))
+        points = df.Points[u[i]] + additional_points_from_origin_combo(u[i]) + additional_points_from_class_combo(u[i])
+        # if u
+        textLabelList[i] = tk.Label(MainWindow, text=points).grid(row=12+rowOffset, column=ShiftBetweenOrigins*(i+1))
 
 
 def update_origins():
@@ -592,8 +725,54 @@ def update_origins():
         for champ in origin:
             if champ.get() >= 1:
                 count = count + 1
-        OriginCounters[i].set(count)        
+        OriginCounters[i].set(count)
+        bonusPointsFromOrigin[i] = count * 0.2        
             
+        
+# def update_classes():
+#     for i,champ in enumerate(OriginChampsCountersList1d):
+#         count = 0
+#         pos = ClassPrimaryNames.index(df.ClassPrimary[i])
+#         print(pos)
+
+#         if champ.get() >= 1:
+#             count = count + 1
+#         ClassPrimaryCounters[pos].set(count)
+#         #bonusPointsFromOrigin[i] = count * 0.2  
+
+
+ClassPrimaryCounters
+
+def update_classes():
+    for i,origin in enumerate(ClassPrimaryCountersList):
+        count = 0
+        for champ in origin:
+            if champ.get() >= 1:
+                count = count + 1
+        ClassPrimaryCounters[i].set(count)
+        bonusPointsFromClass[i] = count * 0.2 
+
+        
+        
+        
+
+def additional_points_from_origin_combo(championNumber):
+    pos = OriginNames.index(df.Origin[championNumber])
+    print("bonusPointsFromOrigin[pos] ",bonusPointsFromOrigin[pos])
+    return bonusPointsFromOrigin[pos]
+
+def additional_points_from_class_combo(championNumber):
+    pos = ClassPrimaryNames.index(df.ClassPrimary[championNumber])
+    if df.ClassSecondary[championNumber] == ("Demolitionist" or "Blademaster"):
+        pos2 = ClassPrimaryNames.index(df.ClassSecondary[championNumber])
+        return bonusPointsFromClass[pos]  + bonusPointsFromClass[pos2]  
+    #print("bonusPointsFromClass[pos] ",bonusPointsFromClass[pos])
+    else:
+        return bonusPointsFromClass[pos]  
+
+
+
+
 
     
 def delete_button(position):
@@ -659,9 +838,11 @@ for i in range(0, len(OriginChampsFromDFList),1):
 for i in range(0, len(OriginChampsFromDFList),1):
     show_champions_from_origin(i, OriginChampsFromDFList[i], OriginChampsCountersBuyList[i], DOWNSIDE)
     
-    
+####origins
 show_champions_from_origin(11,OriginNames, OriginCounters, UPSIDE,ORIGINFLAG)    
 
+#### primary class
+show_champions_from_origin(12, ClassPrimaryNames, ClassPrimaryCounters, UPSIDE, ORIGINFLAG )
 labeling = tk.Label(MainWindow, text="Left to buy").grid(row=12+0, column=0)
 
 labeling = tk.Label(MainWindow, text="Points").grid(row=14+0, column=0)
@@ -681,5 +862,6 @@ buttonCal = tk.Button(MainWindow, text="update", command=lambda:update_origins()
 
 
 
+buttonCal = tk.Button(MainWindow, text="updateC", command=lambda:update_classes()).grid(row=DOWNSIDE, column=36)
 
 MainWindow.mainloop()
