@@ -8,3 +8,6 @@ I will use my knowledge to build fuzzy logic system that will calculate uncertai
 You can track my progress in projects section.
 
 ![StatsPlot](https://user-images.githubusercontent.com/60773657/85411123-3d6cfb00-b568-11ea-9eee-8dc245cdcd4e.png)
+
+![Scores](https://user-images.githubusercontent.com/60773657/86474581-6bf68d00-bd43-11ea-849a-700741035bc8.png)
+
