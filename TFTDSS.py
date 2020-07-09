@@ -6,6 +6,7 @@ Created on Wed Jun  3 10:54:45 2020
 """
 
 import tkinter as tk
+import tkinter.font as tkFont
 import random
 from functools import partial
 
@@ -28,10 +29,12 @@ from collections import namedtuple
 
 
 def add(intVariable):
+    """Adding one to counter"""
     intVariable.set(intVariable.get() + 1)
     return
 
 def sub(intVariable):
+    """Minus one to counter"""
     if intVariable.get() >0:
         intVariable.set(intVariable.get() - 1)
 
@@ -111,7 +114,7 @@ classChampsFromDFList = [BlademasterChamps, BlasterChamps, BrawlerChamps,
 
 
 MainWindow = tk.Tk()
-MainWindow.geometry('1600x800')
+MainWindow.geometry('1700x800')
 MainWindow.title('TFTDSS')
 
 
@@ -638,8 +641,20 @@ bonusPointsFromClass = [0] * 14
 df.sort_values(by=['Origin', 'Champion'], inplace = True)
 df.reset_index(drop=True, inplace = True)
 
+boldedFont = tkFont.Font(family="Arial", size=10, weight=tkFont.BOLD)
+
+
 def show_champions_from_origin(originPositionInOriginList, OriginChampsFromDF, OriginCounterList, shiftBetweenUpsideDownside, flag = CHAMPIONFLAG):
-    """Adding buttons and text labels for single Origin."""
+    """Adding buttons and text labels for single origin.
+    In: originPositionInOriginList - its used to pickup origin from originlist,
+    and place text on the window.
+    OriginChampsFromDF  - list of champions in origin.
+    OriginCounterList - list of champions counters in origin.
+    shiftBetweenUpsideDownside - placing on the window, UPSIDE is upper location,
+    DOWNSIDE is lower location.
+    flag - if 1 then text label is above counters, for origin champions should 
+    be CHAMPIONFLAG, for origins or classes should be ORIGINFLAG.
+        """
     if flag == 1:
         labelTitle = tk.Label(MainWindow, text=originList[originPositionInOriginList]).grid(row=1+shiftBetweenUpsideDownside, column=OriginLabelPositionColumn*ShiftBetweenOrigins*originPositionInOriginList)
 
@@ -657,7 +672,8 @@ def show_champions_from_origin(originPositionInOriginList, OriginChampsFromDF, O
 
 
 def reset_counters_2dlist(list2d=OriginChampsCountersBuyList):
-    """Reset counters, used when roll or new round starts."""
+    """Reset counters to 0, used when roll or new round starts.
+    In: list2d by default its OriginChampsCountersBuyList."""
     list1d = sum(list2d, [])
     for champCounter in list1d:
         champCounter.set(0)
@@ -666,6 +682,9 @@ def reset_counters_2dlist(list2d=OriginChampsCountersBuyList):
     return
 
 def check_nonzero_counters(list2d=OriginChampsCountersBuyList):
+    """Check how much champion counters are nonzero.
+    In: list2d by default its OriginChampsCountersBuyList.
+    Out: position of counters in champions list that are nonzero"""    
     nonzeroCountersList = []
     nonzeroCountersNumberList = []
     list1d = sum(list2d, [])
@@ -693,6 +712,10 @@ def check_nonzero_counters(list2d=OriginChampsCountersBuyList):
 
 
 def show_nonzero_counters(rowOffset=0):
+    """It shows up champions to buy that counters are nonzero, as a button.
+    Created button will add one to champion pool counter, delete itself from window
+    and sub one from counters champions that can be bought.
+    In: rowOffset by default = 0 for buttons row placement."""
     global buttonCalcList
     buttonCalcList =[0] *5
     u =check_nonzero_counters()
@@ -710,6 +733,9 @@ def show_nonzero_counters(rowOffset=0):
 
 
 def show_points_for_nonzero_counters(rowOffset=2):
+    """It shows up champions POINTS to buy that counters are nonzero, as a text.
+    Doesnt disappear currently, should be fixed.
+    In: rowOffset by default = 0 for buttons row placement."""
     global textLabelList
     textLabelList =[0] *5
     u =check_nonzero_counters()
@@ -722,6 +748,10 @@ def show_points_for_nonzero_counters(rowOffset=2):
 
 
 def show_nonzero_counters_with_points(rowOffset1= 0, rowOffset2 =2):
+    """First updates classes and origins to get points updated, then shows
+    champions to buy as a buttons and their points as a text.
+    In: rowOffset1 by default 0 for buttons.
+    rowOffset2 by default 2 for points as a text."""
     update_classes_and_origins()
     show_nonzero_counters(rowOffset1)
     show_points_for_nonzero_counters(rowOffset2)
@@ -729,6 +759,8 @@ def show_nonzero_counters_with_points(rowOffset1= 0, rowOffset2 =2):
 
 
 def update_origins():
+    """Checks nonzero counters for champions in pool and updates origins.
+    Also sets bonus points from origin."""
     for i,origin in enumerate(OriginChampsCountersList):
         count = 0
         for champ in origin:
@@ -750,9 +782,11 @@ def update_origins():
 #         #bonusPointsFromOrigin[i] = count * 0.2  
 
 
-ClassPrimaryCounters
+#ClassPrimaryCounters
 
 def update_classes():
+    """Checks nonzero counters for champions in pool and updates classes.
+    Also sets bonus points from class."""
     for i,origin in enumerate(ClassPrimaryCountersList):
         count = 0
         for champ in origin:
@@ -763,16 +797,26 @@ def update_classes():
 
         
 def update_classes_and_origins():
+    """Checks nonzero counters for champions in pool and updates classes and origins.
+    Also sets bonus points from class and origins."""
     update_origins()
     update_classes()        
         
 
 def additional_points_from_origin_combo(championNumber):
+    """Part of sum points, bonus from origin for specific champion.
+    In: championNumber its just position of champion in list by primal 
+    champions to buy list.
+    Out: Bonus points from origin."""
     pos = OriginNames.index(df.Origin[championNumber])
     print("bonusPointsFromOrigin[pos] ",bonusPointsFromOrigin[pos])
     return bonusPointsFromOrigin[pos]
 
 def additional_points_from_class_combo(championNumber):
+    """Part of sum points, bonus from class for specific champion.
+    In: championNumber its just position of champion in list by primal 
+    champions to buy list.
+    Out: Bonus points from class."""
     pos = ClassPrimaryNames.index(df.ClassPrimary[championNumber])
     if df.ClassSecondary[championNumber] == ("Demolitionist" or "Blademaster"):
         pos2 = ClassPrimaryNames.index(df.ClassSecondary[championNumber])
@@ -784,12 +828,17 @@ def additional_points_from_class_combo(championNumber):
 
 
 def additional_points_from_champions_in_pool(championNumber):
+    """Part of sum points, bonus from champion in pool.
+    In: championNumber its just position of champion in list by primal 
+    champions to buy list.
+    Out: Bonus points from champions that are already in pool."""
     bonusPointsFromChampionPool = (OriginChampsCountersList1d[championNumber].get() -1) * 0.2
     print("bonusPointsFromChampionPool[pos] ",bonusPointsFromChampionPool)
     return bonusPointsFromChampionPool
 
     
 def delete_button(position):
+    """Deleting buttons"""
     buttonCalcList[position].destroy()
 
 def delete_all_buttons():
@@ -808,7 +857,7 @@ DOWNSIDE = 16################ champions to buy
 
 
 
-labelTitle = tk.Label(MainWindow, text="Champion pool").grid(row=0, column=ShiftBetweenOrigins*5)
+labelTitle = tk.Label(MainWindow, text="Champion pool", font=boldedFont).grid(row=0, column=ShiftBetweenOrigins*5)
 
 labelTitle = tk.Label(MainWindow, text=originList[0]).grid(row=1, column=OriginLabelPositionColumn)
 
@@ -842,7 +891,7 @@ labelTitle = tk.Label(MainWindow, text=originList[0]).grid(row=1, column=OriginL
 #     buttonCal = tk.Button(MainWindow, text="-", command=lambda counter=CelestialCounters[i]:sub(counter)).grid(row=2+i, column=ShiftBetweenOrigins*2+3)
 
 
-labelTitle = tk.Label(MainWindow, text="Champions to buy").grid(row=DOWNSIDE-1, column=ShiftBetweenOrigins*5)
+labelTitle = tk.Label(MainWindow, text="Champions to buy", font=boldedFont).grid(row=DOWNSIDE-1, column=ShiftBetweenOrigins*5)
 
 
 ###### champions
@@ -857,9 +906,9 @@ show_champions_from_origin(11,OriginNames, OriginCounters, UPSIDE,ORIGINFLAG)
 
 #### primary class
 show_champions_from_origin(12, ClassPrimaryNames, ClassPrimaryCounters, UPSIDE, ORIGINFLAG )
-labeling = tk.Label(MainWindow, text="Left to buy").grid(row=12+0, column=0)
+labeling = tk.Label(MainWindow, text="Left to buy", font=boldedFont).grid(row=12+0, column=0)
 
-labeling = tk.Label(MainWindow, text="Points").grid(row=14+0, column=0)
+labeling = tk.Label(MainWindow, text="Points", font=boldedFont).grid(row=14+0, column=0)
 
 
 
