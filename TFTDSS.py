@@ -38,7 +38,7 @@ from computerVision import Vision
 
 
 
-
+pointsForChampionsToBuy = [0] * 5
 
 
 def add(intVariable):
@@ -161,7 +161,7 @@ screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
 
 wincap = WindowCapture('League of Legends (TM) Client')
 
-#wincap = None
+wincap = None
 
 def make_cropped_ss_and_get_champions_to_buy(loadImage=0, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
     if loadImage:
@@ -191,6 +191,65 @@ def update_champions_to_buy_from_ocr_detection():
                 break
                 
     return
+
+
+#drawing rectangles things
+# First champion card to buy on screen
+    
+xFirstChampionCard = 505
+wChampionCard = 175
+yFirstChampionCard = 865
+hChampionCard = 135
+
+PADDINGBETWEENCHAMPIONCARDS = 14
+
+#drawing rectangles
+
+line_color = (255, 0, 255)
+line_type = cv.LINE_4
+marker_color = (255, 0, 255)
+marker_type = cv.MARKER_CROSS
+
+
+listOfRGBColours = [(0, 255, 0), (255, 0, 0), (255, 0, 0), (255, 0, 0), (0, 0, 255)]
+
+
+
+# next card, indexing from 0 = most left side
+def calculate_card_position_on_screen(cardIndex):
+    xCard = xFirstChampionCard+ PADDINGBETWEENCHAMPIONCARDS * cardIndex + wChampionCard * cardIndex
+    return xCard
+
+def build_list_of_champion_cards_rectangles():
+    cardsRectangles=[0]*5
+    for i in range(0, 5):
+        topLeft = (calculate_card_position_on_screen(i), yFirstChampionCard)
+        bottomRight = (calculate_card_position_on_screen(i) + wChampionCard, yFirstChampionCard + hChampionCard)
+        center = (topLeft[0] + wChampionCard//2, topLeft[1] + hChampionCard//2)
+        print("Typeeeeeeeeeeeeeeeeee" ,type(center))
+        cardsRectangles[i] = [topLeft, bottomRight, center]
+    return cardsRectangles
+
+
+
+# https://stackoverflow.com/questions/6618515/sorting-list-based-on-values-from-another-list
+def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
+    championsToBuyPoints=show_points_for_nonzero_counters()
+    print("Points:",championsToBuyPoints)
+    colorsSorted = [x for _, x in sorted(zip(championsToBuyPoints, colors))]
+    print(colorsSorted)
+    f=build_list_of_champion_cards_rectangles()
+    if mode == "rectangle":
+        for i in range(0,5):
+            cv.rectangle(screenshot, f[i][0], f[i][1], color=colorsSorted[i],
+                         lineType=line_type, thickness=2)
+        cv.imshow("wind", screenshot)
+    elif mode == "points":
+        for i in range(0,5):
+                    # Draw the center point
+            cv.drawMarker(screenshot, f[i][2], color=colorsSorted[i],
+                          markerType=marker_type, markerSize=40, thickness=2)
+        cv.imshow("wind", screenshot)
 
 
 ############### WINDOW THINGS
@@ -815,19 +874,21 @@ def show_nonzero_counters(rowOffset=0):
 
 
 
-def show_points_for_nonzero_counters(rowOffset=2):
+def show_points_for_nonzero_counters(rowOffset=2, showMode=1):
     """It shows up champions POINTS to buy that counters are nonzero, as a text.
     Doesnt disappear currently, should be fixed.
     In: rowOffset by default = 0 for buttons row placement."""
-    global textLabelList
+    global textLabelList, points
+    pointsForChampionsToBuy = [0] * 5
     textLabelList =[0] *5
     u =check_nonzero_counters()
     for i in range(0,len(u),1):
-        points = (df.Points[u[i]] + additional_points_from_origin_combo(u[i]) 
+        pointsForChampionsToBuy[i] = (df.Points[u[i]] + additional_points_from_origin_combo(u[i]) 
                   + additional_points_from_class_combo(u[i]) + additional_points_from_champions_in_pool(u[i]))
-        # if u
-        textLabelList[i] = tk.Label(MainWindow, text=points).grid(row=12+rowOffset, column=ShiftBetweenOrigins*(i+1))
-
+        if showMode:
+            textLabelList[i] = tk.Label(MainWindow, text=pointsForChampionsToBuy[i]).grid(row=12+rowOffset, column=ShiftBetweenOrigins*(i+1))
+    print(pointsForChampionsToBuy)
+    return pointsForChampionsToBuy
 
 
 def show_nonzero_counters_with_points(rowOffset1= 0, rowOffset2 =2):
@@ -1016,6 +1077,9 @@ buttonCal = tk.Button(MainWindow, text="update classes", command=lambda:update_c
 buttonCal = tk.Button(MainWindow, text="show points", command=lambda:show_nonzero_counters_with_points()).grid(row=DOWNSIDE, column=18)
 
 buttonCal = tk.Button(MainWindow, text="OCR", command=lambda:update_champions_to_buy_from_ocr_detection()).grid(row=DOWNSIDE, column=24)
+
+buttonCal = tk.Button(MainWindow, text="draw rectangles", command=lambda:draw_on_champion_to_buy_cards()).grid(row=DOWNSIDE, column=30)
+
 
 
 
