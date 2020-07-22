@@ -159,11 +159,11 @@ reader = easyocr.Reader(['en'])
 
 screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
 
-# wincap = WindowCapture('League of Legends (TM) Client')
+wincap = WindowCapture('League of Legends (TM) Client')
 
-wincap = None
+# wincap = None
 
-def make_cropped_ss_and_get_champions_to_buy(loadImage=1, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
+def make_cropped_ss_and_get_champions_to_buy(loadImage=0, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
     if loadImage:
         screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
     else:
@@ -252,7 +252,7 @@ def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
     res = [sortedChampionsToBuyPosition.index(i) for i in championsPositionToBuyOrderedByScreen]
     print("Indexes on screen in points list", res)
     f=build_list_of_champion_cards_rectangles()
-    #screenshot = window.get_screenshot()
+    screenshot = wincap.get_screenshot()
     if mode == "rectangle":
         for i in range(0,5):
             cv.rectangle(screenshot, f[i][0], f[i][1], color=colors[res[i]],
@@ -266,11 +266,17 @@ def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
         cv.imshow("wind", screenshot)
 
 
+
+######## need to fix double calculate points inside draw_on_champion_to_buy_cards
 def draw_rectangles_show_points_show_buttons_reset_counters():
     update_classes_and_origins()
-    reset_counters_2dlist(OriginChampsCountersBuyList)
-    show_nonzero_counters()
+    try:
+        reset_counters_2dlist(OriginChampsCountersBuyList)
+    except :
+        pass
     draw_on_champion_to_buy_cards()
+    show_nonzero_counters_with_points()
+
 
 ############### WINDOW THINGS
 
