@@ -28,6 +28,19 @@ from collections import namedtuple
 
 
 
+import easyocr
+
+import cv2 as cv
+import os
+from time import time
+from windowcapture import WindowCapture
+from computerVision import Vision
+
+
+
+
+
+
 def add(intVariable):
     """Adding one to counter"""
     intVariable.set(intVariable.get() + 1)
@@ -108,6 +121,76 @@ classChampsFromDFList = [BlademasterChamps, BlasterChamps, BrawlerChamps,
 
 
 
+
+
+
+# OCR things
+
+
+
+
+championListForOCR = ['Bard', 'Gnar', 'Nautilus', 'Teemo', 'Cassiopeia',
+                      'Illaoi', "Kog'Maw", 'Nocturne', 'Urgot', 'Viktor',
+                      'Ashe', 'Lulu', 'Rakan', 'Xayah', 'XinZhao', 'Blitzcrank',
+                      'Caitlyn', 'Ezreal', 'Riven', 'Shen', 'Thresh',
+                      'Twisted Fate', 'Wukong', 'Ekko', 'Fiora', 'Irelia', 
+                      'Leona', 'Lucian', 'Vayne', 'Vi', 'Jarvan IV', 'Jhin',
+                      'Karma', 'Mordekaiser', 'Shaco', 'Xerath', 'Annie', 'Fizz',
+                      'Rumble', 'Aurelion Sol', 'Jinx', 'Malphite', 'Master Yi',
+                      'Yasuo', 'Zed', 'Ziggs', 'Darius', 'Gangplank', 'Graves', 
+                      'Jayce', 'Ahri', 'Janna', 'Neeko', 'Poppy', 'Soraka', 
+                      'Syndra', 'Zoe',]
+
+def sort_detected_champions_to_buy_by_position(OCRResultsSorted):
+    
+    # sort from lowest width (left to right side)
+    OCRResultsSorted = sorted(OCRResultsSorted, key=lambda x: x[0])
+    sortedChampionsToBuy = []
+    for text in OCRResultsSorted:
+        for champ in championListForOCR:
+            if champ in text:
+                sortedChampionsToBuy.append(champ)
+                print("found {}".format(champ))
+    print("List of sorted champions to buy: ",sortedChampionsToBuy)
+    return sortedChampionsToBuy 
+
+
+reader = easyocr.Reader(['en'])
+
+screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
+
+wincap = WindowCapture('League of Legends (TM) Client')
+
+#wincap = None
+
+def make_cropped_ss_and_get_champions_to_buy(loadImage=0, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
+    if loadImage:
+        screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
+    else:
+        screenshot = window.get_screenshot()
+    #print(screenshot)
+    crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
+    cv.imshow("ss", crop_img)
+    OCRResult=reader.readtext(crop_img)
+    print(OCRResult)
+    listOfChampsToBuyThisTurn=sort_detected_champions_to_buy_by_position(OCRResult)
+    return listOfChampsToBuyThisTurn
+
+
+
+def update_champions_to_buy_from_ocr_detection():
+    listOfChampsToBuyThisTurn=make_cropped_ss_and_get_champions_to_buy()
+    for champToBuy in listOfChampsToBuyThisTurn:
+        for i,champ in enumerate(championListForOCR):
+            if champToBuy == champ:
+                print(i)
+                add(OriginChampsCountersBuyList1d[i])
+                print(champ)
+                print("Succesfully added detected champion")
+                print(counterBuyNeeko.get())
+                break
+                
+    return
 
 
 ############### WINDOW THINGS
@@ -931,6 +1014,8 @@ buttonCal = tk.Button(MainWindow, text="reset", command=lambda:reset_counters_2d
 buttonCal = tk.Button(MainWindow, text="update classes", command=lambda:update_classes_and_origins()).grid(row=DOWNSIDE, column=12)
 
 buttonCal = tk.Button(MainWindow, text="show points", command=lambda:show_nonzero_counters_with_points()).grid(row=DOWNSIDE, column=18)
+
+buttonCal = tk.Button(MainWindow, text="OCR", command=lambda:update_champions_to_buy_from_ocr_detection()).grid(row=DOWNSIDE, column=24)
 
 
 
