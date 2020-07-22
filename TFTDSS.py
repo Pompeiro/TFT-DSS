@@ -159,11 +159,11 @@ reader = easyocr.Reader(['en'])
 
 screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
 
-wincap = WindowCapture('League of Legends (TM) Client')
+# wincap = WindowCapture('League of Legends (TM) Client')
 
 wincap = None
 
-def make_cropped_ss_and_get_champions_to_buy(loadImage=0, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
+def make_cropped_ss_and_get_champions_to_buy(loadImage=1, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
     if loadImage:
         screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
     else:
@@ -187,10 +187,10 @@ def update_champions_to_buy_from_ocr_detection():
                 add(OriginChampsCountersBuyList1d[i])
                 print(champ)
                 print("Succesfully added detected champion")
-                print(counterBuyNeeko.get())
+                # print(counterBuyNeeko.get())
                 break
-                
-    return
+    print("List of champions detected: ",listOfChampsToBuyThisTurn)            
+    return listOfChampsToBuyThisTurn
 
 
 #drawing rectangles things
@@ -211,10 +211,11 @@ marker_color = (255, 0, 255)
 marker_type = cv.MARKER_CROSS
 
 
-listOfRGBColours = [(0, 255, 0), (255, 0, 0), (255, 0, 0), (255, 0, 0), (0, 0, 255)]
+listOfRGBColours = [(0, 0, 255), (255, 0, 0), (255, 0, 0), (255, 0, 0), (0, 255, 0)]
 
+# listOfRGBColours = ["worst", "medium3", "medium2", "medium1", "best"]
 
-
+# listOfRGBColours=range(0,5)
 # next card, indexing from 0 = most left side
 def calculate_card_position_on_screen(cardIndex):
     xCard = xFirstChampionCard+ PADDINGBETWEENCHAMPIONCARDS * cardIndex + wChampionCard * cardIndex
@@ -226,7 +227,7 @@ def build_list_of_champion_cards_rectangles():
         topLeft = (calculate_card_position_on_screen(i), yFirstChampionCard)
         bottomRight = (calculate_card_position_on_screen(i) + wChampionCard, yFirstChampionCard + hChampionCard)
         center = (topLeft[0] + wChampionCard//2, topLeft[1] + hChampionCard//2)
-        print("Typeeeeeeeeeeeeeeeeee" ,type(center))
+        # print("Type" ,type(center))
         cardsRectangles[i] = [topLeft, bottomRight, center]
     return cardsRectangles
 
@@ -234,23 +235,42 @@ def build_list_of_champion_cards_rectangles():
 
 # https://stackoverflow.com/questions/6618515/sorting-list-based-on-values-from-another-list
 def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
-    championsToBuyPoints=show_points_for_nonzero_counters()
+    championsToBuyInOrderAsInScreen = update_champions_to_buy_from_ocr_detection()
+    championsToBuyPointsAndPosition=show_points_for_nonzero_counters()
+    
+    championsPositionToBuyOrderedByScreen = [championListForOCR.index(i) for i in championsToBuyInOrderAsInScreen]
+    
+    print("THEREEEEEEE",championsPositionToBuyOrderedByScreen)
+    
+    championsToBuyPoints = list(zip(*championsToBuyPointsAndPosition))[0]
+    championsToBuyPosition = list(zip(*championsToBuyPointsAndPosition))[1]
     print("Points:",championsToBuyPoints)
-    colorsSorted = [x for _, x in sorted(zip(championsToBuyPoints, colors))]
-    print(colorsSorted)
+    sortedChampionsToBuyPointsAndPosition = sorted(championsToBuyPointsAndPosition)
+    print("Champions sorted: ",sortedChampionsToBuyPointsAndPosition)
+    sortedChampionsToBuyPosition = list(zip(*sortedChampionsToBuyPointsAndPosition))[1]
+    
+    res = [sortedChampionsToBuyPosition.index(i) for i in championsPositionToBuyOrderedByScreen]
+    print("Indexes on screen in points list", res)
     f=build_list_of_champion_cards_rectangles()
+    #screenshot = window.get_screenshot()
     if mode == "rectangle":
         for i in range(0,5):
-            cv.rectangle(screenshot, f[i][0], f[i][1], color=colorsSorted[i],
+            cv.rectangle(screenshot, f[i][0], f[i][1], color=colors[res[i]],
                          lineType=line_type, thickness=2)
         cv.imshow("wind", screenshot)
     elif mode == "points":
         for i in range(0,5):
                     # Draw the center point
-            cv.drawMarker(screenshot, f[i][2], color=colorsSorted[i],
+            cv.drawMarker(screenshot, f[i][2], color=colors[res[i]],
                           markerType=marker_type, markerSize=40, thickness=2)
         cv.imshow("wind", screenshot)
 
+
+def draw_rectangles_show_points_show_buttons_reset_counters():
+    update_classes_and_origins()
+    reset_counters_2dlist(OriginChampsCountersBuyList)
+    show_nonzero_counters()
+    draw_on_champion_to_buy_cards()
 
 ############### WINDOW THINGS
 
@@ -878,17 +898,17 @@ def show_points_for_nonzero_counters(rowOffset=2, showMode=1):
     """It shows up champions POINTS to buy that counters are nonzero, as a text.
     Doesnt disappear currently, should be fixed.
     In: rowOffset by default = 0 for buttons row placement."""
-    global textLabelList, points
+    global textLabelList
     pointsForChampionsToBuy = [0] * 5
     textLabelList =[0] *5
-    u =check_nonzero_counters()
-    for i in range(0,len(u),1):
-        pointsForChampionsToBuy[i] = (df.Points[u[i]] + additional_points_from_origin_combo(u[i]) 
-                  + additional_points_from_class_combo(u[i]) + additional_points_from_champions_in_pool(u[i]))
+    championPositionInListOrderedByOrigin =check_nonzero_counters()
+    for i in range(0,len(championPositionInListOrderedByOrigin),1):
+        pointsForChampionsToBuy[i] = (df.Points[championPositionInListOrderedByOrigin[i]] + additional_points_from_origin_combo(championPositionInListOrderedByOrigin[i]) 
+                  + additional_points_from_class_combo(championPositionInListOrderedByOrigin[i]) + additional_points_from_champions_in_pool(championPositionInListOrderedByOrigin[i]))
         if showMode:
             textLabelList[i] = tk.Label(MainWindow, text=pointsForChampionsToBuy[i]).grid(row=12+rowOffset, column=ShiftBetweenOrigins*(i+1))
-    print(pointsForChampionsToBuy)
-    return pointsForChampionsToBuy
+    print("Points and championPositionInListOrderedByOrigin",list(zip(pointsForChampionsToBuy,championPositionInListOrderedByOrigin)))
+    return list(zip(pointsForChampionsToBuy,championPositionInListOrderedByOrigin))
 
 
 def show_nonzero_counters_with_points(rowOffset1= 0, rowOffset2 =2):
@@ -1080,7 +1100,7 @@ buttonCal = tk.Button(MainWindow, text="OCR", command=lambda:update_champions_to
 
 buttonCal = tk.Button(MainWindow, text="draw rectangles", command=lambda:draw_on_champion_to_buy_cards()).grid(row=DOWNSIDE, column=30)
 
-
+buttonCal = tk.Button(MainWindow, text="scan&go", command=lambda:draw_rectangles_show_points_show_buttons_reset_counters()).grid(row=DOWNSIDE, column=36)
 
 
 MainWindow.attributes('-alpha', 0.9)
