@@ -131,7 +131,7 @@ classChampsFromDFList = [BlademasterChamps, BlasterChamps, BrawlerChamps,
 
 championListForOCR = ['Bard', 'Gnar', 'Nautilus', 'Teemo', 'Cassiopeia',
                       'Illaoi', "Kog'Maw", 'Nocturne', 'Urgot', 'Viktor',
-                      'Ashe', 'Lulu', 'Rakan', 'Xayah', 'XinZhao', 'Blitzcrank',
+                      'Ashe', 'Lulu', 'Rakan', 'Xayah', 'Xin Zhao', 'Blitzcrank',
                       'Caitlyn', 'Ezreal', 'Riven', 'Shen', 'Thresh',
                       'Twisted Fate', 'Wukong', 'Ekko', 'Fiora', 'Irelia', 
                       'Leona', 'Lucian', 'Vayne', 'Vi', 'Jarvan IV', 'Jhin',
