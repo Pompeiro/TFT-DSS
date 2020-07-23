@@ -7,22 +7,22 @@ Created on Wed Jun  3 10:54:45 2020
 
 import tkinter as tk
 import tkinter.font as tkFont
-import random
-from functools import partial
+# import random
+# from functools import partial
 
 
-import collections
-from enum import IntEnum
-import operator
+# import collections
+# from enum import IntEnum
+# import operator
 
 
 
 import pandas as pd
 
 
-import skfuzzy as fuzz
-from skfuzzy import control as ctrl
-import numpy as np
+# import skfuzzy as fuzz
+# from skfuzzy import control as ctrl
+# import numpy as np
 
 from collections import namedtuple
 
@@ -31,10 +31,10 @@ from collections import namedtuple
 import easyocr
 
 import cv2 as cv
-import os
-from time import time
+# import os
+# from time import time
 from windowcapture import WindowCapture
-from computerVision import Vision
+# from computerVision import Vision
 
 
 
@@ -130,7 +130,7 @@ classChampsFromDFList = [BlademasterChamps, BlasterChamps, BrawlerChamps,
 
 
 championListForOCR = ['Bard', 'Gnar', 'Nautilus', 'Teemo', 'Cassiopeia',
-                      'Illaoi', "Kog'Maw", 'Nocturne', 'Urgot', 'Viktor',
+                      'Illaoi', "Kog Maw", 'Nocturne', 'Urgot', 'Viktor',
                       'Ashe', 'Lulu', 'Rakan', 'Xayah', 'Xin Zhao', 'Blitzcrank',
                       'Caitlyn', 'Ezreal', 'Riven', 'Shen', 'Thresh',
                       'Twisted Fate', 'Wukong', 'Ekko', 'Fiora', 'Irelia', 
@@ -236,7 +236,7 @@ def build_list_of_champion_cards_rectangles():
 # https://stackoverflow.com/questions/6618515/sorting-list-based-on-values-from-another-list
 def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
     championsToBuyInOrderAsInScreen = update_champions_to_buy_from_ocr_detection()
-    championsToBuyPointsAndPosition=show_points_for_nonzero_counters()
+    championsToBuyPointsAndPosition=show_nonzero_counters_with_points()
     
     championsPositionToBuyOrderedByScreen = [championListForOCR.index(i) for i in championsToBuyInOrderAsInScreen]
     
@@ -275,7 +275,6 @@ def draw_rectangles_show_points_show_buttons_reset_counters():
     except :
         pass
     draw_on_champion_to_buy_cards()
-    show_nonzero_counters_with_points()
 
 
 ############### WINDOW THINGS
@@ -924,8 +923,8 @@ def show_nonzero_counters_with_points(rowOffset1= 0, rowOffset2 =2):
     rowOffset2 by default 2 for points as a text."""
     update_classes_and_origins()
     show_nonzero_counters(rowOffset1)
-    show_points_for_nonzero_counters(rowOffset2)
-
+    pointsWithPositionZip = show_points_for_nonzero_counters(rowOffset2)
+    return pointsWithPositionZip
 
 
 def update_origins():
