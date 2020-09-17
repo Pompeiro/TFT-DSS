@@ -23,7 +23,7 @@ import pandas as pd
 
 
 
-df = pd.read_csv("scaledChampionsData.csv") 
+df = pd.read_csv("scaledChampionsdf.csv") 
 
 df.drop('Unnamed: 0', axis=1, inplace=True)
 reader = easyocr.Reader(['en'])
@@ -32,16 +32,16 @@ reader = easyocr.Reader(['en'])
 # for champ in df.Champion:
 #     print("'{}'".format(champ), end = ', ')
     
-championListForOCR = ['Ahri', 'Annie', 'Ashe', 'Aurelion Sol', 'Bard',
-                      'Blitzcrank', 'Caitlyn', 'Cassiopeia', 'Darius', 'Ekko',
-                      'Ezreal', 'Fiora', 'Fizz', 'Gangplank', 'Gnar', 'Graves',
-                      'Illaoi', 'Irelia', 'Janna', 'Jarvan IV', 'Jayce', 'Jhin',
-                      'Jinx', 'Karma', 'Kog Maw', 'Leona', 'Lucian', 'Lulu',
-                      'Malphite', 'Master Yi', 'Mordekaiser', 'Nautilus', 'Neeko',
-                      'Nocturne', 'Poppy', 'Rakan', 'Riven', 'Rumble', 'Shaco',
-                      'Shen', 'Soraka', 'Syndra', 'Teemo', 'Thresh', 'Twisted Fate',
-                      'Urgot', 'Vayne', 'Vi', 'Viktor', 'Wukong', 'Xayah', 'Xerath',
-                      'Xin Zhao', 'Yasuo', 'Zed', 'Ziggs', 'Zoe']
+championListForOCR = ['Aatrox', 'Ahri', 'Akali', 'Annie', 'Aphelios', 'Ashe',
+                      'Azir', 'Cassiopeia', 'Diana', 'Elise', 'Evelynn',
+                      'Ezreal', 'Fiora', 'Garen', 'Hecarim', 'Irelia', 'Janna',
+                      'JarvanIV', 'Jax', 'Jhin', 'Jinx', 'Kalista', 'Katarina',
+                      'Kayn', 'Kennen', 'Kindred', 'LeeSin', 'Lillia', 'Lissandra',
+                      'Lulu', 'Lux', 'Maokai', 'Morgana', 'Nami', 'Nidalee', 'Nunu',
+                      'Pyke', 'Riven', 'Sejuani', 'Sett', 'Shen', 'Sylas', 'TahmKench',
+                      'Talon', 'Teemo', 'Thresh', 'TwistedFate', 'Vayne', 'Veigar',
+                      'Vi', 'Warwick', 'Wukong', 'XinZhao', 'Yasuo', 'Yone', 'Yuumi',
+                      'Zed', 'Zilean']
 
 
 def sort_detected_champions_to_buy_by_position(OCRResultsSorted):
