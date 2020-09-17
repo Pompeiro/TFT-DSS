@@ -29,8 +29,8 @@ df.drop('Unnamed: 0', axis=1, inplace=True)
 reader = easyocr.Reader(['en'])
 
             
-# for champ in df.Champion:
-#     print("'{}'".format(champ), end = ', ')
+for champ in df.Champion:
+    print("'{}'".format(champ), end = ', ')
     
 championListForOCR = ['Aatrox', 'Ahri', 'Akali', 'Annie', 'Aphelios', 'Ashe',
                       'Azir', 'Cassiopeia', 'Diana', 'Elise', 'Evelynn',
