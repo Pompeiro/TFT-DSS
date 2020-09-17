@@ -11,11 +11,15 @@ import pandas as pd
 df = pd.DataFrame(columns=['Champion','DPS','Attack Speed','Damage','Range']) # creates master dataframe 
 from collections import namedtuple
 
-
+import time
 
 
 driver = webdriver.Opera()
 driver.get('https://tftactics.gg/db/champion-stats')
+time.sleep(3)
+driver.find_element_by_xpath('//a[@class="cmpboxbtn cmpboxbtnyes"]').click() # accept cookies
+time.sleep(1)
+
 driver.find_element_by_xpath('//div[@class="rt-th -cursor-pointer"]').click()
 
 
@@ -32,9 +36,9 @@ content = driver.find_elements_by_css_selector('a')
 pStart = 0
 pStop = 0
 for i in range(0,len(content),1):
-    if content[i].text == 'Ahri': ############ First champion sorted by name
+    if content[i].text == 'Aatrox': ############ First champion sorted by name
         pStart = i
-    if content[i].text =='Zoe':############ Last champion sorted by name
+    if content[i].text =='Zilean':############ Last champion sorted by name
         pStop = i+1####  +1 because for loop stops at i +1
         
 championList = [0] * (pStop-pStart)
@@ -148,11 +152,11 @@ driver.get('https://tftactics.gg/tierlist/champions')
 image_elements = driver.find_elements_by_xpath('//div[@class="character-wrapper"]/img')
 #### count how many champs are in each tier
 ChampionTier = namedtuple('ChampTier', ['Champion', 'Tier'])
-Stier = 6
-Atier = 19
-Btier = 23
-Ctier = 7
-Dtier = 2
+Stier = 3
+Atier = 16
+Btier = 22
+Ctier = 14
+Dtier = 3
 ChampionTierList =[]
 for i in range(0,Stier,1):
     ChampionTierList.append(ChampionTier(image_elements[i].get_attribute('alt'),5))
@@ -174,7 +178,7 @@ for i in range(Ctier+Btier+Atier+Stier,Dtier+Ctier+Btier+Atier+Stier,1):
 ChampionTierList.sort()    
 
 
-driver.close()
+# driver.close()
 
 for i,champ in enumerate(step3):
     champ.insert(13,ChampionTierList[i].Tier)
@@ -184,13 +188,25 @@ Champion = namedtuple('Champ', ['Champion', 'DPS', 'AS', 'DMG', 'Range', 'HP', '
 
 
 
+############# need to add origin secondary
+
+classList = ['Adept', 'Assassin', 'Brawler', 'Dazzler', 'Duelist', 'Hunter',
+             'Keeper', 'Mage', 'Mystic', 'Shade', 'Sharpshooter', 'Vanguard']
+
+originsList = ['Cultist', 'Divine', 'Dusk', 'Elderwood', 'Enlightened', 'Exile', 
+               'Fortune', 'Moonlight', 'Ninja', 'Spirit', 'TheBoss', 'Tormented', 
+               'Warlord']
 
 
+for champ in step3:
+    champ.insert(10, 'None')
+    if champ[11] in originsList:
+        champ[10] = champ[11]
+        champ[11] = champ[12]
+        champ[12] = 'None'
+        
 
-
-
-
-z = pd.DataFrame.from_records(step3, columns=['Champion', 'DPS', 'AS', 'DMG', 'Range', 'HP', 'Mana', 'Armor', 'MR', 'Origin', 'ClassPrimary', 'ClassSecondary', 'Cost', 'Tier'])
+z = pd.DataFrame.from_records(step3, columns=['Champion', 'DPS', 'AS', 'DMG', 'Range', 'HP', 'Mana', 'Armor', 'MR', 'OriginPrimary', 'OriginSecondary', 'ClassPrimary', 'ClassSecondary', 'Cost', 'Tier'])
 
 
 z.to_csv('championsData.csv', encoding='utf-8')
@@ -206,57 +222,63 @@ for i,name in enumerate(championNamesList): ######## wasted 2 hours for searchin
     
     
 # z.to_csv('file_name.csv', encoding='utf-8')
-# Ahri = Champion(*step2[0])
-# Annie = Champion(*step2[1])
-# Ashe = Champion(*step2[2])
-# AurelionSol = Champion(*step2[3])
-# Blitzcrank = Champion(*step2[4])
-# Caitlyn = Champion(*step2[5])
-# Chogath = Champion(*step2[6])
-# Darius = Champion(*step2[7])
-# Ekko = Champion(*step2[8])
-# Ezreal = Champion(*step2[9])
-# Fiora = Champion(*step2[10])
-# Fizz = Champion(*step2[11])
-# Gangplank = Champion(*step2[12])
-# Graves = Champion(*step2[13])
-# Irelia = Champion(*step2[14])
-# JarvanIV = Champion(*step2[15])
-# Jayce = Champion(*step2[16])
-# Jhin = Champion(*step2[17])
-# Jinx = Champion(*step2[18])
-# Kaisa = Champion(*step2[19])
-# Karma = Champion(*step2[20])
-# Kassadin = Champion(*step2[21])
-# Kayle = Champion(*step2[22])
-# Khazix = Champion(*step2[23])
-# Leona = Champion(*step2[24])
-# Lucian = Champion(*step2[25])
-# Lulu = Champion(*step2[26])
-# Lux = Champion(*step2[27])
-# Malphite = Champion(*step2[28])
-# MasterYi = Champion(*step2[29])
-# MissFortune = Champion(*step2[30])
-# Mordekaiser = Champion(*step2[31])
-# Neeko = Champion(*step2[32])
-# Poppy = Champion(*step2[33])
-# Rakan = Champion(*step2[34])
-# Rumble = Champion(*step2[35])
-# Shaco = Champion(*step2[36])
-# Shen = Champion(*step2[37])
-# Sona = Champion(*step2[38])
-# Soraka = Champion(*step2[39])
-# Syndra = Champion(*step2[40])
-# Thresh = Champion(*step2[41])
-# TwistedFate = Champion(*step2[42])
-# Velkoz = Champion(*step2[43])
-# Vi = Champion(*step2[44])
-# Wukong = Champion(*step2[45])
-# Xayah = Champion(*step2[46])
-# Xerath = Champion(*step2[47])
-# XinZhao = Champion(*step2[48])
-# Yasuo = Champion(*step2[49])
-# Ziggs = Champion(*step2[50])
-# Zoe = Champion(*step2[51])
+Aatrox = Champion(*step3[0])
+Ahri = Champion(*step3[1])
+Akali = Champion(*step3[2])
+Annie = Champion(*step3[3])
+Aphelios = Champion(*step3[4])
+Ashe = Champion(*step3[5])
+Azir = Champion(*step3[6])
+Cassiopeia = Champion(*step3[7])
+Diana = Champion(*step3[8])
+Elise = Champion(*step3[9])
+Evelynn = Champion(*step3[10])
+Ezreal = Champion(*step3[11])
+Fiora = Champion(*step3[12])
+Garen = Champion(*step3[13])
+Hecarim = Champion(*step3[14])
+Irelia = Champion(*step3[15])
+Janna = Champion(*step3[16])
+JarvanIV = Champion(*step3[17])
+Jax = Champion(*step3[18])
+Jhin = Champion(*step3[19])
+Jinx = Champion(*step3[20])
+Kalista = Champion(*step3[21])
+Katarina = Champion(*step3[22])
+Kayn = Champion(*step3[23])
+Kennen = Champion(*step3[24])
+Kindred = Champion(*step3[25])
+LeeSin = Champion(*step3[26])
+Lillia = Champion(*step3[27])
+Lissandra = Champion(*step3[28])
+Lulu = Champion(*step3[29])
+Lux = Champion(*step3[30])
+Maokai = Champion(*step3[31])
+Morgana = Champion(*step3[32])
+Nami = Champion(*step3[33])
+Nidalee = Champion(*step3[34])
+Nunu = Champion(*step3[35])
+Pyke = Champion(*step3[36])
+Riven = Champion(*step3[37])
+Sejuani = Champion(*step3[38])
+Sett = Champion(*step3[39])
+Shen = Champion(*step3[40])
+Sylas = Champion(*step3[41])
+TahmKench = Champion(*step3[42])
+Talon = Champion(*step3[43])
+Teemo = Champion(*step3[44])
+Thresh = Champion(*step3[45])
+TwistedFate = Champion(*step3[46])
+Vayne = Champion(*step3[47])
+Veigar = Champion(*step3[48])
+Vi = Champion(*step3[49])
+Warwick = Champion(*step3[50])
+Wukong = Champion(*step3[51])
+XinZhao = Champion(*step3[52])
+Yasuo = Champion(*step3[53])
+Yone = Champion(*step3[54])
+Yuumi = Champion(*step3[55])
+Zed = Champion(*step3[56])
+Zilean = Champion(*step3[57])
 
 
