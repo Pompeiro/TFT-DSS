@@ -18,7 +18,7 @@ from matplotlib.spines import Spine
 from matplotlib.transforms import Affine2D
 
 
-df = pd.read_csv("scaledChampionsData.csv") 
+df = pd.read_csv("scaledChampionsdf.csv") 
 
 df.drop('Unnamed: 0', axis=1, inplace=True)
 
