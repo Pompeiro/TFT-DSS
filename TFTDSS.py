@@ -63,61 +63,66 @@ df = pd.read_csv("scaledChampionsdf.csv")
 
 df.drop('Unnamed: 0', axis=1, inplace=True)
 
-originList = list(set(df.Origin))
+originList = list(set(df.OriginPrimary))
 originList.sort()
 
-# for origin in originList:
-#     print(origin+"Champs = list(df.query("+"'Origin == "+'"'+"%s"%origin+'"'+"').Champion)")
+for origin in originList:
+    print(origin+"Champs = list(df.query("+"'OriginPrimary == "+'"'+"%s"%origin+'"'+"').Champion)")
 
-# print("OriginChampsFromDFList = [", end = ' ')
-# for origin in originList:
-#     print(origin+"Champs", end = ', ')
-# print("]")  
+print("OriginChampsFromDFList = [", end = ' ')
+for origin in originList:
+    print(origin+"Champs", end = ', ')
+print("]")  
 
-AstroChamps = list(df.query('Origin == "Astro"').Champion)
-BattlecastChamps = list(df.query('Origin == "Battlecast"').Champion)
-CelestialChamps = list(df.query('Origin == "Celestial"').Champion)
-ChronoChamps = list(df.query('Origin == "Chrono"').Champion)
-CyberneticChamps = list(df.query('Origin == "Cybernetic"').Champion)
-DarkStarChamps = list(df.query('Origin == "DarkStar"').Champion)
-MechPilotChamps = list(df.query('Origin == "MechPilot"').Champion)
-RebelChamps = list(df.query('Origin == "Rebel"').Champion)
-SpacePirateChamps = list(df.query('Origin == "SpacePirate"').Champion)
-StarGuardianChamps = list(df.query('Origin == "StarGuardian"').Champion)
+CultistChamps = list(df.query('OriginPrimary == "Cultist"').Champion)
+DivineChamps = list(df.query('OriginPrimary == "Divine"').Champion)
+DuskChamps = list(df.query('OriginPrimary == "Dusk"').Champion)
+ElderwoodChamps = list(df.query('OriginPrimary == "Elderwood"').Champion)
+EnlightenedChamps = list(df.query('OriginPrimary == "Enlightened"').Champion)
+ExileChamps = list(df.query('OriginPrimary == "Exile"').Champion)
+FortuneChamps = list(df.query('OriginPrimary == "Fortune"').Champion)
+MoonlightChamps = list(df.query('OriginPrimary == "Moonlight"').Champion)
+NinjaChamps = list(df.query('OriginPrimary == "Ninja"').Champion)
+SpiritChamps = list(df.query('OriginPrimary == "Spirit"').Champion)
+TheBossChamps = list(df.query('OriginPrimary == "TheBoss"').Champion)
+TormentedChamps = list(df.query('OriginPrimary == "Tormented"').Champion)
+WarlordChamps = list(df.query('OriginPrimary == "Warlord"').Champion)
 
+OriginChampsFromDFList = [CultistChamps, DivineChamps, DuskChamps, ElderwoodChamps,
+                          EnlightenedChamps, ExileChamps, FortuneChamps,
+                          MoonlightChamps, NinjaChamps, SpiritChamps, TheBossChamps,
+                          TormentedChamps, WarlordChamps]
 
 classList = list(set(df.ClassPrimary))
 classList.sort()
 
-# for clas in classList:
-#     print(clas+"Champs = list(df.query("+"'class == "+'"'+"%s"%clas+'"'+"').Champion)")
+for clas in classList:
+    print(clas+"Champs = list(df.query("+"'ClassPrimary == "+'"'+"%s"%clas+'"'+"').Champion)")
 
-# print("classChampsFromDFList = [", end = ' ')
-# for clas in classList:
-#     print(clas+"Champs", end = ', ')
-# print("]")  
-
-
+print("classChampsFromDFList = [", end = ' ')
+for clas in classList:
+    print(clas+"Champs", end = ', ')
+print("]")  
 
 
-BlademasterChamps = list(df.query('ClassPrimary == "Blademaster"').Champion)
-BlasterChamps = list(df.query('ClassPrimary == "Blaster"').Champion)
+
+
+AdeptChamps = list(df.query('ClassPrimary == "Adept"').Champion)
+AssassinChamps = list(df.query('ClassPrimary == "Assassin"').Champion)
 BrawlerChamps = list(df.query('ClassPrimary == "Brawler"').Champion)
-DemolitionistChamps = list(df.query('ClassPrimary == "Demolitionist"').Champion)
-InfiltratorChamps = list(df.query('ClassPrimary == "Infiltrator"').Champion)
-ManaReaverChamps = list(df.query('ClassPrimary == "Mana-Reaver"').Champion)
-MercenaryChamps = list(df.query('ClassPrimary == "Mercenary"').Champion)
+DazzlerChamps = list(df.query('ClassPrimary == "Dazzler"').Champion)
+DuelistChamps = list(df.query('ClassPrimary == "Duelist"').Champion)
+HunterChamps = list(df.query('ClassPrimary == "Hunter"').Champion)
+KeeperChamps = list(df.query('ClassPrimary == "Keeper"').Champion)
+MageChamps = list(df.query('ClassPrimary == "Mage"').Champion)
 MysticChamps = list(df.query('ClassPrimary == "Mystic"').Champion)
-ParagonChamps = list(df.query('ClassPrimary == "Paragon"').Champion)
-ProtectorChamps = list(df.query('ClassPrimary == "Protector"').Champion)
-SniperChamps = list(df.query('ClassPrimary == "Sniper"').Champion)
-SorcererChamps = list(df.query('ClassPrimary == "Sorcerer"').Champion)
-StarshipChamps = list(df.query('ClassPrimary == "Starship"').Champion)
+ShadeChamps = list(df.query('ClassPrimary == "Shade"').Champion)
+SharpshooterChamps = list(df.query('ClassPrimary == "Sharpshooter"').Champion)
 VanguardChamps = list(df.query('ClassPrimary == "Vanguard"').Champion)
-classChampsFromDFList = [BlademasterChamps, BlasterChamps, BrawlerChamps, 
-                         DemolitionistChamps, InfiltratorChamps, ManaReaverChamps,
-                         MercenaryChamps, MysticChamps, ParagonChamps, ProtectorChamps, 
-                         SniperChamps, SorcererChamps, StarshipChamps, VanguardChamps ]
+
+classChampsFromDFList = [AdeptChamps, AssassinChamps, BrawlerChamps, DazzlerChamps,
+                         DuelistChamps, HunterChamps, KeeperChamps, MageChamps,
+                         MysticChamps, ShadeChamps, SharpshooterChamps, VanguardChamps]
 
 
 
@@ -126,20 +131,22 @@ classChampsFromDFList = [BlademasterChamps, BlasterChamps, BrawlerChamps,
 
 # OCR things
 
+print("championListForOCR = [", end = ' ')
+for champ in df.Champion:
+    print("'"+champ+"'", end = ', ')
+print("]")  
 
 
-
-championListForOCR = ['Bard', 'Gnar', 'Nautilus', 'Teemo', 'Cassiopeia',
-                      'Illaoi', "Kog Maw", 'Nocturne', 'Urgot', 'Viktor',
-                      'Ashe', 'Lulu', 'Rakan', 'Xayah', 'Xin Zhao', 'Blitzcrank',
-                      'Caitlyn', 'Ezreal', 'Riven', 'Shen', 'Thresh',
-                      'Twisted Fate', 'Wukong', 'Ekko', 'Fiora', 'Irelia', 
-                      'Leona', 'Lucian', 'Vayne', 'Vi', 'Jarvan IV', 'Jhin',
-                      'Karma', 'Mordekaiser', 'Shaco', 'Xerath', 'Annie', 'Fizz',
-                      'Rumble', 'Aurelion Sol', 'Jinx', 'Malphite', 'Master Yi',
-                      'Yasuo', 'Zed', 'Ziggs', 'Darius', 'Gangplank', 'Graves', 
-                      'Jayce', 'Ahri', 'Janna', 'Neeko', 'Poppy', 'Soraka', 
-                      'Syndra', 'Zoe',]
+championListForOCR = ['Aatrox', 'Elise', 'Evelynn', 'Jhin', 'Kalista', 'Pyke',
+                      'Twisted Fate', 'Zilean', 'Jax', 'LeeSin', 'Lux', 'Warwick',
+                      'Wukong', 'Cassiopeia', 'Lillia', 'Riven', 'Thresh', 'Vayne',
+                      'Ashe', 'Ezreal', 'Hecarim', 'Lulu', 'Maokai', 'Nunu',
+                      'Veigar', 'Fiora', 'Irelia', 'Janna', 'Morgana', 'Nami',
+                      'Talon', 'Yasuo', 'Yone', 'Annie', 'Jinx', 'Sejuani',
+                      'Tahm Kench', 'Aphelios', 'Diana', 'Lissandra', 'Sylas',
+                      'Akali', 'Kennen', 'Shen', 'Zed', 'Ahri', 'Kindred', 'Teemo',
+                      'Yuumi', 'Sett', 'Kayn', 'Azir', 'Garen', 'Jarvan IV',
+                      'Katarina', 'Nidalee', 'Vi', 'Xin Zhao']
 
 def sort_detected_champions_to_buy_by_position(OCRResultsSorted):
     
@@ -281,475 +288,447 @@ def draw_rectangles_show_points_show_buttons_reset_counters():
 
 
 MainWindow = tk.Tk()
-MainWindow.geometry('1700x800')
+MainWindow.geometry('1900x800')
 MainWindow.title('TFTDSS')
 
 
 
 ############### COUNTERS FOR HEARTS CARDS $$$$$$$$$$$$$$$$$$
 
-# for champ in AstroChamps:
-#     print("counter"+champ+"= tk.IntVar()")
+for champ in CultistChamps:
+    print("counter"+champ+"= tk.IntVar()")
 
-# print("AstroCounters = [")
-# for champ in AstroChamps:
-#     print("counter"+champ,end = ", ")
-# print("]")
-# print()
+print("CultistCounters = [")
+for champ in CultistChamps:
+    print("counter"+champ,end = ", ")
+print("]")
+print()
     
-# for champ in BattlecastChamps:
-#     print("counter"+champ+"= tk.IntVar()")
+for champ in DivineChamps:
+    print("counter"+champ+"= tk.IntVar()")
 
-# print("BattlecastCounters = [")
-# for champ in BattlecastChamps:
-#     print("counter"+champ,end = ", ")
-# print("]")
-# print()
-
-    
-# for champ in CelestialChamps:
-#     print("counter"+champ+"= tk.IntVar()")
-
-# print("CelestialCounters = [")
-# for champ in CelestialChamps:
-#     print("counter"+champ,end = ", ")
-# print("]")
-# print()
+print("DivineCounters = [")
+for champ in DivineChamps:
+    print("counter"+champ,end = ", ")
+print("]")
+print()
 
     
-# for champ in ChronoChamps:
-#     print("counter"+champ+"= tk.IntVar()")
+for champ in DuskChamps:
+    print("counter"+champ+"= tk.IntVar()")
 
-# print("ChronoCounters = [")
-# for champ in ChronoChamps:
-#     print("counter"+champ,end = ", ")
-# print("]")
-# print()
-
-    
-# for champ in CyberneticChamps:
-#     print("counter"+champ+"= tk.IntVar()")
-
-# print("CyberneticCounters = [")
-# for champ in CyberneticChamps:
-#     print("counter"+champ,end = ", ")
-# print("]")
-# print()
+print("DuskCounters = [")
+for champ in DuskChamps:
+    print("counter"+champ,end = ", ")
+print("]")
+print()
 
     
-# for champ in DarkStarChamps:
-#     print("counter"+champ+"= tk.IntVar()")
+for champ in ElderwoodChamps:
+    print("counter"+champ+"= tk.IntVar()")
 
-# print("DarkStarCounters = [")
-# for champ in DarkStarChamps:
-#     print("counter"+champ,end = ", ")
-# print("]")
-# print()
-
-    
-# for champ in MechPilotChamps:
-#     print("counter"+champ+"= tk.IntVar()")
-
-# print("MechPilotCounters = [")
-# for champ in MechPilotChamps:
-#     print("counter"+champ,end = ", ")
-# print("]")
-# print()
+print("ElderwoodCounters = [")
+for champ in ElderwoodChamps:
+    print("counter"+champ,end = ", ")
+print("]")
+print()
 
     
-# for champ in RebelChamps:
-#     print("counter"+champ+"= tk.IntVar()")
+for champ in EnlightenedChamps:
+    print("counter"+champ+"= tk.IntVar()")
 
-# print("RebelCounters = [")
-# for champ in RebelChamps:
-#     print("counter"+champ,end = ", ")
-# print("]")
-# print()
-
-    
-# for champ in SpacePirateChamps:
-#     print("counter"+champ+"= tk.IntVar()")
-
-# print("SpacePirateCounters = [")
-# for champ in SpacePirateChamps:
-#     print("counter"+champ,end = ", ")
-# print("]")
-# print()
+print("EnlightenedCounters = [")
+for champ in EnlightenedChamps:
+    print("counter"+champ,end = ", ")
+print("]")
+print()
 
     
-# for champ in StarGuardianChamps:
-#     print("counter"+champ+"= tk.IntVar()")
+for champ in ExileChamps:
+    print("counter"+champ+"= tk.IntVar()")
 
-# print("StarGuardianCounters = [")
-# for champ in StarGuardianChamps:
-#     print("counter"+champ,end = ", ")
-# print("]")
-# print()
+print("ExileCounters = [")
+for champ in ExileChamps:
+    print("counter"+champ,end = ", ")
+print("]")
+print()
 
     
+for champ in FortuneChamps:
+    print("counter"+champ+"= tk.IntVar()")
 
-counterBard= tk.IntVar()
-counterGnar= tk.IntVar()
-counterNautilus= tk.IntVar()
-counterTeemo= tk.IntVar()
+print("FortuneCounters = [")
+for champ in FortuneChamps:
+    print("counter"+champ,end = ", ")
+print("]")
+print()
 
-AstroCounters = [counterBard, counterGnar, counterNautilus, counterTeemo] 
+    
+for champ in MoonlightChamps:
+    print("counter"+champ+"= tk.IntVar()")
 
+print("MoonlightCounters = [")
+for champ in MoonlightChamps:
+    print("counter"+champ,end = ", ")
+print("]")
+print()
+
+    
+for champ in NinjaChamps:
+    print("counter"+champ+"= tk.IntVar()")
+
+print("NinjaCounters = [")
+for champ in NinjaChamps:
+    print("counter"+champ,end = ", ")
+print("]")
+print()
+
+    
+for champ in SpiritChamps:
+    print("counter"+champ+"= tk.IntVar()")
+
+print("SpiritCounters = [")
+for champ in SpiritChamps:
+    print("counter"+champ,end = ", ")
+print("]")
+print()
+
+
+for champ in TheBossChamps:
+    print("counter"+champ+"= tk.IntVar()")
+
+print("TheBossCounters = [")
+for champ in TheBossChamps:
+    print("counter"+champ,end = ", ")
+print("]")
+print()
+
+for champ in TormentedChamps:
+    print("counter"+champ+"= tk.IntVar()")
+
+print("TormentedCounters = [")
+for champ in TormentedChamps:
+    print("counter"+champ,end = ", ")
+print("]")
+print()
+
+for champ in WarlordChamps:
+    print("counter"+champ+"= tk.IntVar()")
+
+print("WarlordCounters = [")
+for champ in WarlordChamps:
+    print("counter"+champ,end = ", ")
+print("]")
+print()
+    
+counterAatrox= tk.IntVar()
+counterElise= tk.IntVar()
+counterEvelynn= tk.IntVar()
+counterJhin= tk.IntVar()
+counterKalista= tk.IntVar()
+counterPyke= tk.IntVar()
+counterTwistedFate= tk.IntVar()
+counterZilean= tk.IntVar()
+CultistCounters = [counterAatrox, counterElise, counterEvelynn, counterJhin,
+                   counterKalista, counterPyke, counterTwistedFate, counterZilean]
+
+counterJax= tk.IntVar()
+counterLeeSin= tk.IntVar()
+counterLux= tk.IntVar()
+counterWarwick= tk.IntVar()
+counterWukong= tk.IntVar()
+DivineCounters = [counterJax, counterLeeSin, counterLux, counterWarwick, counterWukong]
 
 counterCassiopeia= tk.IntVar()
-counterIllaoi= tk.IntVar()
-counterKogMaw= tk.IntVar()
-counterNocturne= tk.IntVar()
-counterUrgot= tk.IntVar()
-counterViktor= tk.IntVar()
-
-BattlecastCounters = [counterCassiopeia, counterIllaoi, counterKogMaw, 
-                      counterNocturne, counterUrgot, counterViktor]
-
-
+counterLillia= tk.IntVar()
+counterRiven= tk.IntVar()
+counterThresh= tk.IntVar()
+counterVayne= tk.IntVar()
+DuskCounters = [counterCassiopeia, counterLillia, counterRiven, counterThresh,
+                counterVayne]
 
 counterAshe= tk.IntVar()
-counterLulu= tk.IntVar()
-counterRakan= tk.IntVar()
-counterXayah= tk.IntVar()
-counterXinZhao= tk.IntVar()
-
-CelestialCounters = [counterAshe, counterLulu, counterRakan, counterXayah, counterXinZhao ]
-
-
-
-counterBlitzcrank= tk.IntVar()
-counterCaitlyn= tk.IntVar()
 counterEzreal= tk.IntVar()
-counterRiven= tk.IntVar()
-counterShen= tk.IntVar()
-counterThresh= tk.IntVar()
-counterTwistedFate= tk.IntVar()
-counterWukong= tk.IntVar()
+counterHecarim= tk.IntVar()
+counterLulu= tk.IntVar()
+counterMaokai= tk.IntVar()
+counterNunu= tk.IntVar()
+counterVeigar= tk.IntVar()
+ElderwoodCounters = [counterAshe, counterEzreal, counterHecarim, counterLulu,
+                     counterMaokai, counterNunu, counterVeigar]
 
-ChronoCounters = [counterBlitzcrank, counterCaitlyn, counterEzreal, counterRiven,
-                  counterShen, counterThresh, counterTwistedFate, counterWukong ]
-
-
-
-
-counterEkko= tk.IntVar()
 counterFiora= tk.IntVar()
 counterIrelia= tk.IntVar()
-counterLeona= tk.IntVar()
-counterLucian= tk.IntVar()
-counterVayne= tk.IntVar()
-counterVi= tk.IntVar()
+counterJanna= tk.IntVar()
+counterMorgana= tk.IntVar()
+counterNami= tk.IntVar()
+counterTalon= tk.IntVar()
+EnlightenedCounters = [counterFiora, counterIrelia, counterJanna, counterMorgana,
+                       counterNami, counterTalon]
 
-CyberneticCounters = [counterEkko, counterFiora, counterIrelia, counterLeona,
-                      counterLucian, counterVayne, counterVi ]
-
-
-
-counterJarvanIV= tk.IntVar()
-counterJhin= tk.IntVar()
-counterKarma= tk.IntVar()
-counterMordekaiser= tk.IntVar()
-counterShaco= tk.IntVar()
-counterXerath= tk.IntVar()
-
-DarkStarCounters = [counterJarvanIV, counterJhin, counterKarma, counterMordekaiser,
-                    counterShaco, counterXerath ]
-
-
+counterYasuo= tk.IntVar()
+counterYone= tk.IntVar()
+ExileCounters = [counterYasuo, counterYone]
 
 counterAnnie= tk.IntVar()
-counterFizz= tk.IntVar()
-counterRumble= tk.IntVar()
-
-MechPilotCounters = [counterAnnie, counterFizz, counterRumble ]
-
-
-
-counterAurelionSol= tk.IntVar()
 counterJinx= tk.IntVar()
-counterMalphite= tk.IntVar()
-counterMasterYi= tk.IntVar()
-counterYasuo= tk.IntVar()
+counterSejuani= tk.IntVar()
+counterTahmKench= tk.IntVar()
+FortuneCounters = [counterAnnie, counterJinx, counterSejuani, counterTahmKench]
+
+counterAphelios= tk.IntVar()
+counterDiana= tk.IntVar()
+counterLissandra= tk.IntVar()
+counterSylas= tk.IntVar()
+MoonlightCounters = [counterAphelios, counterDiana, counterLissandra, counterSylas]
+
+counterAkali= tk.IntVar()
+counterKennen= tk.IntVar()
+counterShen= tk.IntVar()
 counterZed= tk.IntVar()
-counterZiggs= tk.IntVar()
-
-RebelCounters = [counterAurelionSol, counterJinx, counterMalphite, counterMasterYi,
-                 counterYasuo, counterZed, counterZiggs ]
-
-
-
-
-counterDarius= tk.IntVar()
-counterGangplank= tk.IntVar()
-counterGraves= tk.IntVar()
-counterJayce= tk.IntVar()
-
-SpacePirateCounters = [counterDarius, counterGangplank, counterGraves, counterJayce ]
-
-
-
-
+NinjaCounters = [counterAkali, counterKennen, counterShen, counterZed]
 
 counterAhri= tk.IntVar()
-counterJanna= tk.IntVar()
-counterNeeko= tk.IntVar()
-counterPoppy= tk.IntVar()
-counterSoraka= tk.IntVar()
-counterSyndra= tk.IntVar()
-counterZoe= tk.IntVar()
+counterKindred= tk.IntVar()
+counterTeemo= tk.IntVar()
+counterYuumi= tk.IntVar()
+SpiritCounters = [counterAhri, counterKindred, counterTeemo, counterYuumi]
 
-StarGuardianCounters = [counterAhri, counterJanna, counterNeeko, counterPoppy,
-                        counterSoraka, counterSyndra, counterZoe ]
+counterSett= tk.IntVar()
+TheBossCounters = [counterSett]
 
+counterKayn= tk.IntVar()
+TormentedCounters = [counterKayn]
+
+counterAzir= tk.IntVar()
+counterGaren= tk.IntVar()
+counterJarvanIV= tk.IntVar()
+counterKatarina= tk.IntVar()
+counterNidalee= tk.IntVar()
+counterVi= tk.IntVar()
+counterXinZhao= tk.IntVar()
+WarlordCounters = [counterAzir, counterGaren, counterJarvanIV, counterKatarina,
+                   counterNidalee, counterVi, counterXinZhao]
 
 
 
 ####################### COUNTERS for champions to buy
 
+counterBuyAatrox= tk.IntVar()
+counterBuyElise= tk.IntVar()
+counterBuyEvelynn= tk.IntVar()
+counterBuyJhin= tk.IntVar()
+counterBuyKalista= tk.IntVar()
+counterBuyPyke= tk.IntVar()
+counterBuyTwistedFate= tk.IntVar()
+counterBuyZilean= tk.IntVar()
+CultistCountersBuy = [counterBuyAatrox, counterBuyElise, counterBuyEvelynn, counterBuyJhin,
+                   counterBuyKalista, counterBuyPyke, counterBuyTwistedFate, counterBuyZilean]
 
-counterBuyBard= tk.IntVar()
-counterBuyGnar= tk.IntVar()
-counterBuyNautilus= tk.IntVar()
-counterBuyTeemo= tk.IntVar()
-
-AstroCountersBuy = [counterBuyBard, counterBuyGnar, counterBuyNautilus, counterBuyTeemo] 
-
+counterBuyJax= tk.IntVar()
+counterBuyLeeSin= tk.IntVar()
+counterBuyLux= tk.IntVar()
+counterBuyWarwick= tk.IntVar()
+counterBuyWukong= tk.IntVar()
+DivineCountersBuy = [counterBuyJax, counterBuyLeeSin, counterBuyLux, counterBuyWarwick, counterBuyWukong]
 
 counterBuyCassiopeia= tk.IntVar()
-counterBuyIllaoi= tk.IntVar()
-counterBuyKogMaw= tk.IntVar()
-counterBuyNocturne= tk.IntVar()
-counterBuyUrgot= tk.IntVar()
-counterBuyViktor= tk.IntVar()
-
-BattlecastCountersBuy = [counterBuyCassiopeia, counterBuyIllaoi, counterBuyKogMaw, 
-                      counterBuyNocturne, counterBuyUrgot, counterBuyViktor]
-
-
+counterBuyLillia= tk.IntVar()
+counterBuyRiven= tk.IntVar()
+counterBuyThresh= tk.IntVar()
+counterBuyVayne= tk.IntVar()
+DuskCountersBuy = [counterBuyCassiopeia, counterBuyLillia, counterBuyRiven, counterBuyThresh,
+                counterBuyVayne]
 
 counterBuyAshe= tk.IntVar()
-counterBuyLulu= tk.IntVar()
-counterBuyRakan= tk.IntVar()
-counterBuyXayah= tk.IntVar()
-counterBuyXinZhao= tk.IntVar()
-
-CelestialCountersBuy = [counterBuyAshe, counterBuyLulu, counterBuyRakan, counterBuyXayah, counterBuyXinZhao ]
-
-
-
-counterBuyBlitzcrank= tk.IntVar()
-counterBuyCaitlyn= tk.IntVar()
 counterBuyEzreal= tk.IntVar()
-counterBuyRiven= tk.IntVar()
-counterBuyShen= tk.IntVar()
-counterBuyThresh= tk.IntVar()
-counterBuyTwistedFate= tk.IntVar()
-counterBuyWukong= tk.IntVar()
+counterBuyHecarim= tk.IntVar()
+counterBuyLulu= tk.IntVar()
+counterBuyMaokai= tk.IntVar()
+counterBuyNunu= tk.IntVar()
+counterBuyVeigar= tk.IntVar()
+ElderwoodCountersBuy = [counterBuyAshe, counterBuyEzreal, counterBuyHecarim, counterBuyLulu,
+                     counterBuyMaokai, counterBuyNunu, counterBuyVeigar]
 
-ChronoCountersBuy = [counterBuyBlitzcrank, counterBuyCaitlyn, counterBuyEzreal, counterBuyRiven,
-                  counterBuyShen, counterBuyThresh, counterBuyTwistedFate, counterBuyWukong ]
-
-
-
-
-counterBuyEkko= tk.IntVar()
 counterBuyFiora= tk.IntVar()
 counterBuyIrelia= tk.IntVar()
-counterBuyLeona= tk.IntVar()
-counterBuyLucian= tk.IntVar()
-counterBuyVayne= tk.IntVar()
-counterBuyVi= tk.IntVar()
+counterBuyJanna= tk.IntVar()
+counterBuyMorgana= tk.IntVar()
+counterBuyNami= tk.IntVar()
+counterBuyTalon= tk.IntVar()
+EnlightenedCountersBuy = [counterBuyFiora, counterBuyIrelia, counterBuyJanna, counterBuyMorgana,
+                       counterBuyNami, counterBuyTalon]
 
-CyberneticCountersBuy = [counterBuyEkko, counterBuyFiora, counterBuyIrelia, counterBuyLeona,
-                      counterBuyLucian, counterBuyVayne, counterBuyVi ]
-
-
-
-counterBuyJarvanIV= tk.IntVar()
-counterBuyJhin= tk.IntVar()
-counterBuyKarma= tk.IntVar()
-counterBuyMordekaiser= tk.IntVar()
-counterBuyShaco= tk.IntVar()
-counterBuyXerath= tk.IntVar()
-
-DarkStarCountersBuy = [counterBuyJarvanIV, counterBuyJhin, counterBuyKarma, counterBuyMordekaiser,
-                    counterBuyShaco, counterBuyXerath ]
-
-
+counterBuyYasuo= tk.IntVar()
+counterBuyYone= tk.IntVar()
+ExileCountersBuy = [counterBuyYasuo, counterBuyYone]
 
 counterBuyAnnie= tk.IntVar()
-counterBuyFizz= tk.IntVar()
-counterBuyRumble= tk.IntVar()
-
-MechPilotCountersBuy = [counterBuyAnnie, counterBuyFizz, counterBuyRumble ]
-
-
-
-counterBuyAurelionSol= tk.IntVar()
 counterBuyJinx= tk.IntVar()
-counterBuyMalphite= tk.IntVar()
-counterBuyMasterYi= tk.IntVar()
-counterBuyYasuo= tk.IntVar()
+counterBuySejuani= tk.IntVar()
+counterBuyTahmKench= tk.IntVar()
+FortuneCountersBuy = [counterBuyAnnie, counterBuyJinx, counterBuySejuani, counterBuyTahmKench]
+
+counterBuyAphelios= tk.IntVar()
+counterBuyDiana= tk.IntVar()
+counterBuyLissandra= tk.IntVar()
+counterBuySylas= tk.IntVar()
+MoonlightCountersBuy = [counterBuyAphelios, counterBuyDiana, counterBuyLissandra, counterBuySylas]
+
+counterBuyAkali= tk.IntVar()
+counterBuyKennen= tk.IntVar()
+counterBuyShen= tk.IntVar()
 counterBuyZed= tk.IntVar()
-counterBuyZiggs= tk.IntVar()
-
-RebelCountersBuy = [counterBuyAurelionSol, counterBuyJinx, counterBuyMalphite, counterBuyMasterYi,
-                 counterBuyYasuo, counterBuyZed, counterBuyZiggs ]
-
-
-
-
-counterBuyDarius= tk.IntVar()
-counterBuyGangplank= tk.IntVar()
-counterBuyGraves= tk.IntVar()
-counterBuyJayce= tk.IntVar()
-
-SpacePirateCountersBuy = [counterBuyDarius, counterBuyGangplank, counterBuyGraves, counterBuyJayce ]
-
-
-
-
+NinjaCountersBuy = [counterBuyAkali, counterBuyKennen, counterBuyShen, counterBuyZed]
 
 counterBuyAhri= tk.IntVar()
-counterBuyJanna= tk.IntVar()
-counterBuyNeeko= tk.IntVar()
-counterBuyPoppy= tk.IntVar()
-counterBuySoraka= tk.IntVar()
-counterBuySyndra= tk.IntVar()
-counterBuyZoe= tk.IntVar()
+counterBuyKindred= tk.IntVar()
+counterBuyTeemo= tk.IntVar()
+counterBuyYuumi= tk.IntVar()
+SpiritCountersBuy = [counterBuyAhri, counterBuyKindred, counterBuyTeemo, counterBuyYuumi]
 
-StarGuardianCountersBuy = [counterBuyAhri, counterBuyJanna, counterBuyNeeko, counterBuyPoppy,
-                        counterBuySoraka, counterBuySyndra, counterBuyZoe ]
+counterBuySett= tk.IntVar()
+TheBossCountersBuy = [counterBuySett]
 
+counterBuyKayn= tk.IntVar()
+TormentedCountersBuy = [counterBuyKayn]
 
-
-
-
-
-
-
-
-
-
-
-
+counterBuyAzir= tk.IntVar()
+counterBuyGaren= tk.IntVar()
+counterBuyJarvanIV= tk.IntVar()
+counterBuyKatarina= tk.IntVar()
+counterBuyNidalee= tk.IntVar()
+counterBuyVi= tk.IntVar()
+counterBuyXinZhao= tk.IntVar()
+WarlordCountersBuy = [counterBuyAzir, counterBuyGaren, counterBuyJarvanIV, counterBuyKatarina,
+                   counterBuyNidalee, counterBuyVi, counterBuyXinZhao]
 
 
 
-counterAstro= tk.IntVar()
-counterBattlecast= tk.IntVar()
-counterCelestial= tk.IntVar()
-counterChrono= tk.IntVar()
-counterCybernetic= tk.IntVar()
-counterDarkStar= tk.IntVar()
-counterMechPilot= tk.IntVar()
-counterRebel= tk.IntVar()
-counterSpacePirate= tk.IntVar()
-counterStarGuardian= tk.IntVar()
-
-OriginCounters = [counterAstro, counterBattlecast, counterCelestial, counterChrono,
-                  counterCybernetic, counterDarkStar, counterMechPilot, counterRebel,
-                  counterSpacePirate, counterStarGuardian]
 
 
 
-OriginNames = sorted(list(set(df.Origin)))
+
+
+
+
+
+
+
+counterCultist= tk.IntVar()
+counterDivine= tk.IntVar()
+counterDusk= tk.IntVar()
+counterElderwood= tk.IntVar()
+counterEnlightened= tk.IntVar()
+counterExile= tk.IntVar()
+counterFortune= tk.IntVar()
+counterMoonlight= tk.IntVar()
+counterNinja= tk.IntVar()
+counterSpirit= tk.IntVar()
+counterTheBoss= tk.IntVar()
+counterTormented= tk.IntVar()
+counterWarlord= tk.IntVar()
+
+OriginCounters = [counterCultist, counterDivine, counterDusk, counterElderwood,
+                  counterEnlightened, counterExile, counterFortune, counterMoonlight,
+                  counterNinja, counterSpirit, counterTheBoss, counterTormented,
+                  counterWarlord]
+
+
+
+OriginNames = sorted(list(set(df.OriginPrimary)))
+
+
+######## primary class counters
 
 ClassPrimaryNames = sorted(list(set(df.ClassPrimary)))
 
 
-counterBlademaster = tk.IntVar()
-counterBlaster = tk.IntVar()
+for clas in ClassPrimaryNames:
+    print("counter"+clas+" = tk.IntVar()")
+
+
+counterAdept = tk.IntVar()
+counterAssassin = tk.IntVar()
 counterBrawler = tk.IntVar()
-counterDemolitionist = tk.IntVar()
-counterInfiltrator = tk.IntVar()
-counterManaReaver = tk.IntVar()
-counterMercenary = tk.IntVar()
+counterDazzler = tk.IntVar()
+counterDuelist = tk.IntVar()
+counterHunter = tk.IntVar()
+counterKeeper = tk.IntVar()
+counterMage = tk.IntVar()
 counterMystic = tk.IntVar()
-counterParagon = tk.IntVar()
-counterProtector = tk.IntVar()
-counterSniper = tk.IntVar()
-counterSorcerer = tk.IntVar()
-counterStarship = tk.IntVar()
+counterShade = tk.IntVar()
+counterSharpshooter = tk.IntVar()
 counterVanguard = tk.IntVar()
 
+for i,clas in enumerate(ClassPrimaryNames):
+    print(clas+"Counters = [ ")
+    for champ in classChampsFromDFList[i]:
+        print("counter"+champ,end = ", ")
+    print("]")
+    print()
+        
 
+
+
+
+
+AdeptCounters = [counterIrelia, counterShen, counterYone]
+
+AssassinCounters = [counterAkali, counterDiana, counterKatarina, counterPyke, counterTalon]
+
+BrawlerCounters = [counterMaokai, counterNunu, counterSett, counterSylas,
+                   counterTahmKench, counterVi, counterWarwick]
+
+DazzlerCounters = [counterEzreal, counterLissandra, counterLux, counterMorgana]
+
+DuelistCounters = [counterFiora, counterJax, counterKalista, counterLeeSin,
+                   counterXinZhao, counterYasuo]
+
+HunterCounters = [counterAphelios, counterAshe, counterKindred]
+
+KeeperCounters = [counterAzir, counterElise, counterJarvanIV, counterKennen, counterRiven]
+
+MageCounters = [counterAhri, counterAnnie, counterLillia, counterLulu, counterNami,
+                counterTwistedFate, counterVeigar]
+
+MysticCounters = [counterCassiopeia, counterJanna, counterYuumi, counterZilean]
+
+ShadeCounters = [counterEvelynn, counterKayn, counterZed]
+
+SharpshooterCounters = [counterJhin, counterJinx, counterNidalee, counterTeemo, counterVayne]
+
+VanguardCounters = [counterAatrox, counterGaren, counterHecarim, counterSejuani, counterThresh, counterWukong]
+
+
+print("ClassPrimaryCounters = [")
+for clas in ClassPrimaryNames:
+    print("counter"+clas,end = ", ")
+print("]")
+
+ClassPrimaryCounters = [counterAdept, counterAssassin, counterBrawler, counterDazzler,
+                        counterDuelist, counterHunter, counterKeeper, counterMage,
+                        counterMystic, counterShade, counterSharpshooter, counterVanguard]
+
+
+print("ClassPrimaryCountersList = [")
+for clas in ClassPrimaryNames:
+    print(clas+"Counters",end = ", ")
+print("]")
+
+ClassPrimaryCountersList = [AdeptCounters, AssassinCounters, BrawlerCounters,
+                            DazzlerCounters, DuelistCounters, HunterCounters,
+                            KeeperCounters, MageCounters, MysticCounters, ShadeCounters,
+                            SharpshooterCounters, VanguardCounters]
 
 
 
 ############# manually added secondary counters
 
-BlademasterCounters = [counterFiora, counterMasterYi, counterRiven, counterShen, 
-                      counterXayah, counterYasuo ]
-
-BlasterCounters = [counterEzreal, counterGraves, counterJinx, counterKogMaw, counterLucian ]
-
-BrawlerCounters = [counterBlitzcrank, counterGnar, counterIllaoi, counterMalphite, 
-                  counterVi ]
-
-DemolitionistCounters = [counterRumble, counterZiggs, counterGangplank ]
-
-InfiltratorCounters = [counterEkko, counterFizz, counterNocturne, counterShaco,
-                      counterZed ]
-
-ManaReaverCounters = [counterDarius, counterIrelia, counterThresh ]
-
-MercenaryCounters = [counterGangplank ]
-
-MysticCounters = [counterBard, counterCassiopeia, counterKarma, counterLulu,
-                 counterSoraka ]
-
-ParagonCounters = [counterJanna ]
-
-ProtectorCounters = [counterJarvanIV, counterNeeko, counterRakan, counterUrgot,
-                    counterXinZhao ]
-
-SniperCounters = [counterAshe, counterCaitlyn, counterJhin, counterTeemo,
-                 counterVayne ]
-
-SorcererCounters = [counterAhri, counterAnnie, counterSyndra, counterTwistedFate,
-                   counterViktor, counterXerath, counterZoe ]
-
-StarshipCounters = [counterAurelionSol ]
-
-VanguardCounters = [counterJayce, counterLeona, counterMordekaiser, 
-                   counterNautilus, counterPoppy, counterWukong ]
-
-
-
-ClassPrimaryCounters = [counterBlademaster, counterBlaster, counterBrawler, 
-                        counterDemolitionist, counterInfiltrator, counterManaReaver, 
-                        counterMercenary, counterMystic, counterParagon, counterProtector, 
-                        counterSniper, counterSorcerer, counterStarship, counterVanguard ]
-
-
-ClassPrimaryCountersList = [BlademasterCounters, BlasterCounters, BrawlerCounters, 
-                        DemolitionistCounters, InfiltratorCounters, ManaReaverCounters, 
-                        MercenaryCounters, MysticCounters, ParagonCounters, ProtectorCounters, 
-                        SniperCounters, SorcererCounters, StarshipCounters, VanguardCounters ]
-# for i,championlist in enumerate(classChampsFromDFList):
-#     print(ClassPrimaryNames[i]+"Counters" + " = [")
-#     for champ in championlist:
-#         print("counter"+champ,end = ", ")
-#     print("]")
-#     print()
-
-
-
-# print("ClassPrimaryCounters = [")
-# for clas in ClassPrimaryNames:
-#     print("counter" + clas, end = ", ")
-# print("]")
-
-# for clas in ClassPrimaryNames:
-#     print("counter" + clas +" = tk.IntVar()")
-
-
 # ClassSecondaryNames = sorted(list(set(df.ClassSecondary)))
 
 
-# ClassSecondaryCounters = [counterBlademaster, counterDemolitionist]
+# ClassSecondaryCounters = [counterEmperor]
 # print("ClassSecondaryCounters = [")
 # for clas in ClassSecondaryNames:
 #     print("counter" + clas, end = ", ")
@@ -761,7 +740,7 @@ ClassPrimaryCountersList = [BlademasterCounters, BlasterCounters, BrawlerCounter
 Origin = namedtuple("Origin", ["Name", "Counter"])
 
 
-Astro = Origin(OriginNames[0], OriginCounters[0])
+Cultist = Origin(OriginNames[0], OriginCounters[0])
 
 
 
@@ -770,24 +749,25 @@ Astro = Origin(OriginNames[0], OriginCounters[0])
 
 
 
-OriginChampsFromDFList = [AstroChamps, BattlecastChamps, CelestialChamps, 
-                          ChronoChamps, CyberneticChamps, DarkStarChamps, 
-                          MechPilotChamps, RebelChamps, SpacePirateChamps,
-                          StarGuardianChamps ]
+OriginChampsFromDFList = [CultistChamps, DivineChamps, DuskChamps, 
+                          ElderwoodChamps, EnlightenedChamps, ExileChamps, 
+                          FortuneChamps, MoonlightChamps, NinjaChamps,
+                          SpiritChamps, TheBossChamps, TormentedChamps, WarlordChamps]
 
 
 
-OriginChampsCountersList = [AstroCounters, BattlecastCounters, CelestialCounters, 
-                          ChronoCounters, CyberneticCounters, DarkStarCounters, 
-                          MechPilotCounters, RebelCounters, SpacePirateCounters,
-                          StarGuardianCounters ]
+OriginChampsCountersList = [CultistCounters, DivineCounters, DuskCounters, 
+                          ElderwoodCounters, EnlightenedCounters, ExileCounters, 
+                          FortuneCounters, MoonlightCounters, NinjaCounters,
+                          SpiritCounters, TheBossCounters, TormentedCounters, WarlordCounters]
 
 
 
-OriginChampsCountersBuyList = [AstroCountersBuy, BattlecastCountersBuy, CelestialCountersBuy, 
-                          ChronoCountersBuy, CyberneticCountersBuy, DarkStarCountersBuy, 
-                          MechPilotCountersBuy, RebelCountersBuy, SpacePirateCountersBuy,
-                          StarGuardianCountersBuy ]
+OriginChampsCountersBuyList = [CultistCountersBuy, DivineCountersBuy, DuskCountersBuy, 
+                          ElderwoodCountersBuy, EnlightenedCountersBuy, ExileCountersBuy, 
+                          FortuneCountersBuy, MoonlightCountersBuy, NinjaCountersBuy,
+                          SpiritCountersBuy, TheBossCountersBuy, TormentedCountersBuy,
+                          WarlordCountersBuy]
 
 
 ChampsNames  = sum(OriginChampsFromDFList, [])
@@ -800,12 +780,12 @@ OriginChampsCountersBuyList1d = sum(OriginChampsCountersBuyList, [])
 CHAMPIONFLAG =1
 ORIGINFLAG =0
 
-bonusPointsFromOrigin =[0] * 10
+bonusPointsFromOrigin =[0] * len(OriginNames)
 
-bonusPointsFromClass = [0] * 14
+bonusPointsFromClass = [0] * len(ClassPrimaryNames)
 
 ######### order as in GUI
-df.sort_values(by=['Origin', 'Champion'], inplace = True)
+df.sort_values(by=['OriginPrimary', 'Champion'], inplace = True)
 df.reset_index(drop=True, inplace = True)
 
 boldedFont = tkFont.Font(family="Arial", size=10, weight=tkFont.BOLD)
@@ -977,7 +957,7 @@ def additional_points_from_origin_combo(championNumber):
     In: championNumber its just position of champion in list by primal 
     champions to buy list.
     Out: Bonus points from origin."""
-    pos = OriginNames.index(df.Origin[championNumber])
+    pos = OriginNames.index(df.OriginPrimary[championNumber])
     print("bonusPointsFromOrigin[pos] ",bonusPointsFromOrigin[pos])
     return bonusPointsFromOrigin[pos]
 
@@ -1030,11 +1010,11 @@ labelTitle = tk.Label(MainWindow, text="Champion pool", font=boldedFont).grid(ro
 
 labelTitle = tk.Label(MainWindow, text=originList[0]).grid(row=1, column=OriginLabelPositionColumn)
 
-# for i,champ in enumerate(AstroChamps):
+# for i,champ in enumerate(CultistChamps):
 #     labelTitle = tk.Label(MainWindow, text=champ).grid(row=2+i, column=0)
-#     entryNum = tk.Entry(MainWindow, textvariable=AstroCounters[i], width = 2).grid(row=2+i, column=1)
-#     buttonCal = tk.Button(MainWindow, text="+", command=lambda counter=AstroCounters[i]:add(counter)).grid(row=2+i, column=3)
-#     buttonCal = tk.Button(MainWindow, text="-", command=lambda counter=AstroCounters[i]:sub(counter)).grid(row=2+i, column=4)
+#     entryNum = tk.Entry(MainWindow, textvariable=CultistCounters[i], width = 2).grid(row=2+i, column=1)
+#     buttonCal = tk.Button(MainWindow, text="+", command=lambda counter=CultistCounters[i]:add(counter)).grid(row=2+i, column=3)
+#     buttonCal = tk.Button(MainWindow, text="-", command=lambda counter=CultistCounters[i]:sub(counter)).grid(row=2+i, column=4)
 
  # show_champions_from_origin(4, OriginChampsFromDFList[4], OriginChampsCountersList[4], positionInList)
 
@@ -1042,22 +1022,22 @@ labelTitle = tk.Label(MainWindow, text=originList[0]).grid(row=1, column=OriginL
 
 # labelTitle = tk.Label(MainWindow, text=originList[1]).grid(row=1, column=OriginLabelPositionColumn*ShiftBetweenOrigins)
 
-# for i,champ in enumerate(BattlecastChamps):
+# for i,champ in enumerate(DivineChamps):
 #     labelTitle = tk.Label(MainWindow, text=champ).grid(row=2+i, column=OriginLabelPositionColumn*ShiftBetweenOrigins-1)
-#     entryNum = tk.Entry(MainWindow, textvariable=BattlecastCounters[i], width = 2).grid(row=2+i, column=ShiftBetweenOrigins+1)
-#     buttonCal = tk.Button(MainWindow, text="+", command=lambda counter=BattlecastCounters[i]:add(counter)).grid(row=2+i, column=ShiftBetweenOrigins+2)
-#     buttonCal = tk.Button(MainWindow, text="-", command=lambda counter=BattlecastCounters[i]:sub(counter)).grid(row=2+i, column=ShiftBetweenOrigins+3)
+#     entryNum = tk.Entry(MainWindow, textvariable=DivineCounters[i], width = 2).grid(row=2+i, column=ShiftBetweenOrigins+1)
+#     buttonCal = tk.Button(MainWindow, text="+", command=lambda counter=DivineCounters[i]:add(counter)).grid(row=2+i, column=ShiftBetweenOrigins+2)
+#     buttonCal = tk.Button(MainWindow, text="-", command=lambda counter=DivineCounters[i]:sub(counter)).grid(row=2+i, column=ShiftBetweenOrigins+3)
 
 
 
 
 # labelTitle = tk.Label(MainWindow, text=originList[2]).grid(row=1, column=OriginLabelPositionColumn*ShiftBetweenOrigins*2)
 
-# for i,champ in enumerate(CelestialChamps):
+# for i,champ in enumerate(DuskChamps):
 #     labelTitle = tk.Label(MainWindow, text=champ).grid(row=2+i, column=OriginLabelPositionColumn*ShiftBetweenOrigins*2-1)
-#     entryNum = tk.Entry(MainWindow, textvariable=CelestialCounters[i], width = 2).grid(row=2+i, column=ShiftBetweenOrigins*2+1)
-#     buttonCal = tk.Button(MainWindow, text="+", command=lambda counter=CelestialCounters[i]:add(counter)).grid(row=2+i, column=ShiftBetweenOrigins*2+2)
-#     buttonCal = tk.Button(MainWindow, text="-", command=lambda counter=CelestialCounters[i]:sub(counter)).grid(row=2+i, column=ShiftBetweenOrigins*2+3)
+#     entryNum = tk.Entry(MainWindow, textvariable=DuskCounters[i], width = 2).grid(row=2+i, column=ShiftBetweenOrigins*2+1)
+#     buttonCal = tk.Button(MainWindow, text="+", command=lambda counter=DuskCounters[i]:add(counter)).grid(row=2+i, column=ShiftBetweenOrigins*2+2)
+#     buttonCal = tk.Button(MainWindow, text="-", command=lambda counter=DuskCounters[i]:sub(counter)).grid(row=2+i, column=ShiftBetweenOrigins*2+3)
 
 
 labelTitle = tk.Label(MainWindow, text="Champions to buy", font=boldedFont).grid(row=DOWNSIDE-1, column=ShiftBetweenOrigins*5)
@@ -1071,10 +1051,10 @@ for i in range(0, len(OriginChampsFromDFList),1):
     show_champions_from_origin(i, OriginChampsFromDFList[i], OriginChampsCountersBuyList[i], DOWNSIDE)
     
 ####origins
-show_champions_from_origin(11,OriginNames, OriginCounters, UPSIDE,ORIGINFLAG)    
+show_champions_from_origin(len(OriginChampsFromDFList),OriginNames, OriginCounters, UPSIDE,ORIGINFLAG)    
 
 #### primary class
-show_champions_from_origin(12, ClassPrimaryNames, ClassPrimaryCounters, UPSIDE, ORIGINFLAG )
+show_champions_from_origin((len(OriginChampsFromDFList)+1), ClassPrimaryNames, ClassPrimaryCounters, UPSIDE, ORIGINFLAG )
 labeling = tk.Label(MainWindow, text="Left to buy", font=boldedFont).grid(row=12+0, column=0)
 
 labeling = tk.Label(MainWindow, text="Points", font=boldedFont).grid(row=14+0, column=0)
