@@ -1,6 +1,8 @@
 # TFT-DSS
 Teamfight Tactics Decisive Support System  
 
+17.09 back to business and working on improvements in set 4, was doing research about neural networks to deal with computer vision for DSS.
+
 This is my current project, and I will work on advices which champion should user pick from 5 random champions that user can buy.  
 
 I will use my knowledge to build fuzzy logic system that will calculate uncertain utility for every single champion and their combinations as a team.  I dont recommend using it in ranked games especially its wasnt test with game yet.
