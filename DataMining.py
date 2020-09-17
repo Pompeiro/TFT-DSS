@@ -184,7 +184,6 @@ for i,champ in enumerate(step3):
     champ.insert(13,ChampionTierList[i].Tier)
 
 
-Champion = namedtuple('Champ', ['Champion', 'DPS', 'AS', 'DMG', 'Range', 'HP', 'Mana', 'Armor', 'MR', 'Origin', 'ClassPrimary', 'ClassSecondary', 'Cost', 'Tier'])
 
 
 
@@ -214,6 +213,12 @@ z.to_csv('championsData.csv', encoding='utf-8')
 
 
 championNamesList =z.Champion.to_list()
+
+
+
+
+Champion = namedtuple('Champ', ['Champion', 'DPS', 'AS', 'DMG', 'Range', 'HP', 'Mana', 'Armor', 'MR', 'OriginPimary', 'OriginSecondary', 'ClassPrimary', 'ClassSecondary', 'Cost', 'Tier'])
+
 
 for i,name in enumerate(championNamesList): ######## wasted 2 hours for searching answer how to create variable variable
     print(name.replace(" ", ""), end='')
