@@ -112,6 +112,7 @@ AssassinChamps = list(df.query('ClassPrimary == "Assassin"').Champion)
 BrawlerChamps = list(df.query('ClassPrimary == "Brawler"').Champion)
 DazzlerChamps = list(df.query('ClassPrimary == "Dazzler"').Champion)
 DuelistChamps = list(df.query('ClassPrimary == "Duelist"').Champion)
+EmperorChamps = list(df.query('ClassSecondary == "Emperor"').Champion)
 HunterChamps = list(df.query('ClassPrimary == "Hunter"').Champion)
 KeeperChamps = list(df.query('ClassPrimary == "Keeper"').Champion)
 MageChamps = list(df.query('ClassPrimary == "Mage"').Champion)
@@ -121,8 +122,9 @@ SharpshooterChamps = list(df.query('ClassPrimary == "Sharpshooter"').Champion)
 VanguardChamps = list(df.query('ClassPrimary == "Vanguard"').Champion)
 
 classChampsFromDFList = [AdeptChamps, AssassinChamps, BrawlerChamps, DazzlerChamps,
-                         DuelistChamps, HunterChamps, KeeperChamps, MageChamps,
-                         MysticChamps, ShadeChamps, SharpshooterChamps, VanguardChamps]
+                         DuelistChamps, EmperorChamps, HunterChamps, KeeperChamps,
+                         MageChamps, MysticChamps, ShadeChamps, SharpshooterChamps,
+                         VanguardChamps]
 
 
 
@@ -138,7 +140,7 @@ print("]")
 
 
 championListForOCR = ['Aatrox', 'Elise', 'Evelynn', 'Jhin', 'Kalista', 'Pyke',
-                      'Twisted Fate', 'Zilean', 'Jax', 'LeeSin', 'Lux', 'Warwick',
+                      'Twisted Fate', 'Zilean', 'Jax', 'Lee Sin', 'Lux', 'Warwick',
                       'Wukong', 'Cassiopeia', 'Lillia', 'Riven', 'Thresh', 'Vayne',
                       'Ashe', 'Ezreal', 'Hecarim', 'Lulu', 'Maokai', 'Nunu',
                       'Veigar', 'Fiora', 'Irelia', 'Janna', 'Morgana', 'Nami',
@@ -166,9 +168,26 @@ reader = easyocr.Reader(['en'])
 
 screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
 
-wincap = WindowCapture('League of Legends (TM) Client')
+###################################### 
+######################################
+###### IF U WANT TEST WITHOUT GAME THEN COMMENT HERE
+######################################
+######################################
 
-# wincap = None
+
+
+
+# wincap = WindowCapture('League of Legends (TM) Client')
+
+wincap = None
+
+
+
+###################################
+####################################
+##################################
+
+
 
 def make_cropped_ss_and_get_champions_to_buy(loadImage=0, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
     if loadImage:
@@ -437,7 +456,10 @@ counterLeeSin= tk.IntVar()
 counterLux= tk.IntVar()
 counterWarwick= tk.IntVar()
 counterWukong= tk.IntVar()
-DivineCounters = [counterJax, counterLeeSin, counterLux, counterWarwick, counterWukong]
+
+counterIrelia= tk.IntVar() 
+
+DivineCounters = [counterJax, counterLeeSin, counterLux, counterWarwick, counterWukong, counterIrelia]
 
 counterCassiopeia= tk.IntVar()
 counterLillia= tk.IntVar()
@@ -458,7 +480,7 @@ ElderwoodCounters = [counterAshe, counterEzreal, counterHecarim, counterLulu,
                      counterMaokai, counterNunu, counterVeigar]
 
 counterFiora= tk.IntVar()
-counterIrelia= tk.IntVar()
+# counterIrelia= tk.IntVar() 
 counterJanna= tk.IntVar()
 counterMorgana= tk.IntVar()
 counterNami= tk.IntVar()
@@ -474,7 +496,10 @@ counterAnnie= tk.IntVar()
 counterJinx= tk.IntVar()
 counterSejuani= tk.IntVar()
 counterTahmKench= tk.IntVar()
-FortuneCounters = [counterAnnie, counterJinx, counterSejuani, counterTahmKench]
+
+counterKatarina= tk.IntVar() 
+
+FortuneCounters = [counterAnnie, counterJinx, counterSejuani, counterTahmKench, counterKatarina]
 
 counterAphelios= tk.IntVar()
 counterDiana= tk.IntVar()
@@ -503,7 +528,7 @@ TormentedCounters = [counterKayn]
 counterAzir= tk.IntVar()
 counterGaren= tk.IntVar()
 counterJarvanIV= tk.IntVar()
-counterKatarina= tk.IntVar()
+# counterKatarina= tk.IntVar() 
 counterNidalee= tk.IntVar()
 counterVi= tk.IntVar()
 counterXinZhao= tk.IntVar()
@@ -530,15 +555,16 @@ counterBuyLeeSin= tk.IntVar()
 counterBuyLux= tk.IntVar()
 counterBuyWarwick= tk.IntVar()
 counterBuyWukong= tk.IntVar()
-DivineCountersBuy = [counterBuyJax, counterBuyLeeSin, counterBuyLux, counterBuyWarwick, counterBuyWukong]
+DivineCountersBuy = [counterBuyJax, counterBuyLeeSin, counterBuyLux,
+                     counterBuyWarwick, counterBuyWukong]
 
 counterBuyCassiopeia= tk.IntVar()
 counterBuyLillia= tk.IntVar()
 counterBuyRiven= tk.IntVar()
 counterBuyThresh= tk.IntVar()
 counterBuyVayne= tk.IntVar()
-DuskCountersBuy = [counterBuyCassiopeia, counterBuyLillia, counterBuyRiven, counterBuyThresh,
-                counterBuyVayne]
+DuskCountersBuy = [counterBuyCassiopeia, counterBuyLillia, counterBuyRiven,
+                   counterBuyThresh, counterBuyVayne]
 
 counterBuyAshe= tk.IntVar()
 counterBuyEzreal= tk.IntVar()
@@ -567,7 +593,8 @@ counterBuyAnnie= tk.IntVar()
 counterBuyJinx= tk.IntVar()
 counterBuySejuani= tk.IntVar()
 counterBuyTahmKench= tk.IntVar()
-FortuneCountersBuy = [counterBuyAnnie, counterBuyJinx, counterBuySejuani, counterBuyTahmKench]
+FortuneCountersBuy = [counterBuyAnnie, counterBuyJinx, counterBuySejuani,
+                      counterBuyTahmKench]
 
 counterBuyAphelios= tk.IntVar()
 counterBuyDiana= tk.IntVar()
@@ -641,8 +668,11 @@ OriginNames = sorted(list(set(df.OriginPrimary)))
 
 ######## primary class counters
 
-ClassPrimaryNames = sorted(list(set(df.ClassPrimary)))
-
+ClassPrimaryNames = list(set(df.ClassPrimary))
+ClassSecondaryNames = list(set(df.query('ClassSecondary != "None"').ClassSecondary))
+for secondary in ClassSecondaryNames:
+    ClassPrimaryNames.append(secondary)
+ClassNames = sorted(list(set(ClassPrimaryNames)))
 
 for clas in ClassPrimaryNames:
     print("counter"+clas+" = tk.IntVar()")
@@ -653,6 +683,7 @@ counterAssassin = tk.IntVar()
 counterBrawler = tk.IntVar()
 counterDazzler = tk.IntVar()
 counterDuelist = tk.IntVar()
+counterEmperor = tk.IntVar()
 counterHunter = tk.IntVar()
 counterKeeper = tk.IntVar()
 counterMage = tk.IntVar()
@@ -661,7 +692,7 @@ counterShade = tk.IntVar()
 counterSharpshooter = tk.IntVar()
 counterVanguard = tk.IntVar()
 
-for i,clas in enumerate(ClassPrimaryNames):
+for i,clas in enumerate(ClassNames):
     print(clas+"Counters = [ ")
     for champ in classChampsFromDFList[i]:
         print("counter"+champ,end = ", ")
@@ -685,14 +716,16 @@ DazzlerCounters = [counterEzreal, counterLissandra, counterLux, counterMorgana]
 DuelistCounters = [counterFiora, counterJax, counterKalista, counterLeeSin,
                    counterXinZhao, counterYasuo]
 
-HunterCounters = [counterAphelios, counterAshe, counterKindred]
+EmperorCounters = [counterAzir]
+
+HunterCounters = [counterAphelios, counterAshe, counterKindred, counterWarwick]
 
 KeeperCounters = [counterAzir, counterElise, counterJarvanIV, counterKennen, counterRiven]
 
 MageCounters = [counterAhri, counterAnnie, counterLillia, counterLulu, counterNami,
                 counterTwistedFate, counterVeigar]
 
-MysticCounters = [counterCassiopeia, counterJanna, counterYuumi, counterZilean]
+MysticCounters = [counterCassiopeia, counterJanna, counterShen, counterYuumi, counterZilean]
 
 ShadeCounters = [counterEvelynn, counterKayn, counterZed]
 
@@ -707,8 +740,9 @@ for clas in ClassPrimaryNames:
 print("]")
 
 ClassPrimaryCounters = [counterAdept, counterAssassin, counterBrawler, counterDazzler,
-                        counterDuelist, counterHunter, counterKeeper, counterMage,
-                        counterMystic, counterShade, counterSharpshooter, counterVanguard]
+                        counterDuelist, counterEmperor, counterHunter, counterKeeper,
+                        counterMage, counterMystic, counterShade, counterSharpshooter,
+                        counterVanguard]
 
 
 print("ClassPrimaryCountersList = [")
@@ -717,9 +751,10 @@ for clas in ClassPrimaryNames:
 print("]")
 
 ClassPrimaryCountersList = [AdeptCounters, AssassinCounters, BrawlerCounters,
-                            DazzlerCounters, DuelistCounters, HunterCounters,
-                            KeeperCounters, MageCounters, MysticCounters, ShadeCounters,
-                            SharpshooterCounters, VanguardCounters]
+                            DazzlerCounters, DuelistCounters, EmperorCounters,
+                            HunterCounters, KeeperCounters, MageCounters, 
+                            MysticCounters, ShadeCounters, SharpshooterCounters,
+                            VanguardCounters]
 
 
 
@@ -777,12 +812,43 @@ OriginChampsCountersList1d = sum(OriginChampsCountersList, [])
 OriginChampsCountersBuyList1d = sum(OriginChampsCountersBuyList, [])
 
 
+print("OriginChampsCountersListUseAsButtons = [")
+for champ in ChampsNames:
+    print("counter"+champ,end = ", ")
+print("]")
+print()
+
+OriginChampsCountersListUseAsButtons = [counterAatrox, counterElise, counterEvelynn,
+                                        counterJhin, counterKalista, counterPyke,
+                                        counterTwistedFate, counterZilean, counterJax,
+                                        counterLeeSin, counterLux, counterWarwick,
+                                        counterWukong, counterCassiopeia, counterLillia,
+                                        counterRiven, counterThresh, counterVayne,
+                                        counterAshe, counterEzreal, counterHecarim, counterLulu,
+                                        counterMaokai, counterNunu, counterVeigar,
+                                        counterFiora, counterIrelia, counterJanna,
+                                        counterMorgana, counterNami, counterTalon,
+                                        counterYasuo, counterYone, counterAnnie,
+                                        counterJinx, counterSejuani, counterTahmKench,
+                                        counterAphelios, counterDiana, counterLissandra,
+                                        counterSylas, counterAkali, counterKennen,
+                                        counterShen, counterZed, counterAhri,
+                                        counterKindred, counterTeemo, counterYuumi,
+                                        counterSett, counterKayn, counterAzir,
+                                        counterGaren, counterJarvanIV, counterKatarina,
+                                        counterNidalee, counterVi, counterXinZhao]    
+
+# OriginChampsCountersList1d.pop(12)
+# OriginChampsCountersList1d.pop()
+# OriginChampsCountersList1d.pop()
+
+
 CHAMPIONFLAG =1
 ORIGINFLAG =0
 
 bonusPointsFromOrigin =[0] * len(OriginNames)
 
-bonusPointsFromClass = [0] * len(ClassPrimaryNames)
+bonusPointsFromClass = [0] * len(ClassNames)
 
 ######### order as in GUI
 df.sort_values(by=['OriginPrimary', 'Champion'], inplace = True)
@@ -869,7 +935,7 @@ def show_nonzero_counters(rowOffset=0):
     print("THIS IS U ", u)
     for i in range(0,len(u),1):
         # print("Thats the input to add",select_counter(cardsLeft[i]))
-        buttonCalcList[i] = tk.Button(MainWindow, text=(df.Champion[u[i]]), command=lambda i = i:[add(OriginChampsCountersList1d[u[i]]), delete_button(i), sub(OriginChampsCountersBuyList1d[u[i]])])
+        buttonCalcList[i] = tk.Button(MainWindow, text=(df.Champion[u[i]]), command=lambda i = i:[add(OriginChampsCountersListUseAsButtons[u[i]]), delete_button(i), sub(OriginChampsCountersBuyList1d[u[i]])])
         buttonCalcList[i].grid(row=12+rowOffset, column=ShiftBetweenOrigins*(i+1))
         
     # print(pd.DataFrame(cardsToBeButtons, columns=Card._fields))
@@ -958,20 +1024,28 @@ def additional_points_from_origin_combo(championNumber):
     champions to buy list.
     Out: Bonus points from origin."""
     pos = OriginNames.index(df.OriginPrimary[championNumber])
-    print("bonusPointsFromOrigin[pos] ",bonusPointsFromOrigin[pos])
-    return bonusPointsFromOrigin[pos]
+    if df.OriginSecondary[championNumber] != "None":
+        pos2 = OriginNames.index(df.OriginSecondary[championNumber])
+        print("bonusPointsFromOrigin[pos] + bonusPointsFromOrigin[pos2] ",
+              bonusPointsFromOrigin[pos] + bonusPointsFromOrigin[pos2] )
+        return bonusPointsFromOrigin[pos]  + bonusPointsFromOrigin[pos2]  
+    else:
+        print("bonusPointsFromOrigin[pos] ",bonusPointsFromOrigin[pos])
+        return bonusPointsFromOrigin[pos]
 
 def additional_points_from_class_combo(championNumber):
     """Part of sum points, bonus from class for specific champion.
     In: championNumber its just position of champion in list by primal 
     champions to buy list.
     Out: Bonus points from class."""
-    pos = ClassPrimaryNames.index(df.ClassPrimary[championNumber])
-    if df.ClassSecondary[championNumber] == ("Demolitionist" or "Blademaster"):
-        pos2 = ClassPrimaryNames.index(df.ClassSecondary[championNumber])
+    pos = ClassNames.index(df.ClassPrimary[championNumber])
+    if df.ClassSecondary[championNumber] != "None":
+        pos2 = ClassNames.index(df.ClassSecondary[championNumber])
+        print("bonusPointsFromClass[pos] + bonusPointsFromClass[pos2] ",
+              bonusPointsFromClass[pos] + bonusPointsFromClass[pos2] )
         return bonusPointsFromClass[pos]  + bonusPointsFromClass[pos2]  
-    #print("bonusPointsFromClass[pos] ",bonusPointsFromClass[pos])
     else:
+        print("bonusPointsFromClass[pos] ",bonusPointsFromClass[pos])
         return bonusPointsFromClass[pos]  
 
 
@@ -981,7 +1055,7 @@ def additional_points_from_champions_in_pool(championNumber):
     In: championNumber its just position of champion in list by primal 
     champions to buy list.
     Out: Bonus points from champions that are already in pool."""
-    bonusPointsFromChampionPool = (OriginChampsCountersList1d[championNumber].get() -1) * 0.2
+    bonusPointsFromChampionPool = (OriginChampsCountersListUseAsButtons[championNumber].get() -1) * 0.2
     print("bonusPointsFromChampionPool[pos] ",bonusPointsFromChampionPool)
     return bonusPointsFromChampionPool
 
@@ -1054,7 +1128,7 @@ for i in range(0, len(OriginChampsFromDFList),1):
 show_champions_from_origin(len(OriginChampsFromDFList),OriginNames, OriginCounters, UPSIDE,ORIGINFLAG)    
 
 #### primary class
-show_champions_from_origin((len(OriginChampsFromDFList)+1), ClassPrimaryNames, ClassPrimaryCounters, UPSIDE, ORIGINFLAG )
+show_champions_from_origin((len(OriginChampsFromDFList)+1), ClassNames, ClassPrimaryCounters, UPSIDE, ORIGINFLAG )
 labeling = tk.Label(MainWindow, text="Left to buy", font=boldedFont).grid(row=12+0, column=0)
 
 labeling = tk.Label(MainWindow, text="Points", font=boldedFont).grid(row=14+0, column=0)
