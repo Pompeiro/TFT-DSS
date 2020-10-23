@@ -98,11 +98,11 @@ Points = single champion points(already calculated in FuzzyCalculation.py file) 
 
 
 
-Data visualization.
+# Data visualization.
 ![StatsPlot](https://user-images.githubusercontent.com/60773657/85411123-3d6cfb00-b568-11ea-9eee-8dc245cdcd4e.png)
 
 
-Using DSS in game.
+# Using DSS in game.
 
 
 ![TFTDSS1](https://user-images.githubusercontent.com/60773657/86474906-0951c100-bd44-11ea-9c46-7b530c1c4cb4.png)
@@ -112,4 +112,8 @@ Results of first three attempts playing normal game with 54 points in silver 4.
 You should pay attention that TFTDSS supported me only in choosing champion to buy. I took care about items and champions placement on the field myself.
 
 ![Scores](https://user-images.githubusercontent.com/60773657/86474581-6bf68d00-bd43-11ea-849a-700741035bc8.png)
+
+# Draw rectangles button(cross mode)
+![crosses](https://user-images.githubusercontent.com/60773657/97043409-b7db7500-1572-11eb-88b3-b801c00439d9.jpg)
+
 
