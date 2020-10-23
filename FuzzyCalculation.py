@@ -376,7 +376,7 @@ for i in range(0,len(df)):
 
 totalPointsList = [0] * len(df)
 for i,champ in enumerate(tanksPreferencePoints):
-    totalPointsList[i] = champ + df.DPS[i] + df.Tier[i]/5 -df.Cost[i]/20
+    totalPointsList[i] = champ + df.DPS[i] + df.Tier[i]/5 -df.Cost[i]/20 #where champ is points for MEANHP>HP preference
     
 
 
