@@ -174,11 +174,13 @@ ChampionsThatCostFiveDF.columns=list(df.columns)
 data = [['AS','DMG','DPS', 'HP', 'MEANHP'],
         ]
 
-
-for i in range(0,7,1):
-    data.append((r"$\bf{" + ChampionsThatCostFiveDF.Champion[i] + "}$", [
-            [ChampionsThatCostFiveDF.AS[i], ChampionsThatCostFiveDF.DMG[i], ChampionsThatCostFiveDF.DPS[i], ChampionsThatCostFiveDF.HP[i], ChampionsThatCostFiveDF.MEANHP[i]]
-            ]))
+def plotChampionsThatCost(ChampionsThatCostXDF = ChampionsThatCostFiveDF):
+    for i in range(0,7,1):
+        data.append((r"$\bf{" + ChampionsThatCostXDF.Champion[i] + "}$", [
+                [ChampionsThatCostXDF.AS[i], ChampionsThatCostXDF.DMG[i], ChampionsThatCostXDF.DPS[i], ChampionsThatCostXDF.HP[i], ChampionsThatCostXDF.MEANHP[i]]
+                ]))
+        
+plotChampionsThatCost(ChampionsThatCostFourDF)
 
 N = len(data[0])
 theta = radar_factory(N, frame='polygon')
