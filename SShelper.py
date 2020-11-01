@@ -7,18 +7,16 @@ Created on Sun Nov  1 08:15:50 2020
 
 
 """
-Take SS.
+Make SS.
+Crop it on champion tiles.
+Save cropped images.
 """
 
 
-# from PIL import ImageGrab
-# snapshot = ImageGrab.grab()
-# save_path = "C:\\Users\\janusz\\Pictures\\tft\\MySnapshot.jpg"
-# snapshot.save(save_path)
+
 import os
 import cv2 as cv
-# import os
-# from time import time
+
 from windowcapture import WindowCapture
 
 
@@ -42,32 +40,40 @@ marker_type = cv.MARKER_CROSS
 marker_type_rectangle = cv.MARKER_SQUARE
 
 
-topLeft = (0, 0)
-bottomRight = (128, 128)
-center = (64, 64)
+championWidth = 128
+championHeight = 128
+
+topLeftStart = (256, 256)
+
+
+topLeft = (topLeftStart[0], topLeftStart[0])
+bottomRight = (topLeft[0] + championWidth, topLeft[0] + championHeight)
+center = (topLeft[0] + championWidth//2, topLeft[1] + championHeight//2)
 
 marker_position = [topLeft, bottomRight, center]
 
-def make_ss_and_show(loadImage=0, window=wincap, croppingY=0, croppingX=0, croppingHeight=1080, croppingWidth=1920):
+def make_ss_and_show(loadImage=0, window=wincap, croppingY=0, croppingX=0, croppingHeight=1080, croppingWidth=1920, showMode=0):
     if loadImage:
         screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
     else:
         screenshot = window.get_screenshot()
     #print(screenshot)
     crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
-    # cv.imshow("ss", crop_img)
+    if showMode:
+        cv.imshow("ss", crop_img)
     
+    return crop_img
+
+
+def draw_rectangle_and_center_and_show(screenshot, showMode=0):
     cv.drawMarker(screenshot, marker_position[2], color=line_color,
                   markerType=marker_type, markerSize=40, thickness=2)
     cv.rectangle(screenshot, marker_position[0], marker_position[1], color=line_color,
                          lineType=line_type, thickness=2)
-    cv.imshow("wind", screenshot)
-    # OCRResult=reader.readtext(crop_img)
-    # print(OCRResult)
-    # listOfChampsToBuyThisTurn=sort_detected_champions_to_buy_by_position(OCRResult)
-    # return listOfChampsToBuyThisTurn
+    if showMode:
+        cv.imshow("wind", screenshot)
 
-make_ss_and_show(1)
+
+
+draw_rectangle_and_center_and_show(make_ss_and_show(), 1)
     
-# u=os.chdir(os.path.dirname(os.path.abspath(__file__)))
-# print(u)
