@@ -26,12 +26,12 @@ import keyboard
 # show avaliable apps names
 WindowCapture.list_window_names()
 
-# wincap = WindowCapture('Spyder (Python 3.8)')
+wincap = WindowCapture('Spyder (Python 3.8)')
 
 # wincap = WindowCapture('League of Legends (TM) Client') 
 
 
-wincap = None
+# wincap = None
 
 
 
@@ -66,7 +66,7 @@ marker_position = [topLeft, bottomRight, center]
 basicSSname = 'C:\\Users\\janusz\\Pictures\\tft\\testingimages\\screen.jpg'
 
 
-def make_ss_and_show(loadImage=1, window=wincap, croppingY=0, croppingX=0, croppingHeight=1080, croppingWidth=1920, showMode=0, saveMode=0, savingSSName=basicSSname):
+def make_ss_and_show(loadImage=0, window=wincap, croppingY=0, croppingX=0, croppingHeight=1080, croppingWidth=1920, showMode=0, saveMode=0, savingSSName=basicSSname):
     if loadImage:
         screenshot = cv.imread("C:\\Users\\janusz\\Documents\\TFT-DSS\\scren.jpg",cv.IMREAD_UNCHANGED)
     else:
@@ -138,17 +138,48 @@ u=draw_rectangle_and_center_and_show(u, markerPosition=saving_marker_position[4]
 cv.imshow("window",u)
 
 
+parentDirectory = "C:\\Users\\janusz\\Pictures\\tft\\testingimages\\"
+
+def create_directory(dirCounter=0, parentDir=parentDirectory): 
+    # Directory 
+    directory = "part{:02}".format(dirCounter)
+      
+    # Path 
+    path = os.path.join(parentDir, directory) 
+      
+    try:
+        os.mkdir(path)
+    except OSError:
+        print ("Creation of the directory %s failed" % path)
+    else:
+        print ("Successfully created the directory %s " % path)
+    return path
+
+
+global directoryCounter
+directoryCounter = 0
+
+
 
 #### saving cropped images with single champion
+def save_single_hexes_into_created_directory(parentDir=parentDirectory):
+    global directoryCounter
+    dirpath = create_directory(dirCounter=directoryCounter)
+    for i,markerpos in enumerate(saving_marker_position):
+        screenName='name{:08}.jpg'.format(i)
+        screenName = os.path.join(dirpath, screenName) 
+        make_ss_and_show(croppingY=markerpos[0][1], croppingX=markerpos[0][0], croppingHeight=markerpos[1][1]-markerpos[0][1], croppingWidth=markerpos[1][0]-markerpos[0][0], saveMode=1, savingSSName=screenName)
+    directoryCounter = directoryCounter + 1
 
-for i,markerpos in enumerate(saving_marker_position):
-    screenName='C:\\Users\\janusz\\Pictures\\tft\\testingimages\\name{:08}.jpg'.format(i)
-    make_ss_and_show(croppingY=markerpos[0][1], croppingX=markerpos[0][0], croppingHeight=markerpos[1][1]-markerpos[0][1], croppingWidth=markerpos[1][0]-markerpos[0][0], saveMode=1, savingSSName=screenName)
 
-
-
-
-
+def make_ss_and_save_multiple_times_on_key_pressed():
+    for i in range(0,3,1):
+        while True:
+            if keyboard.is_pressed("p"):
+                print("You pressed p")
+                save_single_hexes_into_created_directory()
+                break
+        
 
 
 # cv.imwrite('C:\\Users\\janusz\\Documents\\TFT-DSS\\screnUpdated.jpg',u)
