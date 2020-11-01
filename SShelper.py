@@ -5,6 +5,12 @@ Created on Sun Nov  1 08:15:50 2020
 @author: janusz
 """
 
+
+"""
+Take SS.
+"""
+
+
 # from PIL import ImageGrab
 # snapshot = ImageGrab.grab()
 # save_path = "C:\\Users\\janusz\\Pictures\\tft\\MySnapshot.jpg"
@@ -61,7 +67,7 @@ def make_ss_and_show(loadImage=0, window=wincap, croppingY=0, croppingX=0, cropp
     # listOfChampsToBuyThisTurn=sort_detected_champions_to_buy_by_position(OCRResult)
     # return listOfChampsToBuyThisTurn
 
-make_ss_and_show()
+make_ss_and_show(1)
     
 # u=os.chdir(os.path.dirname(os.path.abspath(__file__)))
 # print(u)
