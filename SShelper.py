@@ -62,9 +62,13 @@ center = ((topLeft[0]+bottomRight[0])//2, (topLeft[1]+bottomRight[1])//2)
 
 marker_position = [topLeft, bottomRight, center]
 
-def make_ss_and_show(loadImage=1, window=wincap, croppingY=0, croppingX=0, croppingHeight=1080, croppingWidth=1920, showMode=0, saveMode=0):
+
+basicSSname = 'C:\\Users\\janusz\\Pictures\\tft\\testingimages\\screen.jpg'
+
+
+def make_ss_and_show(loadImage=1, window=wincap, croppingY=0, croppingX=0, croppingHeight=1080, croppingWidth=1920, showMode=0, saveMode=0, savingSSName=basicSSname):
     if loadImage:
-        screenshot = cv.imread("scren.jpg",cv.IMREAD_UNCHANGED)
+        screenshot = cv.imread("C:\\Users\\janusz\\Documents\\TFT-DSS\\scren.jpg",cv.IMREAD_UNCHANGED)
     else:
         screenshot = window.get_screenshot()
     #print(screenshot)
@@ -72,13 +76,13 @@ def make_ss_and_show(loadImage=1, window=wincap, croppingY=0, croppingX=0, cropp
     if showMode:
         cv.imshow("ss", crop_img)
     if saveMode:
-        while True:
-            if keyboard.is_pressed("p"):
-                print("You pressed p")
-                break
-        screenshot = window.get_screenshot()
-        crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
-        cv.imwrite('C:\\Users\\janusz\\Documents\\TFT-DSS\\scren.jpg',crop_img)
+        # while True:
+        #     if keyboard.is_pressed("p"):
+        #         print("You pressed p")
+        #         break
+        # screenshot = window.get_screenshot()
+        # crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
+        cv.imwrite(savingSSName, crop_img)
     
     return crop_img
 
@@ -93,25 +97,6 @@ def draw_rectangle_and_center_and_show(screenshot, markerPosition=marker_positio
     return screenshot
 
 
-def make_cropped_image_and_save(loadImage=1, window=wincap, croppingY=0, croppingX=0, croppingHeight=1080, croppingWidth=1920, showMode=0, saveMode=0):
-    if loadImage:
-        screenshot = cv.imread("scren.jpg",cv.IMREAD_UNCHANGED)
-    else:
-        screenshot = window.get_screenshot()
-    #print(screenshot)
-    crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
-    if showMode:
-        cv.imshow("ss", crop_img)
-    if saveMode:
-        while True:
-            if keyboard.is_pressed("p"):
-                print("You pressed p")
-                break
-        screenshot = window.get_screenshot()
-        crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
-        cv.imwrite('C:\\Users\\janusz\\Documents\\TFT-DSS\\scren.jpg',crop_img)
-    
-    return crop_img
 
 
 # need to add row offset because hexes in row arent in the same positions
@@ -151,6 +136,21 @@ u=draw_rectangle_and_center_and_show(u, markerPosition=saving_marker_position[4]
 
         
 cv.imshow("window",u)
+
+
+
+#### saving cropped images with single champion
+
+for i,markerpos in enumerate(saving_marker_position):
+    screenName='C:\\Users\\janusz\\Pictures\\tft\\testingimages\\name{:08}.jpg'.format(i)
+    make_ss_and_show(croppingY=markerpos[0][1], croppingX=markerpos[0][0], croppingHeight=markerpos[1][1]-markerpos[0][1], croppingWidth=markerpos[1][0]-markerpos[0][0], saveMode=1, savingSSName=screenName)
+
+
+
+
+
+
+
 # cv.imwrite('C:\\Users\\janusz\\Documents\\TFT-DSS\\screnUpdated.jpg',u)
 
 # for row in range(0,4,1):
