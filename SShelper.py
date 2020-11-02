@@ -26,9 +26,9 @@ import keyboard
 # show avaliable apps names
 WindowCapture.list_window_names()
 
-wincap = WindowCapture('Spyder (Python 3.8)')
+# wincap = WindowCapture('Spyder (Python 3.8)')
 
-# wincap = WindowCapture('League of Legends (TM) Client') 
+wincap = WindowCapture('League of Legends (TM) Client') 
 
 
 # wincap = None
@@ -135,10 +135,28 @@ u=draw_rectangle_and_center_and_show(u, markerPosition=saving_marker_position[4]
         
 
         
-cv.imshow("window",u)
+# cv.imshow("window",u)
+
+
+
+
+
+
+
+print("Main directory for screens in this game")
+mainDirectoryName = input()
+print("Your input for main directory is: ",mainDirectoryName)
+
+
 
 
 parentDirectory = "C:\\Users\\janusz\\Pictures\\tft\\testingimages\\"
+
+
+
+parentDirectory = os.path.join(parentDirectory, mainDirectoryName)
+
+os.mkdir(parentDirectory)
 
 def create_directory(dirCounter=0, parentDir=parentDirectory): 
     # Directory 
@@ -173,7 +191,8 @@ def save_single_hexes_into_created_directory(parentDir=parentDirectory):
 
 
 def make_ss_and_save_multiple_times_on_key_pressed():
-    for i in range(0,3,1):
+    print("Now press p to save screenshots.")
+    for i in range(0,40,1):
         while True:
             if keyboard.is_pressed("p"):
                 print("You pressed p")
@@ -181,7 +200,7 @@ def make_ss_and_save_multiple_times_on_key_pressed():
                 break
         
 
-
+make_ss_and_save_multiple_times_on_key_pressed()
 # cv.imwrite('C:\\Users\\janusz\\Documents\\TFT-DSS\\screnUpdated.jpg',u)
 
 # for row in range(0,4,1):
