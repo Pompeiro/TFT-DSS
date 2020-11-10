@@ -90,7 +90,8 @@ Formula is based on my experience in game and my playstyle.
 Points = single champion points(already calculated in FuzzyCalculation.py file) + bonus for the same origin(counter * 0.2) + bonus for the same class(counter * 0.2) + bonus for the same champion in pool((counter -1) * 0.2)
 
 
-
+# SShelper.py
+This file is used for cropping screenshots to extract in game champion models which im going to feed neural network model.
 
 
 
