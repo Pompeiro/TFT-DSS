@@ -10,10 +10,10 @@ and at the end save cropped images into right [training] directory
 which will be nammed as [characters] in label name.
 At the end i hope for looping this all over for every .xml file in specified directory.
 Plan:
-    1. Open .xml file.
-    2. Pickup bounding box.
-    3. Cropp img at bounding box.
-    4. Save cropped image into specified directory.
+    1. Open .xml file. +
+    2. Pickup bounding box. + 
+    3. Cropp img at bounding box. +
+    4. Save cropped image into specified directory. +
     
     1. Makedirs if not exist for training directory named as characters in labels.
     2. Pickup right path to save cropped image into specified directory.
@@ -186,7 +186,7 @@ def make_ss_and_show(loadImage=1, croppingY=0, croppingX=0, croppingHeight=1080,
 
 
 
-
+print("INPUT Main directory for screens in this game")
 mainDirectoryName = input()
 print("Your input for main directory is: ",mainDirectoryName)
 
@@ -217,6 +217,22 @@ def create_directory(dirCounter=0, parentDir=parentDirectory):
     return path
 
 
+def create_directory_with_label_name(nameOfDirectory=championNamesFoundInXMLList[0], parentDir=parentDirectory): 
+    # Directory 
+    directory = nameOfDirectory
+      
+    # Path 
+    path = os.path.join(parentDir, directory) 
+      
+    try:
+        os.mkdir(path)
+    except OSError:
+        print ("Creation of the directory %s failed" % path)
+    else:
+        print ("Successfully created the directory %s " % path)
+    return path
+
+
 global directoryCounter
 directoryCounter = 0
 
@@ -233,4 +249,4 @@ def save_single_hexes_into_created_directory(parentDir=parentDirectory):
     directoryCounter = directoryCounter + 1
 
 
-save_single_hexes_into_created_directory()
+# save_single_hexes_into_created_directory()
