@@ -25,7 +25,7 @@ Plan:
 
 from bs4 import BeautifulSoup 
 import cv2 as cv
-  
+import os
   
 # Reading the data inside the xml 
 # file to a variable under the name  
@@ -156,3 +156,81 @@ def draw_rectangle_and_center_and_show(screenshot, markerPosition=markerPosition
 
 for i in range(0,len(championXmaxFoundInXMLList),1):
     draw_rectangle_and_center_and_show(screenshot,markerPositionList[i])
+    
+    
+basicSSname = 'C:\\Users\\janusz\\Pictures\\tft\\testingimages\\screen.jpg'
+
+
+
+def make_ss_and_show(loadImage=1, croppingY=0, croppingX=0, croppingHeight=1080, croppingWidth=1920, showMode=0, saveMode=0, savingSSName=basicSSname):
+    if loadImage:
+        screenshot = cv.imread("name00000005.jpg",cv.IMREAD_UNCHANGED)
+
+    #print(screenshot)
+    crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
+    if showMode:
+        cv.imshow("ss", crop_img)
+    if saveMode:
+        # while True:
+        #     if keyboard.is_pressed("p"):
+        #         print("You pressed p")
+        #         break
+        # screenshot = window.get_screenshot()
+        # crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
+        cv.imwrite(savingSSName, crop_img)
+    
+    return crop_img
+
+
+
+
+
+
+
+mainDirectoryName = input()
+print("Your input for main directory is: ",mainDirectoryName)
+
+
+
+
+parentDirectory = "C:\\Users\\janusz\\Pictures\\tft\\testingimages\\"
+
+
+
+parentDirectory = os.path.join(parentDirectory, mainDirectoryName)
+
+os.mkdir(parentDirectory)
+
+def create_directory(dirCounter=0, parentDir=parentDirectory): 
+    # Directory 
+    directory = "part{:02}".format(dirCounter)
+      
+    # Path 
+    path = os.path.join(parentDir, directory) 
+      
+    try:
+        os.mkdir(path)
+    except OSError:
+        print ("Creation of the directory %s failed" % path)
+    else:
+        print ("Successfully created the directory %s " % path)
+    return path
+
+
+global directoryCounter
+directoryCounter = 0
+
+
+
+#### saving cropped images with single champion
+def save_single_hexes_into_created_directory(parentDir=parentDirectory):
+    global directoryCounter
+    dirpath = create_directory(dirCounter=directoryCounter)
+    for i,markerpos in enumerate(markerPositionList):
+        screenName='name{:08}.jpg'.format(i)
+        screenName = os.path.join(dirpath, screenName) 
+        make_ss_and_show(croppingY=markerpos[0][1], croppingX=markerpos[0][0], croppingHeight=markerpos[1][1]-markerpos[0][1], croppingWidth=markerpos[1][0]-markerpos[0][0], saveMode=1, savingSSName=screenName)
+    directoryCounter = directoryCounter + 1
+
+
+save_single_hexes_into_created_directory()
