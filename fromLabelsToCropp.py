@@ -23,3 +23,73 @@ Plan:
 
 """
 
+from bs4 import BeautifulSoup 
+  
+  
+# Reading the data inside the xml 
+# file to a variable under the name  
+# data 
+with open('name00000005.xml', 'r') as f: 
+    data = f.read() 
+  
+# Passing the stored data inside 
+# the beautifulsoup parser, storing 
+# the returned object  
+Bs_data = BeautifulSoup(data, "xml") 
+  
+# Finding all instances of tag  
+# `unique` 
+
+championNamesFoundInXMLList = []
+
+championXminFoundInXMLList = []
+championYminFoundInXMLList = []
+championXmaxFoundInXMLList = []
+championYmaxFoundInXMLList = []
+
+
+def findSomethingInXMLFormatReturnStandardTypeList(tagToFind="name", standardTypeToConvert = str):
+    b_ChampNames = Bs_data.find_all(tagToFind) 
+      
+    print("BS4 found names with tags: ", b_ChampNames) 
+    
+    listWithStandardType = []
+    
+    for points in b_ChampNames:
+        listWithStandardType.append(standardTypeToConvert(points.text))
+        
+    print("type inside listWithStandardType: ", standardTypeToConvert)    
+    print("listWithStandardType: ", listWithStandardType)
+    return listWithStandardType
+
+
+
+championNamesFoundInXMLList = findSomethingInXMLFormatReturnStandardTypeList("name", str)
+
+championXminFoundInXMLList = findSomethingInXMLFormatReturnStandardTypeList("xmin", int)
+championYminFoundInXMLList = findSomethingInXMLFormatReturnStandardTypeList("ymin", int)
+championXmaxFoundInXMLList = findSomethingInXMLFormatReturnStandardTypeList("xmax", int)
+championYmaxFoundInXMLList = findSomethingInXMLFormatReturnStandardTypeList("ymax", int)
+
+
+
+
+
+
+
+
+
+
+  
+# Using find() to extract attributes  
+# of the first instance of the tag 
+b_name = Bs_data.find('object') 
+  
+print(b_name) 
+  
+# Extracting the data stored in a 
+# specific attribute of the  
+# `child` tag 
+value = b_name.get('bndbox') 
+  
+print(value) 
