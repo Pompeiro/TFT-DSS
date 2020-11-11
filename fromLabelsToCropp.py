@@ -15,7 +15,7 @@ Plan:
     3. Cropp img at bounding box. +
     4. Save cropped image into specified directory. +
     
-    1. Makedirs if not exist for training directory named as characters in labels.
+    1. Makedirs if not exist for training directory named as characters in labels. +
     2. Pickup right path to save cropped image into specified directory.
     3. Check file with highest number in name [ {:08d} or name+{:08d} format ].
     4. Save cropped image.
@@ -250,3 +250,18 @@ def save_single_hexes_into_created_directory(parentDir=parentDirectory):
 
 
 # save_single_hexes_into_created_directory()
+for labelName in championNamesFoundInXMLList:
+    create_directory_with_label_name(labelName)
+    
+    
+## directory = label name
+## crop image for label name in bounding box
+## save cropped image into directory
+
+
+markerpos = markerPositionList[0]
+tempPath = os.path.join(parentDirectory, championNamesFoundInXMLList[0])
+screenName=championNamesFoundInXMLList[0] + '{:08}.jpg'.format(len(os.listdir(tempPath)))
+screenName = os.path.join(tempPath, screenName) 
+make_ss_and_show(croppingY=markerpos[0][1], croppingX=markerpos[0][0], croppingHeight=markerpos[1][1]-markerpos[0][1], croppingWidth=markerpos[1][0]-markerpos[0][0], saveMode=1, savingSSName=screenName)
+print("this is CWD: ",os.getcwd())
