@@ -29,6 +29,14 @@ import os
   
 import glob
 
+
+
+withoutL_Mode = 1         ############ change this value if == 1 then deleting 
+                            ####2 last characters from label name
+
+
+
+
 pathToDirectoryWithXMLDirectories = "C:\\Users\\janusz\\Pictures\\tft\\testingimages"
 os.chdir(pathToDirectoryWithXMLDirectories)
 listOfDirectoriesWithXMLFiles = glob.glob("gra*")
@@ -79,6 +87,12 @@ for directori in listOfDirectoriesWithXMLFiles:
         
         
         championNamesFoundInXMLList = findSomethingInXMLFormatReturnStandardTypeList("name", str)
+        
+        
+        if withoutL_Mode:
+            for i,champName in enumerate(championNamesFoundInXMLList):
+                championNamesFoundInXMLList[i] = champName[:-2]
+            print("championNamesFoundInXMLList after deleting L_ : ", championNamesFoundInXMLList)
         
         championXminFoundInXMLList = findSomethingInXMLFormatReturnStandardTypeList("xmin", int)
         championYminFoundInXMLList = findSomethingInXMLFormatReturnStandardTypeList("ymin", int)
@@ -302,3 +316,4 @@ for directori in listOfDirectoriesWithXMLFiles:
         championHeightList = []
         markerPositionList = []
         
+labels = os.listdir("C:\\Users\\janusz\\Pictures\\tft\\testingimages\\testing")
