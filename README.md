@@ -1,7 +1,7 @@
 # TFT-DSS
 Teamfight Tactics Decisive Support System  
 
-17.09 back to business and working on improvements in set 4, was doing research about neural networks to deal with computer vision for DSS.
+15.11 First try to build champions detector based on CNN with FastAI. Results at the bottom.
 
 This is my current project, and I will work on advices which champion should user pick from 5 random champions that user can buy.  
 
@@ -117,4 +117,11 @@ You should pay attention that TFTDSS supported me only in choosing champion to b
 # Draw rectangles button(cross mode)
 ![crosses](https://user-images.githubusercontent.com/60773657/97043409-b7db7500-1572-11eb-88b3-b801c00439d9.jpg)
 
+
+
+# Champion object detection
+I think i need to collect more images.
+![Champion-detection2](https://user-images.githubusercontent.com/60773657/99180678-7fb9f300-2728-11eb-80bf-87b75fb2a74e.JPG)
+
+![Champion-detection3](https://user-images.githubusercontent.com/60773657/99180674-76308b00-2728-11eb-9309-a37063c0dfa2.JPG)
 
