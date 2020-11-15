@@ -28,10 +28,10 @@ WindowCapture.list_window_names()
 
 # wincap = WindowCapture('Spyder (Python 3.8)')
 
-wincap = WindowCapture('League of Legends (TM) Client') 
+# wincap = WindowCapture('League of Legends (TM) Client') 
 
 
-# wincap = None
+wincap = None
 
 
 
@@ -66,9 +66,9 @@ marker_position = [topLeft, bottomRight, center]
 basicSSname = 'C:\\Users\\janusz\\Pictures\\tft\\testingimages\\screen.jpg'
 
 
-def make_ss_and_show(loadImage=0, window=wincap, croppingY=0, croppingX=0, croppingHeight=1080, croppingWidth=1920, showMode=0, saveMode=0, savingSSName=basicSSname):
+def make_ss_and_show(loadImage=1, window=wincap, croppingY=0, croppingX=0, croppingHeight=1080, croppingWidth=1920, showMode=0, saveMode=0, savingSSName=basicSSname):
     if loadImage:
-        screenshot = cv.imread("C:\\Users\\janusz\\Documents\\TFT-DSS\\scren.jpg",cv.IMREAD_UNCHANGED)
+        screenshot = cv.imread("C:\\Users\\janusz\\Pictures\\tft\\testingimages\\graBack\\name00000002.jpg",cv.IMREAD_UNCHANGED)
     else:
         screenshot = window.get_screenshot()
     #print(screenshot)
@@ -128,7 +128,27 @@ for row in range(0,4,1):
         else:
             u=draw_rectangle_and_center_and_show(u, markerPosition=marker_position, line_coloring=line_coloring, showMode=0)
         
-        
+
+
+#####  substitute's bench
+for column in range(0,9,1):
+
+    
+    topLeftStart = [400 + rowOffset[0]  + (championWidth + 1) * column, 540 + championHeight//2 ]
+    
+    
+    topLeft = (topLeftStart[0], topLeftStart[1])
+    bottomRight = (topLeft[0] + championWidth, topLeft[1] + championHeight)
+    center = ((topLeft[0]+bottomRight[0])//2, (topLeft[1]+bottomRight[1])//2)
+    
+    marker_position = [topLeft, bottomRight, center]
+    saving_marker_position.append(marker_position)
+    
+    if column == 0 and row == 0:
+        u=draw_rectangle_and_center_and_show(make_ss_and_show(showMode=0,saveMode=0),markerPosition=marker_position, line_coloring=line_coloring, showMode=0)
+    else:
+        u=draw_rectangle_and_center_and_show(u, markerPosition=marker_position, line_coloring=line_coloring, showMode=0)
+            
         
 u=draw_rectangle_and_center_and_show(u, markerPosition=saving_marker_position[4], line_coloring=line_color_odd, showMode=0)       
 
@@ -156,7 +176,13 @@ parentDirectory = "C:\\Users\\janusz\\Pictures\\tft\\testingimages\\"
 
 parentDirectory = os.path.join(parentDirectory, mainDirectoryName)
 
-os.mkdir(parentDirectory)
+
+try:
+    os.mkdir(parentDirectory)
+except OSError:
+    print ("Creation of the directory %s failed" % parentDirectory)
+else:
+    print ("Successfully created the directory %s " % parentDirectory)
 
 def create_directory(dirCounter=0, parentDir=parentDirectory): 
     # Directory 
@@ -200,7 +226,9 @@ def make_ss_and_save_multiple_times_on_key_pressed():
                 break
         
 
-make_ss_and_save_multiple_times_on_key_pressed()
+
+save_single_hexes_into_created_directory()
+# make_ss_and_save_multiple_times_on_key_pressed()
 # cv.imwrite('C:\\Users\\janusz\\Documents\\TFT-DSS\\screnUpdated.jpg',u)
 
 # for row in range(0,4,1):
