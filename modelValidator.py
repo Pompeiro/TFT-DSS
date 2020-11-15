@@ -16,6 +16,9 @@ Plan:
     5. Loop over every image with model.
     6. print predictions on screenshot.
 
+
+############ generate cropping bounding boxes and store them instead of
+############ creating them every time in for loop
 """
 
 import os
@@ -26,13 +29,21 @@ from fastai.vision.widgets import *
 import os
 import cv2 as cv
 
+from windowcapture import WindowCapture
+import time
 
+# starting time
+start = time.time()
+
+# wincap = WindowCapture('League of Legends (TM) Client') 
+
+
+wincap = None
 
 ##########3 model loading
 
 
-bear_types = 'akali', 'annie', 'aphelios', 'ashe', 'cassiopeia', 'diana', 'evelynn', 'fiora', 'garen', 'hecarim', 'irelia', 'janna', 'jarvan', 'jax', 'jhin', 'jinx', 'kalista', 'kennen', 'kindred', 'lee', 'lissandra', 'lulu', 'lux', 'maokai', 'morgana', 'nami', 'nidalee', 'nunu', 'pyke', 'sejuani', 'sett', 'shen', 'sylas', 'tahm', 'talon', 'teemo', 'thresh', 'vayne', 'veigar', 'vi', 'warwick', 'wukong', 'xin', 'yasuo', 'yone', 'yummi', 'zed', 'zilean'
-
+bear_types = 'akali', 'annie', 'aphelios', 'ashe', 'BG', 'cassiopeia', 'diana', 'evelynn', 'fiora', 'garen', 'hecarim', 'irelia', 'janna', 'jarvan', 'jax', 'jhin', 'jinx', 'kalista', 'kennen', 'kindred', 'lee', 'lissandra', 'lulu', 'lux', 'maokai', 'morgana', 'nami', 'nidalee', 'nunu', 'pyke', 'sejuani', 'sett', 'shen', 'sylas', 'tahm', 'talon', 'teemo', 'thresh', 'vayne', 'veigar', 'vi', 'warwick', 'wukong', 'xin', 'yasuo', 'yone', 'yummi', 'zed', 'zilean'
 path = Path('C:\\Users\\janusz\\Pictures\\tft\\testingimages\\testing') ## path to directory with directories as labels.
 bears = DataBlock(
     blocks=(ImageBlock, CategoryBlock), 
@@ -43,7 +54,7 @@ bears = DataBlock(
 dls = bears.dataloaders(path)
 
 
-path = "C:\\Users\\janusz\\Documents\\TFT-DSS\\models\\modelChampsWithoutLVL" # model file without .pth extension
+path = "C:\\Users\\janusz\\Documents\\TFT-DSS\\models\\modelChampsWithLVLwithBg" # model file without .pth extension
 learn = cnn_learner(dls, resnet18, metrics=error_rate)
 
 learn_inf = learn.load(path) 
@@ -66,7 +77,6 @@ mainDirectory = 'C:\\Users\\janusz\\Pictures\\tft\\testingimages\\TestSet'
 
 
 
-wincap = None
 
 
 
@@ -99,14 +109,14 @@ marker_position = [topLeft, bottomRight, center]
 
 
 basicSSname = 'C:\\Users\\janusz\\Pictures\\tft\\testingimages\\TestSet\\screen.jpg'
+# screensho = wincap.get_screenshot()
 
-
-def make_ss_and_show(loadImage=1, window=wincap, croppingY=0, croppingX=0, croppingHeight=1080, croppingWidth=1920, showMode=0, saveMode=0, savingSSName=basicSSname):
+def make_ss_and_show(loadImage=1, window=wincap, croppingY=0, croppingX=0, croppingHeight=1002, croppingWidth=1904, showMode=0, saveMode=0, savingSSName=basicSSname):
     if loadImage:
-        screenshot = cv.imread("C:\\Users\\janusz\\Pictures\\tft\\testingimages\\TestSet\\name00000016.jpg",cv.IMREAD_UNCHANGED)
+        # screenshot = screensho
+        screenshot = cv.imread("C:\\Users\\janusz\\Pictures\\tft\\testingimages\\TestSet\\name00000017.jpg",cv.IMREAD_UNCHANGED)
     else:
-        k=5+3
-        # screenshot = window.get_screenshot()
+        screenshot = window.get_screenshot()
     #print(screenshot)
     crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
     if showMode:
@@ -128,14 +138,13 @@ def draw_rectangle_and_center_and_show(screenshot, markerPosition=marker_positio
                   markerType=marker_type, markerSize=40, thickness=2)
     cv.rectangle(screenshot, markerPosition[0], markerPosition[1], color=line_coloring,
                           lineType=line_type, thickness=2)
-    cv.putText(screenshot, textPrediction, markerPosition[2], cv.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
     
     if showMode:
         cv.imshow(name, screenshot)
     return screenshot
 
 def draw_prediction_and_show(screenshot, markerPosition=marker_position,line_coloring=line_color, showMode=0,name="wind", textPrediction="none"):
-    cv.putText(screenshot, textPrediction, markerPosition[2], cv.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
+    cv.putText(screenshot, textPrediction, markerPosition[2], cv.FONT_HERSHEY_SIMPLEX, 0.6, (36,255,12), 2)
     
     if showMode:
         cv.imshow(name, screenshot)
@@ -168,30 +177,43 @@ for row in range(0,4,1):
         marker_position = [topLeft, bottomRight, center]
         saving_marker_position.append(marker_position)
         
-        if column == 0 and row == 0:
-            u=draw_rectangle_and_center_and_show(make_ss_and_show(showMode=0,saveMode=0),markerPosition=marker_position, line_coloring=line_coloring, showMode=0)
-        else:
-            u=draw_rectangle_and_center_and_show(u, markerPosition=marker_position, line_coloring=line_coloring, showMode=0)
-        
-        
-        
-u=draw_rectangle_and_center_and_show(u, markerPosition=saving_marker_position[8], line_coloring=line_color_odd, showMode=1, textPrediction="none")       
-
+        # if column == 0 and row == 0:
+        #     u=draw_rectangle_and_center_and_show(make_ss_and_show(showMode=0,saveMode=0),markerPosition=marker_position, line_coloring=line_coloring, showMode=0)
+        # else:
+        #     u=draw_rectangle_and_center_and_show(u, markerPosition=marker_position, line_coloring=line_coloring, showMode=0)
         
 
+#####  substitute's bench
+for column in range(0,9,1):
+
+    
+    topLeftStart = [400 + rowOffset[0]  + (championWidth + 1) * column, 540 + championHeight//2 ]
+    
+    
+    topLeft = (topLeftStart[0], topLeftStart[1])
+    bottomRight = (topLeft[0] + championWidth, topLeft[1] + championHeight)
+    center = ((topLeft[0]+bottomRight[0])//2, (topLeft[1]+bottomRight[1])//2)
+    
+    marker_position = [topLeft, bottomRight, center]
+    saving_marker_position.append(marker_position)
+    
+    # if column == 0 and row == 0:
+    #     u=draw_rectangle_and_center_and_show(make_ss_and_show(showMode=0,saveMode=0),markerPosition=marker_position, line_coloring=line_coloring, showMode=0)
+    # else:
+    #     u=draw_rectangle_and_center_and_show(u, markerPosition=marker_position, line_coloring=line_coloring, showMode=0)
+    
         
-# cv.imshow("window",u)
 
 
 
-
-
+### directory by input
 
 
 # print("Main directory for screens in this game")
 # mainDirectoryName = input()
 # print("Your input for main directory is: ",mainDirectoryName)
 
+# hardcoded directory
 
 mainDirectoryName = "croppedTest"
 
@@ -311,10 +333,35 @@ for row in range(0,4,1):
         j=j+1
         
         
-u=draw_prediction_and_show(u, markerPosition=saving_marker_position[0], line_coloring=line_color_odd, showMode=1, textPrediction="none")       
+
+#####  substitute's bench
+for column in range(0,9,1):
+
+    
+    topLeftStart = [400 + rowOffset[0]  + (championWidth + 1) * column, 540 + championHeight//2 ]
+    
+    
+    topLeft = (topLeftStart[0], topLeftStart[1])
+    bottomRight = (topLeft[0] + championWidth, topLeft[1] + championHeight)
+    center = ((topLeft[0]+bottomRight[0])//2, (topLeft[1]+bottomRight[1])//2)
+    
+    marker_position = [topLeft, bottomRight, center]
+    saving_marker_position.append(marker_position)
+    
+    if column == 0 and row == 0:
+        u=draw_prediction_and_show(make_ss_and_show(showMode=0,saveMode=0),markerPosition=marker_position, line_coloring=line_coloring, showMode=0,textPrediction=predictionList[j])
+    else:
+        u=draw_prediction_and_show(u, markerPosition=marker_position, line_coloring=line_coloring, showMode=1,textPrediction=predictionList[j])
+    
+    j=j+1     
 
 
 
+
+end = time.time()
+
+# total time taken
+print(f"Runtime of the program is {end - start}")
 
 
 
