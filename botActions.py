@@ -14,7 +14,14 @@ Created on Tue Nov 17 07:59:35 2020
 0x20408 Ustawienia
 0x103fa 
 0x30350 Kalkulator
-0x110210 Kalkulator"""
+0x110210 Kalkulator
+
+Plan:
+    OCR 
+    Points
+    Actions
+
+"""
 import pyautogui
 
 import time
