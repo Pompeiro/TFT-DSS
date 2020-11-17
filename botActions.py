@@ -28,6 +28,104 @@ import time
 
 import mouseinfo
 
+
+#########################################################################################################
+########## OCR MODULE ##############################
+#########################################################################################################
+
+import easyocr
+import cv2 as cv
+
+
+championListForOCR = ['Aatrox', 'Elise', 'Evelynn', 'Jhin', 'Kalista', 'Pyke',
+                      'Twisted Fate', 'Zilean', 'Jax', 'Lee Sin', 'Lux', 'Warwick',
+                      'Wukong', 'Cassiopeia', 'Lillia', 'Riven', 'Thresh', 'Vayne',
+                      'Ashe', 'Ezreal', 'Hecarim', 'Lulu', 'Maokai', 'Nunu',
+                      'Veigar', 'Fiora', 'Irelia', 'Janna', 'Morgana', 'Nami',
+                      'Talon', 'Yasuo', 'Yone', 'Annie', 'Jinx', 'Sejuani',
+                      'Tahm Kench', 'Aphelios', 'Diana', 'Lissandra', 'Sylas',
+                      'Akali', 'Kennen', 'Shen', 'Zed', 'Ahri', 'Kindred', 'Teemo',
+                      'Yuumi', 'Sett', 'Kayn', 'Azir', 'Garen', 'Jarvan IV',
+                      'Katarina', 'Nidalee', 'Vi', 'Xin Zhao']
+
+
+reader = easyocr.Reader(['en'])
+
+screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
+
+###################################### 
+######################################
+###### IF U WANT TEST WITHOUT GAME THEN COMMENT HERE
+######################################
+######################################
+
+
+
+
+# wincap = WindowCapture('League of Legends (TM) Client')
+
+wincap = None
+
+def sort_detected_champions_to_buy_by_position(OCRResultsSorted):
+    """
+    
+    Parameters
+    ----------
+    OCRResultsSorted : OCRresult not parsed
+
+    Returns
+    -------
+    sortedChampionsToBuy : parsed champions list
+
+    """
+    # sort from lowest width (left to right side)
+    OCRResultsSorted = sorted(OCRResultsSorted, key=lambda x: x[0])
+    sortedChampionsToBuy = []
+    for text in OCRResultsSorted:
+        for champ in championListForOCR:
+            if champ in text:
+                sortedChampionsToBuy.append(champ)
+                print("found {}".format(champ))
+    print("List of sorted champions to buy: ",sortedChampionsToBuy)
+    return sortedChampionsToBuy 
+
+
+def make_cropped_ss_and_get_champions_to_buy(loadImage=1, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
+    if loadImage:
+        screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
+    else:
+        screenshot = window.get_screenshot()
+    #print(screenshot)
+    crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
+    cv.imshow("ss", crop_img)
+    OCRResult=reader.readtext(crop_img)
+    print(OCRResult)
+    listOfChampsToBuyThisTurn=sort_detected_champions_to_buy_by_position(OCRResult)
+    return listOfChampsToBuyThisTurn
+
+
+
+
+
+def update_champions_to_buy_from_ocr_detection():
+    listOfChampsToBuyThisTurn=make_cropped_ss_and_get_champions_to_buy()
+    for champToBuy in listOfChampsToBuyThisTurn:
+        for i,champ in enumerate(championListForOCR):
+            if champToBuy == champ:
+                print(i)
+                print(champ)
+                print("Succesfully added detected champion")
+                break
+    print("List of champions detected: ",listOfChampsToBuyThisTurn)            
+    return listOfChampsToBuyThisTurn
+
+
+
+#########################################################################################################
+########## OCR MODULE END ##############################
+#########################################################################################################
+
+
 # pyautogui.getWindowsWithTitle("Spyder (Python 3.8)")[0].minimize()
 
 # pyautogui.getWindowsWithTitle("Discord")[0].restore()
