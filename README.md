@@ -12,6 +12,11 @@ You can track my progress in projects section.
 
 When u want to update csv files by yourself, if not then scroll down to TFTDSS.py 
 
+# V1DSS directory
+It contains just decisive support system for game.
+
+
+
 # Web scraping with DataMining.py
 This file uses selenium, pandas, collections/namedtuple and time.
 
