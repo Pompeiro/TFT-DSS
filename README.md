@@ -13,7 +13,7 @@ You can track my progress in projects section.
 When u want to update csv files by yourself, if not then scroll down to TFTDSS.py 
 
 # V1DSS directory
-It contains just decisive support system for game.
+It contains just decisive support system for game. It's for typical user. 
 
 
 
