@@ -29,24 +29,30 @@ import time
 import mouseinfo
 
 
-#########################################################################################################
-########## OCR MODULE ##############################
-#########################################################################################################
+
+import pandas as pd
+
 
 import easyocr
 import cv2 as cv
 
+###################################################################################
+############################## OCR START ######################################
+####################################################################################
 
-championListForOCR = ['Aatrox', 'Elise', 'Evelynn', 'Jhin', 'Kalista', 'Pyke',
-                      'Twisted Fate', 'Zilean', 'Jax', 'Lee Sin', 'Lux', 'Warwick',
-                      'Wukong', 'Cassiopeia', 'Lillia', 'Riven', 'Thresh', 'Vayne',
-                      'Ashe', 'Ezreal', 'Hecarim', 'Lulu', 'Maokai', 'Nunu',
-                      'Veigar', 'Fiora', 'Irelia', 'Janna', 'Morgana', 'Nami',
-                      'Talon', 'Yasuo', 'Yone', 'Annie', 'Jinx', 'Sejuani',
-                      'Tahm Kench', 'Aphelios', 'Diana', 'Lissandra', 'Sylas',
-                      'Akali', 'Kennen', 'Shen', 'Zed', 'Ahri', 'Kindred', 'Teemo',
-                      'Yuumi', 'Sett', 'Kayn', 'Azir', 'Garen', 'Jarvan IV',
-                      'Katarina', 'Nidalee', 'Vi', 'Xin Zhao']
+
+championListForOCR = ['Aatrox', 'Ahri', 'Akali', 'Annie', 'Aphelios',
+                        'Ashe', 'Azir', 'Cassiopeia', 'Diana', 'Elise', 
+                        'Evelynn', 'Ezreal', 'Fiora', 'Garen', 'Hecarim',
+                        'Irelia', 'Janna', 'Jarvan IV', 'Jax', 'Jhin', 
+                        'Jinx', 'Kalista', 'Katarina', 'Kayn', 'Kennen',
+                        'Kindred', 'Lee Sin', 'Lillia', 'Lissandra', 'Lulu',
+                        'Lux', 'Maokai', 'Morgana', 'Nami', 'Nidalee',
+                        'Nunu', 'Pyke', 'Riven', 'Sejuani', 'Sett',
+                        'Shen', 'Sylas', 'Tahm Kench', 'Talon', 'Teemo', 
+                        'Thresh', 'Twisted Fate', 'Vayne', 'Veigar', 'Vi', 
+                        'Warwick', 'Wukong', 'Xin Zhao', 'Yasuo', 'Yone',
+                        'Yuumi', 'Zed', 'Zilean']
 
 
 reader = easyocr.Reader(['en'])
@@ -119,11 +125,478 @@ def update_champions_to_buy_from_ocr_detection():
     print("List of champions detected: ",listOfChampsToBuyThisTurn)            
     return listOfChampsToBuyThisTurn
 
+###################################################################################
+############################## POINTS END ######################################
+####################################################################################
 
 
-#########################################################################################################
-########## OCR MODULE END ##############################
-#########################################################################################################
+
+
+###################################################################################
+############################## POINTS START ######################################
+####################################################################################
+
+df = pd.read_csv("scaledChampionsdf.csv") 
+
+df.drop('Unnamed: 0', axis=1, inplace=True)
+
+CultistChamps = list(df.query('OriginPrimary == "Cultist"').Champion)
+DivineChamps = list(df.query('OriginPrimary == "Divine"').Champion)
+DuskChamps = list(df.query('OriginPrimary == "Dusk"').Champion)
+ElderwoodChamps = list(df.query('OriginPrimary == "Elderwood"').Champion)
+EnlightenedChamps = list(df.query('OriginPrimary == "Enlightened"').Champion)
+ExileChamps = list(df.query('OriginPrimary == "Exile"').Champion)
+FortuneChamps = list(df.query('OriginPrimary == "Fortune"').Champion)
+MoonlightChamps = list(df.query('OriginPrimary == "Moonlight"').Champion)
+NinjaChamps = list(df.query('OriginPrimary == "Ninja"').Champion)
+SpiritChamps = list(df.query('OriginPrimary == "Spirit"').Champion)
+TheBossChamps = list(df.query('OriginPrimary == "TheBoss"').Champion)
+TormentedChamps = list(df.query('OriginPrimary == "Tormented"').Champion)
+WarlordChamps = list(df.query('OriginPrimary == "Warlord"').Champion)
+
+OriginChampsFromDFList = [CultistChamps, DivineChamps, DuskChamps, ElderwoodChamps,
+                          EnlightenedChamps, ExileChamps, FortuneChamps,
+                          MoonlightChamps, NinjaChamps, SpiritChamps, TheBossChamps,
+                          TormentedChamps, WarlordChamps]
+
+
+
+list(df.query('Champion == "Pyke"').Points)
+
+OriginNames = sorted(list(set(df.OriginPrimary)))
+
+ClassPrimaryNames = list(set(df.ClassPrimary))
+ClassSecondaryNames = list(set(df.query('ClassSecondary != "None"').ClassSecondary))
+for secondary in ClassSecondaryNames:
+    ClassPrimaryNames.append(secondary)
+ClassNames = sorted(list(set(ClassPrimaryNames)))
+
+
+championNamesList=list(df.Champion)
+
+
+
+
+
+# for champ in championNamesList:
+#     print("counter"+champ+" = 0")
+    
+# for champ in championNamesList:
+#     print("counter"+champ, end = ', ')
+    
+    
+####### champions counters
+    
+    
+counterAatrox = 0
+counterAhri = 0
+counterAkali = 0
+counterAnnie = 0
+counterAphelios = 0
+counterAshe = 0
+counterAzir = 0
+counterCassiopeia = 0
+counterDiana = 0
+counterElise = 0
+counterEvelynn = 0
+counterEzreal = 0
+counterFiora = 0
+counterGaren = 0
+counterHecarim = 0
+counterIrelia = 0
+counterJanna = 0
+counterJarvanIV = 0
+counterJax = 0
+counterJhin = 0
+counterJinx = 0
+counterKalista = 0
+counterKatarina = 0
+counterKayn = 0
+counterKennen = 0
+counterKindred = 0
+counterLeeSin = 0
+counterLillia = 0
+counterLissandra = 0
+counterLulu = 0
+counterLux = 0
+counterMaokai = 0
+counterMorgana = 0
+counterNami = 0
+counterNidalee = 0
+counterNunu = 0
+counterPyke = 0
+counterRiven = 0
+counterSejuani = 0
+counterSett = 0
+counterShen = 0
+counterSylas = 0
+counterTahmKench = 0
+counterTalon = 0
+counterTeemo = 0
+counterThresh = 0
+counterTwistedFate = 0
+counterVayne = 0
+counterVeigar = 0
+counterVi = 0
+counterWarwick = 0
+counterWukong = 0
+counterXinZhao = 0
+counterYasuo = 0
+counterYone = 0
+counterYuumi = 0
+counterZed = 0
+counterZilean = 0
+
+championsCounterList = [counterAatrox, counterAhri, counterAkali, counterAnnie,
+                        counterAphelios, counterAshe, counterAzir, counterCassiopeia,
+                        counterDiana, counterElise, counterEvelynn, counterEzreal,
+                        counterFiora, counterGaren, counterHecarim, counterIrelia,
+                        counterJanna, counterJarvanIV, counterJax, counterJhin,
+                        counterJinx, counterKalista, counterKatarina, counterKayn,
+                        counterKennen, counterKindred, counterLeeSin, counterLillia,
+                        counterLissandra, counterLulu, counterLux, counterMaokai,
+                        counterMorgana, counterNami, counterNidalee, counterNunu,
+                        counterPyke, counterRiven, counterSejuani, counterSett,
+                        counterShen, counterSylas, counterTahmKench, counterTalon,
+                        counterTeemo, counterThresh, counterTwistedFate, counterVayne,
+                        counterVeigar, counterVi, counterWarwick, counterWukong,
+                        counterXinZhao, counterYasuo, counterYone, counterYuumi,
+                        counterZed, counterZilean]
+
+
+
+
+# print("CultistCounters = [")
+# for champ in CultistChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
+    
+
+
+# print("DivineCounters = [")
+# for champ in DivineChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
+
+    
+
+# print("DuskCounters = [")
+# for champ in DuskChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
+
+    
+
+# print("ElderwoodCounters = [")
+# for champ in ElderwoodChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
+
+
+# print("EnlightenedCounters = [")
+# for champ in EnlightenedChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
+
+
+
+# print("ExileCounters = [")
+# for champ in ExileChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
+
+
+
+# print("FortuneCounters = [")
+# for champ in FortuneChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
+
+
+
+# print("MoonlightCounters = [")
+# for champ in MoonlightChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
+
+
+
+# print("NinjaCounters = [")
+# for champ in NinjaChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
+
+
+
+# print("SpiritCounters = [")
+# for champ in SpiritChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
+
+
+# print("TheBossCounters = [")
+# for champ in TheBossChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
+
+
+# print("TormentedCounters = [")
+# for champ in TormentedChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
+
+
+# print("WarlordCounters = [")
+# for champ in WarlordChamps:
+#     print("counter"+champ,end = ", ")
+# print("]")
+# print()
+
+
+########################## class counters
+
+
+CultistCounters = [counterAatrox, counterElise, counterEvelynn, counterJhin,
+                   counterKalista, counterPyke, counterTwistedFate, counterZilean]
+
+DivineCounters = [counterJax, counterLeeSin, counterLux, counterWarwick,
+                  counterWukong, counterIrelia]
+
+DuskCounters = [counterCassiopeia, counterLillia, counterRiven, counterThresh, counterVayne]
+
+ElderwoodCounters = [counterAshe, counterEzreal, counterHecarim, counterLulu,
+                     counterMaokai, counterNunu, counterVeigar]
+
+EnlightenedCounters = [counterFiora, counterIrelia, counterJanna, counterMorgana,
+                       counterNami, counterTalon]
+
+ExileCounters = [counterYasuo, counterYone]
+
+FortuneCounters = [counterAnnie, counterJinx, counterSejuani, counterTahmKench,
+                   counterKatarina]
+
+MoonlightCounters = [counterAphelios, counterDiana, counterLissandra, counterSylas]
+
+NinjaCounters = [counterAkali, counterKennen, counterShen, counterZed]
+
+SpiritCounters = [counterAhri, counterKindred, counterTeemo, counterYuumi]
+
+TheBossCounters = [counterSett]
+
+TormentedCounters = [counterKayn]
+
+WarlordCounters = [counterAzir, counterGaren, counterJarvanIV, counterKatarina,
+                   counterNidalee, counterVi, counterXinZhao]
+
+
+counterCultist= 0
+counterDivine= 0
+counterDusk= 0
+counterElderwood= 0
+counterEnlightened= 0
+counterExile= 0
+counterFortune= 0
+counterMoonlight= 0
+counterNinja= 0
+counterSpirit= 0
+counterTheBoss= 0
+counterTormented= 0
+counterWarlord= 0
+
+OriginCounters = [counterCultist, counterDivine, counterDusk, counterElderwood,
+                  counterEnlightened, counterExile, counterFortune, counterMoonlight,
+                  counterNinja, counterSpirit, counterTheBoss, counterTormented,
+                  counterWarlord]
+
+OriginChampsCountersList = [CultistCounters, DivineCounters, DuskCounters, 
+                          ElderwoodCounters, EnlightenedCounters, ExileCounters, 
+                          FortuneCounters, MoonlightCounters, NinjaCounters,
+                          SpiritCounters, TheBossCounters, TormentedCounters, WarlordCounters]
+
+
+
+counterAdept = 0
+counterAssassin = 0
+counterBrawler = 0
+counterDazzler = 0
+counterDuelist = 0
+counterEmperor = 0
+counterHunter = 0
+counterKeeper = 0
+counterMage = 0
+counterMystic = 0
+counterShade = 0
+counterSharpshooter = 0
+counterVanguard = 0
+
+
+AdeptCounters = [counterIrelia, counterShen, counterYone]
+
+AssassinCounters = [counterAkali, counterDiana, counterKatarina, counterPyke,
+                    counterTalon]
+
+BrawlerCounters = [counterMaokai, counterNunu, counterSett, counterSylas,
+                   counterTahmKench, counterVi, counterWarwick]
+
+DazzlerCounters = [counterEzreal, counterLissandra, counterLux, counterMorgana]
+
+DuelistCounters = [counterFiora, counterJax, counterKalista, counterLeeSin,
+                   counterXinZhao, counterYasuo]
+
+EmperorCounters = [counterAzir]
+
+HunterCounters = [counterAphelios, counterAshe, counterKindred, counterWarwick]
+
+KeeperCounters = [counterAzir, counterElise, counterJarvanIV, counterKennen,
+                  counterRiven]
+
+MageCounters = [counterAhri, counterAnnie, counterLillia, counterLulu, counterNami,
+                counterTwistedFate, counterVeigar]
+
+MysticCounters = [counterCassiopeia, counterJanna, counterShen, counterYuumi,
+                  counterZilean]
+
+ShadeCounters = [counterEvelynn, counterKayn, counterZed]
+
+SharpshooterCounters = [counterJhin, counterJinx, counterNidalee, counterTeemo,
+                        counterVayne]
+
+VanguardCounters = [counterAatrox, counterGaren, counterHecarim, counterSejuani,
+                    counterThresh, counterWukong]
+
+
+ClassPrimaryCounters = [counterAdept, counterAssassin, counterBrawler, counterDazzler,
+                        counterDuelist, counterEmperor, counterHunter, counterKeeper,
+                        counterMage, counterMystic, counterShade, counterSharpshooter,
+                        counterVanguard]
+
+ClassPrimaryCountersList = [AdeptCounters, AssassinCounters, BrawlerCounters,
+                            DazzlerCounters, DuelistCounters, EmperorCounters,
+                            HunterCounters, KeeperCounters, MageCounters, 
+                            MysticCounters, ShadeCounters, SharpshooterCounters,
+                            VanguardCounters]
+
+bonusPointsFromOrigin =[0] * len(OriginChampsCountersList)
+
+bonusPointsFromClass = [0] * len(ClassPrimaryCountersList)
+
+
+
+def update_origins():
+    """Checks nonzero counters for champions in pool and updates origins.
+    Also sets bonus points from origin."""
+    for i,origin in enumerate(OriginChampsCountersList):
+        count = 0
+        for champ in origin:
+            if champ >= 1:
+                count = count + 1
+        OriginCounters[i] = count
+        bonusPointsFromOrigin[i] = count * 0.2  
+        
+        
+def update_classes():
+    """Checks nonzero counters for champions in pool and updates classes.
+    Also sets bonus points from class."""
+    for i,origin in enumerate(ClassPrimaryCountersList):
+        count = 0
+        for champ in origin:
+            if champ >= 1:
+                count = count + 1
+        ClassPrimaryCounters[i] = count
+        bonusPointsFromClass[i] = count * 0.2 
+        
+def update_classes_and_origins():
+    """Checks nonzero counters for champions in pool and updates classes and origins.
+    Also sets bonus points from class and origins."""
+    update_origins()
+    update_classes()        
+        
+
+def additional_points_from_origin_combo(counterIndex):
+    """Part of sum points, bonus from origin for specific champion.
+    In: counterIndex its just position of champion in list by primal 
+    champions to buy list.
+    Out: Bonus points from origin."""
+    pos = OriginNames.index(df.OriginPrimary[counterIndex])
+    if df.OriginSecondary[counterIndex] != "None":
+        pos2 = OriginNames.index(df.OriginSecondary[counterIndex])
+        print("bonusPointsFromOrigin[pos] + bonusPointsFromOrigin[pos2] ",
+              bonusPointsFromOrigin[pos] + bonusPointsFromOrigin[pos2] )
+        return bonusPointsFromOrigin[pos]  + bonusPointsFromOrigin[pos2]  
+    else:
+        print("bonusPointsFromOrigin[pos] ",bonusPointsFromOrigin[pos])
+        return bonusPointsFromOrigin[pos]
+
+def additional_points_from_class_combo(counterIndex):
+    """Part of sum points, bonus from class for specific champion.
+    In: counterIndex its just position of champion in list by primal 
+    champions to buy list.
+    Out: Bonus points from class."""
+    pos = ClassNames.index(df.ClassPrimary[counterIndex])
+    if df.ClassSecondary[counterIndex] != "None":
+        pos2 = ClassNames.index(df.ClassSecondary[counterIndex])
+        print("bonusPointsFromClass[pos] + bonusPointsFromClass[pos2] ",
+              bonusPointsFromClass[pos] + bonusPointsFromClass[pos2] )
+        return bonusPointsFromClass[pos]  + bonusPointsFromClass[pos2]  
+    else:
+        print("bonusPointsFromClass[pos] ",bonusPointsFromClass[pos])
+        return bonusPointsFromClass[pos]  
+        
+        
+def additional_points_from_champions_in_pool(counterIndex):
+    """Part of sum points, bonus from champion in pool.
+    In: championNumber its just position of champion in list by primal 
+    champions to buy list.
+    Out: Bonus points from champions that are already in pool."""
+    bonusPointsFromChampionPool = (championsCounterList[counterIndex] -1) * 0.2
+    print("bonusPointsFromChampionPool[pos] ",bonusPointsFromChampionPool)
+    return bonusPointsFromChampionPool
+
+
+
+
+def from_OCR_champions_to_buy_list_to_counter_index_list(OCRchampionsToBuyList=update_champions_to_buy_from_ocr_detection()):
+    counterIndexList = []
+    for detected in OCRchampionsToBuyList:
+        counterIndexList.append(championListForOCR.index(detected))
+        print("Index of detected champion in OCR: ",championListForOCR.index(detected))
+        
+    print("Should be max 5 items there !!!!!!!!!!!!!!! if not check from_OCR_champions_to_buy_list_to_counter_index_list: ",counterIndexList)
+    return counterIndexList
+        
+        
+
+def show_points_for_champions_to_buy(counterIndexListLocal=from_OCR_champions_to_buy_list_to_counter_index_list()):
+    """It shows up champions POINTS to buy that counters are nonzero, as a text.
+    Doesnt disappear currently, should be fixed.
+    In: rowOffset by default = 0 for buttons row placement."""
+    update_classes_and_origins()
+    pointsForChampionsToBuy = [0] * 5
+    for i in range(0,len(counterIndexListLocal),1):
+        pointsForChampionsToBuy[i] = (df.Points[counterIndexListLocal[i]] + additional_points_from_origin_combo(counterIndexListLocal[i]) 
+                  + additional_points_from_class_combo(counterIndexListLocal[i]) + additional_points_from_champions_in_pool(counterIndexListLocal[i]))
+    return pointsForChampionsToBuy
+
+
+f= show_points_for_champions_to_buy()
+print(f)
+
+
+###################################################################################
+############################## POINTS END ######################################
+####################################################################################
 
 
 # pyautogui.getWindowsWithTitle("Spyder (Python 3.8)")[0].minimize()
