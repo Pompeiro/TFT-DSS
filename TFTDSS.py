@@ -177,9 +177,9 @@ screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
 
 
 
-# wincap = WindowCapture('League of Legends (TM) Client')
+wincap = WindowCapture('League of Legends (TM) Client')
 
-wincap = None
+# wincap = None
 
 
 
@@ -189,7 +189,7 @@ wincap = None
 
 
 
-def make_cropped_ss_and_get_champions_to_buy(loadImage=1, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
+def make_cropped_ss_and_get_champions_to_buy(loadImage=0, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
     if loadImage:
         screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
     else:
@@ -241,6 +241,8 @@ listOfRGBColours = [(255, 0, 255), (0, 255, 255), (0, 255, 255), (0, 255, 255), 
 
 # listOfRGBColours = ["worst", "medium3", "medium2", "medium1", "best"]
 
+# worst magenta mediums in yellow and best in green
+
 # listOfRGBColours=range(0,5)
 # next card, indexing from 0 = most left side
 def calculate_card_position_on_screen(cardIndex):
@@ -278,8 +280,8 @@ def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
     res = [sortedChampionsToBuyPosition.index(i) for i in championsPositionToBuyOrderedByScreen]
     print("Indexes on screen in points list", res)
     f=build_list_of_champion_cards_rectangles()
-    # screenshot = wincap.get_screenshot()
-    screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
+    screenshot = wincap.get_screenshot()
+    # screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
 
     if mode == "rectangle":
         for i in range(0,5):
