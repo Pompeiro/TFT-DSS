@@ -177,9 +177,9 @@ screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
 
 
 
-wincap = WindowCapture('League of Legends (TM) Client')
+# wincap = WindowCapture('League of Legends (TM) Client')
 
-# wincap = None
+wincap = None
 
 
 
@@ -189,7 +189,7 @@ wincap = WindowCapture('League of Legends (TM) Client')
 
 
 
-def make_cropped_ss_and_get_champions_to_buy(loadImage=0, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
+def make_cropped_ss_and_get_champions_to_buy(loadImage=1, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
     if loadImage:
         screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
     else:
@@ -237,7 +237,7 @@ marker_color = (255, 0, 255)
 marker_type = cv.MARKER_CROSS
 
 
-listOfRGBColours = [(0, 0, 255), (255, 0, 0), (255, 0, 0), (255, 0, 0), (0, 255, 0)]
+listOfRGBColours = [(255, 0, 255), (0, 255, 255), (0, 255, 255), (0, 255, 255), (0, 255, 0)]
 
 # listOfRGBColours = ["worst", "medium3", "medium2", "medium1", "best"]
 
@@ -278,17 +278,24 @@ def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
     res = [sortedChampionsToBuyPosition.index(i) for i in championsPositionToBuyOrderedByScreen]
     print("Indexes on screen in points list", res)
     f=build_list_of_champion_cards_rectangles()
-    screenshot = wincap.get_screenshot()
+    # screenshot = wincap.get_screenshot()
+    screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
+
     if mode == "rectangle":
         for i in range(0,5):
             cv.rectangle(screenshot, f[i][0], f[i][1], color=colors[res[i]],
                          lineType=line_type, thickness=2)
         cv.imshow("wind", screenshot)
-    elif mode == "points":
+    elif mode == "cross":
         for i in range(0,5):
                     # Draw the center point
             cv.drawMarker(screenshot, f[i][2], color=colors[res[i]],
                           markerType=marker_type, markerSize=40, thickness=2)
+        cv.imshow("wind", screenshot)
+    elif mode == "points":
+        for i in range(0,5):
+                    # Draw the center point
+                cv.putText(screenshot, "{:.3f}".format(sortedChampionsToBuyPointsAndPosition[res[i]][0]), f[i][2], cv.FONT_HERSHEY_SIMPLEX, 0.6, colors[res[i]], 2)
         cv.imshow("wind", screenshot)
 
 
