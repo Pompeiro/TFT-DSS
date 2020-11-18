@@ -36,6 +36,8 @@ import pandas as pd
 import easyocr
 import cv2 as cv
 
+from operator import itemgetter
+
 ###################################################################################
 ############################## OCR START ######################################
 ####################################################################################
@@ -590,13 +592,73 @@ def show_points_for_champions_to_buy(counterIndexListLocal=from_OCR_champions_to
     return pointsForChampionsToBuy
 
 
-f= show_points_for_champions_to_buy()
-print(f)
+
+championsToBuyIndexes = from_OCR_champions_to_buy_list_to_counter_index_list()
+pointsForChampionsInGameToBuy = show_points_for_champions_to_buy()
+print(pointsForChampionsInGameToBuy)
+
+posOnScreen = [0, 1, 2, 3, 4]
+
+
+
+def create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen():
+    #### https://stackoverflow.com/questions/6422700/how-to-get-indices-of-a-sorted-array-in-python
+
+    championsToBuyPointsThenIndexesThenPositionOnScreen = []
+    for i, point in enumerate(pointsForChampionsInGameToBuy):
+        championsToBuyPointsThenIndexesThenPositionOnScreen.append([point, championsToBuyIndexes[i], posOnScreen[i]])
+    
+    sorted_inds, sorted_items = zip(*sorted([(i,e) for i,e in enumerate(championsToBuyPointsThenIndexesThenPositionOnScreen)], key=itemgetter(1), reverse=True))
+
+    return sorted_items
+
+SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen = list(create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen())
+
+
 
 
 ###################################################################################
 ############################## POINTS END ######################################
 ####################################################################################
+
+
+
+# screenshot = wincap.get_screenshot()
+# screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
+    
+
+
+# cv.moveWindow("bestScreenEverSeen", 0,0)
+# cv.imshow("bestScreenEverSeen", screenshot)
+
+
+Screenshotwindow = pyautogui.getWindowsWithTitle("ss.jpg - Paint")[0]
+Screenshotwindow.minimize()
+time.sleep(1)
+Screenshotwindow.restore()
+Screenshotwindow.activate()
+
+
+championToBuyPositionOnGame = [ (600,975), (794,975), (984,975), (1173,975), (1363,975) ]
+
+for i in range(0,3,1):
+    time.sleep(1)
+    pyautogui.moveTo(x=championToBuyPositionOnGame[SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen[i][2]][0], y=championToBuyPositionOnGame[SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen[i][2]][1], duration=2)
+    pyautogui.click()
+    time.sleep(1)
+    pyautogui.moveTo(x=championToBuyPositionOnGame[SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen[i][2]][0], y=championToBuyPositionOnGame[SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen[i][2]][1], duration=2)
+    pyautogui.click()
+
+
+
+
+######################### buy 2 champions with most points
+
+
+# Points list sorted by apperance on screen
+
+
+
 
 
 # pyautogui.getWindowsWithTitle("Spyder (Python 3.8)")[0].minimize()
@@ -607,11 +669,11 @@ print(f)
 
 # pyautogui.getWindowsWithTitle("TFTDSS")[0].maximize()
 
-TFTDSSwindow = pyautogui.getWindowsWithTitle("TFTDSS")[0]
-TFTDSSwindow.minimize()
-time.sleep(1)
-TFTDSSwindow.restore()
-TFTDSSwindow.activate()
+# TFTDSSwindow = pyautogui.getWindowsWithTitle("wind")[0]
+# TFTDSSwindow.minimize()
+# time.sleep(1)
+# TFTDSSwindow.restore()
+# TFTDSSwindow.activate()
 
 # try:
 #     pyautogui.getWindowsWithTitle("TFTDSS")[0].minimize()
@@ -626,7 +688,7 @@ TFTDSSwindow.activate()
 
 # time.sleep(1)
 
-pyautogui.click(x=850, y=450) ### first iteration with gui
+# pyautogui.click(x=850, y=450) ### first iteration with gui
 
 
 # pyautogui.click(x=1010, y=450) ### after first iteration with gui
@@ -639,22 +701,22 @@ pyautogui.click(x=850, y=450) ### first iteration with gui
 
 
 
-championToBuyPositionOnGUI = [ (210,345), (375,345), (535, 346), (700, 345), (860,345)]
+# championToBuyPositionOnGUI = [ (210,345), (375,345), (535, 346), (700, 345), (860,345)]
 
-championToBuyPositionOnGame = [ (600,975), (794,975), (984,975), (1173,975), (1363,975) ]
+# championToBuyPositionOnGame = [ (600,975), (794,975), (984,975), (1173,975), (1363,975) ]
 
-time.sleep(2)
+# time.sleep(2)
 
-try:
-    TFTDSSwindow.restore()
-    TFTDSSwindow.activate()
-except:
-    TFTDSSwindow.restore()
+# try:
+#     TFTDSSwindow.restore()
+#     TFTDSSwindow.activate()
+# except:
+#     TFTDSSwindow.restore()
 
 
-gameWindow = pyautogui.getWindowsWithTitle("wind")[0]
+# gameWindow = pyautogui.getWindowsWithTitle("wind")[0]
 
-# for i in range(2,5,1):
+# # for i in range(2,5,1):
 #     time.sleep(1)
 #     TFTDSSwindow.activate()
 #     pyautogui.click(x=championToBuyPositionOnGUI[i][0], y=championToBuyPositionOnGUI[i][1])
@@ -664,13 +726,13 @@ gameWindow = pyautogui.getWindowsWithTitle("wind")[0]
     
     
     
-def click_on_champion_to_buy_on_GUI_then_click_on_champion_in_game(positionOnGUI=0,positionInGame=0,GUIwindow=TFTDSSwindow,inGameWindow=gameWindow):
-    time.sleep(1)
-    GUIwindow.activate()
-    pyautogui.click(x=championToBuyPositionOnGUI[positionOnGUI][0], y=championToBuyPositionOnGUI[positionOnGUI][1])
-    time.sleep(1)
-    inGameWindow.activate()
-    pyautogui.click(x=championToBuyPositionOnGame[positionInGame][0], y=championToBuyPositionOnGame[positionInGame][1])
+# def click_on_champion_to_buy_on_GUI_then_click_on_champion_in_game(positionOnGUI=0,positionInGame=0,GUIwindow=TFTDSSwindow,inGameWindow=gameWindow):
+#     time.sleep(1)
+#     GUIwindow.activate()
+#     pyautogui.click(x=championToBuyPositionOnGUI[positionOnGUI][0], y=championToBuyPositionOnGUI[positionOnGUI][1])
+#     time.sleep(1)
+#     inGameWindow.activate()
+#     pyautogui.click(x=championToBuyPositionOnGame[positionInGame][0], y=championToBuyPositionOnGame[positionInGame][1])
 
 # 600,975 ## first champion to buy in game
 # 794,975
