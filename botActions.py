@@ -23,6 +23,7 @@ Plan:
 
 """
 import pyautogui
+import pydirectinput
 
 import time
 
@@ -35,6 +36,8 @@ import pandas as pd
 
 import easyocr
 import cv2 as cv
+from windowcapture import WindowCapture
+
 
 from operator import itemgetter
 
@@ -70,9 +73,9 @@ screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
 
 
 
-# wincap = WindowCapture('League of Legends (TM) Client')
+wincap = WindowCapture('League of Legends (TM) Client')
 
-wincap = None
+# wincap = None
 
 def sort_detected_champions_to_buy_by_position(OCRResultsSorted):
     """
@@ -98,7 +101,7 @@ def sort_detected_champions_to_buy_by_position(OCRResultsSorted):
     return sortedChampionsToBuy 
 
 
-def make_cropped_ss_and_get_champions_to_buy(loadImage=1, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
+def make_cropped_ss_and_get_champions_to_buy(loadImage=0, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
     if loadImage:
         screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
     else:
@@ -621,37 +624,101 @@ SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen = list(create_list_sor
 ############################## POINTS END ######################################
 ####################################################################################
 
+#### update counters todo
 
 
-# screenshot = wincap.get_screenshot()
-# screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
-    
+# Screenshotwindow = pyautogui.getWindowsWithTitle("ss.jpg - Paint")[0]
+
+Screenshotwindow = pyautogui.getWindowsWithTitle('League of Legends (TM) Client')[0]
 
 
-# cv.moveWindow("bestScreenEverSeen", 0,0)
-# cv.imshow("bestScreenEverSeen", screenshot)
+def update_champion_counter(champWithPointsThenIndexThenPosition=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen[0]):
+    # print("champWithPointsThenIndexThenPosition",champWithPointsThenIndexThenPosition)
+    # print("champWithPointsThenIndexThenPosition[1]",champWithPointsThenIndexThenPosition[1])
+    championsCounterList[champWithPointsThenIndexThenPosition[1]] = championsCounterList[champWithPointsThenIndexThenPosition[1]] + 1
+    print("Bought champion: ",championListForOCR[champWithPointsThenIndexThenPosition[1]], "counter current value",championsCounterList[champWithPointsThenIndexThenPosition[1]])
 
 
-Screenshotwindow = pyautogui.getWindowsWithTitle("ss.jpg - Paint")[0]
-Screenshotwindow.minimize()
-time.sleep(1)
-Screenshotwindow.restore()
-Screenshotwindow.activate()
 
-
+# champions card that you can buy
 championToBuyPositionOnGame = [ (600,975), (794,975), (984,975), (1173,975), (1363,975) ]
 
-for i in range(0,3,1):
-    time.sleep(1)
-    pyautogui.moveTo(x=championToBuyPositionOnGame[SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen[i][2]][0], y=championToBuyPositionOnGame[SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen[i][2]][1], duration=2)
+
+## hexes from top left to bottom right
+playgroundHexes = [ [584,410], [677,413], [798,405], [915,400], [1020,415], [1128,409],
+                   [1227,402], [622,466], [731,468], [855,476], [954,484], [1077,480],
+                   [1189,477], [1306,474], [535,557], [670,557], [783,549], [902,551],
+                   [1018,545], [1142,551], [1248,550], [599,618], [720,627], [847,626],
+                   [974,625], [1100,627], [1207,627], [1327,630] ]
+
+
+# hexes on bench from left to right side
+
+benchHexes = [ [454,734], [567,738], [671,736], [789,735], [900,738], [1011,737],
+              [1120,741], [1233,738], [1348,742] ]
+
+
+
+def activate_game_window(inGameWindow=Screenshotwindow,sleepDelay = 0.5):
+    inGameWindow.minimize()
+    time.sleep(sleepDelay)
+    inGameWindow.restore()
+    inGameWindow.activate()
+    time.sleep(sleepDelay)
+
+def buy_best_available_champions_by_points(howMuchChampions=2, mousePathDelay=0.2):
+    activate_game_window()
+    
+    for i in range(0,howMuchChampions,1):
+        # pydirectinput.moveTo(100, 150) # Move the mouse to the x, y coordinates 100, 150.
+        # pydirectinput.click() # Click the mouse at its current location.
+        pyautogui.moveTo(x=championToBuyPositionOnGame[SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen[i][2]][0], y=championToBuyPositionOnGame[SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen[i][2]][1], duration=mousePathDelay)
+        pyautogui.mouseDown()
+        time.sleep(0.3)
+        pyautogui.mouseUp()
+
+        
+        update_champion_counter(SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen[i])
+
+
+buy_best_available_champions_by_points()
+
+
+
+# move from x to y
+
+# move mouse to x
+# click
+# move mouse to y
+# mouse down
+
+
+
+def move_champion_from_x_to_y(startingPoint,metaPoint):
+    activate_game_window()
+    
+    pyautogui.moveTo(x=startingPoint[0], y=startingPoint[1], duration=0.5)
     pyautogui.click()
-    time.sleep(1)
-    pyautogui.moveTo(x=championToBuyPositionOnGame[SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen[i][2]][0], y=championToBuyPositionOnGame[SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen[i][2]][1], duration=2)
-    pyautogui.click()
+    pyautogui.moveTo(x=metaPoint[0], y=metaPoint[1], duration=0.5)
+    pyautogui.mouseDown()
+    time.sleep(0.3)
+    pyautogui.mouseUp()
+    
+
+move_champion_from_x_to_y(benchHexes[2],playgroundHexes[9])
+
+move_champion_from_x_to_y(benchHexes[3],playgroundHexes[10])
+
+
+
+move_champion_from_x_to_y(playgroundHexes[21],playgroundHexes[23])
 
 
 
 
+
+# first hex on substitues bench
+# 479,727
 ######################### buy 2 champions with most points
 
 
