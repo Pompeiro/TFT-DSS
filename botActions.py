@@ -41,6 +41,8 @@ from windowcapture import WindowCapture
 
 from operator import itemgetter
 
+import numpy as np
+
 ###################################################################################
 ############################## OCR START ######################################
 ####################################################################################
@@ -624,7 +626,244 @@ SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen = list(create_list_sor
 ############################## POINTS END ######################################
 ####################################################################################
 
-#### update counters todo
+
+
+
+
+
+
+
+#############################################################################
+################ CHECK HEX OCCUPANCY WITH template matching ##################]
+################################################################################
+jpgwithunits = "C:\\Users\\janusz\\Pictures\\tft\\testingimages\\graDziesiecDefaultArena\\name00000012.jpg"
+jpgwithunits = "playground.jpg"
+jpgwithunits = "playgroundwithunits.jpg"
+
+def make_cropped_ss(loadImage=0, window=wincap, croppingY=0, croppingX=0, croppingHeight=1080, croppingWidth=1920, saveMode=0, savingName="sss.jpg"):
+    if loadImage:
+        screenshot = cv.imread(jpgwithunits,cv.IMREAD_UNCHANGED)
+    else:
+        screenshot = window.get_screenshot()
+    #print(screenshot)
+    crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
+    cv.imshow("ss", crop_img)
+    if saveMode:
+        cv.imwrite(savingName, crop_img)    
+    return crop_img
+
+
+
+
+# img = make_cropped_ss_and_get_champions_to_buy()
+
+img = cv.imread("playground.jpg",cv.IMREAD_UNCHANGED)
+# img=cv.imread("playgroundwithunits.jpg", cv.IMREAD_UNCHANGED)
+playgroundHexes = [ [584,410], [677,413], [798,405], [915,400], [1020,415], [1128,409],
+                   [1227,402], [622,466], [731,468], [855,476], [954,484], [1077,480],
+                   [1189,477], [1306,474], [535,515], [670,515], [783,515], [902,515],
+                   [1018,515], [1142,515], [1248,515], [599,618], [720,627], [847,626],
+                   [974,625], [1100,627], [1207,627], [1327,630] ]
+
+
+benchHexes = [ [454,720], [567,720], [671,720], [789,720], [900,720], [1011,720],
+              [1120,720], [1233,720], [1328,720] ]
+
+hexToTemplateMatchWidth = 50
+hextoTemlpateMatchHeight = 50
+
+playgroundHexesWithOffsetToCropp = []
+
+for hexi in playgroundHexes:
+    playgroundHexesWithOffsetToCropp.append([hexi[0]-25,hexi[1]-25])
+    
+    
+benchHexesWithOffsetToCropp = []
+
+for hexi in benchHexes:
+    benchHexesWithOffsetToCropp.append([hexi[0]-25,hexi[1]-25])    
+    
+    
+# for i,hexi in enumerate(playgroundHexesWithOffsetToCropp):
+#     saveName = "C:\\Users\\janusz\\Documents\\TFT-DSS\\hexJPG\\playground\\playgroundHex" + "{}".format(i) + ".jpg"
+#     make_cropped_ss_and_get_champions_to_buy(croppingY=hexi[1], croppingX=hexi[0], croppingHeight=hextoTemlpateMatchHeight,croppingWidth=hexToTemplateMatchWidth,saveMode=1,savingName=saveName)
+
+
+# for i,hexi in enumerate(benchHexesWithOffsetToCropp):
+#     saveName = "C:\\Users\\janusz\\Documents\\TFT-DSS\\hexJPG\\bench\\benchHex" + "{}".format(i) + ".jpg"
+#     make_cropped_ss_and_get_champions_to_buy(croppingY=hexi[1], croppingX=hexi[0], croppingHeight=hextoTemlpateMatchHeight,croppingWidth=hexToTemplateMatchWidth,saveMode=1,savingName=saveName)
+
+
+
+
+
+
+
+HEXES_WITHOUT_CHAMPIONS_JPG_LIST = ['hexJPG\\playground\\playgroundHex0.jpg',
+                                     'hexJPG\\playground\\playgroundHex1.jpg',
+                                     'hexJPG\\playground\\playgroundHex2.jpg',
+                                     'hexJPG\\playground\\playgroundHex3.jpg',
+                                     'hexJPG\\playground\\playgroundHex4.jpg',
+                                     'hexJPG\\playground\\playgroundHex5.jpg',
+                                     'hexJPG\\playground\\playgroundHex6.jpg',
+                                     'hexJPG\\playground\\playgroundHex7.jpg',
+                                     'hexJPG\\playground\\playgroundHex8.jpg',
+                                     'hexJPG\\playground\\playgroundHex9.jpg',
+                                     'hexJPG\\playground\\playgroundHex10.jpg',
+                                     'hexJPG\\playground\\playgroundHex11.jpg',
+                                     'hexJPG\\playground\\playgroundHex12.jpg',
+                                     'hexJPG\\playground\\playgroundHex13.jpg',
+                                     'hexJPG\\playground\\playgroundHex14.jpg',
+                                     'hexJPG\\playground\\playgroundHex15.jpg',
+                                     'hexJPG\\playground\\playgroundHex16.jpg',
+                                     'hexJPG\\playground\\playgroundHex17.jpg',
+                                     'hexJPG\\playground\\playgroundHex18.jpg',
+                                     'hexJPG\\playground\\playgroundHex19.jpg',
+                                     'hexJPG\\playground\\playgroundHex20.jpg',
+                                     'hexJPG\\playground\\playgroundHex21.jpg',
+                                     'hexJPG\\playground\\playgroundHex22.jpg',
+                                     'hexJPG\\playground\\playgroundHex23.jpg',
+                                     'hexJPG\\playground\\playgroundHex24.jpg',
+                                     'hexJPG\\playground\\playgroundHex25.jpg',
+                                     'hexJPG\\playground\\playgroundHex26.jpg',
+                                     'hexJPG\\playground\\playgroundHex27.jpg']
+
+
+BENCH_WITHOUT_CHAMPIONS_JPG_LIST = ['hexJPG\\bench\\benchHex0.jpg',
+                                     'hexJPG\\bench\\benchHex1.jpg',
+                                     'hexJPG\\bench\\benchHex2.jpg',
+                                     'hexJPG\\bench\\benchHex3.jpg',
+                                     'hexJPG\\bench\\benchHex4.jpg',
+                                     'hexJPG\\bench\\benchHex5.jpg',
+                                     'hexJPG\\bench\\benchHex6.jpg',
+                                     'hexJPG\\bench\\benchHex7.jpg',
+                                     'hexJPG\\bench\\benchHex8.jpg']
+
+# u = cv.imread("C:\\Users\\janusz\\pictures\\tft\\testingimages\\graBack\\name00000000.jpg",cv.IMREAD_UNCHANGED)
+# cv.imshow("okno", u)
+
+
+
+
+# for i,hexi in enumerate(playgroundHexes):
+#     print("playgroudHex{}Occupancy = 0".format(i))
+playgroudHex0Occupancy = 0
+playgroudHex1Occupancy = 0
+playgroudHex2Occupancy = 0
+playgroudHex3Occupancy = 0
+playgroudHex4Occupancy = 0
+playgroudHex5Occupancy = 0
+playgroudHex6Occupancy = 0
+playgroudHex7Occupancy = 0
+playgroudHex8Occupancy = 0
+playgroudHex9Occupancy = 0
+playgroudHex10Occupancy = 0
+playgroudHex11Occupancy = 0
+playgroudHex12Occupancy = 0
+playgroudHex13Occupancy = 0
+playgroudHex14Occupancy = 0
+playgroudHex15Occupancy = 0
+playgroudHex16Occupancy = 0
+playgroudHex17Occupancy = 0
+playgroudHex18Occupancy = 0
+playgroudHex19Occupancy = 0
+playgroudHex20Occupancy = 0
+playgroudHex21Occupancy = 0
+playgroudHex22Occupancy = 0
+playgroudHex23Occupancy = 0
+playgroudHex24Occupancy = 0
+playgroudHex25Occupancy = 0
+playgroudHex26Occupancy = 0
+playgroudHex27Occupancy = 0
+
+
+
+# for i,hexi in enumerate(playgroundHexes):
+#     print("playgroudHex{}Occupancy, ".format(i), end="")
+    
+playgroundHexesOccupancyList = [ playgroudHex0Occupancy, playgroudHex1Occupancy,
+                                playgroudHex2Occupancy, playgroudHex3Occupancy,
+                                playgroudHex4Occupancy, playgroudHex5Occupancy,
+                                playgroudHex6Occupancy, playgroudHex7Occupancy,
+                                playgroudHex8Occupancy, playgroudHex9Occupancy,
+                                playgroudHex10Occupancy, playgroudHex11Occupancy,
+                                playgroudHex12Occupancy, playgroudHex13Occupancy,
+                                playgroudHex14Occupancy, playgroudHex15Occupancy,
+                                playgroudHex16Occupancy, playgroudHex17Occupancy,
+                                playgroudHex18Occupancy, playgroudHex19Occupancy,
+                                playgroudHex20Occupancy, playgroudHex21Occupancy,
+                                playgroudHex22Occupancy, playgroudHex23Occupancy,
+                                playgroudHex24Occupancy, playgroudHex25Occupancy,
+                                playgroudHex26Occupancy, playgroudHex27Occupancy ]
+
+# for i,hexi in enumerate(benchHexes):
+#     print("benchHex{}Occupancy = 0".format(i))
+    
+    
+    
+    
+benchHex0Occupancy = 0
+benchHex1Occupancy = 0
+benchHex2Occupancy = 0
+benchHex3Occupancy = 0
+benchHex4Occupancy = 0
+benchHex5Occupancy = 0
+benchHex6Occupancy = 0
+benchHex7Occupancy = 0
+benchHex8Occupancy = 0   
+
+# for i,hexi in enumerate(benchHexes):
+#     print("benchHex{}Occupancy, ".format(i), end="")
+    
+    
+benchHexesOccupancyList = [ benchHex0Occupancy, benchHex1Occupancy, benchHex2Occupancy,
+                           benchHex3Occupancy, benchHex4Occupancy, benchHex5Occupancy,
+                           benchHex6Occupancy, benchHex7Occupancy, benchHex8Occupancy]
+
+
+
+def check_hexes_list_occupancy(hexesToCheckListJPG=HEXES_WITHOUT_CHAMPIONS_JPG_LIST, hexesLocationWithOffset = playgroundHexesWithOffsetToCropp, occupancyList=playgroundHexesOccupancyList):
+    img_main = make_cropped_ss()
+    for i,jpg in enumerate(hexesToCheckListJPG):
+        img_rgb = make_cropped_ss(croppingY=hexesLocationWithOffset[i][1], croppingX=hexesLocationWithOffset[i][0], croppingHeight=hextoTemlpateMatchHeight,croppingWidth=hexToTemplateMatchWidth,saveMode=0,savingName="saveName")
+        img_gray = cv.cvtColor(img_rgb, cv.COLOR_BGR2GRAY)
+        template = cv.imread(jpg,0)
+        w, h = template.shape[::-1]
+        res = cv.matchTemplate(img_gray,template,cv.TM_CCORR_NORMED)
+        threshold = 0.99
+        loc = np.where( res >= threshold)
+        if loc[0].size>0:
+            print("not occupied  hex number {}".format(i))
+            occupancyList[i]=0
+        else:
+            print("Hex is occupied {}".format(i))
+            occupancyList[i]=1
+            
+        for pt in zip(*loc[::-1]):
+            cv.rectangle(img_main, tuple(hexesLocationWithOffset[i]), (hexesLocationWithOffset[i][0] + w, hexesLocationWithOffset[i][1] + h), (0,0,255), 2)
+    cv.imshow("ss5", img_main)
+    
+
+# check_hexes_list_occupancy(BENCH_WITHOUT_CHAMPIONS_JPG_LIST,benchHexesWithOffsetToCropp,benchHexesOccupancyList)
+
+
+
+
+##############################################################################
+########################## template matching END #############################
+##############################################################################
+
+
+
+
+
+
+
+
+##############################################################################
+############################# Simulating user actions ########################
+##############################################################################
+
 
 
 # Screenshotwindow = pyautogui.getWindowsWithTitle("ss.jpg - Paint")[0]
@@ -681,37 +920,92 @@ def buy_best_available_champions_by_points(howMuchChampions=2, mousePathDelay=0.
         update_champion_counter(SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen[i])
 
 
-buy_best_available_champions_by_points()
+# buy_best_available_champions_by_points()
 
 
 
-# move from x to y
-
-# move mouse to x
-# click
-# move mouse to y
-# mouse down
 
 
 
-def move_champion_from_x_to_y(startingPoint,metaPoint):
+def move_champion_from_x_to_y(startingPoint,metaPoint,):
     activate_game_window()
     
-    pyautogui.moveTo(x=startingPoint[0], y=startingPoint[1], duration=0.5)
+    pyautogui.moveTo(x=startingPoint[0], y=startingPoint[1], duration=0.1)
     pyautogui.click()
-    pyautogui.moveTo(x=metaPoint[0], y=metaPoint[1], duration=0.5)
+    pyautogui.moveTo(x=metaPoint[0], y=metaPoint[1], duration=0.1)
     pyautogui.mouseDown()
-    time.sleep(0.3)
+    time.sleep(0.15)
     pyautogui.mouseUp()
     
 
-move_champion_from_x_to_y(benchHexes[2],playgroundHexes[9])
 
-move_champion_from_x_to_y(benchHexes[3],playgroundHexes[10])
+def move_champion_from_x_to_y_without_game_activation(startingPoint,metaPoint):
+    
+    pyautogui.moveTo(x=startingPoint[0], y=startingPoint[1], duration=0.1)
+    pyautogui.click()
+    pyautogui.moveTo(x=metaPoint[0], y=metaPoint[1], duration=0.1)
+    pyautogui.mouseDown()
+    time.sleep(0.15)
+    pyautogui.mouseUp()
+    
+
+# move_champion_from_x_to_y(benchHexes[2],playgroundHexes[9])
+
+# move_champion_from_x_to_y(benchHexes[3],playgroundHexes[10])
 
 
 
-move_champion_from_x_to_y(playgroundHexes[21],playgroundHexes[23])
+# move_champion_from_x_to_y(playgroundHexes[21],playgroundHexes[23])
+
+
+
+
+def shuffle_champions_on_first_and_third_row_of_hexes_and_subsitute_bench():
+    occupiedHexesLocation = []
+    
+    check_hexes_list_occupancy(BENCH_WITHOUT_CHAMPIONS_JPG_LIST,benchHexesWithOffsetToCropp,benchHexesOccupancyList)
+    check_hexes_list_occupancy()
+    i=0
+    while i < (len(playgroundHexesOccupancyList)-7):
+        if playgroundHexesOccupancyList[i]:
+            print("i is {}".format(i))
+            occupiedHexesLocation.append(playgroundHexes[i])
+            print("Added {} {} to occupiedHexesLocation list in shuffle_champions_on_first_and_third_row_of_hexes function".format(playgroundHexes[i], i))
+        if i==6:
+            i=i+7 ### to avoid checking second row of playground hexes
+            print("changed i: {}".format(i))
+        i=i+1
+    
+    for i in range(0,len(benchHexesOccupancyList),1):
+        if benchHexesOccupancyList[i]:
+            occupiedHexesLocation.append(benchHexes[i])
+            print("Added {} {} to occupiedHexesLocation list in shuffle_champions_on_first_and_third_row_of_hexes function".format(benchHexes[i], i))
+
+
+    print("occupiedHexesLocation before shuffle {}".format(occupiedHexesLocation))
+    np.random.shuffle(occupiedHexesLocation)
+    
+    print("occupiedHexesLocation after shuffle {}".format(occupiedHexesLocation))
+    
+    print("There will be {} shufling".format(len(occupiedHexesLocation)//2))
+
+    activate_game_window()
+    if (len(occupiedHexesLocation) % 2 == 0):
+        for i in range(0,len(occupiedHexesLocation),2):
+            move_champion_from_x_to_y_without_game_activation(occupiedHexesLocation[i],occupiedHexesLocation[i+1])
+            
+            
+    if (len(occupiedHexesLocation) % 2 == 1):
+        for i in range(0,len(occupiedHexesLocation)-1,2):
+            move_champion_from_x_to_y_without_game_activation(occupiedHexesLocation[i],occupiedHexesLocation[i+1])
+
+
+
+
+
+
+
+
 
 
 
