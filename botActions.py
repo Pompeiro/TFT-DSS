@@ -156,17 +156,23 @@ def sort_detected_champions_to_buy_by_position(OCRResultsSorted):
 
 
 def make_cropped_ss_and_get_champions_to_buy(loadImage=0, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
+    WINDOWCAPTUREFLAG = 1
     if loadImage:
         screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
     else:
-        screenshot = window.get_screenshot()
+        try:
+            screenshot = window.get_screenshot()
+        except:
+            print("Not found teamfight tactics game window!!!!!!!!!!!!! From make_cropped_ss()")
+            WINDOWCAPTUREFLAG = 0
     #print(screenshot)
-    crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
-    cv.imshow("ss", crop_img)
-    OCRResult=reader.readtext(crop_img)
-    print(OCRResult)
-    listOfChampsToBuyThisTurn=sort_detected_champions_to_buy_by_position(OCRResult)
-    return listOfChampsToBuyThisTurn
+    if WINDOWCAPTUREFLAG:
+        crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
+        cv.imshow("ss", crop_img)
+        OCRResult=reader.readtext(crop_img)
+        print(OCRResult)
+        listOfChampsToBuyThisTurn=sort_detected_champions_to_buy_by_position(OCRResult)
+        return listOfChampsToBuyThisTurn
 
 
 
@@ -705,16 +711,22 @@ jpgwithunits = "playground.jpg"
 jpgwithunits = "playgroundwithunits.jpg"
 
 def make_cropped_ss(loadImage=0, window=wincap, croppingY=0, croppingX=0, croppingHeight=1080, croppingWidth=1920, saveMode=0, savingName="sss.jpg"):
+    WINDOWCAPTUREFLAG = 1
     if loadImage:
         screenshot = cv.imread(jpgwithunits,cv.IMREAD_UNCHANGED)
     else:
-        screenshot = window.get_screenshot()
+        try:
+            screenshot = window.get_screenshot()
+        except:
+            print("Not found teamfight tactics game window!!!!!!!!!!!!! From make_cropped_ss()")
+            WINDOWCAPTUREFLAG = 0
+    if WINDOWCAPTUREFLAG: 
     #print(screenshot)
-    crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
-    cv.imshow("ss", crop_img)
-    if saveMode:
-        cv.imwrite(savingName, crop_img)    
-    return crop_img
+        crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
+        cv.imshow("ss", crop_img)
+        if saveMode:
+            cv.imwrite(savingName, crop_img)    
+        return crop_img
 
 
 
@@ -964,11 +976,14 @@ benchHexes = [ [454,734], [567,738], [671,736], [789,735], [900,738], [1011,737]
 
 
 def activate_game_window(inGameWindow=Screenshotwindow,sleepDelay = 0.5):
-    inGameWindow.minimize()
-    time.sleep(sleepDelay)
-    inGameWindow.restore()
-    inGameWindow.activate()
-    time.sleep(sleepDelay)
+    if GetWindowText(GetForegroundWindow()) != 'League of Legends (TM) Client':
+        inGameWindow.minimize()
+        time.sleep(sleepDelay)
+        inGameWindow.restore()
+        inGameWindow.activate()
+        time.sleep(sleepDelay)
+    else:
+        print("Game client is active window!!! from activate_game_window()")
 
 def buy_best_available_champions_by_points(howMuchChampions=2, mousePathDelay=0.2,inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen):
     activate_game_window(inGameWindow=Screenshotwindow)
@@ -994,7 +1009,7 @@ def buy_best_available_champions_by_points(howMuchChampions=2, mousePathDelay=0.
 
 def move_champion_from_x_to_y(startingPoint,metaPoint):
     activate_game_window()
-    
+    time.sleep(0.15)
     pyautogui.moveTo(x=startingPoint[0], y=startingPoint[1], duration=0.1)
     pyautogui.click()
     pyautogui.moveTo(x=metaPoint[0], y=metaPoint[1], duration=0.1)
@@ -1068,7 +1083,22 @@ def shuffle_champions_on_first_and_third_row_of_hexes_and_subsitute_bench():
 
 
 
+def move_champions_from_X_row_to_Y_row(fromRow=2,toRow=1):
+    if fromRow == 1:
+        hexes=[0, 1, 2, 3, 4, 5, 6] # list(range(0+7*(fromRow-1),7*fromRow))
+    elif fromRow == 2:
+        hexes=[7, 8, 9, 10, 11, 12, 13]
+    elif fromRow == 3:
+        hexes=[14, 15, 16, 17, 18, 19, 20]
+    elif fromRow == 4:
+        hexes=[21, 22, 23, 24, 25, 26, 27]
+    seed = np.random.randint(0, 10000)
+    np.random.seed(seed)
+    np.random.shuffle(hexes)
+    for i,hexi in enumerate(hexes):
+        move_champion_from_x_to_y(startingPoint=playgroundHexes[hexi], metaPoint=playgroundHexes[i+(toRow-1)*7])
 
+    
 
 # playOrPartyButtonInClient = [440,200]
 
@@ -1103,19 +1133,6 @@ def shuffle_champions_on_first_and_third_row_of_hexes_and_subsitute_bench():
 
 
 
-# def make_cropped_ss_and_get_champions_to_buy(loadImage=0, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
-#     if loadImage:
-#         screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
-#     else:
-#         screenshot = window.get_screenshot()
-#     #print(screenshot)
-#     crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
-#     cv.imshow("ss", crop_img)
-#     OCRResult=reader.readtext(crop_img)
-#     print(OCRResult)
-#     listOfChampsToBuyThisTurn=sort_detected_champions_to_buy_by_position(OCRResult)
-#     return listOfChampsToBuyThisTurn
-
 
 
 
@@ -1130,25 +1147,28 @@ Screenshotwindow = pyautogui.getWindowsWithTitle('League of Legends (TM) Client'
 
 while True:
     try:
-        championsToBuyIndexes = from_OCR_champions_to_buy_list_to_counter_index_list()
-        pointsForChampionsInGameToBuy = show_points_for_champions_to_buy()
-        print(pointsForChampionsInGameToBuy)
-        
-        posOnScreen = [0, 1, 2, 3, 4]
-        
-        SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen = list(create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen(pointsForChamp=pointsForChampionsInGameToBuy, champsTOBUYINDEXES=championsToBuyIndexes, posONSCREEN=posOnScreen))
-        
-        
-        buy_best_available_champions_by_points(howMuchChampions=1, inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen)
-        
-        time.sleep(1)
-        shuffle_champions_on_first_and_third_row_of_hexes_and_subsitute_bench()
-
+        try:
+            championsToBuyIndexes = from_OCR_champions_to_buy_list_to_counter_index_list()
+            pointsForChampionsInGameToBuy = show_points_for_champions_to_buy()
+            print(pointsForChampionsInGameToBuy)
+            
+            posOnScreen = [0, 1, 2, 3, 4]
+            
+            SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen = list(create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen(pointsForChamp=pointsForChampionsInGameToBuy, champsTOBUYINDEXES=championsToBuyIndexes, posONSCREEN=posOnScreen))
+            
+            
+            buy_best_available_champions_by_points(howMuchChampions=1, inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen)
+            
+            time.sleep(1)
+            shuffle_champions_on_first_and_third_row_of_hexes_and_subsitute_bench()
+            move_champions_from_X_row_to_Y_row(fromRow=2,toRow=1)
+            move_champions_from_X_row_to_Y_row(fromRow=4,toRow=3)
+        except(TypeError): 
+            print("end of the game")
+            break
+    
     except(IndexError):
         pass
-    if keyboard.is_pressed("q"):
-        print("You pressed q")
-        break
 
 
 
