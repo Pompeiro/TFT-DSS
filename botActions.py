@@ -45,14 +45,55 @@ import numpy as np
 
 from win32gui import GetWindowText, GetForegroundWindow
 
-import keyboard
+import os
 
 
-inGameWindow = pyautogui.getWindowsWithTitle('League of Legends')[0]
-inGameWindow.minimize()
+
+import itertools
+
+
+#https://stackoverflow.com/questions/33691187/how-to-save-the-file-with-different-name-and-not-overwriting-existing-one
+
+def unique_file(basename, ext):
+    actualname = "%s.%s" % (basename, ext)
+    c = itertools.count()
+    while os.path.exists(actualname):
+        actualname = "%s%d.%s" % (basename, next(c), ext)
+    return actualname
+
+
+
+print("Main directory for screens in this game")
+mainDirectoryName = input()
+print("Your input for main directory is: ",mainDirectoryName)
+
+
+
+
+parentDirectory = "C:\\Users\\janusz\\Pictures\\tft\\testingimages\\"
+
+
+
+parentDirectory = os.path.join(parentDirectory, mainDirectoryName)
+
+
+try:
+    os.mkdir(parentDirectory)
+except OSError:
+    print ("Creation of the directory %s failed" % parentDirectory)
+else:
+    print ("Successfully created the directory %s " % parentDirectory)
+
+
+
+
+
+
+clientWindow = pyautogui.getWindowsWithTitle('League of Legends')[0]
+clientWindow.minimize()
 time.sleep(0.5)
-inGameWindow.restore()
-inGameWindow.activate()
+clientWindow.restore()
+clientWindow.activate()
 time.sleep(0.5)
 
 playOrPartyButtonInClient = [440,200]
@@ -84,7 +125,9 @@ while GetWindowText(GetForegroundWindow()) == 'League of Legends':
 
 print("Game should be accepted")
 
-time.sleep(10)
+time.sleep(15)
+
+
 
 
 
@@ -104,7 +147,7 @@ championListForOCR = ['Aatrox', 'Ahri', 'Akali', 'Annie', 'Aphelios',
                         'Jinx', 'Kalista', 'Katarina', 'Kayn', 'Kennen',
                         'Kindred', 'Lee Sin', 'Lillia', 'Lissandra', 'Lulu',
                         'Lux', 'Maokai', 'Morgana', 'Nami', 'Nidalee',
-                        'Nunu', 'Pyke', 'Riven', 'Sejuani', 'Sett',
+                        'Nunu & Willump', 'Pyke', 'Riven', 'Sejuani', 'Sett',
                         'Shen', 'Sylas', 'Tahm Kench', 'Talon', 'Teemo', 
                         'Thresh', 'Twisted Fate', 'Vayne', 'Veigar', 'Vi', 
                         'Warwick', 'Wukong', 'Xin Zhao', 'Yasuo', 'Yone',
@@ -710,7 +753,7 @@ jpgwithunits = "C:\\Users\\janusz\\Pictures\\tft\\testingimages\\graDziesiecDefa
 jpgwithunits = "playground.jpg"
 jpgwithunits = "playgroundwithunits.jpg"
 
-def make_cropped_ss(loadImage=0, window=wincap, croppingY=0, croppingX=0, croppingHeight=1080, croppingWidth=1920, saveMode=0, savingName="sss.jpg"):
+def make_cropped_ss(loadImage=0, window=wincap, croppingY=0, croppingX=0, croppingHeight=1080, croppingWidth=1920, saveMode=0, savingName="sss.jpg", savingNameUnique="ssIlony",saveModeUnique=0, parDirectory="C:\\Users\\janusz\\Pictures\\tft\\testingimages\\"):
     WINDOWCAPTUREFLAG = 1
     if loadImage:
         screenshot = cv.imread(jpgwithunits,cv.IMREAD_UNCHANGED)
@@ -725,7 +768,10 @@ def make_cropped_ss(loadImage=0, window=wincap, croppingY=0, croppingX=0, croppi
         crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
         cv.imshow("ss", crop_img)
         if saveMode:
-            cv.imwrite(savingName, crop_img)    
+            cv.imwrite(savingName, crop_img)
+        if saveModeUnique:
+                cv.imwrite(unique_file((parDirectory+"\\"+savingNameUnique),"jpg"), crop_img)
+
         return crop_img
 
 
@@ -985,7 +1031,7 @@ def activate_game_window(inGameWindow=Screenshotwindow,sleepDelay = 0.5):
     else:
         print("Game client is active window!!! from activate_game_window()")
 
-def buy_best_available_champions_by_points(howMuchChampions=2, mousePathDelay=0.2,inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen):
+def buy_best_available_champions_by_points(howMuchChampions=2, mousePathDelay=0.05,inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen):
     activate_game_window(inGameWindow=Screenshotwindow)
     
     for i in range(0,howMuchChampions,1):
@@ -993,14 +1039,13 @@ def buy_best_available_champions_by_points(howMuchChampions=2, mousePathDelay=0.
         # pydirectinput.click() # Click the mouse at its current location.
         pyautogui.moveTo(x=championToBuyPositionOnGame[sortedChampionsToBuyPoints[i][2]][0], y=championToBuyPositionOnGame[sortedChampionsToBuyPoints[i][2]][1], duration=mousePathDelay)
         pyautogui.mouseDown()
-        time.sleep(0.3)
+        time.sleep(0.1)
         pyautogui.mouseUp()
 
         
         update_champion_counter(sortedChampionsToBuyPoints[i])
 
 
-# buy_best_available_champions_by_points()
 
 
 
@@ -1009,23 +1054,23 @@ def buy_best_available_champions_by_points(howMuchChampions=2, mousePathDelay=0.
 
 def move_champion_from_x_to_y(startingPoint,metaPoint):
     activate_game_window()
-    time.sleep(0.15)
-    pyautogui.moveTo(x=startingPoint[0], y=startingPoint[1], duration=0.1)
+    time.sleep(0.02)
+    pyautogui.moveTo(x=startingPoint[0], y=startingPoint[1], duration=0.02)
     pyautogui.click()
-    pyautogui.moveTo(x=metaPoint[0], y=metaPoint[1], duration=0.1)
+    pyautogui.moveTo(x=metaPoint[0], y=metaPoint[1], duration=0.02)
     pyautogui.mouseDown()
-    time.sleep(0.15)
+    time.sleep(0.02)
     pyautogui.mouseUp()
     
 
 
 def move_champion_from_x_to_y_without_game_activation(startingPoint,metaPoint):
     
-    pyautogui.moveTo(x=startingPoint[0], y=startingPoint[1], duration=0.1)
+    pyautogui.moveTo(x=startingPoint[0], y=startingPoint[1], duration=0.01)
     pyautogui.click()
-    pyautogui.moveTo(x=metaPoint[0], y=metaPoint[1], duration=0.1)
+    pyautogui.moveTo(x=metaPoint[0], y=metaPoint[1], duration=0.01)
     pyautogui.mouseDown()
-    time.sleep(0.15)
+    time.sleep(0.02)
     pyautogui.mouseUp()
     
 
@@ -1132,43 +1177,182 @@ def move_champions_from_X_row_to_Y_row(fromRow=2,toRow=1):
 # time.sleep(30)
 
 
+gameBuyXPButtonXY = [305,865]
+gameBuyXPButtonHW = [60,185]
+# make_cropped_ss(loadImage=0, window=wincap, croppingY=gameBuyXPButtonXY[1], croppingX=gameBuyXPButtonXY[0], croppingHeight=gameBuyXPButtonHW[0], croppingWidth=gameBuyXPButtonHW[1], saveMode=0, savingName="TemplateMatchingGame\\buyXPButton.jpg")
+
+
+gameRefreshButtonXY = [305,935]
+gameRefreshButtonHW = [60,185]
+# make_cropped_ss(loadImage=0, window=wincap, croppingY=gameRefreshButtonXY[1], croppingX=gameRefreshButtonXY[0], croppingHeight=gameRefreshButtonHW[0], croppingWidth=gameRefreshButtonHW[1], saveMode=0, savingName="TemplateMatchingGame\\refreshButton.jpg")
+
+
+gameBuyXPButtonJPG = "TemplateMatchingGame\\buyXPButton.jpg"
+gameRefreshButtonJPG= "TemplateMatchingGame\\refreshButton.jpg"
+# match_template_with_screen(hexesToCheckListJPG=gameBuyXPButtonJPG, hexesLocationWithOffset = gameBuyXPButtonXY, HW = gameBuyXPButtonHW, threshold=0.95)
+
+# match_template_with_screen(hexesToCheckListJPG=gameRefreshButtonJPG, hexesLocationWithOffset = gameRefreshButtonXY, HW = gameRefreshButtonHW, threshold=0.95)
+
+
+def match_template_with_screen(hexesToCheckListJPG=gameBuyXPButtonJPG, hexesLocationWithOffset = gameBuyXPButtonXY, HW = gameBuyXPButtonHW, threshold = 0.95):
+    img_main = make_cropped_ss()
+    img_rgb = make_cropped_ss(loadImage=0, window=wincap, croppingY=hexesLocationWithOffset[1], croppingX=hexesLocationWithOffset[0], croppingHeight=HW[0], croppingWidth=HW[1], saveMode=0, savingName="TemplateMatchingClient\\acceptGameButton.jpg")
+    img_gray = cv.cvtColor(img_rgb, cv.COLOR_BGR2GRAY)
+    template = cv.imread(hexesToCheckListJPG,0)
+    w, h = template.shape[::-1]
+    res = cv.matchTemplate(img_gray,template,cv.TM_CCORR_NORMED)
+    loc = np.where( res >= threshold)
+    
+    print(loc[0].size)
+
+        
+    for pt in zip(*loc[::-1]):
+        cv.rectangle(img_main, tuple(hexesLocationWithOffset), (hexesLocationWithOffset[0] + HW[1], hexesLocationWithOffset[1] + HW[0]), (0,0,255), 2)
+    cv.imshow("ss5", img_main)
+    return loc[0].size # << if this >0 then template has been found
+
+
+
+def click_on_buyXPButton_or_refreshButton(buttonToClick=1):
+    """
+    Check is button available on the screen and there is enough gold to click it.
+    Then Click it and set ACTIONDONE to 1. 
+
+    Parameters
+    ----------
+    buttonToClick : 1 stands for buyXPbutton
+    0 is for refreshButton
+
+    Returns
+    -------
+    ACTIONDONE equals 1 when there is enough gold to do buy xp or refresh.
+
+    """
+    ACTIONDONE = 0
+    if buttonToClick:
+        if match_template_with_screen(hexesToCheckListJPG=gameBuyXPButtonJPG, hexesLocationWithOffset = gameBuyXPButtonXY, HW = gameBuyXPButtonHW, threshold=0.95):
+            activate_game_window()
+            pyautogui.moveTo(x=gameBuyXPButtonXY[0]+gameBuyXPButtonHW[1]//2, y=gameBuyXPButtonXY[1]+gameBuyXPButtonHW[0]//2, duration=0.15)
+            pyautogui.mouseDown()
+            time.sleep(0.1)
+            pyautogui.mouseUp()
+            ACTIONDONE = 1
+        else:
+            print("No resources to buyXP or buyXPButton isnt available on screen.")
+            print("Message from click_on_buyXPButton_or_refreshButton()")
+    else:
+        if match_template_with_screen(hexesToCheckListJPG=gameRefreshButtonJPG, hexesLocationWithOffset = gameRefreshButtonXY, HW = gameRefreshButtonHW, threshold=0.95):
+            activate_game_window()
+            pyautogui.moveTo(x=gameRefreshButtonXY[0]+gameRefreshButtonHW[1]//2, y=gameRefreshButtonXY[1]+gameRefreshButtonHW[0]//2, duration=0.15)
+            pyautogui.mouseDown()
+            time.sleep(0.1)
+            pyautogui.mouseUp()
+            ACTIONDONE = 1
+        else:
+            print("No resources to refresh or refreshButton isnt available on screen.")
+            print("Message from click_on_buyXPButton_or_refreshButton()")
+    return ACTIONDONE
 
 
 
 
-
-
-
-
-Screenshotwindow = pyautogui.getWindowsWithTitle('League of Legends (TM) Client')[0]
-
-
-# update current champions to buy with ocr
 
 while True:
-    try:
-        try:
-            championsToBuyIndexes = from_OCR_champions_to_buy_list_to_counter_index_list()
-            pointsForChampionsInGameToBuy = show_points_for_champions_to_buy()
-            print(pointsForChampionsInGameToBuy)
-            
-            posOnScreen = [0, 1, 2, 3, 4]
-            
-            SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen = list(create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen(pointsForChamp=pointsForChampionsInGameToBuy, champsTOBUYINDEXES=championsToBuyIndexes, posONSCREEN=posOnScreen))
-            
-            
-            buy_best_available_champions_by_points(howMuchChampions=1, inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen)
-            
-            time.sleep(1)
-            shuffle_champions_on_first_and_third_row_of_hexes_and_subsitute_bench()
-            move_champions_from_X_row_to_Y_row(fromRow=2,toRow=1)
-            move_champions_from_X_row_to_Y_row(fromRow=4,toRow=3)
-        except(TypeError): 
-            print("end of the game")
-            break
+
     
-    except(IndexError):
-        pass
+    
+    clientWindow = pyautogui.getWindowsWithTitle('League of Legends')[0]
+    clientWindow.minimize()
+    time.sleep(0.5)
+    clientWindow.restore()
+    clientWindow.activate()
+    time.sleep(0.5)
+    
+    playOrPartyButtonInClient = [440,200]
+    
+    confirmButtonInClient = [850,850]
+    
+    findMatchButtonInClient = [850,840]
+    
+    acceptButtonInClient = [960,720]
+    
+    
+    
+    pyautogui.click(playOrPartyButtonInClient)
+    time.sleep(5)
+    
+    
+    pyautogui.click(confirmButtonInClient)
+    time.sleep(5)
+    
+    
+    pyautogui.click(findMatchButtonInClient)
+    time.sleep(2)
+    
+    u=1
+    while GetWindowText(GetForegroundWindow()) == 'League of Legends':
+        pyautogui.click(acceptButtonInClient)
+        time.sleep(1)
+        u=0
+    
+    print("Game should be accepted")
+    
+    time.sleep(15)
+    
+    
+    
+    
+    
+    wincap = WindowCapture('League of Legends (TM) Client')
+
+    
+    
+    
+    
+    
+    
+    
+    Screenshotwindow = pyautogui.getWindowsWithTitle('League of Legends (TM) Client')[0]
+    
+    
+    # update current champions to buy with ocr
+    ROUNDCOUNTER = 0
+    while True:
+        try:
+            try:
+                championsToBuyIndexes = from_OCR_champions_to_buy_list_to_counter_index_list()
+                pointsForChampionsInGameToBuy = show_points_for_champions_to_buy()
+                print(pointsForChampionsInGameToBuy)
+                
+                posOnScreen = [0, 1, 2, 3, 4]
+                
+                SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen = list(create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen(pointsForChamp=pointsForChampionsInGameToBuy, champsTOBUYINDEXES=championsToBuyIndexes, posONSCREEN=posOnScreen))
+                
+                
+                buy_best_available_champions_by_points(howMuchChampions=1, inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen)
+                
+                time.sleep(0.1)
+                shuffle_champions_on_first_and_third_row_of_hexes_and_subsitute_bench()
+                move_champions_from_X_row_to_Y_row(fromRow=2,toRow=1)
+                move_champions_from_X_row_to_Y_row(fromRow=4,toRow=3)
+                ROUNDCOUNTER = ROUNDCOUNTER + 1
+                make_cropped_ss(savingNameUnique="ssIlony",saveModeUnique=1, parDirectory=parentDirectory)
+                if ((ROUNDCOUNTER % 5) == 0):
+                    while click_on_buyXPButton_or_refreshButton(buttonToClick=1) == 1: ### buy XP till bot has gold to do it
+                        print("Buying XP")
+                        
+                
+                if ((ROUNDCOUNTER % 4) == 0):   
+                    click_on_buyXPButton_or_refreshButton(buttonToClick=0)
+                    
+                    # click_on_buyXPButton_or_refreshButton(buttonToClick=1)
+                    
+            except(TypeError): 
+                print("end of the game")
+                break
+        
+        except(IndexError):
+            pass
 
 
 
