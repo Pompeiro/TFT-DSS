@@ -43,6 +43,53 @@ from operator import itemgetter
 
 import numpy as np
 
+from win32gui import GetWindowText, GetForegroundWindow
+
+
+inGameWindow = pyautogui.getWindowsWithTitle('League of Legends')[0]
+inGameWindow.minimize()
+time.sleep(0.5)
+inGameWindow.restore()
+inGameWindow.activate()
+time.sleep(0.5)
+
+playOrPartyButtonInClient = [440,200]
+
+confirmButtonInClient = [850,850]
+
+findMatchButtonInClient = [850,840]
+
+acceptButtonInClient = [960,720]
+
+
+
+pyautogui.click(playOrPartyButtonInClient)
+time.sleep(5)
+
+
+pyautogui.click(confirmButtonInClient)
+time.sleep(5)
+
+
+pyautogui.click(findMatchButtonInClient)
+time.sleep(2)
+
+u=1
+while GetWindowText(GetForegroundWindow()) == 'League of Legends':
+    pyautogui.click(acceptButtonInClient)
+    time.sleep(1)
+    u=0
+
+print("Game should be accepted")
+
+time.sleep(10)
+
+
+
+
+
+
+
 ###################################################################################
 ############################## OCR START ######################################
 ####################################################################################
@@ -75,9 +122,11 @@ screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
 
 
 
-wincap = WindowCapture('League of Legends (TM) Client')
 
 # wincap = None
+
+wincap = WindowCapture('League of Legends (TM) Client')
+
 
 def sort_detected_champions_to_buy_by_position(OCRResultsSorted):
     """
@@ -101,6 +150,7 @@ def sort_detected_champions_to_buy_by_position(OCRResultsSorted):
                 print("found {}".format(champ))
     print("List of sorted champions to buy: ",sortedChampionsToBuy)
     return sortedChampionsToBuy 
+
 
 
 def make_cropped_ss_and_get_champions_to_buy(loadImage=0, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
@@ -574,7 +624,8 @@ def additional_points_from_champions_in_pool(counterIndex):
 
 
 
-def from_OCR_champions_to_buy_list_to_counter_index_list(OCRchampionsToBuyList=update_champions_to_buy_from_ocr_detection()):
+def from_OCR_champions_to_buy_list_to_counter_index_list():
+    OCRchampionsToBuyList=update_champions_to_buy_from_ocr_detection()
     counterIndexList = []
     for detected in OCRchampionsToBuyList:
         counterIndexList.append(championListForOCR.index(detected))
@@ -585,10 +636,11 @@ def from_OCR_champions_to_buy_list_to_counter_index_list(OCRchampionsToBuyList=u
         
         
 
-def show_points_for_champions_to_buy(counterIndexListLocal=from_OCR_champions_to_buy_list_to_counter_index_list()):
+def show_points_for_champions_to_buy():
     """It shows up champions POINTS to buy that counters are nonzero, as a text.
     Doesnt disappear currently, should be fixed.
     In: rowOffset by default = 0 for buttons row placement."""
+    counterIndexListLocal=from_OCR_champions_to_buy_list_to_counter_index_list()
     update_classes_and_origins()
     pointsForChampionsToBuy = [0] * 5
     for i in range(0,len(counterIndexListLocal),1):
@@ -598,26 +650,36 @@ def show_points_for_champions_to_buy(counterIndexListLocal=from_OCR_champions_to
 
 
 
-championsToBuyIndexes = from_OCR_champions_to_buy_list_to_counter_index_list()
-pointsForChampionsInGameToBuy = show_points_for_champions_to_buy()
-print(pointsForChampionsInGameToBuy)
-
-posOnScreen = [0, 1, 2, 3, 4]
 
 
+pointsForChampionsInGameToBuyINITIAL=[0,0,0,0,0]
+champsToBuyIndexesINITIAL=[1, 2, 3, 4, 5]
 
-def create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen():
+posOnScreenINITIAL = [0, 1, 2, 3, 4]
+
+def create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen(pointsForChamp=pointsForChampionsInGameToBuyINITIAL, champsTOBUYINDEXES=champsToBuyIndexesINITIAL, posONSCREEN=posOnScreenINITIAL):
     #### https://stackoverflow.com/questions/6422700/how-to-get-indices-of-a-sorted-array-in-python
+    print("inputs to create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen()")
+    print("pointsForChamp, champsTOBUYINDEXES, posONSCREEN")
+    print(pointsForChamp, champsTOBUYINDEXES, posONSCREEN)
 
     championsToBuyPointsThenIndexesThenPositionOnScreen = []
-    for i, point in enumerate(pointsForChampionsInGameToBuy):
-        championsToBuyPointsThenIndexesThenPositionOnScreen.append([point, championsToBuyIndexes[i], posOnScreen[i]])
+    for i, point in enumerate(pointsForChamp):
+        championsToBuyPointsThenIndexesThenPositionOnScreen.append([point, champsTOBUYINDEXES[i], posONSCREEN[i]])
     
     sorted_inds, sorted_items = zip(*sorted([(i,e) for i,e in enumerate(championsToBuyPointsThenIndexesThenPositionOnScreen)], key=itemgetter(1), reverse=True))
-
+    print("Output create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen")
+    print("sorted_items")
+    print(sorted_items)
+    print("and sorted inds")
+    print(sorted_inds)
     return sorted_items
 
-SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen = list(create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen())
+SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen = [[1.2645505077078336, 36, 0], ### hardcoded only for give this initial value
+                                                             [1.2407485721719331, 16, 4],
+                                                             [1.1604445548925015, 51, 2],
+                                                             [1.06933241627392, 42, 1],
+                                                             [1.0686296243238476, 31, 3]]
 
 
 
@@ -830,7 +892,7 @@ def check_hexes_list_occupancy(hexesToCheckListJPG=HEXES_WITHOUT_CHAMPIONS_JPG_L
         template = cv.imread(jpg,0)
         w, h = template.shape[::-1]
         res = cv.matchTemplate(img_gray,template,cv.TM_CCORR_NORMED)
-        threshold = 0.99
+        threshold = 0.95
         loc = np.where( res >= threshold)
         if loc[0].size>0:
             print("not occupied  hex number {}".format(i))
@@ -871,6 +933,7 @@ def check_hexes_list_occupancy(hexesToCheckListJPG=HEXES_WITHOUT_CHAMPIONS_JPG_L
 Screenshotwindow = pyautogui.getWindowsWithTitle('League of Legends (TM) Client')[0]
 
 
+
 def update_champion_counter(champWithPointsThenIndexThenPosition=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen[0]):
     # print("champWithPointsThenIndexThenPosition",champWithPointsThenIndexThenPosition)
     # print("champWithPointsThenIndexThenPosition[1]",champWithPointsThenIndexThenPosition[1])
@@ -905,19 +968,19 @@ def activate_game_window(inGameWindow=Screenshotwindow,sleepDelay = 0.5):
     inGameWindow.activate()
     time.sleep(sleepDelay)
 
-def buy_best_available_champions_by_points(howMuchChampions=2, mousePathDelay=0.2):
-    activate_game_window()
+def buy_best_available_champions_by_points(howMuchChampions=2, mousePathDelay=0.2,inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen):
+    activate_game_window(inGameWindow=Screenshotwindow)
     
     for i in range(0,howMuchChampions,1):
         # pydirectinput.moveTo(100, 150) # Move the mouse to the x, y coordinates 100, 150.
         # pydirectinput.click() # Click the mouse at its current location.
-        pyautogui.moveTo(x=championToBuyPositionOnGame[SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen[i][2]][0], y=championToBuyPositionOnGame[SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen[i][2]][1], duration=mousePathDelay)
+        pyautogui.moveTo(x=championToBuyPositionOnGame[sortedChampionsToBuyPoints[i][2]][0], y=championToBuyPositionOnGame[sortedChampionsToBuyPoints[i][2]][1], duration=mousePathDelay)
         pyautogui.mouseDown()
         time.sleep(0.3)
         pyautogui.mouseUp()
 
         
-        update_champion_counter(SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen[i])
+        update_champion_counter(sortedChampionsToBuyPoints[i])
 
 
 # buy_best_available_champions_by_points()
@@ -927,7 +990,7 @@ def buy_best_available_champions_by_points(howMuchChampions=2, mousePathDelay=0.
 
 
 
-def move_champion_from_x_to_y(startingPoint,metaPoint,):
+def move_champion_from_x_to_y(startingPoint,metaPoint):
     activate_game_window()
     
     pyautogui.moveTo(x=startingPoint[0], y=startingPoint[1], duration=0.1)
@@ -1005,10 +1068,77 @@ def shuffle_champions_on_first_and_third_row_of_hexes_and_subsitute_bench():
 
 
 
+# playOrPartyButtonInClient = [440,200]
+
+# confirmButtonInClient = [850,850]
+
+# findMatchButtonInClient = [850,840]
+
+# acceptButtonInClient = [960,720]
+
+
+
+# activate_game_window()
+# pyautogui.click(playOrPartyButtonInClient)
+# time.sleep(5)
+
+
+# pyautogui.click(confirmButtonInClient)
+# time.sleep(5)
+
+
+# pyautogui.click(findMatchButtonInClient)
+# time.sleep(2)
+
+# u=1
+# while GetWindowText(GetForegroundWindow()) == 'League of Legends':
+#     pyautogui.click(acceptButtonInClient)
+#     time.sleep(1)
+#     u=0
+
+
+# time.sleep(30)
+
+
+
+# def make_cropped_ss_and_get_champions_to_buy(loadImage=0, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
+#     if loadImage:
+#         screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
+#     else:
+#         screenshot = window.get_screenshot()
+#     #print(screenshot)
+#     crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
+#     cv.imshow("ss", crop_img)
+#     OCRResult=reader.readtext(crop_img)
+#     print(OCRResult)
+#     listOfChampsToBuyThisTurn=sort_detected_champions_to_buy_by_position(OCRResult)
+#     return listOfChampsToBuyThisTurn
 
 
 
 
+
+
+
+
+Screenshotwindow = pyautogui.getWindowsWithTitle('League of Legends (TM) Client')[0]
+
+
+# update current champions to buy with ocr
+
+try:
+    championsToBuyIndexes = from_OCR_champions_to_buy_list_to_counter_index_list()
+    pointsForChampionsInGameToBuy = show_points_for_champions_to_buy()
+    print(pointsForChampionsInGameToBuy)
+    
+    posOnScreen = [0, 1, 2, 3, 4]
+    
+    SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen = list(create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen(pointsForChamp=pointsForChampionsInGameToBuy, champsTOBUYINDEXES=championsToBuyIndexes, posONSCREEN=posOnScreen))
+    
+    
+    buy_best_available_champions_by_points(howMuchChampions=1, inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen)
+except(IndexError):
+    pass
 
 
 # first hex on substitues bench
