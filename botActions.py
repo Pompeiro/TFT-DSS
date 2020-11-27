@@ -45,6 +45,8 @@ import numpy as np
 
 from win32gui import GetWindowText, GetForegroundWindow
 
+import keyboard
+
 
 inGameWindow = pyautogui.getWindowsWithTitle('League of Legends')[0]
 inGameWindow.minimize()
@@ -1126,19 +1128,31 @@ Screenshotwindow = pyautogui.getWindowsWithTitle('League of Legends (TM) Client'
 
 # update current champions to buy with ocr
 
-try:
-    championsToBuyIndexes = from_OCR_champions_to_buy_list_to_counter_index_list()
-    pointsForChampionsInGameToBuy = show_points_for_champions_to_buy()
-    print(pointsForChampionsInGameToBuy)
-    
-    posOnScreen = [0, 1, 2, 3, 4]
-    
-    SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen = list(create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen(pointsForChamp=pointsForChampionsInGameToBuy, champsTOBUYINDEXES=championsToBuyIndexes, posONSCREEN=posOnScreen))
-    
-    
-    buy_best_available_champions_by_points(howMuchChampions=1, inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen)
-except(IndexError):
-    pass
+while True:
+    try:
+        championsToBuyIndexes = from_OCR_champions_to_buy_list_to_counter_index_list()
+        pointsForChampionsInGameToBuy = show_points_for_champions_to_buy()
+        print(pointsForChampionsInGameToBuy)
+        
+        posOnScreen = [0, 1, 2, 3, 4]
+        
+        SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen = list(create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen(pointsForChamp=pointsForChampionsInGameToBuy, champsTOBUYINDEXES=championsToBuyIndexes, posONSCREEN=posOnScreen))
+        
+        
+        buy_best_available_champions_by_points(howMuchChampions=1, inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen)
+        
+        time.sleep(1)
+        shuffle_champions_on_first_and_third_row_of_hexes_and_subsitute_bench()
+
+    except(IndexError):
+        pass
+    if keyboard.is_pressed("q"):
+        print("You pressed q")
+        break
+
+
+
+
 
 
 # first hex on substitues bench
