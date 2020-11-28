@@ -1295,6 +1295,7 @@ Screenshotwindow = pyautogui.getWindowsWithTitle('League of Legends (TM) Client'
 # update current champions to buy with ocr
 ROUNDCOUNTER = 0
 TRYCOUNTER = 0
+THRESHOLDFORPOINTSTOBUYCHAMPION = 1.8
 while True:
     try:
         TRYCOUNTER = TRYCOUNTER + 1
@@ -1315,30 +1316,30 @@ while True:
             championsToBuyIndexes = from_OCR_champions_to_buy_list_to_counter_index_list()
             pointsForChampionsInGameToBuy = show_points_for_champions_to_buy()
             print(pointsForChampionsInGameToBuy)
-            
-            posOnScreen = [0, 1, 2, 3, 4]
-            
-            SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen = list(create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen(pointsForChamp=pointsForChampionsInGameToBuy, champsTOBUYINDEXES=championsToBuyIndexes, posONSCREEN=posOnScreen))
-            
-            
-            buy_best_available_champions_by_points_threshold(threshold=1.8, inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen)
-            
-            time.sleep(0.1)
-            shuffle_champions_on_first_and_third_row_of_hexes_and_subsitute_bench()
-            move_champions_from_X_row_to_Y_row(fromRow=2,toRow=1)
-            move_champions_from_X_row_to_Y_row(fromRow=4,toRow=3)
-            ROUNDCOUNTER = ROUNDCOUNTER + 1
-            make_cropped_ss(savingNameUnique="ssIlony",saveModeUnique=1, parDirectory=parentDirectory)
-            if ((ROUNDCOUNTER % 5) == 0):
-                while click_on_buyXPButton_or_refreshButton(buttonToClick=1) == 1: ### buy XP till bot has gold to do it
-                    print("Buying XP")
+            if sum(i >= THRESHOLDFORPOINTSTOBUYCHAMPION for i in pointsForChampionsInGameToBuy):
+                posOnScreen = [0, 1, 2, 3, 4]
+                
+                SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen = list(create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen(pointsForChamp=pointsForChampionsInGameToBuy, champsTOBUYINDEXES=championsToBuyIndexes, posONSCREEN=posOnScreen))
+                
+                
+                buy_best_available_champions_by_points_threshold(threshold=THRESHOLDFORPOINTSTOBUYCHAMPION, inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen)
+                
+                time.sleep(0.1)
+                shuffle_champions_on_first_and_third_row_of_hexes_and_subsitute_bench()
+                move_champions_from_X_row_to_Y_row(fromRow=2,toRow=1)
+                move_champions_from_X_row_to_Y_row(fromRow=4,toRow=3)
+                ROUNDCOUNTER = ROUNDCOUNTER + 1
+                make_cropped_ss(savingNameUnique="ssIlony",saveModeUnique=1, parDirectory=parentDirectory)
+                if ((ROUNDCOUNTER % 5) == 0):
+                    while click_on_buyXPButton_or_refreshButton(buttonToClick=1) == 1: ### buy XP till bot has gold to do it
+                        print("Buying XP")
+                        
+                
+                if ((ROUNDCOUNTER % 4) == 0):   
+                    click_on_buyXPButton_or_refreshButton(buttonToClick=0)
                     
-            
-            if ((ROUNDCOUNTER % 4) == 0):   
-                click_on_buyXPButton_or_refreshButton(buttonToClick=0)
-                
-                # click_on_buyXPButton_or_refreshButton(buttonToClick=1)
-                
+                    # click_on_buyXPButton_or_refreshButton(buttonToClick=1)
+                    
         except(TypeError): 
             print("end of the game")
             break
