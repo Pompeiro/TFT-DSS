@@ -64,7 +64,7 @@ def unique_file(basename, ext):
 
 
 print("Main directory for screens in this game")
-mainDirectoryName = input()
+mainDirectoryName = "test2ilony"#input()
 print("Your input for main directory is: ",mainDirectoryName)
 
 
@@ -245,6 +245,12 @@ def update_champions_to_buy_from_ocr_detection():
 ####################################################################################
 
 df = pd.read_csv("scaledChampionsdf.csv") 
+
+def boost_up_points_for_class(clas='"Assassin"'):
+    quer = 'ClassPrimary == {}'.format(clas)
+    for indexi in df.query(quer).index:
+        print(indexi)
+        df.at[indexi, 'Points'] =  5.0
 
 df.drop('Unnamed: 0', axis=1, inplace=True)
 
@@ -1047,6 +1053,20 @@ def buy_best_available_champions_by_points(howMuchChampions=2, mousePathDelay=0.
 
 
 
+def buy_best_available_champions_by_points_threshold(threshold=1.8, mousePathDelay=0.05,inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen):
+    activate_game_window(inGameWindow=Screenshotwindow)
+    pointList = show_points_for_champions_to_buy()
+    howMuchChampions = sum(i >= threshold for i in pointList)
+    for i in range(0,howMuchChampions,1):
+        # pydirectinput.moveTo(100, 150) # Move the mouse to the x, y coordinates 100, 150.
+        # pydirectinput.click() # Click the mouse at its current location.
+        pyautogui.moveTo(x=championToBuyPositionOnGame[sortedChampionsToBuyPoints[i][2]][0], y=championToBuyPositionOnGame[sortedChampionsToBuyPoints[i][2]][1], duration=mousePathDelay)
+        pyautogui.mouseDown()
+        time.sleep(0.1)
+        pyautogui.mouseUp()
+
+        
+        update_champion_counter(sortedChampionsToBuyPoints[i])
 
 
 
@@ -1257,102 +1277,74 @@ def click_on_buyXPButton_or_refreshButton(buttonToClick=1):
 
 
 
+
+    
+    
+    
+
+
+
+
+
+boost_up_points_for_class(clas='"Assassin"')
+
+
+Screenshotwindow = pyautogui.getWindowsWithTitle('League of Legends (TM) Client')[0]
+
+
+# update current champions to buy with ocr
+ROUNDCOUNTER = 0
+TRYCOUNTER = 0
 while True:
+    try:
+        TRYCOUNTER = TRYCOUNTER + 1
+        if (TRYCOUNTER % 20) == 0:
+            pyautogui.moveTo(x=961, y=626, duration=0.15) # continue
+            pyautogui.mouseDown()
+            time.sleep(0.1)
+            pyautogui.mouseUp()
 
-    
-    
-    clientWindow = pyautogui.getWindowsWithTitle('League of Legends')[0]
-    clientWindow.minimize()
-    time.sleep(0.5)
-    clientWindow.restore()
-    clientWindow.activate()
-    time.sleep(0.5)
-    
-    playOrPartyButtonInClient = [440,200]
-    
-    confirmButtonInClient = [850,850]
-    
-    findMatchButtonInClient = [850,840]
-    
-    acceptButtonInClient = [960,720]
-    
-    
-    
-    pyautogui.click(playOrPartyButtonInClient)
-    time.sleep(5)
-    
-    
-    pyautogui.click(confirmButtonInClient)
-    time.sleep(5)
-    
-    
-    pyautogui.click(findMatchButtonInClient)
-    time.sleep(2)
-    
-    u=1
-    while GetWindowText(GetForegroundWindow()) == 'League of Legends':
-        pyautogui.click(acceptButtonInClient)
-        time.sleep(1)
-        u=0
-    
-    print("Game should be accepted")
-    
-    time.sleep(15)
-    
-    
-    
-    
-    
-    wincap = WindowCapture('League of Legends (TM) Client')
+            
+            pyautogui.moveTo(x=834, y=545, duration=0.15) # exit now
+            pyautogui.mouseDown()
+            time.sleep(0.1)
+            pyautogui.mouseUp()
+            
 
-    
-    
-    
-    
-    
-    
-    
-    Screenshotwindow = pyautogui.getWindowsWithTitle('League of Legends (TM) Client')[0]
-    
-    
-    # update current champions to buy with ocr
-    ROUNDCOUNTER = 0
-    while True:
         try:
-            try:
-                championsToBuyIndexes = from_OCR_champions_to_buy_list_to_counter_index_list()
-                pointsForChampionsInGameToBuy = show_points_for_champions_to_buy()
-                print(pointsForChampionsInGameToBuy)
-                
-                posOnScreen = [0, 1, 2, 3, 4]
-                
-                SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen = list(create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen(pointsForChamp=pointsForChampionsInGameToBuy, champsTOBUYINDEXES=championsToBuyIndexes, posONSCREEN=posOnScreen))
-                
-                
-                buy_best_available_champions_by_points(howMuchChampions=1, inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen)
-                
-                time.sleep(0.1)
-                shuffle_champions_on_first_and_third_row_of_hexes_and_subsitute_bench()
-                move_champions_from_X_row_to_Y_row(fromRow=2,toRow=1)
-                move_champions_from_X_row_to_Y_row(fromRow=4,toRow=3)
-                ROUNDCOUNTER = ROUNDCOUNTER + 1
-                make_cropped_ss(savingNameUnique="ssIlony",saveModeUnique=1, parDirectory=parentDirectory)
-                if ((ROUNDCOUNTER % 5) == 0):
-                    while click_on_buyXPButton_or_refreshButton(buttonToClick=1) == 1: ### buy XP till bot has gold to do it
-                        print("Buying XP")
-                        
-                
-                if ((ROUNDCOUNTER % 4) == 0):   
-                    click_on_buyXPButton_or_refreshButton(buttonToClick=0)
+            championsToBuyIndexes = from_OCR_champions_to_buy_list_to_counter_index_list()
+            pointsForChampionsInGameToBuy = show_points_for_champions_to_buy()
+            print(pointsForChampionsInGameToBuy)
+            
+            posOnScreen = [0, 1, 2, 3, 4]
+            
+            SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen = list(create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen(pointsForChamp=pointsForChampionsInGameToBuy, champsTOBUYINDEXES=championsToBuyIndexes, posONSCREEN=posOnScreen))
+            
+            
+            buy_best_available_champions_by_points_threshold(threshold=1.8, inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen)
+            
+            time.sleep(0.1)
+            shuffle_champions_on_first_and_third_row_of_hexes_and_subsitute_bench()
+            move_champions_from_X_row_to_Y_row(fromRow=2,toRow=1)
+            move_champions_from_X_row_to_Y_row(fromRow=4,toRow=3)
+            ROUNDCOUNTER = ROUNDCOUNTER + 1
+            make_cropped_ss(savingNameUnique="ssIlony",saveModeUnique=1, parDirectory=parentDirectory)
+            if ((ROUNDCOUNTER % 5) == 0):
+                while click_on_buyXPButton_or_refreshButton(buttonToClick=1) == 1: ### buy XP till bot has gold to do it
+                    print("Buying XP")
                     
-                    # click_on_buyXPButton_or_refreshButton(buttonToClick=1)
-                    
-            except(TypeError): 
-                print("end of the game")
-                break
-        
-        except(IndexError):
-            pass
+            
+            if ((ROUNDCOUNTER % 4) == 0):   
+                click_on_buyXPButton_or_refreshButton(buttonToClick=0)
+                
+                # click_on_buyXPButton_or_refreshButton(buttonToClick=1)
+                
+        except(TypeError): 
+            print("end of the game")
+            break
+    
+    except(IndexError):
+        pass
 
 
 
