@@ -271,7 +271,7 @@ def update_champions_to_buy_from_ocr_detection():
     listOfChampsToBuyThisTurn=make_cropped_ss_and_get_champions_to_buy()
     for champToBuy in listOfChampsToBuyThisTurn:
         for i,champ in enumerate(championListForOCR):
-            if champToBuy == champ:
+            if champ in champToBuy:
                 print(i)
                 print(champ)
                 print("Succesfully added detected champion")
@@ -1255,9 +1255,16 @@ gameRefreshButtonHW = [60,185]
 
 gameBuyXPButtonJPG = "TemplateMatchingGame\\buyXPButton.jpg"
 gameRefreshButtonJPG= "TemplateMatchingGame\\refreshButton.jpg"
+
+gameExitNowButtonXY = [487,750]
+gameExitNowButtonHW = [50,150]
+
+gameExitNowButtonJPG = "TemplateMatchingGame\\exitNowGameButton.jpg"
 # match_template_with_screen(hexesToCheckListJPG=gameBuyXPButtonJPG, hexesLocationWithOffset = gameBuyXPButtonXY, HW = gameBuyXPButtonHW, threshold=0.95)
 
 # match_template_with_screen(hexesToCheckListJPG=gameRefreshButtonJPG, hexesLocationWithOffset = gameRefreshButtonXY, HW = gameRefreshButtonHW, threshold=0.95)
+
+# match_template_with_screen(hexesToCheckListJPG=gameExitNowButtonJPG, hexesLocationWithOffset = gameExitNowButtonXY, HW = gameBuyXPButtonHW, threshold=0.90)
 
 
 def match_template_with_screen(hexesToCheckListJPG=gameBuyXPButtonJPG, hexesLocationWithOffset = gameBuyXPButtonXY, HW = gameBuyXPButtonHW, threshold = 0.95):
@@ -1351,7 +1358,7 @@ def buy_champ_if_has_more_points_than_threshold():
 
 
 
-boost_up_points_for_class(clas='"Brawler"')
+boost_up_points_for_class(clas='"Mage"')
 
 
 Screenshotwindow = pyautogui.getWindowsWithTitle('League of Legends (TM) Client')[0]
@@ -1368,19 +1375,21 @@ localCapturedRound = "00"
 THRESHOLDFORPOINTSTOBUYCHAMPION = 1.8
 while True:
     try:
-        TRYCOUNTER = TRYCOUNTER + 1
-        if (TRYCOUNTER % 20) == 0:
-            pyautogui.moveTo(x=961, y=626, duration=0.15) # continue
-            pyautogui.mouseDown()
-            time.sleep(0.1)
-            pyautogui.mouseUp()
+        # TRYCOUNTER = TRYCOUNTER + 1
+        # if (TRYCOUNTER % 20) == 0:
+        #     pyautogui.moveTo(x=961, y=626, duration=0.15) # continue
+        #     pyautogui.mouseDown()
+        #     time.sleep(0.1)
+        #     pyautogui.mouseUp()
 
+
+        if match_template_with_screen(hexesToCheckListJPG=gameExitNowButtonJPG, hexesLocationWithOffset = gameExitNowButtonXY, HW = gameExitNowButtonHW, threshold=0.90):
+            print("Found exit game button!!!!!")
             
             pyautogui.moveTo(x=834, y=545, duration=0.15) # exit now
             pyautogui.mouseDown()
             time.sleep(0.1)
             pyautogui.mouseUp()
-            
 
         try:
             championsToBuyIndexes = from_OCR_champions_to_buy_list_to_counter_index_list()
