@@ -6,24 +6,22 @@ Created on Tue Nov 17 07:59:35 2020
 """
 
 
-"""0x10588 Spyder (Python 3.8)
-0x10482 Python pyautogui window handle - Stack Overflow – Brave
-0x50428 Eksplorator plików
-0x20290 Discord
-0x1041c CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
-0x20408 Ustawienia
-0x103fa 
-0x30350 Kalkulator
-0x110210 Kalkulator
+"""
 
 Plan:
     OCR 
     Points
     Actions
 
+
+
+Need bugfix:
+    bonus points should be fed with championsCounterList
+    sometimes Vi isnt treated as a champion with ocr
+
 """
 import pyautogui
-import pydirectinput
+# import pydirectinput
 
 import time
 
@@ -1256,7 +1254,7 @@ gameRefreshButtonHW = [60,185]
 gameBuyXPButtonJPG = "TemplateMatchingGame\\buyXPButton.jpg"
 gameRefreshButtonJPG= "TemplateMatchingGame\\refreshButton.jpg"
 
-gameExitNowButtonXY = [487,750]
+gameExitNowButtonXY = [750,487]
 gameExitNowButtonHW = [50,150]
 
 gameExitNowButtonJPG = "TemplateMatchingGame\\exitNowGameButton.jpg"
@@ -1358,7 +1356,7 @@ def buy_champ_if_has_more_points_than_threshold():
 
 
 
-boost_up_points_for_class(clas='"Mage"')
+boost_up_points_for_class(clas='"Brawler"')
 
 
 Screenshotwindow = pyautogui.getWindowsWithTitle('League of Legends (TM) Client')[0]
@@ -1383,7 +1381,7 @@ while True:
         #     pyautogui.mouseUp()
 
 
-        if match_template_with_screen(hexesToCheckListJPG=gameExitNowButtonJPG, hexesLocationWithOffset = gameExitNowButtonXY, HW = gameExitNowButtonHW, threshold=0.90):
+        if match_template_with_screen(hexesToCheckListJPG=gameExitNowButtonJPG, hexesLocationWithOffset = gameExitNowButtonXY, HW = gameExitNowButtonHW, threshold=0.95):
             print("Found exit game button!!!!!")
             
             pyautogui.moveTo(x=834, y=545, duration=0.15) # exit now
