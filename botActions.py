@@ -217,6 +217,52 @@ def make_cropped_ss_and_get_champions_to_buy(loadImage=0, window=wincap, croppin
         listOfChampsToBuyThisTurn=sort_detected_champions_to_buy_by_position(OCRResult)
         return listOfChampsToBuyThisTurn
 
+def make_cropped_ss_and_get_gold(loadImage=0, window=wincap, croppingY=820, croppingX=820, croppingHeight=40, croppingWidth=100):
+    WINDOWCAPTUREFLAG = 1
+    if loadImage:
+        screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
+    else:
+        try:
+            screenshot = window.get_screenshot()
+        except:
+            print("Not found teamfight tactics game window!!!!!!!!!!!!! From make_cropped_ss()")
+            WINDOWCAPTUREFLAG = 0
+    #print(screenshot)
+    if WINDOWCAPTUREFLAG:
+        crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
+        cv.imshow("ss", crop_img)
+        OCRResult=reader.readtext(crop_img)
+        try:
+            print(OCRResult[0][1])
+            goldAmount = OCRResult[0][1]
+        except(IndexError):
+            print("Couldnt find the gold")
+            goldAmount = 500
+        return goldAmount
+
+
+def make_cropped_ss_and_get_round(loadImage=0, window=wincap, croppingY=0, croppingX=760, croppingHeight=40, croppingWidth=60):
+    WINDOWCAPTUREFLAG = 1
+    if loadImage:
+        screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
+    else:
+        try:
+            screenshot = window.get_screenshot()
+        except:
+            print("Not found teamfight tactics game window!!!!!!!!!!!!! From make_cropped_ss()")
+            WINDOWCAPTUREFLAG = 0
+    #print(screenshot)
+    if WINDOWCAPTUREFLAG:
+        crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
+        cv.imshow("ss", crop_img)
+        OCRResult=reader.readtext(crop_img)
+        try:
+            print(OCRResult[0][1])
+            currentRound = OCRResult[0][1]
+        except(IndexError):
+            print("Couldnt find round")
+            currentRound = "5-8"
+        return currentRound.replace("-", "")   ######### delete -
 
 
 
@@ -1281,20 +1327,44 @@ def click_on_buyXPButton_or_refreshButton(buttonToClick=1):
     
     
     
+def buy_champ_if_has_more_points_than_threshold():
+    championsToBuyIndexes = from_OCR_champions_to_buy_list_to_counter_index_list()
+    pointsForChampionsInGameToBuy = show_points_for_champions_to_buy()
+    print(pointsForChampionsInGameToBuy)
+    if sum(i >= THRESHOLDFORPOINTSTOBUYCHAMPION for i in pointsForChampionsInGameToBuy):
+        posOnScreen = [0, 1, 2, 3, 4]
+        
+        SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen = list(create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen(pointsForChamp=pointsForChampionsInGameToBuy, champsTOBUYINDEXES=championsToBuyIndexes, posONSCREEN=posOnScreen))
+        
+        
+        buy_best_available_champions_by_points_threshold(threshold=THRESHOLDFORPOINTSTOBUYCHAMPION, inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen)
+        
+        time.sleep(0.1)
+        shuffle_champions_on_first_and_third_row_of_hexes_and_subsitute_bench()
+        move_champions_from_X_row_to_Y_row(fromRow=2,toRow=1)
+        move_champions_from_X_row_to_Y_row(fromRow=4,toRow=3)
+        make_cropped_ss(savingNameUnique="ssIlony",saveModeUnique=1, parDirectory=parentDirectory)
+        
 
 
 
 
 
-boost_up_points_for_class(clas='"Assassin"')
+
+boost_up_points_for_class(clas='"Brawler"')
 
 
 Screenshotwindow = pyautogui.getWindowsWithTitle('League of Legends (TM) Client')[0]
 
 
+ROUNDSTOBUYREFRESH = [22,25,31,32,35,41,42,45,51,52,55,61,62,65]
+
+ROUNDSTOBUYXP = [26,36,46,56,66]
+
 # update current champions to buy with ocr
 ROUNDCOUNTER = 0
 TRYCOUNTER = 0
+localCapturedRound = "00"
 THRESHOLDFORPOINTSTOBUYCHAMPION = 1.8
 while True:
     try:
@@ -1316,37 +1386,28 @@ while True:
             championsToBuyIndexes = from_OCR_champions_to_buy_list_to_counter_index_list()
             pointsForChampionsInGameToBuy = show_points_for_champions_to_buy()
             print(pointsForChampionsInGameToBuy)
-            if sum(i >= THRESHOLDFORPOINTSTOBUYCHAMPION for i in pointsForChampionsInGameToBuy):
-                posOnScreen = [0, 1, 2, 3, 4]
-                
-                SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen = list(create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen(pointsForChamp=pointsForChampionsInGameToBuy, champsTOBUYINDEXES=championsToBuyIndexes, posONSCREEN=posOnScreen))
-                
-                
-                buy_best_available_champions_by_points_threshold(threshold=THRESHOLDFORPOINTSTOBUYCHAMPION, inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen)
-                
-                time.sleep(0.1)
-                shuffle_champions_on_first_and_third_row_of_hexes_and_subsitute_bench()
-                move_champions_from_X_row_to_Y_row(fromRow=2,toRow=1)
-                move_champions_from_X_row_to_Y_row(fromRow=4,toRow=3)
-                ROUNDCOUNTER = ROUNDCOUNTER + 1
-                make_cropped_ss(savingNameUnique="ssIlony",saveModeUnique=1, parDirectory=parentDirectory)
-                if ((ROUNDCOUNTER % 5) == 0):
+            capturedRound = make_cropped_ss_and_get_round()
+            buy_champ_if_has_more_points_than_threshold()
+            if ((int(capturedRound) in ROUNDSTOBUYXP) and (not sum(i >= THRESHOLDFORPOINTSTOBUYCHAMPION for i in pointsForChampionsInGameToBuy))):
+                if localCapturedRound != capturedRound:
                     while click_on_buyXPButton_or_refreshButton(buttonToClick=1) == 1: ### buy XP till bot has gold to do it
                         print("Buying XP")
-                        
-                
-                if ((ROUNDCOUNTER % 4) == 0):   
-                    click_on_buyXPButton_or_refreshButton(buttonToClick=0)
-                    
+                    localCapturedRound = make_cropped_ss_and_get_round()
+            
+            if ((int(capturedRound) in ROUNDSTOBUYREFRESH) and (not sum(i >= THRESHOLDFORPOINTSTOBUYCHAMPION for i in pointsForChampionsInGameToBuy))):
+                if localCapturedRound != capturedRound:
+                    for i in range(0,int(capturedRound[0])+1,1):
+                        click_on_buyXPButton_or_refreshButton(buttonToClick=0)
+                        buy_champ_if_has_more_points_than_threshold()
+                    localCapturedRound = make_cropped_ss_and_get_round()
                     # click_on_buyXPButton_or_refreshButton(buttonToClick=1)
-                    
+                        
         except(TypeError): 
             print("end of the game")
             break
     
     except(IndexError):
         pass
-
 
 
 
