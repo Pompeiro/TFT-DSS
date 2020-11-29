@@ -1,6 +1,8 @@
 # TFT-DSS
 Teamfight Tactics Decisive Support System  
 
+29.11 new file botActions.py check description at the bottom.
+
 15.11 First try to build champions detector based on CNN with FastAI. Results at the bottom.
 
 This is my current project, and I will work on advices which champion should user pick from 5 random champions that user can buy.  
@@ -130,3 +132,7 @@ I think i need to collect more images.
 
 ![Champion-detection3](https://user-images.githubusercontent.com/60773657/99180674-76308b00-2728-11eb-9309-a37063c0dfa2.JPG)
 
+
+
+# botActions.py
+Working bot which buy preffered class of champions for example brawlers. Shuffling champions on playground and subsitutes bench after champion is bought. Also spending gold in predefined rounds for XP or refreshing champions to buy. This bot is mainly for automate screenshots gathering to feed my dataset to train object detection model, but it performs well and can beat some players. For sure it beats "afk bots".
