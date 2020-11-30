@@ -136,5 +136,6 @@ I think i need to collect more images.
 
 # botActions.py
 Working bot which buy preffered class of champions for example brawlers. Shuffling champions on playground and subsitutes bench after champion is bought. Also spending gold in predefined rounds for XP or refreshing champions to buy. This bot is mainly for automate screenshots gathering to feed my dataset to train object detection model, but it performs well and can beat some players. For sure it beats "afk bots".
+For sure you need to clone directories with JPGs like TemplateMatchingClient.
 
 Just be sure to set windowed mode in game, and after log in u can run this code.
