@@ -96,6 +96,8 @@ time.sleep(0.5)
 
 playOrPartyButtonInClient = [440,200]
 
+tftModeButtonInClient = [1038,401]
+
 confirmButtonInClient = [850,850]
 
 findMatchButtonInClient = [850,840]
@@ -103,10 +105,11 @@ findMatchButtonInClient = [850,840]
 acceptButtonInClient = [960,720]
 
 
-
 pyautogui.click(playOrPartyButtonInClient)
 time.sleep(5)
 
+pyautogui.click(tftModeButtonInClient)
+time.sleep(5)
 
 pyautogui.click(confirmButtonInClient)
 time.sleep(5)
