@@ -18,6 +18,7 @@ Plan:
 Need bugfix:
     bonus points should be fed with championsCounterList
     sometimes Vi isnt treated as a champion with ocr
+    fix first 3 rounds
 
 """
 import pyautogui
@@ -252,6 +253,7 @@ def make_cropped_ss_and_get_round(loadImage=0, window=wincap, croppingY=0, cropp
         except:
             print("Not found teamfight tactics game window!!!!!!!!!!!!! From make_cropped_ss()")
             WINDOWCAPTUREFLAG = 0
+            return None
     #print(screenshot)
     if WINDOWCAPTUREFLAG:
         crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
@@ -260,10 +262,10 @@ def make_cropped_ss_and_get_round(loadImage=0, window=wincap, croppingY=0, cropp
         try:
             print(OCRResult[0][1])
             currentRound = OCRResult[0][1]
+            return currentRound.replace("-", "")   ######### delete -
         except(IndexError):
             print("Couldnt find round")
-            currentRound = "5-8"
-        return currentRound.replace("-", "")   ######### delete -
+            return None
 
 
 
@@ -1347,19 +1349,37 @@ def buy_champ_if_has_more_points_than_threshold():
         
         buy_best_available_champions_by_points_threshold(threshold=THRESHOLDFORPOINTSTOBUYCHAMPION, inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen)
         
-        time.sleep(0.1)
-        shuffle_champions_on_first_and_third_row_of_hexes_and_subsitute_bench()
-        move_champions_from_X_row_to_Y_row(fromRow=2,toRow=1)
-        move_champions_from_X_row_to_Y_row(fromRow=4,toRow=3)
+        time.sleep(1.0)
+
         make_cropped_ss(savingNameUnique="ssIlony",saveModeUnique=1, parDirectory=parentDirectory)
         
 
+def shuffle_champs():
+    pyautogui.moveTo(x=300, y=300, duration=0.5) # to avoid blocking screen
+    shuffle_champions_on_first_and_third_row_of_hexes_and_subsitute_bench()
+    move_champions_from_X_row_to_Y_row(fromRow=2,toRow=1)
+    move_champions_from_X_row_to_Y_row(fromRow=4,toRow=3)
 
 
+def check_round_change(roundCurr):
+    roundLocal = make_cropped_ss_and_get_round()
+    if roundLocal == None: ########### different round placement on screen
+        roundLocal = make_cropped_ss_and_get_round(croppingWidth=150)
+    if roundLocal:
+        roundCapturedNow = int(roundLocal)
+        if roundCurr == roundCapturedNow:
+            print("roundSaved, roundCapturedNow:", roundCurr, roundCapturedNow)
+            print("Round is the same! From check_round_change()")
+            return roundCurr, 0
+        else:
+            print("roundSaved, roundCapturedNow:", roundCurr, roundCapturedNow)
+            print("Round changed")
+            return roundCapturedNow, 1
+    else:
+        return None,2
 
 
-
-boost_up_points_for_class(clas='"Brawler"')
+boost_up_points_for_class(clas='"Sharpshooter"')
 
 
 Screenshotwindow = pyautogui.getWindowsWithTitle('League of Legends (TM) Client')[0]
@@ -1369,9 +1389,12 @@ ROUNDSTOBUYREFRESH = [22,25,31,32,35,41,42,45,51,52,55,61,62,65]
 
 ROUNDSTOBUYXP = [26,36,46,56,66]
 
+SHUFFLEROUNDS = [22,25,31,32,35,41,42,45,51,55,61,65]
+
 # update current champions to buy with ocr
 ROUNDCOUNTER = 0
 TRYCOUNTER = 0
+roundNow = None
 localCapturedRound = "00"
 THRESHOLDFORPOINTSTOBUYCHAMPION = 1.8
 while True:
@@ -1391,30 +1414,37 @@ while True:
             pyautogui.mouseDown()
             time.sleep(0.1)
             pyautogui.mouseUp()
+            
+        checkingRound = check_round_change(roundNow)
+        if checkingRound[1]:
+            roundNow = checkingRound[0]
+            print("Changed round or there is no round on the screen!!!!!!!!!!!!!!!!!!!!!!! From while loop")
+            
 
-        try:
-            championsToBuyIndexes = from_OCR_champions_to_buy_list_to_counter_index_list()
-            pointsForChampionsInGameToBuy = show_points_for_champions_to_buy()
-            print(pointsForChampionsInGameToBuy)
-            capturedRound = make_cropped_ss_and_get_round()
-            buy_champ_if_has_more_points_than_threshold()
-            if ((int(capturedRound) in ROUNDSTOBUYXP) and (not sum(i >= THRESHOLDFORPOINTSTOBUYCHAMPION for i in pointsForChampionsInGameToBuy))):
-                if localCapturedRound != capturedRound:
+            try:
+                championsToBuyIndexes = from_OCR_champions_to_buy_list_to_counter_index_list()
+                pointsForChampionsInGameToBuy = show_points_for_champions_to_buy()
+                print(pointsForChampionsInGameToBuy)
+                capturedRound = make_cropped_ss_and_get_round()
+                buy_champ_if_has_more_points_than_threshold()
+                if (roundNow in ROUNDSTOBUYXP):
                     while click_on_buyXPButton_or_refreshButton(buttonToClick=1) == 1: ### buy XP till bot has gold to do it
                         print("Buying XP")
-                    localCapturedRound = make_cropped_ss_and_get_round()
-            
-            if ((int(capturedRound) in ROUNDSTOBUYREFRESH) and (not sum(i >= THRESHOLDFORPOINTSTOBUYCHAMPION for i in pointsForChampionsInGameToBuy))):
-                if localCapturedRound != capturedRound:
+                
+                if (roundNow in ROUNDSTOBUYREFRESH):
                     for i in range(0,int(capturedRound[0])+1,1):
                         click_on_buyXPButton_or_refreshButton(buttonToClick=0)
                         buy_champ_if_has_more_points_than_threshold()
-                    localCapturedRound = make_cropped_ss_and_get_round()
-                    # click_on_buyXPButton_or_refreshButton(buttonToClick=1)
+                        # click_on_buyXPButton_or_refreshButton(buttonToClick=1)
                         
-        except(TypeError): 
-            print("end of the game")
-            break
+                if (roundNow in SHUFFLEROUNDS):
+                    shuffle_champs()
+
+            except(TypeError): 
+                print("end of the game")
+                break
+                                
+
     
     except(IndexError):
         pass
