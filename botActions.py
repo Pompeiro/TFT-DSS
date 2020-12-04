@@ -50,6 +50,7 @@ import os
 
 import itertools
 
+pyautogui.PAUSE = 0.02
 
 #https://stackoverflow.com/questions/33691187/how-to-save-the-file-with-different-name-and-not-overwriting-existing-one
 
@@ -808,17 +809,18 @@ jpgwithunits = "C:\\Users\\janusz\\Pictures\\tft\\testingimages\\graDziesiecDefa
 jpgwithunits = "playground.jpg"
 jpgwithunits = "playgroundwithunits.jpg"
 
-def make_cropped_ss(loadImage=0, window=wincap, croppingY=0, croppingX=0, croppingHeight=1080, croppingWidth=1920, saveMode=0, savingName="sss.jpg", savingNameUnique="ssIlony",saveModeUnique=0, parDirectory="C:\\Users\\janusz\\Pictures\\tft\\testingimages\\"):
+def make_cropped_ss(loadImage=0, window=wincap, croppingY=0, croppingX=0, croppingHeight=1080, croppingWidth=1920, saveMode=0, savingName="sss.jpg", savingNameUnique="ssIlony",saveModeUnique=0, parDirectory="C:\\Users\\janusz\\Pictures\\tft\\testingimages\\", imageToLoad=None):
     WINDOWCAPTUREFLAG = 1
     if loadImage:
-        screenshot = cv.imread(jpgwithunits,cv.IMREAD_UNCHANGED)
+        screenshot = imageToLoad
     else:
         try:
             screenshot = window.get_screenshot()
         except:
             print("Not found teamfight tactics game window!!!!!!!!!!!!! From make_cropped_ss()")
             WINDOWCAPTUREFLAG = 0
-    if WINDOWCAPTUREFLAG: 
+            return None
+    if WINDOWCAPTUREFLAG or loadImage: 
     #print(screenshot)
         crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
         cv.imshow("ss", crop_img)
@@ -1086,7 +1088,7 @@ def activate_game_window(inGameWindow=Screenshotwindow,sleepDelay = 0.5):
     else:
         print("Game client is active window!!! from activate_game_window()")
 
-def buy_best_available_champions_by_points(howMuchChampions=2, mousePathDelay=0.05,inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen):
+def buy_best_available_champions_by_points(howMuchChampions=2, mousePathDelay=0.01,inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen):
     activate_game_window(inGameWindow=Screenshotwindow)
     
     for i in range(0,howMuchChampions,1):
@@ -1094,7 +1096,7 @@ def buy_best_available_champions_by_points(howMuchChampions=2, mousePathDelay=0.
         # pydirectinput.click() # Click the mouse at its current location.
         pyautogui.moveTo(x=championToBuyPositionOnGame[sortedChampionsToBuyPoints[i][2]][0], y=championToBuyPositionOnGame[sortedChampionsToBuyPoints[i][2]][1], duration=mousePathDelay)
         pyautogui.mouseDown()
-        time.sleep(0.1)
+        # time.sleep(0.1)
         pyautogui.mouseUp()
 
         
@@ -1111,7 +1113,7 @@ def buy_best_available_champions_by_points_threshold(threshold=1.8, mousePathDel
         # pydirectinput.click() # Click the mouse at its current location.
         pyautogui.moveTo(x=championToBuyPositionOnGame[sortedChampionsToBuyPoints[i][2]][0], y=championToBuyPositionOnGame[sortedChampionsToBuyPoints[i][2]][1], duration=mousePathDelay)
         pyautogui.mouseDown()
-        time.sleep(0.1)
+        # time.sleep(0.1)
         pyautogui.mouseUp()
 
         
@@ -1123,12 +1125,12 @@ def buy_best_available_champions_by_points_threshold(threshold=1.8, mousePathDel
 
 def move_champion_from_x_to_y(startingPoint,metaPoint):
     activate_game_window()
-    time.sleep(0.02)
-    pyautogui.moveTo(x=startingPoint[0], y=startingPoint[1], duration=0.02)
+    # time.sleep(0.02)
+    pyautogui.moveTo(x=startingPoint[0], y=startingPoint[1], duration=0.01)
     pyautogui.click()
-    pyautogui.moveTo(x=metaPoint[0], y=metaPoint[1], duration=0.02)
+    pyautogui.moveTo(x=metaPoint[0], y=metaPoint[1], duration=0.01)
     pyautogui.mouseDown()
-    time.sleep(0.02)
+    # time.sleep(0.02)
     pyautogui.mouseUp()
     
 
@@ -1139,7 +1141,7 @@ def move_champion_from_x_to_y_without_game_activation(startingPoint,metaPoint):
     pyautogui.click()
     pyautogui.moveTo(x=metaPoint[0], y=metaPoint[1], duration=0.01)
     pyautogui.mouseDown()
-    time.sleep(0.02)
+    # time.sleep(0.02)
     pyautogui.mouseUp()
     
 
@@ -1272,20 +1274,24 @@ gameExitNowButtonJPG = "TemplateMatchingGame\\exitNowGameButton.jpg"
 
 def match_template_with_screen(hexesToCheckListJPG=gameBuyXPButtonJPG, hexesLocationWithOffset = gameBuyXPButtonXY, HW = gameBuyXPButtonHW, threshold = 0.95):
     img_main = make_cropped_ss()
-    img_rgb = make_cropped_ss(loadImage=0, window=wincap, croppingY=hexesLocationWithOffset[1], croppingX=hexesLocationWithOffset[0], croppingHeight=HW[0], croppingWidth=HW[1], saveMode=0, savingName="TemplateMatchingClient\\acceptGameButton.jpg")
-    img_gray = cv.cvtColor(img_rgb, cv.COLOR_BGR2GRAY)
-    template = cv.imread(hexesToCheckListJPG,0)
-    w, h = template.shape[::-1]
-    res = cv.matchTemplate(img_gray,template,cv.TM_CCORR_NORMED)
-    loc = np.where( res >= threshold)
-    
-    print(loc[0].size)
-
+    try:
+        if img_main.all() != None: ### return 0 if ss not found
+            img_rgb = make_cropped_ss(loadImage=1, window=wincap, croppingY=hexesLocationWithOffset[1], croppingX=hexesLocationWithOffset[0], croppingHeight=HW[0], croppingWidth=HW[1], saveMode=0, savingName="TemplateMatchingClient\\acceptGameButton.jpg", imageToLoad=img_main)
+            img_gray = cv.cvtColor(img_rgb, cv.COLOR_BGR2GRAY)
+            template = cv.imread(hexesToCheckListJPG,0)
+            w, h = template.shape[::-1]
+            res = cv.matchTemplate(img_gray,template,cv.TM_CCORR_NORMED)
+            loc = np.where( res >= threshold)
         
-    for pt in zip(*loc[::-1]):
-        cv.rectangle(img_main, tuple(hexesLocationWithOffset), (hexesLocationWithOffset[0] + HW[1], hexesLocationWithOffset[1] + HW[0]), (0,0,255), 2)
-    cv.imshow("ss5", img_main)
-    return loc[0].size # << if this >0 then template has been found
+        print(loc[0].size)
+    
+            
+        for pt in zip(*loc[::-1]):
+            cv.rectangle(img_main, tuple(hexesLocationWithOffset), (hexesLocationWithOffset[0] + HW[1], hexesLocationWithOffset[1] + HW[0]), (0,0,255), 2)
+        cv.imshow("ss5", img_main)
+        return loc[0].size # << if this >0 then template has been found
+    except(AttributeError):
+        print("Couldnt do image because there is no screenshot! from match template with screen")
 
 
 
@@ -1308,9 +1314,9 @@ def click_on_buyXPButton_or_refreshButton(buttonToClick=1):
     if buttonToClick:
         if match_template_with_screen(hexesToCheckListJPG=gameBuyXPButtonJPG, hexesLocationWithOffset = gameBuyXPButtonXY, HW = gameBuyXPButtonHW, threshold=0.95):
             activate_game_window()
-            pyautogui.moveTo(x=gameBuyXPButtonXY[0]+gameBuyXPButtonHW[1]//2, y=gameBuyXPButtonXY[1]+gameBuyXPButtonHW[0]//2, duration=0.15)
+            pyautogui.moveTo(x=gameBuyXPButtonXY[0]+gameBuyXPButtonHW[1]//2, y=gameBuyXPButtonXY[1]+gameBuyXPButtonHW[0]//2, duration=0.05)
             pyautogui.mouseDown()
-            time.sleep(0.1)
+            # time.sleep(0.1)
             pyautogui.mouseUp()
             ACTIONDONE = 1
         else:
@@ -1319,9 +1325,9 @@ def click_on_buyXPButton_or_refreshButton(buttonToClick=1):
     else:
         if match_template_with_screen(hexesToCheckListJPG=gameRefreshButtonJPG, hexesLocationWithOffset = gameRefreshButtonXY, HW = gameRefreshButtonHW, threshold=0.95):
             activate_game_window()
-            pyautogui.moveTo(x=gameRefreshButtonXY[0]+gameRefreshButtonHW[1]//2, y=gameRefreshButtonXY[1]+gameRefreshButtonHW[0]//2, duration=0.15)
+            pyautogui.moveTo(x=gameRefreshButtonXY[0]+gameRefreshButtonHW[1]//2, y=gameRefreshButtonXY[1]+gameRefreshButtonHW[0]//2, duration=0.05)
             pyautogui.mouseDown()
-            time.sleep(0.1)
+            # time.sleep(0.1)
             pyautogui.mouseUp()
             ACTIONDONE = 1
         else:
@@ -1349,7 +1355,7 @@ def buy_champ_if_has_more_points_than_threshold():
         
         buy_best_available_champions_by_points_threshold(threshold=THRESHOLDFORPOINTSTOBUYCHAMPION, inGameWindow=Screenshotwindow, sortedChampionsToBuyPoints=SORTEDchampionsToBuyPointsThenIndexesThenPositionOnScreen)
         
-        time.sleep(1.0)
+        time.sleep(0.5)
 
         make_cropped_ss(savingNameUnique="ssIlony",saveModeUnique=1, parDirectory=parentDirectory)
         
@@ -1364,7 +1370,13 @@ def shuffle_champs():
 def check_round_change(roundCurr):
     roundLocal = make_cropped_ss_and_get_round()
     if roundLocal == None: ########### different round placement on screen
-        roundLocal = make_cropped_ss_and_get_round(croppingWidth=150)
+        roundLocal = make_cropped_ss_and_get_round(croppingX=820, croppingWidth=60)
+        try:
+            if "#" in roundLocal:
+                print("# in roundLocal something went wrong from check round change")
+                roundLocal = None
+        except(TypeError):
+            pass
     if roundLocal:
         roundCapturedNow = int(roundLocal)
         if roundCurr == roundCapturedNow:
@@ -1379,7 +1391,7 @@ def check_round_change(roundCurr):
         return None,2
 
 
-boost_up_points_for_class(clas='"Sharpshooter"')
+boost_up_points_for_class(clas='"Vanguard"')
 
 
 Screenshotwindow = pyautogui.getWindowsWithTitle('League of Legends (TM) Client')[0]
@@ -1389,7 +1401,7 @@ ROUNDSTOBUYREFRESH = [22,25,31,32,35,41,42,45,51,52,55,61,62,65]
 
 ROUNDSTOBUYXP = [26,36,46,56,66]
 
-SHUFFLEROUNDS = [22,25,31,32,35,41,42,45,51,55,61,65]
+SHUFFLEROUNDS = [23,25,26,32,33,36,37,42,43,47,51,52,53,55,61,65]
 
 # update current champions to buy with ocr
 ROUNDCOUNTER = 0
@@ -1434,6 +1446,7 @@ while True:
                 if (roundNow in ROUNDSTOBUYREFRESH):
                     for i in range(0,int(capturedRound[0])+1,1):
                         click_on_buyXPButton_or_refreshButton(buttonToClick=0)
+                        time.sleep(0.1)
                         buy_champ_if_has_more_points_than_threshold()
                         # click_on_buyXPButton_or_refreshButton(buttonToClick=1)
                         
