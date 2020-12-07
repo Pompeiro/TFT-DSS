@@ -134,6 +134,11 @@ I think i need to collect more images.
 
 
 
+07.12.2020 object champion detection with YOLO
+![ROTD1](https://user-images.githubusercontent.com/60773657/101356751-d71b3100-3898-11eb-9756-85f22e17dbd7.jpg)
+
+
+
 # botActions.py
 Working bot which buy preffered class of champions for example brawlers. Shuffling champions on playground and subsitutes bench after champion is bought. Also spending gold in predefined rounds for XP or refreshing champions to buy. This bot is mainly for automate screenshots gathering to feed my dataset to train object detection model, but it performs well and can beat some players. For sure it beats "afk bots".
 For sure you need to clone directories with JPGs like TemplateMatchingClient.
