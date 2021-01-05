@@ -45,16 +45,30 @@ logging.basicConfig(level=logging.DEBUG)
 
 pointsForChampionsToBuy = [0] * 5
 
+VARIABLEPRINTMODE = 0
+# VARIABLEPRINTMODE = 1
 
 def add(intVariable):
     """Adding one to counter"""
+    logging.debug("Function add() called")
+    
+    logging.info("input = {}".format(intVariable.get()))
     intVariable.set(intVariable.get() + 1)
-    return
+    
+    logging.info("after call = {}".format(intVariable.get()))
+    logging.debug("Function add() end")
+
 
 def sub(intVariable):
     """Minus one to counter"""
+    logging.debug("Function sub() called")
+    
+    logging.info("input = {}".format(intVariable.get()))
     if intVariable.get() >0:
         intVariable.set(intVariable.get() - 1)
+
+    logging.info("after call = {}".format(intVariable.get()))
+    logging.debug("Function sub() end")
 
 
 
@@ -71,13 +85,15 @@ df.drop('Unnamed: 0', axis=1, inplace=True)
 originList = list(set(df.OriginPrimary))
 originList.sort()
 
-for origin in originList:
-    print(origin+"Champs = list(df.query("+"'OriginPrimary == "+'"'+"%s"%origin+'"'+"').Champion)")
+if VARIABLEPRINTMODE:
+    for origin in originList:
+        print(origin+"Champs = list(df.query("+"'OriginPrimary == "+'"'+"%s"%origin+'"'+"').Champion)")
 
-print("OriginChampsFromDFList = [", end = ' ')
-for origin in originList:
-    print(origin+"Champs", end = ', ')
-print("]")  
+if VARIABLEPRINTMODE:
+    print("OriginChampsFromDFList = [", end = ' ')
+    for origin in originList:
+        print(origin+"Champs", end = ', ')
+    print("]")  
 
 CultistChamps = list(df.query('OriginPrimary == "Cultist"').Champion)
 DivineChamps = list(df.query('OriginPrimary == "Divine"').Champion)
@@ -101,13 +117,15 @@ OriginChampsFromDFList = [CultistChamps, DivineChamps, DuskChamps, ElderwoodCham
 classList = list(set(df.ClassPrimary))
 classList.sort()
 
-for clas in classList:
-    print(clas+"Champs = list(df.query("+"'ClassPrimary == "+'"'+"%s"%clas+'"'+"').Champion)")
+if VARIABLEPRINTMODE:
+    for clas in classList:
+        print(clas+"Champs = list(df.query("+"'ClassPrimary == "+'"'+"%s"%clas+'"'+"').Champion)")
 
-print("classChampsFromDFList = [", end = ' ')
-for clas in classList:
-    print(clas+"Champs", end = ', ')
-print("]")  
+if VARIABLEPRINTMODE:
+    print("classChampsFromDFList = [", end = ' ')
+    for clas in classList:
+        print(clas+"Champs", end = ', ')
+    print("]")  
 
 
 
@@ -138,10 +156,11 @@ classChampsFromDFList = [AdeptChamps, AssassinChamps, BrawlerChamps, DazzlerCham
 
 # OCR things
 
-print("championListForOCR = [", end = ' ')
-for champ in df.Champion:
-    print("'"+champ+"'", end = ', ')
-print("]")  
+if VARIABLEPRINTMODE:
+    print("championListForOCR = [", end = ' ')
+    for champ in df.Champion:
+        print("'"+champ+"'", end = ', ')
+    print("]")  
 
 
 championListForOCR = ['Aatrox', 'Elise', 'Evelynn', 'Jhin', 'Kalista', 'Pyke',
@@ -195,42 +214,46 @@ wincap = None
 ###################################
 ####################################
 ##################################
-
-
-
-def make_cropped_ss_and_get_champions_to_buy(loadImage=1, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
-    logging.debug("Function make_cropped_ss_and_get_champions_to_buy() called")
+def make_cropped_ss(loadImage=1, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
+    logging.debug("Function make_cropped_ss() called")
 
     if loadImage:
         screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
     else:
         screenshot = window.get_screenshot()
-    #print(screenshot)
     crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
     cv.imshow("ss", crop_img)
-    OCRResult=reader.readtext(crop_img)
-    print(OCRResult)
+    
+    logging.debug("Function make_cropped_ss() end")
+    return crop_img
+
+
+def ocr_on_cropped_img(croppedSSWithChampionCardNames):
+    logging.debug("Function ocr_on_cropped_img() called")
+
+
+    OCRResult=reader.readtext(croppedSSWithChampionCardNames)
+    logging.info("OCR results: {}".format(OCRResult))
     listOfChampsToBuyThisTurn=sort_detected_champions_to_buy_by_position(OCRResult)
     
-    logging.debug("Function make_cropped_ss_and_get_champions_to_buy() end")
+    logging.debug("Function ocr_on_cropped_img() end")
     return listOfChampsToBuyThisTurn
-
 
 
 def update_champions_to_buy_from_ocr_detection():
     logging.debug("Function update_champions_to_buy_from_ocr_detection() called")
 
-    listOfChampsToBuyThisTurn=make_cropped_ss_and_get_champions_to_buy()
+    listOfChampsToBuyThisTurn=ocr_on_cropped_img(make_cropped_ss())
     for champToBuy in listOfChampsToBuyThisTurn:
         for i,champ in enumerate(championListForOCR):
             if champToBuy == champ:
-                print(i)
+                logging.info("from IF inside for loop in update_champions_to_buy_from_ocr_detection()")
+                logging.info("Index in championListForOCR that is detected: {}".format(i))
+                logging.info("Champ name in this index: {}".format(champ))
                 add(OriginChampsCountersBuyList1d[i])
-                print(champ)
-                print("Succesfully added detected champion")
-                # print(counterBuyNeeko.get())
                 break
-    print("List of champions detected: ",listOfChampsToBuyThisTurn)   
+    
+    logging.info("List of champions detected(return of this func): {}".format(champ))
 
     logging.debug("Function update_champions_to_buy_from_ocr_detection() end")         
     return listOfChampsToBuyThisTurn
@@ -363,131 +386,132 @@ MainWindow.title('TFTDSS')
 
 ############### COUNTERS FOR HEARTS CARDS $$$$$$$$$$$$$$$$$$
 
-for champ in CultistChamps:
-    print("counter"+champ+"= tk.IntVar()")
-
-print("CultistCounters = [")
-for champ in CultistChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
+if VARIABLEPRINTMODE:
+    for champ in CultistChamps:
+        print("counter"+champ+"= tk.IntVar()")
     
-for champ in DivineChamps:
-    print("counter"+champ+"= tk.IntVar()")
-
-print("DivineCounters = [")
-for champ in DivineChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
-
+    print("CultistCounters = [")
+    for champ in CultistChamps:
+        print("counter"+champ,end = ", ")
+    print("]")
+    print()
+        
+    for champ in DivineChamps:
+        print("counter"+champ+"= tk.IntVar()")
     
-for champ in DuskChamps:
-    print("counter"+champ+"= tk.IntVar()")
-
-print("DuskCounters = [")
-for champ in DuskChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
-
+    print("DivineCounters = [")
+    for champ in DivineChamps:
+        print("counter"+champ,end = ", ")
+    print("]")
+    print()
     
-for champ in ElderwoodChamps:
-    print("counter"+champ+"= tk.IntVar()")
-
-print("ElderwoodCounters = [")
-for champ in ElderwoodChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
-
+        
+    for champ in DuskChamps:
+        print("counter"+champ+"= tk.IntVar()")
     
-for champ in EnlightenedChamps:
-    print("counter"+champ+"= tk.IntVar()")
-
-print("EnlightenedCounters = [")
-for champ in EnlightenedChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
-
+    print("DuskCounters = [")
+    for champ in DuskChamps:
+        print("counter"+champ,end = ", ")
+    print("]")
+    print()
     
-for champ in ExileChamps:
-    print("counter"+champ+"= tk.IntVar()")
-
-print("ExileCounters = [")
-for champ in ExileChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
-
+        
+    for champ in ElderwoodChamps:
+        print("counter"+champ+"= tk.IntVar()")
     
-for champ in FortuneChamps:
-    print("counter"+champ+"= tk.IntVar()")
-
-print("FortuneCounters = [")
-for champ in FortuneChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
-
+    print("ElderwoodCounters = [")
+    for champ in ElderwoodChamps:
+        print("counter"+champ,end = ", ")
+    print("]")
+    print()
     
-for champ in MoonlightChamps:
-    print("counter"+champ+"= tk.IntVar()")
-
-print("MoonlightCounters = [")
-for champ in MoonlightChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
-
+        
+    for champ in EnlightenedChamps:
+        print("counter"+champ+"= tk.IntVar()")
     
-for champ in NinjaChamps:
-    print("counter"+champ+"= tk.IntVar()")
-
-print("NinjaCounters = [")
-for champ in NinjaChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
-
+    print("EnlightenedCounters = [")
+    for champ in EnlightenedChamps:
+        print("counter"+champ,end = ", ")
+    print("]")
+    print()
     
-for champ in SpiritChamps:
-    print("counter"+champ+"= tk.IntVar()")
-
-print("SpiritCounters = [")
-for champ in SpiritChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
-
-
-for champ in TheBossChamps:
-    print("counter"+champ+"= tk.IntVar()")
-
-print("TheBossCounters = [")
-for champ in TheBossChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
-
-for champ in TormentedChamps:
-    print("counter"+champ+"= tk.IntVar()")
-
-print("TormentedCounters = [")
-for champ in TormentedChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
-
-for champ in WarlordChamps:
-    print("counter"+champ+"= tk.IntVar()")
-
-print("WarlordCounters = [")
-for champ in WarlordChamps:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
+        
+    for champ in ExileChamps:
+        print("counter"+champ+"= tk.IntVar()")
+    
+    print("ExileCounters = [")
+    for champ in ExileChamps:
+        print("counter"+champ,end = ", ")
+    print("]")
+    print()
+    
+        
+    for champ in FortuneChamps:
+        print("counter"+champ+"= tk.IntVar()")
+    
+    print("FortuneCounters = [")
+    for champ in FortuneChamps:
+        print("counter"+champ,end = ", ")
+    print("]")
+    print()
+    
+        
+    for champ in MoonlightChamps:
+        print("counter"+champ+"= tk.IntVar()")
+    
+    print("MoonlightCounters = [")
+    for champ in MoonlightChamps:
+        print("counter"+champ,end = ", ")
+    print("]")
+    print()
+    
+        
+    for champ in NinjaChamps:
+        print("counter"+champ+"= tk.IntVar()")
+    
+    print("NinjaCounters = [")
+    for champ in NinjaChamps:
+        print("counter"+champ,end = ", ")
+    print("]")
+    print()
+    
+        
+    for champ in SpiritChamps:
+        print("counter"+champ+"= tk.IntVar()")
+    
+    print("SpiritCounters = [")
+    for champ in SpiritChamps:
+        print("counter"+champ,end = ", ")
+    print("]")
+    print()
+    
+    
+    for champ in TheBossChamps:
+        print("counter"+champ+"= tk.IntVar()")
+    
+    print("TheBossCounters = [")
+    for champ in TheBossChamps:
+        print("counter"+champ,end = ", ")
+    print("]")
+    print()
+    
+    for champ in TormentedChamps:
+        print("counter"+champ+"= tk.IntVar()")
+    
+    print("TormentedCounters = [")
+    for champ in TormentedChamps:
+        print("counter"+champ,end = ", ")
+    print("]")
+    print()
+    
+    for champ in WarlordChamps:
+        print("counter"+champ+"= tk.IntVar()")
+    
+    print("WarlordCounters = [")
+    for champ in WarlordChamps:
+        print("counter"+champ,end = ", ")
+    print("]")
+    print()
     
 counterAatrox= tk.IntVar()
 counterElise= tk.IntVar()
@@ -723,8 +747,9 @@ for secondary in ClassSecondaryNames:
     ClassPrimaryNames.append(secondary)
 ClassNames = sorted(list(set(ClassPrimaryNames)))
 
-for clas in ClassPrimaryNames:
-    print("counter"+clas+" = tk.IntVar()")
+if VARIABLEPRINTMODE:
+    for clas in ClassPrimaryNames:
+        print("counter"+clas+" = tk.IntVar()")
 
 
 counterAdept = tk.IntVar()
@@ -741,13 +766,14 @@ counterShade = tk.IntVar()
 counterSharpshooter = tk.IntVar()
 counterVanguard = tk.IntVar()
 
-for i,clas in enumerate(ClassNames):
-    print(clas+"Counters = [ ")
-    for champ in classChampsFromDFList[i]:
-        print("counter"+champ,end = ", ")
-    print("]")
-    print()
-        
+if VARIABLEPRINTMODE:
+    for i,clas in enumerate(ClassNames):
+        print(clas+"Counters = [ ")
+        for champ in classChampsFromDFList[i]:
+            print("counter"+champ,end = ", ")
+        print("]")
+        print()
+            
 
 
 
@@ -782,22 +808,22 @@ SharpshooterCounters = [counterJhin, counterJinx, counterNidalee, counterTeemo, 
 
 VanguardCounters = [counterAatrox, counterGaren, counterHecarim, counterSejuani, counterThresh, counterWukong]
 
-
-print("ClassPrimaryCounters = [")
-for clas in ClassPrimaryNames:
-    print("counter"+clas,end = ", ")
-print("]")
+if VARIABLEPRINTMODE:
+    print("ClassPrimaryCounters = [")
+    for clas in ClassPrimaryNames:
+        print("counter"+clas,end = ", ")
+    print("]")
 
 ClassPrimaryCounters = [counterAdept, counterAssassin, counterBrawler, counterDazzler,
                         counterDuelist, counterEmperor, counterHunter, counterKeeper,
                         counterMage, counterMystic, counterShade, counterSharpshooter,
                         counterVanguard]
 
-
-print("ClassPrimaryCountersList = [")
-for clas in ClassPrimaryNames:
-    print(clas+"Counters",end = ", ")
-print("]")
+if VARIABLEPRINTMODE:
+    print("ClassPrimaryCountersList = [")
+    for clas in ClassPrimaryNames:
+        print(clas+"Counters",end = ", ")
+    print("]")
 
 ClassPrimaryCountersList = [AdeptCounters, AssassinCounters, BrawlerCounters,
                             DazzlerCounters, DuelistCounters, EmperorCounters,
@@ -860,12 +886,12 @@ OriginChampsCountersList1d = sum(OriginChampsCountersList, [])
 
 OriginChampsCountersBuyList1d = sum(OriginChampsCountersBuyList, [])
 
-
-print("OriginChampsCountersListUseAsButtons = [")
-for champ in ChampsNames:
-    print("counter"+champ,end = ", ")
-print("]")
-print()
+if VARIABLEPRINTMODE:
+    print("OriginChampsCountersListUseAsButtons = [")
+    for champ in ChampsNames:
+        print("counter"+champ,end = ", ")
+    print("]")
+    print()
 
 OriginChampsCountersListUseAsButtons = [counterAatrox, counterElise, counterEvelynn,
                                         counterJhin, counterKalista, counterPyke,
