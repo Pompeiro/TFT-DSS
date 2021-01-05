@@ -26,6 +26,7 @@ import pandas as pd
 
 from collections import namedtuple
 
+import pyautogui
 
 
 import easyocr
@@ -142,7 +143,7 @@ print("]")
 championListForOCR = ['Aatrox', 'Elise', 'Evelynn', 'Jhin', 'Kalista', 'Pyke',
                       'Twisted Fate', 'Zilean', 'Jax', 'Lee Sin', 'Lux', 'Warwick',
                       'Wukong', 'Cassiopeia', 'Lillia', 'Riven', 'Thresh', 'Vayne',
-                      'Ashe', 'Ezreal', 'Hecarim', 'Lulu', 'Maokai', 'Nunu',
+                      'Ashe', 'Ezreal', 'Hecarim', 'Lulu', 'Maokai', 'Nunu & Willump',
                       'Veigar', 'Fiora', 'Irelia', 'Janna', 'Morgana', 'Nami',
                       'Talon', 'Yasuo', 'Yone', 'Annie', 'Jinx', 'Sejuani',
                       'Tahm Kench', 'Aphelios', 'Diana', 'Lissandra', 'Sylas',
@@ -282,11 +283,15 @@ def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
     f=build_list_of_champion_cards_rectangles()
     screenshot = wincap.get_screenshot()
     # screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
+    
+    ##### at the end
+    # res contains champions sorted by points from lowest(0) to highest(4) 
+    # and indexes represents champion placement on the screen
 
     if mode == "rectangle":
         for i in range(0,5):
             cv.rectangle(screenshot, f[i][0], f[i][1], color=colors[res[i]],
-                         lineType=line_type, thickness=2)
+                          lineType=line_type, thickness=2)
         cv.imshow("wind", screenshot)
     elif mode == "cross":
         for i in range(0,5):
@@ -316,7 +321,7 @@ def draw_rectangles_show_points_show_buttons_reset_counters():
 
 
 MainWindow = tk.Tk()
-MainWindow.geometry('1900x800')
+MainWindow.geometry('1900x800+0+0')
 MainWindow.title('TFTDSS')
 
 
