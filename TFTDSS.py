@@ -48,6 +48,9 @@ pointsForChampionsToBuy = [0] * 5
 VARIABLEPRINTMODE = 0
 # VARIABLEPRINTMODE = 1
 
+# IMAGESDEBUGMODE = 0
+IMAGESDEBUGMODE = 1
+
 def add(intVariable):
     """Adding one to counter"""
     logging.debug("Function add() called")
@@ -214,7 +217,28 @@ wincap = None
 ###################################
 ####################################
 ##################################
-def make_cropped_ss(loadImage=1, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
+def make_cropped_ss(loadImage=1, window=wincap, croppingX=450, croppingY=970, croppingWidth=1000, croppingHeight=30):
+    """
+    
+
+    Parameters
+    ----------
+    loadImage : If want to open without game then change to 1. 
+        The default is 0.
+    window : Window to be captured, set to None if want to open without game.
+        The default is wincap.
+        
+        Defaults to cropp screenshot from first to fifth(1-5) champion card name.
+    croppingX :  The default is 450. 
+    croppingY :  The default is 970.
+    croppingWidth :  The default is 1000.
+    croppingHeight :  The default is 30.
+
+    Returns
+    -------
+    crop_img : Cropped screenshot.
+
+    """
     logging.debug("Function make_cropped_ss() called")
 
     if loadImage:
@@ -222,7 +246,9 @@ def make_cropped_ss(loadImage=1, window=wincap, croppingY=970, croppingX=450, cr
     else:
         screenshot = window.get_screenshot()
     crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
-    cv.imshow("ss", crop_img)
+    
+    if IMAGESDEBUGMODE:
+        cv.imshow("make_cropped_ss()", crop_img)
     
     logging.debug("Function make_cropped_ss() end")
     return crop_img
@@ -253,10 +279,8 @@ def update_champions_to_buy_from_ocr_detection():
                 add(OriginChampsCountersBuyList1d[i])
                 break
     
-    logging.info("List of champions detected(return of this func): {}".format(champ))
-
     logging.debug("Function update_champions_to_buy_from_ocr_detection() end")         
-    return listOfChampsToBuyThisTurn
+    return 
 
 
 #drawing rectangles things
