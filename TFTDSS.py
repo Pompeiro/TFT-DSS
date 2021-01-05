@@ -178,13 +178,29 @@ championListForOCR = ['Aatrox', 'Elise', 'Evelynn', 'Jhin', 'Kalista', 'Pyke',
                       'Katarina', 'Nidalee', 'Vi', 'Xin Zhao']
 
 def sort_detected_champions_to_buy_by_position(OCRResultsSorted):
+    """
+    
+    Sorting input in order from left to right by placement on the screen
+    (lowest width is first).Then filters out champion names, numbers(champions cost)
+    are discarded.
+
+    Parameters
+    ----------
+    OCRResultsSorted : Typical == ocr_on_cropped_img(make_cropped_ss())
+
+    Returns
+    -------
+    sortedChampionsToBuy : List of champions that were found in input.
+
+    """
+    
     logging.debug("Function sort_detected_champions_to_buy_by_position() called")
     # sort from lowest width (left to right side)
     OCRResultsSorted = sorted(OCRResultsSorted, key=lambda x: x[0])
     sortedChampionsToBuy = []
     for text in OCRResultsSorted:
         for champ in championListForOCR:
-            if champ in text:
+            if champ in text: # filters champion names
                 sortedChampionsToBuy.append(champ)
                 logging.info("from for loop in sort_detected_champions_to_buy_by_position()")
                 logging.info("found {}".format(champ))
