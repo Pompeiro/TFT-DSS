@@ -280,6 +280,15 @@ def ocr_on_cropped_img(croppedSSWithChampionCardNames):
 
 
 def update_champions_to_buy_from_ocr_detection():
+    """
+    Add 1 to every champion to buy counter detected in OCRResults.
+    champion to buy counters GLOBAL STATE CHANGE !!!!!!!!!!!!!!!!!!!!
+
+    Returns
+    -------
+    None.
+
+    """
     logging.debug("Function update_champions_to_buy_from_ocr_detection() called")
 
     listOfChampsToBuyThisTurn=sort_detected_champions_to_buy_by_position(ocr_on_cropped_img(make_cropped_ss()))
@@ -293,7 +302,7 @@ def update_champions_to_buy_from_ocr_detection():
                 break
     
     logging.debug("Function update_champions_to_buy_from_ocr_detection() end")         
-    return 
+    return None
 
 
 #drawing rectangles things
