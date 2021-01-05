@@ -255,21 +255,34 @@ def make_cropped_ss(loadImage=1, window=wincap, croppingX=450, croppingY=970, cr
 
 
 def ocr_on_cropped_img(croppedSSWithChampionCardNames):
+    """
+    
+
+    Parameters
+    ----------
+    croppedSSWithChampionCardNames : for example if want to OCR card names then
+    input there make_cropped_ss(loadImage=0, window=wincap, croppingX=450,
+                                croppingY=970, croppingWidth=1000, croppingHeight=30)
+
+    Returns
+    -------
+    OCRResult : 
+
+    """
     logging.debug("Function ocr_on_cropped_img() called")
 
 
     OCRResult=reader.readtext(croppedSSWithChampionCardNames)
-    logging.info("OCR results: {}".format(OCRResult))
-    listOfChampsToBuyThisTurn=sort_detected_champions_to_buy_by_position(OCRResult)
+    logging.info("OCR results(return): {}".format(OCRResult))
     
     logging.debug("Function ocr_on_cropped_img() end")
-    return listOfChampsToBuyThisTurn
+    return OCRResult
 
 
 def update_champions_to_buy_from_ocr_detection():
     logging.debug("Function update_champions_to_buy_from_ocr_detection() called")
 
-    listOfChampsToBuyThisTurn=ocr_on_cropped_img(make_cropped_ss())
+    listOfChampsToBuyThisTurn=sort_detected_champions_to_buy_by_position(ocr_on_cropped_img(make_cropped_ss()))
     for champToBuy in listOfChampsToBuyThisTurn:
         for i,champ in enumerate(championListForOCR):
             if champToBuy == champ:
@@ -366,18 +379,18 @@ def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
         for i in range(0,5):
             cv.rectangle(screenshot, f[i][0], f[i][1], color=colors[res[i]],
                           lineType=line_type, thickness=2)
-        cv.imshow("wind", screenshot)
+        cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
     elif mode == "cross":
         for i in range(0,5):
                     # Draw the center point
             cv.drawMarker(screenshot, f[i][2], color=colors[res[i]],
                           markerType=marker_type, markerSize=40, thickness=2)
-        cv.imshow("wind", screenshot)
+        cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
     elif mode == "points":
         for i in range(0,5):
                     # Draw the center point
                 cv.putText(screenshot, "{:.3f}".format(sortedChampionsToBuyPointsAndPosition[res[i]][0]), f[i][2], cv.FONT_HERSHEY_SIMPLEX, 0.6, colors[res[i]], 2)
-        cv.imshow("wind", screenshot)
+        cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
         
     logging.debug("Function draw_on_champion_to_buy_cards() end")         
 
