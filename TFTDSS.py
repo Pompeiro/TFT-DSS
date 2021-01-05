@@ -39,6 +39,10 @@ from windowcapture import WindowCapture
 
 
 
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+
 pointsForChampionsToBuy = [0] * 5
 
 
@@ -152,7 +156,7 @@ championListForOCR = ['Aatrox', 'Elise', 'Evelynn', 'Jhin', 'Kalista', 'Pyke',
                       'Katarina', 'Nidalee', 'Vi', 'Xin Zhao']
 
 def sort_detected_champions_to_buy_by_position(OCRResultsSorted):
-    
+    logging.debug("Function sort_detected_champions_to_buy_by_position() called")
     # sort from lowest width (left to right side)
     OCRResultsSorted = sorted(OCRResultsSorted, key=lambda x: x[0])
     sortedChampionsToBuy = []
@@ -160,8 +164,12 @@ def sort_detected_champions_to_buy_by_position(OCRResultsSorted):
         for champ in championListForOCR:
             if champ in text:
                 sortedChampionsToBuy.append(champ)
-                print("found {}".format(champ))
-    print("List of sorted champions to buy: ",sortedChampionsToBuy)
+                logging.info("from for loop in sort_detected_champions_to_buy_by_position()")
+                logging.info("found {}".format(champ))
+    logging.info("return in sort_detected_champions_to_buy_by_position()")
+    logging.info("List of sorted champions to buy: {}".format(sortedChampionsToBuy))
+    
+    logging.debug("Function sort_detected_champions_to_buy_by_position() end")
     return sortedChampionsToBuy 
 
 
@@ -178,9 +186,9 @@ screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
 
 
 
-wincap = WindowCapture('League of Legends (TM) Client')
+# wincap = WindowCapture('League of Legends (TM) Client')
 
-# wincap = None
+wincap = None
 
 
 
@@ -190,7 +198,9 @@ wincap = WindowCapture('League of Legends (TM) Client')
 
 
 
-def make_cropped_ss_and_get_champions_to_buy(loadImage=0, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
+def make_cropped_ss_and_get_champions_to_buy(loadImage=1, window=wincap, croppingY=970, croppingX=450, croppingHeight=30, croppingWidth=1000):
+    logging.debug("Function make_cropped_ss_and_get_champions_to_buy() called")
+
     if loadImage:
         screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
     else:
@@ -201,11 +211,15 @@ def make_cropped_ss_and_get_champions_to_buy(loadImage=0, window=wincap, croppin
     OCRResult=reader.readtext(crop_img)
     print(OCRResult)
     listOfChampsToBuyThisTurn=sort_detected_champions_to_buy_by_position(OCRResult)
+    
+    logging.debug("Function make_cropped_ss_and_get_champions_to_buy() end")
     return listOfChampsToBuyThisTurn
 
 
 
 def update_champions_to_buy_from_ocr_detection():
+    logging.debug("Function update_champions_to_buy_from_ocr_detection() called")
+
     listOfChampsToBuyThisTurn=make_cropped_ss_and_get_champions_to_buy()
     for champToBuy in listOfChampsToBuyThisTurn:
         for i,champ in enumerate(championListForOCR):
@@ -216,7 +230,9 @@ def update_champions_to_buy_from_ocr_detection():
                 print("Succesfully added detected champion")
                 # print(counterBuyNeeko.get())
                 break
-    print("List of champions detected: ",listOfChampsToBuyThisTurn)            
+    print("List of champions detected: ",listOfChampsToBuyThisTurn)   
+
+    logging.debug("Function update_champions_to_buy_from_ocr_detection() end")         
     return listOfChampsToBuyThisTurn
 
 
@@ -247,10 +263,17 @@ listOfRGBColours = [(255, 0, 255), (0, 255, 255), (0, 255, 255), (0, 255, 255), 
 # listOfRGBColours=range(0,5)
 # next card, indexing from 0 = most left side
 def calculate_card_position_on_screen(cardIndex):
+    logging.debug("Function calculate_card_position_on_screen() called")
+
     xCard = xFirstChampionCard+ PADDINGBETWEENCHAMPIONCARDS * cardIndex + wChampionCard * cardIndex
+    
+    logging.debug("Function calculate_card_position_on_screen() end")         
     return xCard
 
 def build_list_of_champion_cards_rectangles():
+    logging.debug("Function build_list_of_champion_cards_rectangles() called")
+
+    
     cardsRectangles=[0]*5
     for i in range(0, 5):
         topLeft = (calculate_card_position_on_screen(i), yFirstChampionCard)
@@ -258,12 +281,16 @@ def build_list_of_champion_cards_rectangles():
         center = (topLeft[0] + wChampionCard//2, topLeft[1] + hChampionCard//2)
         # print("Type" ,type(center))
         cardsRectangles[i] = [topLeft, bottomRight, center]
+        
+    logging.debug("Function build_list_of_champion_cards_rectangles() end")         
     return cardsRectangles
 
 
 
 # https://stackoverflow.com/questions/6618515/sorting-list-based-on-values-from-another-list
 def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
+    logging.debug("Function draw_on_champion_to_buy_cards() called")
+
     championsToBuyInOrderAsInScreen = update_champions_to_buy_from_ocr_detection()
     championsToBuyPointsAndPosition=show_nonzero_counters_with_points()
     
@@ -304,11 +331,16 @@ def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
                     # Draw the center point
                 cv.putText(screenshot, "{:.3f}".format(sortedChampionsToBuyPointsAndPosition[res[i]][0]), f[i][2], cv.FONT_HERSHEY_SIMPLEX, 0.6, colors[res[i]], 2)
         cv.imshow("wind", screenshot)
+        
+    logging.debug("Function draw_on_champion_to_buy_cards() end")         
+
 
 
 
 ######## need to fix double calculate points inside draw_on_champion_to_buy_cards
 def draw_rectangles_show_points_show_buttons_reset_counters():
+    logging.debug("Function draw_rectangles_show_points_show_buttons_reset_counters() called")
+
     update_classes_and_origins()
     try:
         reset_counters_2dlist(OriginChampsCountersBuyList)
@@ -316,9 +348,12 @@ def draw_rectangles_show_points_show_buttons_reset_counters():
         pass
     draw_on_champion_to_buy_cards()
 
+    logging.debug("Function draw_rectangles_show_points_show_buttons_reset_counters() end")         
+
 
 ############### WINDOW THINGS
 
+      
 
 MainWindow = tk.Tk()
 MainWindow.geometry('1900x800+0+0')
@@ -870,6 +905,8 @@ df.reset_index(drop=True, inplace = True)
 
 boldedFont = tkFont.Font(family="Arial", size=10, weight=tkFont.BOLD)
 
+ 
+
 
 def show_champions_from_origin(originPositionInOriginList, OriginChampsFromDF, OriginCounterList, shiftBetweenUpsideDownside, flag = CHAMPIONFLAG):
     """Adding buttons and text labels for single origin.
@@ -882,6 +919,8 @@ def show_champions_from_origin(originPositionInOriginList, OriginChampsFromDF, O
     flag - if 1 then text label is above counters, for origin champions should 
     be CHAMPIONFLAG, for origins or classes should be ORIGINFLAG.
         """
+    logging.debug("Function show_champions_from_origin() called")
+    
     if flag == 1:
         labelTitle = tk.Label(MainWindow, text=originList[originPositionInOriginList]).grid(row=1+shiftBetweenUpsideDownside, column=OriginLabelPositionColumn*ShiftBetweenOrigins*originPositionInOriginList)
 
@@ -890,9 +929,9 @@ def show_champions_from_origin(originPositionInOriginList, OriginChampsFromDF, O
         entryNum = tk.Entry(MainWindow, textvariable=OriginCounterList[i], width = 2).grid(row=2+i+shiftBetweenUpsideDownside, column=ShiftBetweenOrigins*originPositionInOriginList+1)
         buttonCal = tk.Button(MainWindow, text="+", command=lambda counter=OriginCounterList[i]:add(counter)).grid(row=2+i+shiftBetweenUpsideDownside, column=ShiftBetweenOrigins*originPositionInOriginList+2)
         buttonCal = tk.Button(MainWindow, text="-", command=lambda counter=OriginCounterList[i]:sub(counter)).grid(row=2+i+shiftBetweenUpsideDownside, column=ShiftBetweenOrigins*originPositionInOriginList+3)
+   
+    logging.debug("Function show_champions_from_origin() end")    
     return
-
-
 
 
 
@@ -901,17 +940,23 @@ def show_champions_from_origin(originPositionInOriginList, OriginChampsFromDF, O
 def reset_counters_2dlist(list2d=OriginChampsCountersBuyList):
     """Reset counters to 0, used when roll or new round starts.
     In: list2d by default its OriginChampsCountersBuyList."""
+    logging.debug("Function reset_counters_2dlist() called")
+
     list1d = sum(list2d, [])
     for champCounter in list1d:
         champCounter.set(0)
         
     delete_all_buttons()
+    
+    logging.debug("Function reset_counters_2dlist() end")  
     return
 
 def check_nonzero_counters(list2d=OriginChampsCountersBuyList):
     """Check how much champion counters are nonzero.
     In: list2d by default its OriginChampsCountersBuyList.
-    Out: position of counters in champions list that are nonzero"""    
+    Out: position of counters in champions list that are nonzero"""   
+    logging.debug("Function check_nonzero_counters() called")
+
     nonzeroCountersList = []
     nonzeroCountersNumberList = []
     list1d = sum(list2d, [])
@@ -931,6 +976,8 @@ def check_nonzero_counters(list2d=OriginChampsCountersBuyList):
     print("This is nonzero Counter list:")
     print(nonzeroCountersList)
     print(nonzeroCountersNumberList)
+    
+    logging.debug("Function check_nonzero_counters() end")
     return nonzeroCountersNumberList
     
 
@@ -943,6 +990,8 @@ def show_nonzero_counters(rowOffset=0):
     Created button will add one to champion pool counter, delete itself from window
     and sub one from counters champions that can be bought.
     In: rowOffset by default = 0 for buttons row placement."""
+    logging.debug("Function show_nonzero_counters() called")
+
     global buttonCalcList
     buttonCalcList =[0] *5
     u =check_nonzero_counters()
@@ -953,6 +1002,8 @@ def show_nonzero_counters(rowOffset=0):
         buttonCalcList[i].grid(row=12+rowOffset, column=ShiftBetweenOrigins*(i+1))
         
     # print(pd.DataFrame(cardsToBeButtons, columns=Card._fields))
+    
+    logging.debug("Function show_nonzero_counters() end")
     return    
     
 
@@ -963,6 +1014,8 @@ def show_points_for_nonzero_counters(rowOffset=2, showMode=1):
     """It shows up champions POINTS to buy that counters are nonzero, as a text.
     Doesnt disappear currently, should be fixed.
     In: rowOffset by default = 0 for buttons row placement."""
+    logging.debug("Function show_points_for_nonzero_counters() called")
+
     global textLabelList
     pointsForChampionsToBuy = [0] * 5
     textLabelList =[0] *5
@@ -973,6 +1026,8 @@ def show_points_for_nonzero_counters(rowOffset=2, showMode=1):
         if showMode:
             textLabelList[i] = tk.Label(MainWindow, text=pointsForChampionsToBuy[i]).grid(row=12+rowOffset, column=ShiftBetweenOrigins*(i+1))
     print("Points and championPositionInListOrderedByOrigin",list(zip(pointsForChampionsToBuy,championPositionInListOrderedByOrigin)))
+    
+    logging.debug("Function show_points_for_nonzero_counters() end")
     return list(zip(pointsForChampionsToBuy,championPositionInListOrderedByOrigin))
 
 
@@ -981,15 +1036,21 @@ def show_nonzero_counters_with_points(rowOffset1= 0, rowOffset2 =2):
     champions to buy as a buttons and their points as a text.
     In: rowOffset1 by default 0 for buttons.
     rowOffset2 by default 2 for points as a text."""
+    logging.debug("Function show_nonzero_counters_with_points() called")
+
     update_classes_and_origins()
     show_nonzero_counters(rowOffset1)
     pointsWithPositionZip = show_points_for_nonzero_counters(rowOffset2)
+    
+    logging.debug("Function show_nonzero_counters_with_points() end")
     return pointsWithPositionZip
 
 
 def update_origins():
     """Checks nonzero counters for champions in pool and updates origins.
     Also sets bonus points from origin."""
+    logging.debug("Function update_origins() called")
+
     for i,origin in enumerate(OriginChampsCountersList):
         count = 0
         for champ in origin:
@@ -998,6 +1059,8 @@ def update_origins():
         OriginCounters[i].set(count)
         bonusPointsFromOrigin[i] = count * 0.2        
             
+    logging.debug("Function update_origins() end")
+
         
 # def update_classes():
 #     for i,champ in enumerate(OriginChampsCountersList1d):
@@ -1016,6 +1079,8 @@ def update_origins():
 def update_classes():
     """Checks nonzero counters for champions in pool and updates classes.
     Also sets bonus points from class."""
+    logging.debug("Function update_classes() called")
+
     for i,origin in enumerate(ClassPrimaryCountersList):
         count = 0
         for champ in origin:
@@ -1023,13 +1088,18 @@ def update_classes():
                 count = count + 1
         ClassPrimaryCounters[i].set(count)
         bonusPointsFromClass[i] = count * 0.2 
-
+        
+    logging.debug("Function update_classes() end")
         
 def update_classes_and_origins():
     """Checks nonzero counters for champions in pool and updates classes and origins.
     Also sets bonus points from class and origins."""
+    logging.debug("Function update_classes_and_origins() called")
+
     update_origins()
     update_classes()        
+    
+    logging.debug("Function update_classes_and_origins() end")
         
 
 def additional_points_from_origin_combo(championNumber):
@@ -1037,6 +1107,8 @@ def additional_points_from_origin_combo(championNumber):
     In: championNumber its just position of champion in list by primal 
     champions to buy list.
     Out: Bonus points from origin."""
+    logging.debug("Function additional_points_from_origin_combo() called")
+
     pos = OriginNames.index(df.OriginPrimary[championNumber])
     if df.OriginSecondary[championNumber] != "None":
         pos2 = OriginNames.index(df.OriginSecondary[championNumber])
@@ -1046,12 +1118,16 @@ def additional_points_from_origin_combo(championNumber):
     else:
         print("bonusPointsFromOrigin[pos] ",bonusPointsFromOrigin[pos])
         return bonusPointsFromOrigin[pos]
+    
+    logging.debug("Function additional_points_from_origin_combo() end")
 
 def additional_points_from_class_combo(championNumber):
     """Part of sum points, bonus from class for specific champion.
     In: championNumber its just position of champion in list by primal 
     champions to buy list.
     Out: Bonus points from class."""
+    logging.debug("Function additional_points_from_class_combo() called")
+
     pos = ClassNames.index(df.ClassPrimary[championNumber])
     if df.ClassSecondary[championNumber] != "None":
         pos2 = ClassNames.index(df.ClassSecondary[championNumber])
@@ -1061,6 +1137,8 @@ def additional_points_from_class_combo(championNumber):
     else:
         print("bonusPointsFromClass[pos] ",bonusPointsFromClass[pos])
         return bonusPointsFromClass[pos]  
+    
+    logging.debug("Function additional_points_from_class_combo() end")
 
 
 
@@ -1069,18 +1147,33 @@ def additional_points_from_champions_in_pool(championNumber):
     In: championNumber its just position of champion in list by primal 
     champions to buy list.
     Out: Bonus points from champions that are already in pool."""
+    logging.debug("Function additional_points_from_champions_in_pool() called")
+
     bonusPointsFromChampionPool = (OriginChampsCountersListUseAsButtons[championNumber].get() -1) * 0.2
     print("bonusPointsFromChampionPool[pos] ",bonusPointsFromChampionPool)
+    
+    logging.debug("Function additional_points_from_champions_in_pool() end")
     return bonusPointsFromChampionPool
 
     
 def delete_button(position):
     """Deleting buttons"""
+    logging.debug("Function delete_button() called")
+
     buttonCalcList[position].destroy()
 
+    logging.debug("Function delete_button() end")
+    
+    
+    
 def delete_all_buttons():
+    logging.debug("Function delete_all_buttons() called")
+
     for button in buttonCalcList:
         button.destroy()
+        
+    logging.debug("Function delete_all_buttons() end")
+
 
 ShiftBetweenOrigins = 6
 
