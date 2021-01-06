@@ -222,7 +222,6 @@ def sort_detected_champions_to_buy_by_position(OCRResultsSorted):
 
 reader = easyocr.Reader(['en'])
 
-screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
 
 ###################################### 
 ######################################
@@ -233,16 +232,16 @@ screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
 
 
 
-# wincap = WindowCapture('League of Legends (TM) Client')
+wincap = WindowCapture('League of Legends (TM) Client')
 
-wincap = None
+# wincap = None
 
 
 
 ###################################
 ####################################
 ##################################
-def make_cropped_ss(loadImage=1, window=wincap, croppingX=450, croppingY=970, croppingWidth=1000, croppingHeight=30):
+def make_cropped_ss(loadImage=0, window=wincap, croppingX=450, croppingY=970, croppingWidth=1000, croppingHeight=30):
     """
     
 
@@ -276,7 +275,7 @@ def make_cropped_ss(loadImage=1, window=wincap, croppingX=450, croppingY=970, cr
         cv.imshow("make_cropped_ss()", crop_img)
     
     logging.debug("Function make_cropped_ss() end")
-    return crop_img
+    return crop_img,screenshot
 
 
 def ocr_on_cropped_img(croppedSSWithChampionCardNames):
@@ -316,7 +315,7 @@ def update_champions_to_buy_from_ocr_detection():
     """
     logging.debug("Function update_champions_to_buy_from_ocr_detection() called")
 
-    listOfChampsToBuyThisTurn=sort_detected_champions_to_buy_by_position(ocr_on_cropped_img(make_cropped_ss()))
+    listOfChampsToBuyThisTurn=sort_detected_champions_to_buy_by_position(ocr_on_cropped_img(make_cropped_ss()[0]))
     for champToBuy in listOfChampsToBuyThisTurn:
         for i,champ in enumerate(championListForOCR):
             if champToBuy == champ:
@@ -327,7 +326,7 @@ def update_champions_to_buy_from_ocr_detection():
                 break
     
     logging.debug("Function update_champions_to_buy_from_ocr_detection() end")         
-    return None
+    return listOfChampsToBuyThisTurn
 
 
 #drawing rectangles things
@@ -357,10 +356,22 @@ listOfRGBColours = [(255, 0, 255), (0, 255, 255), (0, 255, 255), (0, 255, 255), 
 # listOfRGBColours=range(0,5)
 # next card, indexing from 0 = most left side
 def calculate_card_position_on_screen(cardIndex):
+    """
+    
+
+    Parameters
+    ----------
+    cardIndex : simply from 0-4(first to fifth card)
+
+    Returns
+    -------
+    xCard : x Position on the screen of the top left corner for card
+
+    """
     logging.debug("Function calculate_card_position_on_screen() called")
 
-    xCard = xFirstChampionCard+ PADDINGBETWEENCHAMPIONCARDS * cardIndex + wChampionCard * cardIndex
-    
+    xCard = xFirstChampionCard + PADDINGBETWEENCHAMPIONCARDS * cardIndex + wChampionCard * cardIndex
+    logging.info("X coord of card with index= {} is: {}".format(cardIndex, xCard))
     logging.debug("Function calculate_card_position_on_screen() end")         
     return xCard
 
