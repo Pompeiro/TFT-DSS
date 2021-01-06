@@ -1136,19 +1136,26 @@ def show_nonzero_counters_with_points(rowOffset1= 0, rowOffset2 =2):
 
 def update_origins():
     """Checks nonzero counters for champions in pool and updates origins.
-    Also sets bonus points from origin."""
+    Also sets bonus points from origin.
+    GLOBAL STATE CHANGE  bonusPointsFromOrigin!!!!!!!!!!!!!!!"""
     logging.debug("Function update_origins() called")
 
-    for i,origin in enumerate(OriginChampsCountersList):
+    logging.info("Origin bonus points list before calculations: {}".format(bonusPointsFromOrigin))
+    for i,origin in enumerate(OriginChampsCountersList): # looping over counters for every origin
+        logging.info("Current origin: {}".format(originList[i]))
         count = 0
-        for champ in origin:
+        for j,champ in enumerate(origin): # for loop to assign how much champions are nonzero in origin
             if champ.get() >= 1:
+                logging.info("Current champ that is nonzero: {}".format(OriginChampsFromDFList[i][j]))
                 count = count + 1
+        logging.info("Number of nonzero champions in this origin: {}".format(count))
         OriginCounters[i].set(count)
-        bonusPointsFromOrigin[i] = count * 0.2        
-            
+        bonusPointsFromOrigin[i] = count * 0.2
+        
+    logging.info("Origin bonus points list after calculations: {}".format(bonusPointsFromOrigin))
+        
     logging.debug("Function update_origins() end")
-
+    return None
         
 # def update_classes():
 #     for i,champ in enumerate(OriginChampsCountersList1d):
