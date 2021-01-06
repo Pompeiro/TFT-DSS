@@ -1136,7 +1136,7 @@ def show_points_for_nonzero_counters(rowOffset=2, showMode=1):
     logging.info("Champions that are availbable to buy with calculated points list human readable: {}".format(list(zip(pointsForChampionsToBuy,humanReadableChampions))))
 
     logging.debug("Function show_points_for_nonzero_counters() end")
-    return None
+    return list(zip(pointsForChampionsToBuy,championPositionInListOrderedByOrigin))
 
 
 def show_nonzero_counters_with_points(rowOffset1= 0, rowOffset2 =2):
