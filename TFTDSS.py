@@ -117,13 +117,20 @@ OriginChampsFromDFList = [CultistChamps, DivineChamps, DuskChamps, ElderwoodCham
                           MoonlightChamps, NinjaChamps, SpiritChamps, TheBossChamps,
                           TormentedChamps, WarlordChamps]
 
-classList = list(set(df.ClassPrimary))
+classList = list(set(df.ClassPrimary))+list(set(df.ClassSecondary))
+classList = list(set(classList))
+classList.remove("None")
 classList.sort()
 
 if VARIABLEPRINTMODE:
     for clas in classList:
         print(clas+"Champs = list(df.query("+"'ClassPrimary == "+'"'+"%s"%clas+'"'+"').Champion)")
-
+        ################################3
+        #################################
+        ###### Watch out to change ClassSecondary
+        #################################
+        #################################
+        #ClassNames variable should be the same should figure out why assign two same variables !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 if VARIABLEPRINTMODE:
     print("classChampsFromDFList = [", end = ' ')
     for clas in classList:
@@ -808,7 +815,7 @@ ClassSecondaryNames = list(set(df.query('ClassSecondary != "None"').ClassSeconda
 for secondary in ClassSecondaryNames:
     ClassPrimaryNames.append(secondary)
 ClassNames = sorted(list(set(ClassPrimaryNames)))
-
+#classList variable should be the same should figure out why assign two same variables !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 if VARIABLEPRINTMODE:
     for clas in ClassPrimaryNames:
         print("counter"+clas+" = tk.IntVar()")
@@ -1151,7 +1158,6 @@ def update_origins():
         logging.info("Number of nonzero champions in this origin: {}".format(count))
         OriginCounters[i].set(count)
         bonusPointsFromOrigin[i] = count * 0.2
-        
     logging.info("Origin bonus points list after calculations: {}".format(bonusPointsFromOrigin))
         
     logging.debug("Function update_origins() end")
@@ -1173,18 +1179,25 @@ def update_origins():
 
 def update_classes():
     """Checks nonzero counters for champions in pool and updates classes.
-    Also sets bonus points from class."""
+    Also sets bonus points from class.
+    GLOBAL STATE CHANGE bonusPointsFromClass!!!!!!!!!!!!!!!"""
     logging.debug("Function update_classes() called")
 
-    for i,origin in enumerate(ClassPrimaryCountersList):
+    logging.info("Class bonus points list before calculations: {}".format(bonusPointsFromClass))
+    for i,Champclass in enumerate(ClassPrimaryCountersList): # looping over counters for every class
+        logging.info("Current class: {}".format(classList[i]))
         count = 0
-        for champ in origin:
+        for j,champ in enumerate(Champclass):# for loop to assign how much champions are nonzero in class
             if champ.get() >= 1:
-                count = count + 1
+                logging.info("Current champ that is nonzero: {}".format(classChampsFromDFList[i][j]))
+                count = count + 1    
+        logging.info("Number of nonzero champions in this class: {}".format(count))
         ClassPrimaryCounters[i].set(count)
         bonusPointsFromClass[i] = count * 0.2 
+    logging.info("Class bonus points list after calculations: {}".format(bonusPointsFromClass))
         
     logging.debug("Function update_classes() end")
+    return None
         
 def update_classes_and_origins():
     """Checks nonzero counters for champions in pool and updates classes and origins.
