@@ -1166,7 +1166,10 @@ def update_origins():
         count = 0
         for j,champ in enumerate(origin): # for loop to assign how much champions are nonzero in origin
             if champ.get() >= 1:
-                logging.info("Current champ that is nonzero: {}".format(OriginChampsFromDFList[i][j]))
+                try:
+                    logging.info("Current champ that is nonzero: {}".format(OriginChampsFromDFList[i][j]))
+                except (IndexError):
+                    logging.info("Current champ with two origins")
                 count = count + 1
         logging.info("Number of nonzero champions in this origin: {}".format(count))
         OriginCounters[i].set(count)
@@ -1175,7 +1178,8 @@ def update_origins():
         
     logging.debug("Function update_origins() end")
     return None
-        
+         
+            
 # def update_classes():
 #     for i,champ in enumerate(OriginChampsCountersList1d):
 #         count = 0
@@ -1202,7 +1206,10 @@ def update_classes():
         count = 0
         for j,champ in enumerate(Champclass):# for loop to assign how much champions are nonzero in class
             if champ.get() >= 1:
-                logging.info("Current champ that is nonzero: {}".format(classChampsFromDFList[i][j]))
+                try:
+                    logging.info("Current champ that is nonzero: {}".format(classChampsFromDFList[i][j]))
+                except(IndexError):
+                    logging.info("Current champ with 2 classes")
                 count = count + 1    
         logging.info("Number of nonzero champions in this class: {}".format(count))
         ClassPrimaryCounters[i].set(count)
@@ -1249,15 +1256,18 @@ def additional_points_from_class_combo(championNumber):
     Out: Bonus points from class."""
     logging.debug("Function additional_points_from_class_combo() called")
 
-    pos = ClassNames.index(df.ClassPrimary[championNumber])
+    logging.info("Calculating class points for champ named: {} ".format(ChampsNames[championNumber]))
+    primaryClassPositionInClassList = ClassNames.index(df.ClassPrimary[championNumber])
     if df.ClassSecondary[championNumber] != "None":
-        pos2 = ClassNames.index(df.ClassSecondary[championNumber])
-        print("bonusPointsFromClass[pos] + bonusPointsFromClass[pos2] ",
-              bonusPointsFromClass[pos] + bonusPointsFromClass[pos2] )
-        return bonusPointsFromClass[pos]  + bonusPointsFromClass[pos2]  
+        secondaryClassPositionInClassList = ClassNames.index(df.ClassSecondary[championNumber])
+        twoClassBonus = bonusPointsFromClass[primaryClassPositionInClassList] + bonusPointsFromClass[secondaryClassPositionInClassList]
+        logging.info("Champion with Primary and Secondary class bonuses: Primary class bonus = {} \
+                     Secondary class Bonus = {}".format(bonusPointsFromClass[primaryClassPositionInClassList], bonusPointsFromClass[secondaryClassPositionInClassList]))
+        logging.info("Total bonus for 2 classes(return): {}".format(twoClassBonus))
+        return twoClassBonus
     else:
-        print("bonusPointsFromClass[pos] ",bonusPointsFromClass[pos])
-        return bonusPointsFromClass[pos]  
+        logging.info("Only Primary class bonus(return): {}".format(bonusPointsFromClass[primaryClassPositionInClassList]))
+        return bonusPointsFromClass[primaryClassPositionInClassList]  
     
     logging.debug("Function additional_points_from_class_combo() end")
 
