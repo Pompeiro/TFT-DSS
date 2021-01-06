@@ -1271,7 +1271,7 @@ def additional_points_from_champions_in_pool(championNumber):
     logging.debug("Function additional_points_from_champions_in_pool() called")
 
     bonusPointsFromChampionPool = (OriginChampsCountersListUseAsButtons[championNumber].get() -1) * 0.2
-    print("bonusPointsFromChampionPool[pos] ",bonusPointsFromChampionPool)
+    logging.info("bonusPointsFromChampionPool = {} for champ named: {} ".format(bonusPointsFromChampionPool,ChampsNames[championNumber]))
     
     logging.debug("Function additional_points_from_champions_in_pool() end")
     return bonusPointsFromChampionPool
