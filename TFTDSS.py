@@ -394,51 +394,68 @@ def build_list_of_champion_cards_rectangles():
 
 # https://stackoverflow.com/questions/6618515/sorting-list-based-on-values-from-another-list
 def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
+    """
+    This function is making OCR detection on champion cards, and then draws by
+    input mode like default points on screenshot.
+
+    Parameters
+    ----------
+    colors : ["worst", "medium3", "medium2", "medium1", "best"]. list of RGB tuples.
+    The default is listOfRGBColours.
+    mode :  The default is "points". Also there are cross and rectangle.
+
+    Returns
+    -------
+    None.
+
+    """
     logging.debug("Function draw_on_champion_to_buy_cards() called")
 
     championsToBuyInOrderAsInScreen = update_champions_to_buy_from_ocr_detection()
     championsToBuyPointsAndPosition=show_nonzero_counters_with_points()
     
     championsPositionToBuyOrderedByScreen = [championListForOCR.index(i) for i in championsToBuyInOrderAsInScreen]
-    
-    print("THEREEEEEEE",championsPositionToBuyOrderedByScreen)
+    logging.info("championsPositionToBuyOrderedByScreen: {}".format(championsPositionToBuyOrderedByScreen))
     
     championsToBuyPoints = list(zip(*championsToBuyPointsAndPosition))[0]
     championsToBuyPosition = list(zip(*championsToBuyPointsAndPosition))[1]
-    print("Points:",championsToBuyPoints)
+    logging.info("Points (in alphabetical by champ name order?): {}".format(championsToBuyPoints))
+    logging.info("Champions position (in alphabetical by champ name order?): {}".format(championsToBuyPosition))
     sortedChampionsToBuyPointsAndPosition = sorted(championsToBuyPointsAndPosition)
-    print("Champions sorted: ",sortedChampionsToBuyPointsAndPosition)
+    logging.info("Points and Champions position (in alphabetical by champ name order?): {}".format(sortedChampionsToBuyPointsAndPosition))
     sortedChampionsToBuyPosition = list(zip(*sortedChampionsToBuyPointsAndPosition))[1]
-    
-    res = [sortedChampionsToBuyPosition.index(i) for i in championsPositionToBuyOrderedByScreen]
-    print("Indexes on screen in points list", res)
-    f=build_list_of_champion_cards_rectangles()
+    logging.info("sortedChampionsToBuyPosition in alphabetical order?: {}".format(sortedChampionsToBuyPosition))
+    valuesByPointsIndexesOrderByPositionOnScreen = [sortedChampionsToBuyPosition.index(i) for i in championsPositionToBuyOrderedByScreen]
+    logging.info("valuesByPointsIndexesOrderByPositionOnScreen 0 worst card 4 best card: {}".format(valuesByPointsIndexesOrderByPositionOnScreen))
+    cardsRectangles=build_list_of_champion_cards_rectangles()
     screenshot = wincap.get_screenshot()
     # screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
     
     ##### at the end
-    # res contains champions sorted by points from lowest(0) to highest(4) 
+    # valuesByPointsIndexesOrderByPositionOnScreen contains champions 
+    # sorted by points from lowest(0) to highest(4) 
     # and indexes represents champion placement on the screen
 
     if mode == "rectangle":
         for i in range(0,CARDSTOBUYAMOUNT):
-            cv.rectangle(screenshot, f[i][0], f[i][1], color=colors[res[i]],
+            cv.rectangle(screenshot, cardsRectangles[i][0], cardsRectangles[i][1], color=colors[valuesByPointsIndexesOrderByPositionOnScreen[i]],
                           lineType=line_type, thickness=2)
         cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
     elif mode == "cross":
         for i in range(0,CARDSTOBUYAMOUNT):
                     # Draw the center point
-            cv.drawMarker(screenshot, f[i][2], color=colors[res[i]],
+            cv.drawMarker(screenshot, cardsRectangles[i][2], color=colors[valuesByPointsIndexesOrderByPositionOnScreen[i]],
                           markerType=marker_type, markerSize=40, thickness=2)
         cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
     elif mode == "points":
         for i in range(0,CARDSTOBUYAMOUNT):
                     # Draw the center point
-                cv.putText(screenshot, "{:.3f}".format(sortedChampionsToBuyPointsAndPosition[res[i]][0]), f[i][2], cv.FONT_HERSHEY_SIMPLEX, 0.6, colors[res[i]], 2)
+                cv.putText(screenshot, "{:.3f}".format(sortedChampionsToBuyPointsAndPosition[valuesByPointsIndexesOrderByPositionOnScreen[i]][0]),
+                           cardsRectangles[i][2], cv.FONT_HERSHEY_SIMPLEX, 0.6, colors[valuesByPointsIndexesOrderByPositionOnScreen[i]], 2)
         cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
         
     logging.debug("Function draw_on_champion_to_buy_cards() end")         
-
+    return None
 
 
 
