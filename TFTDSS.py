@@ -1048,6 +1048,7 @@ def reset_counters_2dlist(list2d=OriginChampsCountersBuyList):
 
 def check_nonzero_counters(list2d=OriginChampsCountersBuyList):
     """Check how much champion counters are nonzero.
+    IF ladder to append repetitions to list.
     In: list2d by default its OriginChampsCountersBuyList.
     Out: position of counters in champions list that are nonzero"""   
     logging.debug("Function check_nonzero_counters() called")
@@ -1068,9 +1069,12 @@ def check_nonzero_counters(list2d=OriginChampsCountersBuyList):
                     if champCounter.get() >= 4:
                         nonzeroCountersList.append(champCounter)
                         nonzeroCountersNumberList.append(i)
-    print("This is nonzero Counter list:")
-    print(nonzeroCountersList)
-    print(nonzeroCountersNumberList)
+    logging.info("Nonzero counters list human readable: ")
+    for champIndex in nonzeroCountersNumberList:
+        logging.info("{}".format(ChampsNames[champIndex]))
+    logging.info("Nonzero counters indexes(return): {}".format(nonzeroCountersNumberList))
+    logging.info("This is nonzero Counter list: {}".format(nonzeroCountersList))
+
     
     logging.debug("Function check_nonzero_counters() end")
     return nonzeroCountersNumberList
