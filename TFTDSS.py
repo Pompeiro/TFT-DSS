@@ -43,7 +43,9 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
-pointsForChampionsToBuy = [0] * 5
+CARDSTOBUYAMOUNT = 5
+
+pointsForChampionsToBuy = [0] * CARDSTOBUYAMOUNT
 
 VARIABLEPRINTMODE = 0
 # VARIABLEPRINTMODE = 1
@@ -366,8 +368,8 @@ def build_list_of_champion_cards_rectangles():
     logging.debug("Function build_list_of_champion_cards_rectangles() called")
 
     
-    cardsRectangles=[0]*5
-    for i in range(0, 5):
+    cardsRectangles=[0]*CARDSTOBUYAMOUNT
+    for i in range(0, CARDSTOBUYAMOUNT):
         topLeft = (calculate_card_position_on_screen(i), yFirstChampionCard)
         bottomRight = (calculate_card_position_on_screen(i) + wChampionCard, yFirstChampionCard + hChampionCard)
         center = (topLeft[0] + wChampionCard//2, topLeft[1] + hChampionCard//2)
@@ -408,18 +410,18 @@ def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
     # and indexes represents champion placement on the screen
 
     if mode == "rectangle":
-        for i in range(0,5):
+        for i in range(0,CARDSTOBUYAMOUNT):
             cv.rectangle(screenshot, f[i][0], f[i][1], color=colors[res[i]],
                           lineType=line_type, thickness=2)
         cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
     elif mode == "cross":
-        for i in range(0,5):
+        for i in range(0,CARDSTOBUYAMOUNT):
                     # Draw the center point
             cv.drawMarker(screenshot, f[i][2], color=colors[res[i]],
                           markerType=marker_type, markerSize=40, thickness=2)
         cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
     elif mode == "points":
-        for i in range(0,5):
+        for i in range(0,CARDSTOBUYAMOUNT):
                     # Draw the center point
                 cv.putText(screenshot, "{:.3f}".format(sortedChampionsToBuyPointsAndPosition[res[i]][0]), f[i][2], cv.FONT_HERSHEY_SIMPLEX, 0.6, colors[res[i]], 2)
         cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
@@ -1092,18 +1094,17 @@ def show_nonzero_counters(rowOffset=0):
     logging.debug("Function show_nonzero_counters() called")
 
     global buttonCalcList
-    buttonCalcList =[0] *5
-    u =check_nonzero_counters()
-    print("THIS IS U ", u)
-    for i in range(0,len(u),1):
-        # print("Thats the input to add",select_counter(cardsLeft[i]))
-        buttonCalcList[i] = tk.Button(MainWindow, text=(df.Champion[u[i]]), command=lambda i = i:[add(OriginChampsCountersListUseAsButtons[u[i]]), delete_button(i), sub(OriginChampsCountersBuyList1d[u[i]])])
+    buttonCalcList =[0] * CARDSTOBUYAMOUNT
+    championPositionInListOrderedByOrigin = check_nonzero_counters()
+    for i in range(0,len(championPositionInListOrderedByOrigin),1):
+        buttonCalcList[i] = tk.Button(MainWindow, text=(df.Champion[championPositionInListOrderedByOrigin[i]]),
+            command=lambda i = i:[add(OriginChampsCountersListUseAsButtons[championPositionInListOrderedByOrigin[i]]),
+                    delete_button(i), sub(OriginChampsCountersBuyList1d[championPositionInListOrderedByOrigin[i]])])
         buttonCalcList[i].grid(row=12+rowOffset, column=ShiftBetweenOrigins*(i+1))
         
-    # print(pd.DataFrame(cardsToBeButtons, columns=Card._fields))
     
     logging.debug("Function show_nonzero_counters() end")
-    return    
+    return None
     
 
 
@@ -1116,16 +1117,24 @@ def show_points_for_nonzero_counters(rowOffset=2, showMode=1):
     logging.debug("Function show_points_for_nonzero_counters() called")
 
     global textLabelList
-    pointsForChampionsToBuy = [0] * 5
-    textLabelList =[0] *5
+    pointsForChampionsToBuy = [0] * CARDSTOBUYAMOUNT
+    textLabelList =[0] * CARDSTOBUYAMOUNT
     championPositionInListOrderedByOrigin =check_nonzero_counters()
     for i in range(0,len(championPositionInListOrderedByOrigin),1):
         pointsForChampionsToBuy[i] = (df.Points[championPositionInListOrderedByOrigin[i]] + additional_points_from_origin_combo(championPositionInListOrderedByOrigin[i]) 
                   + additional_points_from_class_combo(championPositionInListOrderedByOrigin[i]) + additional_points_from_champions_in_pool(championPositionInListOrderedByOrigin[i]))
         if showMode:
             textLabelList[i] = tk.Label(MainWindow, text=pointsForChampionsToBuy[i]).grid(row=12+rowOffset, column=ShiftBetweenOrigins*(i+1))
-    print("Points and championPositionInListOrderedByOrigin",list(zip(pointsForChampionsToBuy,championPositionInListOrderedByOrigin)))
+    logging.info("Points and championPositionInListOrderedByOrigin: {}".format(list(zip(pointsForChampionsToBuy,championPositionInListOrderedByOrigin))))
     
+    humanReadableChampions = []
+    logging.info("Should be empty list: {}".format(humanReadableChampions))
+    for champIndex in championPositionInListOrderedByOrigin:
+        humanReadableChampions.append(ChampsNames[champIndex])
+    logging.info("Should be filled with nonzero champions to buy: {}".format(humanReadableChampions))
+    
+    logging.info("Champions that are availbable to buy with calculated points list human readable: {}".format(list(zip(pointsForChampionsToBuy,humanReadableChampions))))
+
     logging.debug("Function show_points_for_nonzero_counters() end")
     return list(zip(pointsForChampionsToBuy,championPositionInListOrderedByOrigin))
 
