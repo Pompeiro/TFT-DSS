@@ -866,9 +866,7 @@ OriginChampsCountersListUseAsButtons = [counterAatrox, counterElise, counterEvel
 CHAMPIONFLAG =1
 ORIGINFLAG =0
 
-bonusPointsFromOrigin =[0] * len(OriginNames)
 
-bonusPointsFromClass = [0] * len(ClassNames)
 
 ######### order as in GUI
 df.sort_values(by=['OriginPrimary', 'Champion'], inplace = True)
@@ -1437,12 +1435,10 @@ def show_nonzero_counters_with_points(rowOffset1= 0, rowOffset2 =2):
 
 
 def update_origins():
-    """Checks nonzero counters for champions in pool and updates origins.
-    Also sets bonus points from origin.
-    GLOBAL STATE CHANGE  bonusPointsFromOrigin!!!!!!!!!!!!!!!"""
+    """Checks nonzero counters for champions in pool and updates origins by 
+    setting origin counters."""
     logging.debug("Function update_origins() called")
 
-    logging.info("Origin bonus points list before calculations: {}".format(bonusPointsFromOrigin))
     originIntCounters = [0] * len(originList)
     for i,originChamp in enumerate(originList): # looping over counters for every origin
         logging.info("Current origin: {}".format(originChamp))
@@ -1455,8 +1451,6 @@ def update_origins():
                     originIntCounters[i] = originIntCounters[i] + 1
         logging.info("Number of nonzero champions in this origin: {}".format(originIntCounters[i]))
         OriginCounters[i].set(originIntCounters[i])
-        bonusPointsFromOrigin[i] = originIntCounters[i] * 0.2
-    logging.info("Origin bonus points list after calculations: {}".format(bonusPointsFromOrigin))
         
     logging.debug("Function update_origins() end")
     return None
@@ -1466,12 +1460,10 @@ def update_origins():
 
 
 def update_classes():
-    """Checks nonzero counters for champions in pool and updates classes.
-    Also sets bonus points from class.
-    GLOBAL STATE CHANGE bonusPointsFromClass!!!!!!!!!!!!!!!"""
+    """Checks nonzero counters for champions in pool and updates classes by 
+    setting class counters."""
     logging.debug("Function update_classes() called")
 
-    logging.info("Class bonus points list before calculations: {}".format(bonusPointsFromClass))
     classIntCounters = [0] * len(classList)
     for i,classChamp in enumerate(classList): # looping over counters for every class
         logging.info("Current class: {}".format(classChamp))
@@ -1484,15 +1476,12 @@ def update_classes():
                     classIntCounters[i] = classIntCounters[i] + 1
         logging.info("Number of nonzero champions in this class = {}".format(classIntCounters[i]))
         ClassCounters[i].set(classIntCounters[i])
-        bonusPointsFromClass[i] = classIntCounters[i] * 0.2 
-    logging.info("Class bonus points list after calculations: {}".format(bonusPointsFromClass))
         
     logging.debug("Function update_classes() end")
     return None
         
 def update_classes_and_origins():
-    """Checks nonzero counters for champions in pool and updates classes and origins.
-    Also sets bonus points from class and origins."""
+    """Checks nonzero counters for champions in pool and updates classes and origins."""
     logging.debug("Function update_classes_and_origins() called")
 
     update_origins()
@@ -1518,21 +1507,11 @@ def additional_points_from_origin_combo(championNumber):
     
     originBonus = totalCount * bonusPointsFromOriginNew
     logging.info("Bonus(return) = {}".format(originBonus))
+    logging.debug("Function additional_points_from_origin_combo() end")
     return originBonus
     
-    # primaryOriginPositionInOriginList = OriginNames.index(df.OriginPrimary[championNumber])
-    # if df.OriginSecondary[championNumber] != "None":
-    #     secondaryOriginPositionInOriginList = OriginNames.index(df.OriginSecondary[championNumber])
-    #     twoOriginsBonus = bonusPointsFromOrigin[primaryOriginPositionInOriginList] + bonusPointsFromOrigin[secondaryOriginPositionInOriginList]
-    #     logging.info("Champion with Primary and Secondary origins bonuses: Primary origin bonus = {} \
-    #                  Secondary origin Bonus = {}".format(bonusPointsFromOrigin[primaryOriginPositionInOriginList], bonusPointsFromOrigin[secondaryOriginPositionInOriginList]))
-    #     logging.info("Total bonus for 2 classes(return): {}".format(twoOriginsBonus))
-    #     return twoOriginsBonus 
-    # else:
-    #     logging.info("Only Primary origin bonus(return): {}".format(bonusPointsFromOrigin[primaryOriginPositionInOriginList]))
-    #     return bonusPointsFromOrigin[primaryOriginPositionInOriginList]
+
     
-    logging.debug("Function additional_points_from_origin_combo() end")
 
 def additional_points_from_class_combo(championNumber):
     """Part of sum points, bonus from class for specific champion.
@@ -1541,20 +1520,17 @@ def additional_points_from_class_combo(championNumber):
     Out: Bonus points from class."""
     logging.debug("Function additional_points_from_class_combo() called")
 
-    logging.info("Calculating class points for champ named: {} ".format(ChampsNames[championNumber]))
-    primaryClassPositionInClassList = ClassNames.index(df.ClassPrimary[championNumber])
-    if df.ClassSecondary[championNumber] != "None":
-        secondaryClassPositionInClassList = ClassNames.index(df.ClassSecondary[championNumber])
-        twoClassBonus = bonusPointsFromClass[primaryClassPositionInClassList] + bonusPointsFromClass[secondaryClassPositionInClassList]
-        logging.info("Champion with Primary and Secondary class bonuses: Primary class bonus = {} \
-                     Secondary class Bonus = {}".format(bonusPointsFromClass[primaryClassPositionInClassList], bonusPointsFromClass[secondaryClassPositionInClassList]))
-        logging.info("Total bonus for 2 classes(return): {}".format(twoClassBonus))
-        return twoClassBonus
-    else:
-        logging.info("Only Primary class bonus(return): {}".format(bonusPointsFromClass[primaryClassPositionInClassList]))
-        return bonusPointsFromClass[primaryClassPositionInClassList]  
-    
+    logging.info("Calculating class points for champ named: {} ".format(championsList[championNumber]))
+    bonusPointsFromClassNew = 0.2
+    totalCount = championsList[championNumber].classPrimCounter.get()
+    if championsList[championNumber].classSec != "None":
+        totalCount = championsList[championNumber].classSecCounter.get() + totalCount
+        logging.info("Class primary + secondary counter = {}".format(totalCount))
+
+    classBonus = totalCount * bonusPointsFromClassNew
+    logging.info("Bonus(return) = {}".format(classBonus))
     logging.debug("Function additional_points_from_class_combo() end")
+    return classBonus
 
 
 
