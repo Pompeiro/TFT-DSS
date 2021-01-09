@@ -1508,18 +1508,29 @@ def additional_points_from_origin_combo(championNumber):
     Out: Bonus points from origin."""
     logging.debug("Function additional_points_from_origin_combo() called")
 
-    logging.info("Calculating origin points for champ named: {} ".format(ChampsNames[championNumber]))
-    primaryOriginPositionInOriginList = OriginNames.index(df.OriginPrimary[championNumber])
-    if df.OriginSecondary[championNumber] != "None":
-        secondaryOriginPositionInOriginList = OriginNames.index(df.OriginSecondary[championNumber])
-        twoOriginsBonus = bonusPointsFromOrigin[primaryOriginPositionInOriginList] + bonusPointsFromOrigin[secondaryOriginPositionInOriginList]
-        logging.info("Champion with Primary and Secondary origins bonuses: Primary origin bonus = {} \
-                     Secondary origin Bonus = {}".format(bonusPointsFromOrigin[primaryOriginPositionInOriginList], bonusPointsFromOrigin[secondaryOriginPositionInOriginList]))
-        logging.info("Total bonus for 2 classes(return): {}".format(twoOriginsBonus))
-        return twoOriginsBonus 
-    else:
-        logging.info("Only Primary origin bonus(return): {}".format(bonusPointsFromOrigin[primaryOriginPositionInOriginList]))
-        return bonusPointsFromOrigin[primaryOriginPositionInOriginList]
+    logging.info("Calculating origin points for champ named: {} ".format(championsList[championNumber]))
+    bonusPointsFromOriginNew = 0.2
+    totalCount = championsList[championNumber].originPrimCounter.get()
+    logging.info("Origin primary counter = {}".format(totalCount))
+    if championsList[championNumber].originSec != "None":
+        totalCount = championsList[championNumber].originSecCounter.get() + totalCount
+        logging.info("Origin primary + secondary counter = {}".format(totalCount))
+    
+    originBonus = totalCount * bonusPointsFromOriginNew
+    logging.info("Bonus(return) = {}".format(originBonus))
+    return originBonus
+    
+    # primaryOriginPositionInOriginList = OriginNames.index(df.OriginPrimary[championNumber])
+    # if df.OriginSecondary[championNumber] != "None":
+    #     secondaryOriginPositionInOriginList = OriginNames.index(df.OriginSecondary[championNumber])
+    #     twoOriginsBonus = bonusPointsFromOrigin[primaryOriginPositionInOriginList] + bonusPointsFromOrigin[secondaryOriginPositionInOriginList]
+    #     logging.info("Champion with Primary and Secondary origins bonuses: Primary origin bonus = {} \
+    #                  Secondary origin Bonus = {}".format(bonusPointsFromOrigin[primaryOriginPositionInOriginList], bonusPointsFromOrigin[secondaryOriginPositionInOriginList]))
+    #     logging.info("Total bonus for 2 classes(return): {}".format(twoOriginsBonus))
+    #     return twoOriginsBonus 
+    # else:
+    #     logging.info("Only Primary origin bonus(return): {}".format(bonusPointsFromOrigin[primaryOriginPositionInOriginList]))
+    #     return bonusPointsFromOrigin[primaryOriginPositionInOriginList]
     
     logging.debug("Function additional_points_from_origin_combo() end")
 
