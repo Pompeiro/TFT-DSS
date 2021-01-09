@@ -1443,38 +1443,25 @@ def update_origins():
     logging.debug("Function update_origins() called")
 
     logging.info("Origin bonus points list before calculations: {}".format(bonusPointsFromOrigin))
-    for i,origin in enumerate(OriginChampsCountersList): # looping over counters for every origin
-        logging.info("Current origin: {}".format(originList[i]))
-        count = 0
-        for j,champ in enumerate(origin): # for loop to assign how much champions are nonzero in origin
-            if champ.get() >= 1:
-                try:
-                    logging.info("Current champ that is nonzero: {}".format(OriginChampsFromDFList[i][j]))
-                except (IndexError):
-                    logging.info("Current champ with two origins")
-                count = count + 1
-        logging.info("Number of nonzero champions in this origin: {}".format(count))
-        OriginCounters[i].set(count)
-        bonusPointsFromOrigin[i] = count * 0.2
+    originIntCounters = [0] * len(originList)
+    for i,originChamp in enumerate(originList): # looping over counters for every origin
+        logging.info("Current origin: {}".format(originChamp))
+        for j,champ in enumerate(championsList): # for loop to assign how much champions are nonzero in origin
+            if champ.champCounter.get() >= 1:
+                logging.info("Current champ with counter >=1: {}".format(champ.name))
+                if ((originChamp == champ.originPrim) or (originChamp == champ.originSec)):
+                    logging.info("Current champ with counter >=1 match origin Prim or Sec \
+                                 : {} or {}".format(champ.originPrim, champ.originSec))
+                    originIntCounters[i] = originIntCounters[i] + 1
+        logging.info("Number of nonzero champions in this origin: {}".format(originIntCounters[i]))
+        OriginCounters[i].set(originIntCounters[i])
+        bonusPointsFromOrigin[i] = originIntCounters[i] * 0.2
     logging.info("Origin bonus points list after calculations: {}".format(bonusPointsFromOrigin))
         
     logging.debug("Function update_origins() end")
     return None
          
             
-# def update_classes():
-#     for i,champ in enumerate(OriginChampsCountersList1d):
-#         count = 0
-#         pos = ClassPrimaryNames.index(df.ClassPrimary[i])
-#         print(pos)
-
-#         if champ.get() >= 1:
-#             count = count + 1
-#         ClassCounters[pos].set(count)
-#         #bonusPointsFromOrigin[i] = count * 0.2  
-
-
-#ClassCounters
 
 
 
