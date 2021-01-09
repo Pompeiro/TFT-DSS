@@ -43,6 +43,12 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
+Champion = namedtuple("Champion", ["name", "nameOcr", "indexOcr", "champCounter", 
+                                   "originPrim", "originSec", "classPrim", 
+                                   "classSec", "originPrimCounter", "originSecCounter",
+                                   "classPrimCounter", "classSecCounter"])
+
+
 CARDSTOBUYAMOUNT = 5
 
 pointsForChampionsToBuy = [0] * CARDSTOBUYAMOUNT
@@ -52,6 +58,28 @@ VARIABLEPRINTMODE = 0
 
 # IMAGESDEBUGMODE = 0
 IMAGESDEBUGMODE = 1
+
+reader = easyocr.Reader(['en'])
+
+
+###################################### 
+######################################
+###### IF U WANT TEST WITHOUT GAME THEN COMMENT HERE
+######################################
+######################################
+
+
+
+
+# wincap = WindowCapture('League of Legends (TM) Client')
+
+wincap = None
+
+
+
+###################################
+####################################
+##################################
 
 def add(intVariable):
     """Adding one to counter"""
@@ -87,7 +115,9 @@ df = pd.read_csv("scaledChampionsdf.csv")
 
 df.drop('Unnamed: 0', axis=1, inplace=True)
 
-originList = list(set(df.OriginPrimary))
+originList = list(set(df.OriginPrimary)) + list(set(df.OriginSecondary))
+originList = list(set(originList))
+originList.remove("None")
 originList.sort()
 
 if VARIABLEPRINTMODE:
@@ -118,6 +148,64 @@ OriginChampsFromDFList = [CultistChamps, DivineChamps, DuskChamps, ElderwoodCham
                           EnlightenedChamps, ExileChamps, FortuneChamps,
                           MoonlightChamps, NinjaChamps, SpiritChamps, TheBossChamps,
                           TormentedChamps, WarlordChamps]
+
+if VARIABLEPRINTMODE:
+    for origin in originList:
+        print(origin+"ChampsSecondary = list(df.query("+"'OriginSecondary == "+'"'+"%s"%origin+'"'+"').Champion)")
+
+if VARIABLEPRINTMODE:
+    print("OriginChampsSecondaryFromDFList = [", end = ' ')
+    for origin in originList:
+        print(origin+"ChampsSecondary", end = ', ')
+    print("]") 
+
+
+##################### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+###################### manually replaced NoneChampsSecondary to the end
+##################### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+CultistChampsSecondary = list(df.query('OriginSecondary == "Cultist"').Champion)
+DivineChampsSecondary = list(df.query('OriginSecondary == "Divine"').Champion)
+DuskChampsSecondary = list(df.query('OriginSecondary == "Dusk"').Champion)
+ElderwoodChampsSecondary = list(df.query('OriginSecondary == "Elderwood"').Champion)
+EnlightenedChampsSecondary = list(df.query('OriginSecondary == "Enlightened"').Champion)
+ExileChampsSecondary = list(df.query('OriginSecondary == "Exile"').Champion)
+FortuneChampsSecondary = list(df.query('OriginSecondary == "Fortune"').Champion)
+MoonlightChampsSecondary = list(df.query('OriginSecondary == "Moonlight"').Champion)
+NinjaChampsSecondary = list(df.query('OriginSecondary == "Ninja"').Champion)
+SpiritChampsSecondary = list(df.query('OriginSecondary == "Spirit"').Champion)
+TheBossChampsSecondary = list(df.query('OriginSecondary == "TheBoss"').Champion)
+TormentedChampsSecondary = list(df.query('OriginSecondary == "Tormented"').Champion)
+WarlordChampsSecondary = list(df.query('OriginSecondary == "Warlord"').Champion)
+NoneChampsSecondary = list(df.query('OriginSecondary == "None"').Champion)
+
+
+
+##################### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+###################### manually replaced NoneChampsSecondary to the end
+##################### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+OriginChampsSecondaryFromDFList = [CultistChampsSecondary, DivineChampsSecondary,
+        DuskChampsSecondary, ElderwoodChampsSecondary, EnlightenedChampsSecondary,
+        ExileChampsSecondary, FortuneChampsSecondary, MoonlightChampsSecondary,
+        NinjaChampsSecondary, SpiritChampsSecondary, TheBossChampsSecondary,
+        TormentedChampsSecondary, WarlordChampsSecondary, NoneChampsSecondary]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 classList = list(set(df.ClassPrimary))+list(set(df.ClassSecondary))
 classList = list(set(classList))
@@ -186,147 +274,7 @@ championListForOCR = ['Aatrox', 'Elise', 'Evelynn', 'Jhin', 'Kalista', 'Pyke',
                       'Yuumi', 'Sett', 'Kayn', 'Azir', 'Garen', 'Jarvan IV',
                       'Katarina', 'Nidalee', 'Vi', 'Xin Zhao']
 
-def sort_detected_champions_to_buy_by_position(OCRResultsSorted):
-    """
-    
-    Sorting input in order from left to right by placement on the screen
-    (lowest width is first).Then filters out champion names, numbers(champions cost)
-    are discarded.
 
-    Parameters
-    ----------
-    OCRResultsSorted : Typical == ocr_on_cropped_img(make_cropped_ss())
-
-    Returns
-    -------
-    sortedChampionsToBuy : List of champions that were found in input.
-
-    """
-    
-    logging.debug("Function sort_detected_champions_to_buy_by_position() called")
-    # sort from lowest width (left to right side)
-    OCRResultsSorted = sorted(OCRResultsSorted, key=lambda x: x[0])
-    sortedChampionsToBuy = []
-    for text in OCRResultsSorted:
-        for champ in championListForOCR:
-            if champ in text: # filters champion names
-                sortedChampionsToBuy.append(champ)
-                logging.info("from for loop in sort_detected_champions_to_buy_by_position()")
-                logging.info("found {}".format(champ))
-    logging.info("return in sort_detected_champions_to_buy_by_position()")
-    logging.info("List of sorted champions to buy: {}".format(sortedChampionsToBuy))
-    
-    logging.debug("Function sort_detected_champions_to_buy_by_position() end")
-    return sortedChampionsToBuy 
-
-
-reader = easyocr.Reader(['en'])
-
-
-###################################### 
-######################################
-###### IF U WANT TEST WITHOUT GAME THEN COMMENT HERE
-######################################
-######################################
-
-
-
-
-wincap = WindowCapture('League of Legends (TM) Client')
-
-# wincap = None
-
-
-
-###################################
-####################################
-##################################
-def make_cropped_ss(loadImage=0, window=wincap, croppingX=450, croppingY=970, croppingWidth=1000, croppingHeight=30):
-    """
-    
-
-    Parameters
-    ----------
-    loadImage : If want to open without game then change to 1. 
-        The default is 0.
-    window : Window to be captured, set to None if want to open without game.
-        The default is wincap.
-        
-        Defaults to cropp screenshot from first to fifth(1-5) champion card name.
-    croppingX :  The default is 450. 
-    croppingY :  The default is 970.
-    croppingWidth :  The default is 1000.
-    croppingHeight :  The default is 30.
-
-    Returns
-    -------
-    crop_img : Cropped screenshot.
-
-    """
-    logging.debug("Function make_cropped_ss() called")
-
-    if loadImage:
-        screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
-    else:
-        screenshot = window.get_screenshot()
-    crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
-    
-    if IMAGESDEBUGMODE:
-        cv.imshow("make_cropped_ss()", crop_img)
-    
-    logging.debug("Function make_cropped_ss() end")
-    return crop_img,screenshot
-
-
-def ocr_on_cropped_img(croppedSSWithChampionCardNames):
-    """
-    
-
-    Parameters
-    ----------
-    croppedSSWithChampionCardNames : for example if want to OCR card names then
-    input there make_cropped_ss(loadImage=0, window=wincap, croppingX=450,
-                                croppingY=970, croppingWidth=1000, croppingHeight=30)
-
-    Returns
-    -------
-    OCRResult : 
-
-    """
-    logging.debug("Function ocr_on_cropped_img() called")
-
-
-    OCRResult=reader.readtext(croppedSSWithChampionCardNames)
-    logging.info("OCR results(return): {}".format(OCRResult))
-    
-    logging.debug("Function ocr_on_cropped_img() end")
-    return OCRResult
-
-
-def update_champions_to_buy_from_ocr_detection():
-    """
-    Add 1 to every champion to buy counter detected in OCRResults.
-    champion to buy counters GLOBAL STATE CHANGE !!!!!!!!!!!!!!!!!!!!
-
-    Returns
-    -------
-    None.
-
-    """
-    logging.debug("Function update_champions_to_buy_from_ocr_detection() called")
-
-    listOfChampsToBuyThisTurn=sort_detected_champions_to_buy_by_position(ocr_on_cropped_img(make_cropped_ss()[0]))
-    for champToBuy in listOfChampsToBuyThisTurn:
-        for i,champ in enumerate(championListForOCR):
-            if champToBuy == champ:
-                logging.info("from IF inside for loop in update_champions_to_buy_from_ocr_detection()")
-                logging.info("Index in championListForOCR that is detected: {}".format(i))
-                logging.info("Champ name in this index: {}".format(champ))
-                add(OriginChampsCountersBuyList1d[i])
-                break
-    
-    logging.debug("Function update_champions_to_buy_from_ocr_detection() end")         
-    return listOfChampsToBuyThisTurn
 
 
 #drawing rectangles things
@@ -355,122 +303,7 @@ listOfRGBColours = [(255, 0, 255), (0, 255, 255), (0, 255, 255), (0, 255, 255), 
 
 # listOfRGBColours=range(0,5)
 # next card, indexing from 0 = most left side
-def calculate_card_position_on_screen(cardIndex):
-    """
-    
 
-    Parameters
-    ----------
-    cardIndex : simply from 0-4(first to fifth card)
-
-    Returns
-    -------
-    xCard : x Position on the screen of the top left corner for card
-
-    """
-    logging.debug("Function calculate_card_position_on_screen() called")
-
-    xCard = xFirstChampionCard + PADDINGBETWEENCHAMPIONCARDS * cardIndex + wChampionCard * cardIndex
-    logging.info("X coord of card with index= {} is: {}".format(cardIndex, xCard))
-    logging.debug("Function calculate_card_position_on_screen() end")         
-    return xCard
-
-def build_list_of_champion_cards_rectangles():
-    logging.debug("Function build_list_of_champion_cards_rectangles() called")
-
-    
-    cardsRectangles=[0]*CARDSTOBUYAMOUNT
-    for i in range(0, CARDSTOBUYAMOUNT):
-        topLeft = (calculate_card_position_on_screen(i), yFirstChampionCard)
-        bottomRight = (calculate_card_position_on_screen(i) + wChampionCard, yFirstChampionCard + hChampionCard)
-        center = (topLeft[0] + wChampionCard//2, topLeft[1] + hChampionCard//2)
-        # print("Type" ,type(center))
-        cardsRectangles[i] = [topLeft, bottomRight, center]
-        
-    logging.debug("Function build_list_of_champion_cards_rectangles() end")         
-    return cardsRectangles
-
-
-
-# https://stackoverflow.com/questions/6618515/sorting-list-based-on-values-from-another-list
-def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
-    """
-    This function is making OCR detection on champion cards, and then draws by
-    input mode like default points on screenshot.
-
-    Parameters
-    ----------
-    colors : ["worst", "medium3", "medium2", "medium1", "best"]. list of RGB tuples.
-    The default is listOfRGBColours.
-    mode :  The default is "points". Also there are cross and rectangle.
-
-    Returns
-    -------
-    None.
-
-    """
-    logging.debug("Function draw_on_champion_to_buy_cards() called")
-
-    championsToBuyInOrderAsInScreen = update_champions_to_buy_from_ocr_detection()
-    championsToBuyPointsAndPosition=show_nonzero_counters_with_points()
-    
-    championsPositionToBuyOrderedByScreen = [championListForOCR.index(i) for i in championsToBuyInOrderAsInScreen]
-    logging.info("championsPositionToBuyOrderedByScreen: {}".format(championsPositionToBuyOrderedByScreen))
-    
-    championsToBuyPoints = list(zip(*championsToBuyPointsAndPosition))[0]
-    championsToBuyPosition = list(zip(*championsToBuyPointsAndPosition))[1]
-    logging.info("Points (in alphabetical by champ name order?): {}".format(championsToBuyPoints))
-    logging.info("Champions position (in alphabetical by champ name order?): {}".format(championsToBuyPosition))
-    sortedChampionsToBuyPointsAndPosition = sorted(championsToBuyPointsAndPosition)
-    logging.info("Points and Champions position (in alphabetical by champ name order?): {}".format(sortedChampionsToBuyPointsAndPosition))
-    sortedChampionsToBuyPosition = list(zip(*sortedChampionsToBuyPointsAndPosition))[1]
-    logging.info("sortedChampionsToBuyPosition in alphabetical order?: {}".format(sortedChampionsToBuyPosition))
-    valuesByPointsIndexesOrderByPositionOnScreen = [sortedChampionsToBuyPosition.index(i) for i in championsPositionToBuyOrderedByScreen]
-    logging.info("valuesByPointsIndexesOrderByPositionOnScreen 0 worst card 4 best card: {}".format(valuesByPointsIndexesOrderByPositionOnScreen))
-    cardsRectangles=build_list_of_champion_cards_rectangles()
-    screenshot = wincap.get_screenshot()
-    # screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
-    
-    ##### at the end
-    # valuesByPointsIndexesOrderByPositionOnScreen contains champions 
-    # sorted by points from lowest(0) to highest(4) 
-    # and indexes represents champion placement on the screen
-
-    if mode == "rectangle":
-        for i in range(0,CARDSTOBUYAMOUNT):
-            cv.rectangle(screenshot, cardsRectangles[i][0], cardsRectangles[i][1], color=colors[valuesByPointsIndexesOrderByPositionOnScreen[i]],
-                          lineType=line_type, thickness=2)
-        cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
-    elif mode == "cross":
-        for i in range(0,CARDSTOBUYAMOUNT):
-                    # Draw the center point
-            cv.drawMarker(screenshot, cardsRectangles[i][2], color=colors[valuesByPointsIndexesOrderByPositionOnScreen[i]],
-                          markerType=marker_type, markerSize=40, thickness=2)
-        cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
-    elif mode == "points":
-        for i in range(0,CARDSTOBUYAMOUNT):
-                    # Draw the center point
-                cv.putText(screenshot, "{:.3f}".format(sortedChampionsToBuyPointsAndPosition[valuesByPointsIndexesOrderByPositionOnScreen[i]][0]),
-                           cardsRectangles[i][2], cv.FONT_HERSHEY_SIMPLEX, 0.6, colors[valuesByPointsIndexesOrderByPositionOnScreen[i]], 2)
-        cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
-        
-    logging.debug("Function draw_on_champion_to_buy_cards() end")         
-    return None
-
-
-
-######## need to fix double calculate points inside draw_on_champion_to_buy_cards
-def draw_rectangles_show_points_show_buttons_reset_counters():
-    logging.debug("Function draw_rectangles_show_points_show_buttons_reset_counters() called")
-
-    update_classes_and_origins()
-    try:
-        reset_counters_2dlist(OriginChampsCountersBuyList)
-    except :
-        pass
-    draw_on_champion_to_buy_cards()
-
-    logging.debug("Function draw_rectangles_show_points_show_buttons_reset_counters() end")         
 
 
 ############### WINDOW THINGS
@@ -612,6 +445,21 @@ if VARIABLEPRINTMODE:
     print("]")
     print()
     
+    
+    ################################ !!!!!!!!!!!!!!!!!!!!!!!!!!
+    ############################### WARNING MESSAGE TO ADD MANUALLY these champs
+    ################################ !!!!!!!!!!!!!!!!!!!!!!!!!!
+    print("NEED TO MANUALLY WRTIE THESE CHAMPS INTO ORIGIN COUNTERS!!!!!!!!!\
+          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\
+              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\
+                  counter should be declared only once !!!!!!!!! \n\
+            add counter manually to the first appending Origin \
+                          and delete duplicates manually!!!!!!!!!!!")
+    for i,champ in enumerate(OriginChampsSecondaryFromDFList[0:-1]):
+        if champ:
+            print(originList[i])
+            print(champ)
+    
 counterAatrox= tk.IntVar()
 counterElise= tk.IntVar()
 counterEvelynn= tk.IntVar()
@@ -622,6 +470,7 @@ counterTwistedFate= tk.IntVar()
 counterZilean= tk.IntVar()
 CultistCounters = [counterAatrox, counterElise, counterEvelynn, counterJhin,
                    counterKalista, counterPyke, counterTwistedFate, counterZilean]
+
 
 counterJax= tk.IntVar()
 counterLeeSin= tk.IntVar()
@@ -908,23 +757,23 @@ SharpshooterCounters = [counterJhin, counterJinx, counterNidalee, counterTeemo, 
 VanguardCounters = [counterAatrox, counterGaren, counterHecarim, counterSejuani, counterThresh, counterWukong]
 
 if VARIABLEPRINTMODE:
-    print("ClassPrimaryCounters = [")
+    print("ClassCounters = [")
     for clas in ClassPrimaryNames:
         print("counter"+clas,end = ", ")
     print("]")
 
-ClassPrimaryCounters = [counterAdept, counterAssassin, counterBrawler, counterDazzler,
+ClassCounters = [counterAdept, counterAssassin, counterBrawler, counterDazzler,
                         counterDuelist, counterEmperor, counterHunter, counterKeeper,
                         counterMage, counterMystic, counterShade, counterSharpshooter,
                         counterVanguard]
 
 if VARIABLEPRINTMODE:
-    print("ClassPrimaryCountersList = [")
+    print("ClassCountersList = [")
     for clas in ClassPrimaryNames:
         print(clas+"Counters",end = ", ")
     print("]")
 
-ClassPrimaryCountersList = [AdeptCounters, AssassinCounters, BrawlerCounters,
+ClassCountersList = [AdeptCounters, AssassinCounters, BrawlerCounters,
                             DazzlerCounters, DuelistCounters, EmperorCounters,
                             HunterCounters, KeeperCounters, MageCounters, 
                             MysticCounters, ShadeCounters, SharpshooterCounters,
@@ -958,10 +807,7 @@ Cultist = Origin(OriginNames[0], OriginCounters[0])
 
 
 
-OriginChampsFromDFList = [CultistChamps, DivineChamps, DuskChamps, 
-                          ElderwoodChamps, EnlightenedChamps, ExileChamps, 
-                          FortuneChamps, MoonlightChamps, NinjaChamps,
-                          SpiritChamps, TheBossChamps, TormentedChamps, WarlordChamps]
+
 
 
 
@@ -1030,8 +876,416 @@ df.reset_index(drop=True, inplace = True)
 
 boldedFont = tkFont.Font(family="Arial", size=10, weight=tkFont.BOLD)
 
- 
+championInfo = [] 
+logging.debug("Filling championInfo in purpose of creating namedtuple")
+for i,champ in enumerate(df.Champion):
+    championInfo.append([champ, championListForOCR[i], i,
+                OriginChampsCountersListUseAsButtons[i], df.OriginPrimary[i],
+                df.OriginSecondary[i], df.ClassPrimary[i], df.ClassSecondary[i]])
+logging.debug("First filling championInfo has ended.")   
+    
+logging.debug("Filling championInfo with originPrimCounter")
+for i,champ in enumerate(df.Champion):
+    if championInfo[i][4] == "None":
+        logging.info("Champion name: {}, champion index = {}".format(champ,i))
+        logging.info("origin primary == 'NONE' Appending None as originPrimCounter")
+        championInfo[i].append(None)
+    else:
+        logging.info("origin primary IS NOT 'NONE'")
+        for j,origin in enumerate(originList):
+            if championInfo[i][4] == origin:
+                logging.info("Champion name: {}, champion index = {}".format(champ,i))
+                logging.info("Found match in champion originPrimary and originList for origin: {}".format(origin))
+                logging.info("appending origin counter: {}".format(OriginCounters[j]))
+                championInfo[i].append(OriginCounters[j])
+logging.debug("Filling championInfo with originPrimCounter has ended.")
+            
+logging.debug("Filling championInfo with originSecCounter")
+for i,champ in enumerate(df.Champion):
+    if championInfo[i][5] == "None":
+        logging.info("Champion name: {}, champion index = {}".format(champ,i))
+        logging.info("origin secondary == 'NONE' Appending None as originSecCounter")
+        championInfo[i].append(None)
+    else:
+        logging.info("origin secondary IS NOT 'NONE'")
+        for j,origin in enumerate(originList):
+            if championInfo[i][5] == origin:
+                logging.info("Champion name: {}, champion index = {}".format(champ,i))
+                logging.info("Found match in champion originSecondary and originList for origin: {}".format(origin))
+                logging.info("appending origin counter: {}".format(OriginCounters[j]))
+                championInfo[i].append(OriginCounters[j])            
+logging.debug("Filling championInfo with originSecCounter has ended")
 
+logging.debug("Filling championInfo with classPrimCounter")
+for i,champ in enumerate(df.Champion):
+    if championInfo[i][6] == "None":
+        logging.info("Champion name: {}, champion index = {}".format(champ,i))
+        logging.info("class primary == 'NONE' Appending None as classPrimCounter")
+        championInfo[i].append(None)
+    else:
+        logging.info("class primary IS NOT 'NONE'")
+        for j,classPri in enumerate(classList):
+            if championInfo[i][6] == classPri:
+                logging.info("Champion name: {}, champion index = {}".format(champ,i))
+                logging.info("Found match in champion classPrimary and originList for class: {}".format(classPri))
+                logging.info("appending origin counter: {}".format(ClassCounters[j]))
+                championInfo[i].append(ClassCounters[j])            
+logging.debug("Filling championInfo with classPrimCounter has ended")                
+
+
+logging.debug("Filling championInfo with classSecCounter")
+for i,champ in enumerate(df.Champion):
+    if championInfo[i][7] == "None":
+        logging.info("Champion name: {}, champion index = {}".format(champ,i))
+        logging.info("class secondary == 'NONE' Appending None as classSecCounter")
+        championInfo[i].append(None)
+    else:
+        logging.info("class secondary IS NOT 'NONE'")
+        for j,classPri in enumerate(classList):
+            if championInfo[i][7] == classPri:
+                logging.info("Champion name: {}, champion index = {}".format(champ,i))
+                logging.info("Found match in champion classSecondary and classList for class: {}".format(classPri))
+                logging.info("appending origin counter: {}".format(ClassCounters[j]))
+                championInfo[i].append(ClassCounters[j])            
+logging.debug("Filling championInfo with classSecCounter has ended")  
+
+
+
+
+z = pd.DataFrame.from_records(championInfo, columns=['Champion','nameOcr','indexOcr','champCounter',
+                           'originPrim', "originSec", "classPrim", "classSec",
+                           "originPrimCounter", "originSecCounter", "classPrimCounter",
+                           "classSecCounter"])
+
+
+if VARIABLEPRINTMODE:
+    for i,champ in enumerate(championInfo):
+        print(champ[0] + ' = Champion(*championInfo[%d])'%i)
+
+Aatrox = Champion(*championInfo[0])
+Elise = Champion(*championInfo[1])
+Evelynn = Champion(*championInfo[2])
+Jhin = Champion(*championInfo[3])
+Kalista = Champion(*championInfo[4])
+Pyke = Champion(*championInfo[5])
+TwistedFate = Champion(*championInfo[6])
+Zilean = Champion(*championInfo[7])
+Jax = Champion(*championInfo[8])
+LeeSin = Champion(*championInfo[9])
+Lux = Champion(*championInfo[10])
+Warwick = Champion(*championInfo[11])
+Wukong = Champion(*championInfo[12])
+Cassiopeia = Champion(*championInfo[13])
+Lillia = Champion(*championInfo[14])
+Riven = Champion(*championInfo[15])
+Thresh = Champion(*championInfo[16])
+Vayne = Champion(*championInfo[17])
+Ashe = Champion(*championInfo[18])
+Ezreal = Champion(*championInfo[19])
+Hecarim = Champion(*championInfo[20])
+Lulu = Champion(*championInfo[21])
+Maokai = Champion(*championInfo[22])
+Nunu = Champion(*championInfo[23])
+Veigar = Champion(*championInfo[24])
+Fiora = Champion(*championInfo[25])
+Irelia = Champion(*championInfo[26])
+Janna = Champion(*championInfo[27])
+Morgana = Champion(*championInfo[28])
+Nami = Champion(*championInfo[29])
+Talon = Champion(*championInfo[30])
+Yasuo = Champion(*championInfo[31])
+Yone = Champion(*championInfo[32])
+Annie = Champion(*championInfo[33])
+Jinx = Champion(*championInfo[34])
+Sejuani = Champion(*championInfo[35])
+TahmKench = Champion(*championInfo[36])
+Aphelios = Champion(*championInfo[37])
+Diana = Champion(*championInfo[38])
+Lissandra = Champion(*championInfo[39])
+Sylas = Champion(*championInfo[40])
+Akali = Champion(*championInfo[41])
+Kennen = Champion(*championInfo[42])
+Shen = Champion(*championInfo[43])
+Zed = Champion(*championInfo[44])
+Ahri = Champion(*championInfo[45])
+Kindred = Champion(*championInfo[46])
+Teemo = Champion(*championInfo[47])
+Yuumi = Champion(*championInfo[48])
+Sett = Champion(*championInfo[49])
+Kayn = Champion(*championInfo[50])
+Azir = Champion(*championInfo[51])
+Garen = Champion(*championInfo[52])
+JarvanIV = Champion(*championInfo[53])
+Katarina = Champion(*championInfo[54])
+Nidalee = Champion(*championInfo[55])
+Vi = Champion(*championInfo[56])
+XinZhao = Champion(*championInfo[57])
+
+
+if VARIABLEPRINTMODE:
+    print("championsList = [")
+    for champ in championInfo:
+        print(champ[0],end = ", ")
+    print("]")
+    print()
+
+
+championsList = [Aatrox, Elise, Evelynn, Jhin, Kalista, Pyke, TwistedFate,
+                 Zilean, Jax, LeeSin, Lux, Warwick, Wukong, Cassiopeia,
+                 Lillia, Riven, Thresh, Vayne, Ashe, Ezreal, Hecarim,
+                 Lulu, Maokai, Nunu, Veigar, Fiora, Irelia, Janna,
+                 Morgana, Nami, Talon, Yasuo, Yone, Annie, Jinx, Sejuani,
+                 TahmKench, Aphelios, Diana, Lissandra, Sylas, Akali,
+                 Kennen, Shen, Zed, Ahri, Kindred, Teemo, Yuumi,
+                 Sett, Kayn, Azir, Garen, JarvanIV, Katarina, Nidalee,
+                 Vi, XinZhao]
+
+def sort_detected_champions_to_buy_by_position(OCRResultsSorted):
+    """
+    
+    Sorting input in order from left to right by placement on the screen
+    (lowest width is first).Then filters out champion names, numbers(champions cost)
+    are discarded.
+
+    Parameters
+    ----------
+    OCRResultsSorted : Typical == ocr_on_cropped_img(make_cropped_ss())
+
+    Returns
+    -------
+    sortedChampionsToBuy : List of champions that were found in input.
+
+    """
+    
+    logging.debug("Function sort_detected_champions_to_buy_by_position() called")
+    # sort from lowest width (left to right side)
+    OCRResultsSorted = sorted(OCRResultsSorted, key=lambda x: x[0])
+    sortedChampionsToBuy = []
+    for text in OCRResultsSorted:
+        for champ in championListForOCR:
+            if champ in text: # filters champion names
+                sortedChampionsToBuy.append(champ)
+                logging.info("from for loop in sort_detected_champions_to_buy_by_position()")
+                logging.info("found {}".format(champ))
+    logging.info("return in sort_detected_champions_to_buy_by_position()")
+    logging.info("List of sorted champions to buy: {}".format(sortedChampionsToBuy))
+    
+    logging.debug("Function sort_detected_champions_to_buy_by_position() end")
+    return sortedChampionsToBuy 
+
+
+
+def make_cropped_ss(loadImage=1, window=wincap, croppingX=450, croppingY=970, croppingWidth=1000, croppingHeight=30):
+    """
+    
+
+    Parameters
+    ----------
+    loadImage : If want to open without game then change to 1. 
+        The default is 0.
+    window : Window to be captured, set to None if want to open without game.
+        The default is wincap.
+        
+        Defaults to cropp screenshot from first to fifth(1-5) champion card name.
+    croppingX :  The default is 450. 
+    croppingY :  The default is 970.
+    croppingWidth :  The default is 1000.
+    croppingHeight :  The default is 30.
+
+    Returns
+    -------
+    crop_img : Cropped screenshot.
+
+    """
+    logging.debug("Function make_cropped_ss() called")
+
+    if loadImage:
+        screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
+    else:
+        screenshot = window.get_screenshot()
+    crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
+    
+    if IMAGESDEBUGMODE:
+        cv.imshow("make_cropped_ss()", crop_img)
+    
+    logging.debug("Function make_cropped_ss() end")
+    return crop_img,screenshot
+
+
+def ocr_on_cropped_img(croppedSSWithChampionCardNames):
+    """
+    
+
+    Parameters
+    ----------
+    croppedSSWithChampionCardNames : for example if want to OCR card names then
+    input there make_cropped_ss(loadImage=0, window=wincap, croppingX=450,
+                                croppingY=970, croppingWidth=1000, croppingHeight=30)
+
+    Returns
+    -------
+    OCRResult : 
+
+    """
+    logging.debug("Function ocr_on_cropped_img() called")
+
+
+    OCRResult=reader.readtext(croppedSSWithChampionCardNames)
+    logging.info("OCR results(return): {}".format(OCRResult))
+    
+    logging.debug("Function ocr_on_cropped_img() end")
+    return OCRResult
+
+
+def update_champions_to_buy_from_ocr_detection():
+    """
+    Add 1 to every champion to buy counter detected in OCRResults.
+    champion to buy counters GLOBAL STATE CHANGE !!!!!!!!!!!!!!!!!!!!
+
+    Returns
+    -------
+    None.
+
+    """
+    logging.debug("Function update_champions_to_buy_from_ocr_detection() called")
+
+    listOfChampsToBuyThisTurn=sort_detected_champions_to_buy_by_position(ocr_on_cropped_img(make_cropped_ss()[0]))
+    for champToBuy in listOfChampsToBuyThisTurn:
+        for i,champ in enumerate(championListForOCR):
+            if champToBuy == champ:
+                logging.info("from IF inside for loop in update_champions_to_buy_from_ocr_detection()")
+                logging.info("Index in championListForOCR that is detected: {}".format(i))
+                logging.info("Champ name in this index: {}".format(champ))
+                add(OriginChampsCountersBuyList1d[i])
+                break
+    
+    logging.debug("Function update_champions_to_buy_from_ocr_detection() end")         
+    return listOfChampsToBuyThisTurn
+
+
+
+def calculate_card_position_on_screen(cardIndex):
+    """
+    
+
+    Parameters
+    ----------
+    cardIndex : simply from 0-4(first to fifth card)
+
+    Returns
+    -------
+    xCard : x Position on the screen of the top left corner for card
+
+    """
+    logging.debug("Function calculate_card_position_on_screen() called")
+
+    xCard = xFirstChampionCard + PADDINGBETWEENCHAMPIONCARDS * cardIndex + wChampionCard * cardIndex
+    logging.info("X coord of card with index= {} is: {}".format(cardIndex, xCard))
+    logging.debug("Function calculate_card_position_on_screen() end")         
+    return xCard
+
+def build_list_of_champion_cards_rectangles():
+    logging.debug("Function build_list_of_champion_cards_rectangles() called")
+
+    
+    cardsRectangles=[0]*CARDSTOBUYAMOUNT
+    for i in range(0, CARDSTOBUYAMOUNT):
+        topLeft = (calculate_card_position_on_screen(i), yFirstChampionCard)
+        bottomRight = (calculate_card_position_on_screen(i) + wChampionCard, yFirstChampionCard + hChampionCard)
+        center = (topLeft[0] + wChampionCard//2, topLeft[1] + hChampionCard//2)
+        # print("Type" ,type(center))
+        cardsRectangles[i] = [topLeft, bottomRight, center]
+        
+    logging.debug("Function build_list_of_champion_cards_rectangles() end")         
+    return cardsRectangles
+
+
+
+# https://stackoverflow.com/questions/6618515/sorting-list-based-on-values-from-another-list
+def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
+    """
+    This function is making OCR detection on champion cards, and then draws by
+    input mode like default points on screenshot.
+
+    Parameters
+    ----------
+    colors : ["worst", "medium3", "medium2", "medium1", "best"]. list of RGB tuples.
+    The default is listOfRGBColours.
+    mode :  The default is "points". Also there are cross and rectangle.
+
+    Returns
+    -------
+    None.
+
+    """
+    logging.debug("Function draw_on_champion_to_buy_cards() called")
+
+    championsToBuyInOrderAsInScreen = update_champions_to_buy_from_ocr_detection()
+    championsToBuyPointsAndPosition=show_nonzero_counters_with_points()
+    
+    championsPositionToBuyOrderedByScreen = [championListForOCR.index(i) for i in championsToBuyInOrderAsInScreen]
+    logging.info("championsPositionToBuyOrderedByScreen: {}".format(championsPositionToBuyOrderedByScreen))
+    
+    championsToBuyPoints = list(zip(*championsToBuyPointsAndPosition))[0]
+    championsToBuyPosition = list(zip(*championsToBuyPointsAndPosition))[1]
+    logging.info("Points (in alphabetical by champ name order?): {}".format(championsToBuyPoints))
+    logging.info("Champions position (in alphabetical by champ name order?): {}".format(championsToBuyPosition))
+    sortedChampionsToBuyPointsAndPosition = sorted(championsToBuyPointsAndPosition)
+    logging.info("Points and Champions position (in alphabetical by champ name order?): {}".format(sortedChampionsToBuyPointsAndPosition))
+    sortedChampionsToBuyPosition = list(zip(*sortedChampionsToBuyPointsAndPosition))[1]
+    logging.info("sortedChampionsToBuyPosition in alphabetical order?: {}".format(sortedChampionsToBuyPosition))
+    valuesByPointsIndexesOrderByPositionOnScreen = [sortedChampionsToBuyPosition.index(i) for i in championsPositionToBuyOrderedByScreen]
+    logging.info("valuesByPointsIndexesOrderByPositionOnScreen 0 worst card 4 best card: {}".format(valuesByPointsIndexesOrderByPositionOnScreen))
+    cardsRectangles=build_list_of_champion_cards_rectangles()
+    screenshot = wincap.get_screenshot()
+    # screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
+    
+    ##### at the end
+    # valuesByPointsIndexesOrderByPositionOnScreen contains champions 
+    # sorted by points from lowest(0) to highest(4) 
+    # and indexes represents champion placement on the screen
+
+    if mode == "rectangle":
+        for i in range(0,CARDSTOBUYAMOUNT):
+            cv.rectangle(screenshot, cardsRectangles[i][0], cardsRectangles[i][1], color=colors[valuesByPointsIndexesOrderByPositionOnScreen[i]],
+                          lineType=line_type, thickness=2)
+        cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
+    elif mode == "cross":
+        for i in range(0,CARDSTOBUYAMOUNT):
+                    # Draw the center point
+            cv.drawMarker(screenshot, cardsRectangles[i][2], color=colors[valuesByPointsIndexesOrderByPositionOnScreen[i]],
+                          markerType=marker_type, markerSize=40, thickness=2)
+        cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
+    elif mode == "points":
+        for i in range(0,CARDSTOBUYAMOUNT):
+                    # Draw the center point
+                cv.putText(screenshot, "{:.3f}".format(sortedChampionsToBuyPointsAndPosition[valuesByPointsIndexesOrderByPositionOnScreen[i]][0]),
+                           cardsRectangles[i][2], cv.FONT_HERSHEY_SIMPLEX, 0.6, colors[valuesByPointsIndexesOrderByPositionOnScreen[i]], 2)
+        cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
+        
+    logging.debug("Function draw_on_champion_to_buy_cards() end")         
+    return None
+
+
+
+######## need to fix double calculate points inside draw_on_champion_to_buy_cards
+def draw_rectangles_show_points_show_buttons_reset_counters():
+    logging.debug("Function draw_rectangles_show_points_show_buttons_reset_counters() called")
+
+    update_classes_and_origins()
+    try:
+        reset_counters_2dlist(OriginChampsCountersBuyList)
+    except :
+        pass
+    draw_on_champion_to_buy_cards()
+
+    logging.debug("Function draw_rectangles_show_points_show_buttons_reset_counters() end")         
+
+
+
+
+            
+            
 
 def show_champions_from_origin(originPositionInOriginList, OriginChampsFromDF, OriginCounterList, shiftBetweenUpsideDownside, flag = CHAMPIONFLAG):
     """Adding buttons and text labels for single origin.
@@ -1216,11 +1470,13 @@ def update_origins():
 
 #         if champ.get() >= 1:
 #             count = count + 1
-#         ClassPrimaryCounters[pos].set(count)
+#         ClassCounters[pos].set(count)
 #         #bonusPointsFromOrigin[i] = count * 0.2  
 
 
-#ClassPrimaryCounters
+#ClassCounters
+
+
 
 def update_classes():
     """Checks nonzero counters for champions in pool and updates classes.
@@ -1229,19 +1485,19 @@ def update_classes():
     logging.debug("Function update_classes() called")
 
     logging.info("Class bonus points list before calculations: {}".format(bonusPointsFromClass))
-    for i,Champclass in enumerate(ClassPrimaryCountersList): # looping over counters for every class
-        logging.info("Current class: {}".format(classList[i]))
-        count = 0
-        for j,champ in enumerate(Champclass):# for loop to assign how much champions are nonzero in class
-            if champ.get() >= 1:
-                try:
-                    logging.info("Current champ that is nonzero: {}".format(classChampsFromDFList[i][j]))
-                except(IndexError):
-                    logging.info("Current champ with 2 classes")
-                count = count + 1    
-        logging.info("Number of nonzero champions in this class: {}".format(count))
-        ClassPrimaryCounters[i].set(count)
-        bonusPointsFromClass[i] = count * 0.2 
+    classIntCounters = [0] * len(classList)
+    for i,classChamp in enumerate(classList): # looping over counters for every class
+        logging.info("Current class: {}".format(classChamp))
+        for j,champ in enumerate(championsList):# for loop to assign how much champions are nonzero in class
+            if champ.champCounter.get() >= 1:
+                logging.info("Current champ with counter >=1: {}".format(champ.name))
+                if ((classChamp == champ.classPrim) or (classChamp == champ.classSec)):
+                    logging.info("Current champ with counter >=1 match class Prim or Sec \
+                                 : {} or {}".format(champ.classPrim, champ.classSec))
+                    classIntCounters[i] = classIntCounters[i] + 1
+        logging.info("Number of nonzero champions in this class = {}".format(classIntCounters[i]))
+        ClassCounters[i].set(classIntCounters[i])
+        bonusPointsFromClass[i] = classIntCounters[i] * 0.2 
     logging.info("Class bonus points list after calculations: {}".format(bonusPointsFromClass))
         
     logging.debug("Function update_classes() end")
@@ -1397,7 +1653,7 @@ for i in range(0, len(OriginChampsFromDFList),1):
 show_champions_from_origin(len(OriginChampsFromDFList),OriginNames, OriginCounters, UPSIDE,ORIGINFLAG)    
 
 #### primary class
-show_champions_from_origin((len(OriginChampsFromDFList)+1), ClassNames, ClassPrimaryCounters, UPSIDE, ORIGINFLAG )
+show_champions_from_origin((len(OriginChampsFromDFList)+1), ClassNames, ClassCounters, UPSIDE, ORIGINFLAG )
 labeling = tk.Label(MainWindow, text="Left to buy", font=boldedFont).grid(row=12+0, column=0)
 
 labeling = tk.Label(MainWindow, text="Points", font=boldedFont).grid(row=14+0, column=0)
