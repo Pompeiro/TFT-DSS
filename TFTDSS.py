@@ -1497,7 +1497,7 @@ def additional_points_from_origin_combo(championNumber):
     Out: Bonus points from origin."""
     logging.debug("Function additional_points_from_origin_combo() called")
 
-    logging.info("Calculating origin points for champ named: {} ".format(championsList[championNumber]))
+    logging.info("Calculating origin points for champ named: {} ".format(championsList[championNumber].name))
     bonusPointsFromOriginNew = 0.2
     totalCount = championsList[championNumber].originPrimCounter.get()
     logging.info("Origin primary counter = {}".format(totalCount))
@@ -1520,7 +1520,7 @@ def additional_points_from_class_combo(championNumber):
     Out: Bonus points from class."""
     logging.debug("Function additional_points_from_class_combo() called")
 
-    logging.info("Calculating class points for champ named: {} ".format(championsList[championNumber]))
+    logging.info("Calculating class points for champ named: {} ".format(championsList[championNumber].name))
     bonusPointsFromClassNew = 0.2
     totalCount = championsList[championNumber].classPrimCounter.get()
     if championsList[championNumber].classSec != "None":
@@ -1541,8 +1541,8 @@ def additional_points_from_champions_in_pool(championNumber):
     Out: Bonus points from champions that are already in pool."""
     logging.debug("Function additional_points_from_champions_in_pool() called")
 
-    bonusPointsFromChampionPool = (OriginChampsCountersListUseAsButtons[championNumber].get() -1) * 0.2
-    logging.info("bonusPointsFromChampionPool = {} for champ named: {} ".format(bonusPointsFromChampionPool,ChampsNames[championNumber]))
+    bonusPointsFromChampionPool = (championsList[championNumber].champCounter.get() -1) * 0.2
+    logging.info("bonusPointsFromChampionPool = {} for champ named: {} ".format(bonusPointsFromChampionPool, championsList[championNumber].name))
     
     logging.debug("Function additional_points_from_champions_in_pool() end")
     return bonusPointsFromChampionPool
