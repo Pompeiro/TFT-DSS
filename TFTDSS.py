@@ -221,7 +221,6 @@ if VARIABLEPRINTMODE:
         ###### Watch out to change ClassSecondary
         #################################
         #################################
-        #ClassNames variable should be the same should figure out why assign two same variables !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 if VARIABLEPRINTMODE:
     print("classChampsFromDFList = [", end = ' ')
     for clas in classList:
@@ -688,16 +687,9 @@ OriginCounters = [counterCultist, counterDivine, counterDusk, counterElderwood,
 OriginNames = sorted(list(set(df.OriginPrimary)))
 
 
-######## primary class counters
 
-ClassPrimaryNames = list(set(df.ClassPrimary))
-ClassSecondaryNames = list(set(df.query('ClassSecondary != "None"').ClassSecondary))
-for secondary in ClassSecondaryNames:
-    ClassPrimaryNames.append(secondary)
-ClassNames = sorted(list(set(ClassPrimaryNames)))
-#classList variable should be the same should figure out why assign two same variables !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 if VARIABLEPRINTMODE:
-    for clas in ClassPrimaryNames:
+    for clas in classList:
         print("counter"+clas+" = tk.IntVar()")
 
 
@@ -716,7 +708,7 @@ counterSharpshooter = tk.IntVar()
 counterVanguard = tk.IntVar()
 
 if VARIABLEPRINTMODE:
-    for i,clas in enumerate(ClassNames):
+    for i,clas in enumerate(classList):
         print(clas+"Counters = [ ")
         for champ in classChampsFromDFList[i]:
             print("counter"+champ,end = ", ")
@@ -759,7 +751,7 @@ VanguardCounters = [counterAatrox, counterGaren, counterHecarim, counterSejuani,
 
 if VARIABLEPRINTMODE:
     print("ClassCounters = [")
-    for clas in ClassPrimaryNames:
+    for clas in classList:
         print("counter"+clas,end = ", ")
     print("]")
 
@@ -770,7 +762,7 @@ ClassCounters = [counterAdept, counterAssassin, counterBrawler, counterDazzler,
 
 if VARIABLEPRINTMODE:
     print("ClassCountersList = [")
-    for clas in ClassPrimaryNames:
+    for clas in classList:
         print(clas+"Counters",end = ", ")
     print("]")
 
@@ -1740,7 +1732,7 @@ for i in range(0, len(OriginChampsFromDFList),1):
 show_champions_from_origin(len(OriginChampsFromDFList),OriginNames, OriginCounters, UPSIDE,ORIGINFLAG)    
 
 #### primary class
-show_champions_from_origin((len(OriginChampsFromDFList)+1), ClassNames, ClassCounters, UPSIDE, ORIGINFLAG )
+show_champions_from_origin((len(OriginChampsFromDFList)+1), classList, ClassCounters, UPSIDE, ORIGINFLAG )
 labeling = tk.Label(MainWindow, text="Left to buy", font=boldedFont).grid(row=12+0, column=0)
 
 labeling = tk.Label(MainWindow, text="Points", font=boldedFont).grid(row=14+0, column=0)
