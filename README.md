@@ -1,6 +1,8 @@
 # TFT-DSS
 Teamfight Tactics Decisive Support System  
 
+10.01 TFTDSS.py file after refactoring.
+
 29.11 new file botActions.py check description at the bottom.
 
 15.11 First try to build champions detector based on CNN with FastAI. Results at the bottom.
