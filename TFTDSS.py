@@ -114,6 +114,7 @@ def sub(intVariable):
 df = pd.read_csv("scaledChampionsdf.csv") 
 
 df.drop('Unnamed: 0', axis=1, inplace=True)
+df.Points = df["Points"].round(3)
 
 originList = list(set(df.OriginPrimary)) + list(set(df.OriginSecondary))
 originList = list(set(originList))
@@ -1493,7 +1494,7 @@ def check_nonzero_counters(list1d=OriginChampsCountersToBuy):
                         nonzeroCountersNumberList.append(i)
     logging.info("Nonzero counters list human readable: ")
     for champIndex in nonzeroCountersNumberList:
-        logging.info("{}".format(ChampsNames[champIndex]))
+        logging.info("{}".format(championsList[champIndex].name))
     logging.info("Nonzero counters indexes(return): {}".format(nonzeroCountersNumberList))
     logging.info("This is nonzero Counter list: {}".format(nonzeroCountersList))
 
@@ -1550,7 +1551,7 @@ def show_points_for_nonzero_counters(rowOffset=2, showMode=1):
     humanReadableChampions = []
     logging.info("Should be empty list: {}".format(humanReadableChampions))
     for champIndex in championPositionInListOrderedByOrigin:
-        humanReadableChampions.append(ChampsNames[champIndex])
+        humanReadableChampions.append(championsList[champIndex].name)
     logging.info("Should be filled with nonzero champions to buy: {}".format(humanReadableChampions))
     
     logging.info("Champions that are availbable to buy with calculated points list human readable: {}".format(list(zip(pointsForChampionsToBuy,humanReadableChampions))))
