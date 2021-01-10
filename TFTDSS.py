@@ -915,6 +915,14 @@ logging.debug("First filling championInfo has ended.")
     
 
 
+championToBuyInfo = [] 
+logging.debug("Filling championToBuyInfo in purpose of creating namedtuple")
+for i,champ in enumerate(df.Champion):
+    championToBuyInfo.append([champ, championListForOCR[i], i,
+                OriginChampsCountersToBuy[i], df.OriginPrimary[i],
+                df.OriginSecondary[i], df.ClassPrimary[i], df.ClassSecondary[i]])
+logging.debug("First filling championToBuyInfo has ended.")   
+
 
 def filling_list_with_counter_for_namedtuple(fieldToCheck, inputList=championInfo):
     """
@@ -977,7 +985,7 @@ def append_counters_to_input_list(inputList=championInfo):
 
     countersToAppend = [4, 5, 6, 7]
     for j in countersToAppend:
-        listOfCountersToAppend = filling_list_with_counter_for_namedtuple(j)
+        listOfCountersToAppend = filling_list_with_counter_for_namedtuple(j, inputList)
         for i,champ in enumerate(inputList):
             champ.append(listOfCountersToAppend[i])
     
@@ -985,10 +993,17 @@ def append_counters_to_input_list(inputList=championInfo):
 
     return None
 
-append_counters_to_input_list()
+append_counters_to_input_list(championInfo)
 
+append_counters_to_input_list(championToBuyInfo)
 
 championInfoDF = pd.DataFrame.from_records(championInfo, columns=['Champion','nameOcr',
+                                                                  'indexOcr','champCounter',
+                           'originPrim', "originSec", "classPrim", "classSec",
+                           "originPrimCounter", "originSecCounter", "classPrimCounter",
+                           "classSecCounter"])
+
+championToBuyInfoDF = pd.DataFrame.from_records(championInfo, columns=['Champion','nameOcr',
                                                                   'indexOcr','champCounter',
                            'originPrim', "originSec", "classPrim", "classSec",
                            "originPrimCounter", "originSecCounter", "classPrimCounter",
@@ -1076,6 +1091,95 @@ championsList = [Aatrox, Elise, Evelynn, Jhin, Kalista, Pyke, TwistedFate,
                  Kennen, Shen, Zed, Ahri, Kindred, Teemo, Yuumi,
                  Sett, Kayn, Azir, Garen, JarvanIV, Katarina, Nidalee,
                  Vi, XinZhao]
+
+
+if VARIABLEPRINTMODE:
+    for i,champ in enumerate(championToBuyInfo):
+        print(champ[0]+"ToBuy" + ' = Champion(*championToBuyInfo[%d])'%i)
+
+AatroxToBuy = Champion(*championToBuyInfo[0])
+EliseToBuy = Champion(*championToBuyInfo[1])
+EvelynnToBuy = Champion(*championToBuyInfo[2])
+JhinToBuy = Champion(*championToBuyInfo[3])
+KalistaToBuy = Champion(*championToBuyInfo[4])
+PykeToBuy = Champion(*championToBuyInfo[5])
+TwistedFateToBuy = Champion(*championToBuyInfo[6])
+ZileanToBuy = Champion(*championToBuyInfo[7])
+JaxToBuy = Champion(*championToBuyInfo[8])
+LeeSinToBuy = Champion(*championToBuyInfo[9])
+LuxToBuy = Champion(*championToBuyInfo[10])
+WarwickToBuy = Champion(*championToBuyInfo[11])
+WukongToBuy = Champion(*championToBuyInfo[12])
+CassiopeiaToBuy = Champion(*championToBuyInfo[13])
+LilliaToBuy = Champion(*championToBuyInfo[14])
+RivenToBuy = Champion(*championToBuyInfo[15])
+ThreshToBuy = Champion(*championToBuyInfo[16])
+VayneToBuy = Champion(*championToBuyInfo[17])
+AsheToBuy = Champion(*championToBuyInfo[18])
+EzrealToBuy = Champion(*championToBuyInfo[19])
+HecarimToBuy = Champion(*championToBuyInfo[20])
+LuluToBuy = Champion(*championToBuyInfo[21])
+MaokaiToBuy = Champion(*championToBuyInfo[22])
+NunuToBuy = Champion(*championToBuyInfo[23])
+VeigarToBuy = Champion(*championToBuyInfo[24])
+FioraToBuy = Champion(*championToBuyInfo[25])
+IreliaToBuy = Champion(*championToBuyInfo[26])
+JannaToBuy = Champion(*championToBuyInfo[27])
+MorganaToBuy = Champion(*championToBuyInfo[28])
+NamiToBuy = Champion(*championToBuyInfo[29])
+TalonToBuy = Champion(*championToBuyInfo[30])
+YasuoToBuy = Champion(*championToBuyInfo[31])
+YoneToBuy = Champion(*championToBuyInfo[32])
+AnnieToBuy = Champion(*championToBuyInfo[33])
+JinxToBuy = Champion(*championToBuyInfo[34])
+SejuaniToBuy = Champion(*championToBuyInfo[35])
+TahmKenchToBuy = Champion(*championToBuyInfo[36])
+ApheliosToBuy = Champion(*championToBuyInfo[37])
+DianaToBuy = Champion(*championToBuyInfo[38])
+LissandraToBuy = Champion(*championToBuyInfo[39])
+SylasToBuy = Champion(*championToBuyInfo[40])
+AkaliToBuy = Champion(*championToBuyInfo[41])
+KennenToBuy = Champion(*championToBuyInfo[42])
+ShenToBuy = Champion(*championToBuyInfo[43])
+ZedToBuy = Champion(*championToBuyInfo[44])
+AhriToBuy = Champion(*championToBuyInfo[45])
+KindredToBuy = Champion(*championToBuyInfo[46])
+TeemoToBuy = Champion(*championToBuyInfo[47])
+YuumiToBuy = Champion(*championToBuyInfo[48])
+SettToBuy = Champion(*championToBuyInfo[49])
+KaynToBuy = Champion(*championToBuyInfo[50])
+AzirToBuy = Champion(*championToBuyInfo[51])
+GarenToBuy = Champion(*championToBuyInfo[52])
+JarvanIVToBuy = Champion(*championToBuyInfo[53])
+KatarinaToBuy = Champion(*championToBuyInfo[54])
+NidaleeToBuy = Champion(*championToBuyInfo[55])
+ViToBuy = Champion(*championToBuyInfo[56])
+XinZhaoToBuy = Champion(*championToBuyInfo[57])
+
+
+if VARIABLEPRINTMODE:
+    print("championsToBuyList = [")
+    for champ in championToBuyInfo:
+        print(champ[0]+"ToBuy",end = ", ")
+    print("]")
+    print()
+
+
+championsToBuyList = [AatroxToBuy, EliseToBuy, EvelynnToBuy, JhinToBuy,
+                      KalistaToBuy, PykeToBuy, TwistedFateToBuy, ZileanToBuy,
+                      JaxToBuy, LeeSinToBuy, LuxToBuy, WarwickToBuy, WukongToBuy,
+                      CassiopeiaToBuy, LilliaToBuy, RivenToBuy, ThreshToBuy,
+                      VayneToBuy, AsheToBuy, EzrealToBuy, HecarimToBuy, LuluToBuy,
+                      MaokaiToBuy, NunuToBuy, VeigarToBuy, FioraToBuy, IreliaToBuy,
+                      JannaToBuy, MorganaToBuy, NamiToBuy, TalonToBuy, YasuoToBuy,
+                      YoneToBuy, AnnieToBuy, JinxToBuy, SejuaniToBuy, TahmKenchToBuy,
+                      ApheliosToBuy, DianaToBuy, LissandraToBuy, SylasToBuy, AkaliToBuy,
+                      KennenToBuy, ShenToBuy, ZedToBuy, AhriToBuy, KindredToBuy,
+                      TeemoToBuy, YuumiToBuy, SettToBuy, KaynToBuy, AzirToBuy,
+                      GarenToBuy, JarvanIVToBuy, KatarinaToBuy, NidaleeToBuy,
+                      ViToBuy, XinZhaoToBuy]
+
+
 
 def sort_detected_champions_to_buy_by_position(OCRResultsSorted):
     """
