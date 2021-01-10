@@ -917,6 +917,20 @@ logging.debug("First filling championInfo has ended.")
 
 
 def filling_list_with_counter_for_namedtuple(fieldToCheck, inputList=championInfo):
+    """
+    
+
+    Parameters
+    ----------
+    fieldToCheck : {4:"originPrim", 5:"originSec", 6:"classPrim",
+                           7:"classSec"}
+    inputList : List with 4,5,6,7 field == fieldToCheck. The default is championInfo.
+
+    Returns
+    -------
+    listOfCounters : List of GUI counters
+
+    """
     logging.debug("Function filling_list_with_counter_for_namedtuple() called")
     fieldToCheck2String = {4:"originPrim", 5:"originSec", 6:"classPrim",
                            7:"classSec"}
@@ -945,6 +959,20 @@ def filling_list_with_counter_for_namedtuple(fieldToCheck, inputList=championInf
     return listOfCounters
 
 def append_counters_to_input_list(inputList=championInfo):
+    """
+    
+
+    Parameters
+    ----------
+    inputList : Appending counters to list with fields like {4:"originPrim", 
+    5:"originSec", 6:"classPrim", 7:"classSec"}. The default is championInfo.
+
+    Returns
+    -------
+    None.
+
+    """
+    
     logging.debug("Function filling_list_with_counter_for_namedtuple() called")
 
     countersToAppend = [4, 5, 6, 7]
