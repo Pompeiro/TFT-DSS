@@ -829,7 +829,6 @@ ChampsNames  = sum(OriginChampsFromDFList, [])
 
 OriginChampsCountersList1d = sum(OriginChampsCountersList, [])
 
-OriginChampsCountersBuyList1d = sum(OriginChampsCountersBuyList, [])
 
 if VARIABLEPRINTMODE:
     print("OriginChampsCountersListUseAsButtons = [")
@@ -1297,7 +1296,7 @@ def update_champions_to_buy_from_ocr_detection():
                 logging.info("from IF inside for loop in update_champions_to_buy_from_ocr_detection()")
                 logging.info("Index in championListForOCR that is detected: {}".format(i))
                 logging.info("Champ name in this index: {}".format(champ))
-                add(OriginChampsCountersBuyList1d[i])
+                add(OriginChampsCountersToBuy[i])
                 break
     
     logging.debug("Function update_champions_to_buy_from_ocr_detection() end")         
@@ -1415,7 +1414,7 @@ def draw_rectangles_show_points_show_buttons_reset_counters():
 
     update_classes_and_origins()
     try:
-        reset_counters_2dlist(OriginChampsCountersBuyList)
+        reset_counters_in_list(OriginChampsCountersToBuy)
     except :
         pass
     draw_on_champion_to_buy_cards()
@@ -1457,30 +1456,28 @@ def show_champions_from_origin(originPositionInOriginList, OriginChampsFromDF, O
 
 
 
-def reset_counters_2dlist(list2d=OriginChampsCountersBuyList):
+def reset_counters_in_list(list1d=OriginChampsCountersToBuy):
     """Reset counters to 0, used when roll or new round starts.
-    In: list2d by default its OriginChampsCountersBuyList."""
-    logging.debug("Function reset_counters_2dlist() called")
+    In: list1d by default its OriginChampsCountersToBuy."""
+    logging.debug("Function reset_counters_in_list() called")
 
-    list1d = sum(list2d, [])
     for champCounter in list1d:
         champCounter.set(0)
         
     delete_all_buttons()
     
-    logging.debug("Function reset_counters_2dlist() end")  
+    logging.debug("Function reset_counters_in_list() end")  
     return
 
-def check_nonzero_counters(list2d=OriginChampsCountersBuyList):
+def check_nonzero_counters(list1d=OriginChampsCountersToBuy):
     """Check how much champion counters are nonzero.
     IF ladder to append repetitions to list.
-    In: list2d by default its OriginChampsCountersBuyList.
+    In: list1d by default its OriginChampsCountersToBuy.
     Out: position of counters in champions list that are nonzero"""   
     logging.debug("Function check_nonzero_counters() called")
 
     nonzeroCountersList = []
     nonzeroCountersNumberList = []
-    list1d = sum(list2d, [])
     for i,champCounter in enumerate(list1d):
         if champCounter.get() >= 1:
             nonzeroCountersList.append(champCounter)
@@ -1522,7 +1519,7 @@ def show_nonzero_counters(rowOffset=0):
     for i in range(0,len(championPositionInListOrderedByOrigin),1):
         buttonCalcList[i] = tk.Button(MainWindow, text=(df.Champion[championPositionInListOrderedByOrigin[i]]),
             command=lambda i = i:[add(OriginChampsCountersListUseAsButtons[championPositionInListOrderedByOrigin[i]]),
-                    delete_button(i), sub(OriginChampsCountersBuyList1d[championPositionInListOrderedByOrigin[i]])])
+                    delete_button(i), sub(OriginChampsCountersToBuy[championPositionInListOrderedByOrigin[i]])])
         buttonCalcList[i].grid(row=12+rowOffset, column=ShiftBetweenOrigins*(i+1))
         
     
@@ -1777,7 +1774,7 @@ labeling = tk.Label(MainWindow, text="Points", font=boldedFont).grid(row=14+0, c
 
 
 
-buttonCal = tk.Button(MainWindow, text="reset", command=lambda:reset_counters_2dlist(OriginChampsCountersBuyList)).grid(row=DOWNSIDE, column=6)
+buttonCal = tk.Button(MainWindow, text="reset", command=lambda:reset_counters_in_list(OriginChampsCountersToBuy)).grid(row=DOWNSIDE, column=6)
 
 
 # buttonCal = tk.Button(MainWindow, text="nonzero", command=lambda:check_nonzero_counters(OriginChampsCountersBuyList)).grid(row=DOWNSIDE, column=12)
