@@ -1536,6 +1536,7 @@ def show_points_for_nonzero_counters(rowOffset=2, showMode=1):
     for i in range(0,len(championPositionInListOrderedByOrigin),1):
         pointsForChampionsToBuy[i] = (df.Points[championPositionInListOrderedByOrigin[i]] + additional_points_from_origin_combo(championPositionInListOrderedByOrigin[i]) 
                   + additional_points_from_class_combo(championPositionInListOrderedByOrigin[i]) + additional_points_from_champions_in_pool(championPositionInListOrderedByOrigin[i]))
+        pointsForChampionsToBuy[i] = round(pointsForChampionsToBuy[i],3)
         if showMode:
             textLabelList[i] = tk.Label(MainWindow, text=pointsForChampionsToBuy[i]).grid(row=12+rowOffset, column=ShiftBetweenOrigins*(i+1))
     logging.info("Points and championPositionInListOrderedByOrigin: {}".format(list(zip(pointsForChampionsToBuy,championPositionInListOrderedByOrigin))))
