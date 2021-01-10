@@ -1724,34 +1724,6 @@ labelTitle = tk.Label(MainWindow, text="Champion pool", font=boldedFont).grid(ro
 
 labelTitle = tk.Label(MainWindow, text=originList[0]).grid(row=1, column=OriginLabelPositionColumn)
 
-# for i,champ in enumerate(CultistChamps):
-#     labelTitle = tk.Label(MainWindow, text=champ).grid(row=2+i, column=0)
-#     entryNum = tk.Entry(MainWindow, textvariable=CultistCounters[i], width = 2).grid(row=2+i, column=1)
-#     buttonCal = tk.Button(MainWindow, text="+", command=lambda counter=CultistCounters[i]:add(counter)).grid(row=2+i, column=3)
-#     buttonCal = tk.Button(MainWindow, text="-", command=lambda counter=CultistCounters[i]:sub(counter)).grid(row=2+i, column=4)
-
- # show_champions_from_origin(4, OriginChampsFromDFList[4], OriginChampsCountersList[4], positionInList)
-
-
-
-# labelTitle = tk.Label(MainWindow, text=originList[1]).grid(row=1, column=OriginLabelPositionColumn*ShiftBetweenOrigins)
-
-# for i,champ in enumerate(DivineChamps):
-#     labelTitle = tk.Label(MainWindow, text=champ).grid(row=2+i, column=OriginLabelPositionColumn*ShiftBetweenOrigins-1)
-#     entryNum = tk.Entry(MainWindow, textvariable=DivineCounters[i], width = 2).grid(row=2+i, column=ShiftBetweenOrigins+1)
-#     buttonCal = tk.Button(MainWindow, text="+", command=lambda counter=DivineCounters[i]:add(counter)).grid(row=2+i, column=ShiftBetweenOrigins+2)
-#     buttonCal = tk.Button(MainWindow, text="-", command=lambda counter=DivineCounters[i]:sub(counter)).grid(row=2+i, column=ShiftBetweenOrigins+3)
-
-
-
-
-# labelTitle = tk.Label(MainWindow, text=originList[2]).grid(row=1, column=OriginLabelPositionColumn*ShiftBetweenOrigins*2)
-
-# for i,champ in enumerate(DuskChamps):
-#     labelTitle = tk.Label(MainWindow, text=champ).grid(row=2+i, column=OriginLabelPositionColumn*ShiftBetweenOrigins*2-1)
-#     entryNum = tk.Entry(MainWindow, textvariable=DuskCounters[i], width = 2).grid(row=2+i, column=ShiftBetweenOrigins*2+1)
-#     buttonCal = tk.Button(MainWindow, text="+", command=lambda counter=DuskCounters[i]:add(counter)).grid(row=2+i, column=ShiftBetweenOrigins*2+2)
-#     buttonCal = tk.Button(MainWindow, text="-", command=lambda counter=DuskCounters[i]:sub(counter)).grid(row=2+i, column=ShiftBetweenOrigins*2+3)
 
 
 labelTitle = tk.Label(MainWindow, text="Champions to buy", font=boldedFont).grid(row=DOWNSIDE-1, column=ShiftBetweenOrigins*5)
