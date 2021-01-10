@@ -82,6 +82,42 @@ wincap = None
 ##################################
 
 
+#drawing rectangles things
+# First champion card to buy on screen
+    
+xFirstChampionCard = 505
+wChampionCard = 175
+yFirstChampionCard = 865
+hChampionCard = 135
+
+PADDINGBETWEENCHAMPIONCARDS = 14
+
+#drawing rectangles
+
+line_color = (255, 0, 255)
+line_type = cv.LINE_4
+marker_color = (255, 0, 255)
+marker_type = cv.MARKER_CROSS
+
+
+listOfRGBColours = [(255, 0, 255), (0, 255, 255), (0, 255, 255), (0, 255, 255), (0, 255, 0)]
+
+# listOfRGBColours = ["worst", "medium3", "medium2", "medium1", "best"]
+
+# worst magenta mediums in yellow and best in green
+
+# listOfRGBColours=range(0,5)
+# next card, indexing from 0 = most left side
+
+
+
+############### WINDOW THINGS
+
+      
+
+MainWindow = tk.Tk()
+MainWindow.geometry('1900x800+0+0')
+MainWindow.title('TFTDSS')
 
 
 
@@ -257,42 +293,6 @@ championListForOCR = ['Aatrox', 'Elise', 'Evelynn', 'Jhin', 'Kalista', 'Pyke',
 
 
 
-#drawing rectangles things
-# First champion card to buy on screen
-    
-xFirstChampionCard = 505
-wChampionCard = 175
-yFirstChampionCard = 865
-hChampionCard = 135
-
-PADDINGBETWEENCHAMPIONCARDS = 14
-
-#drawing rectangles
-
-line_color = (255, 0, 255)
-line_type = cv.LINE_4
-marker_color = (255, 0, 255)
-marker_type = cv.MARKER_CROSS
-
-
-listOfRGBColours = [(255, 0, 255), (0, 255, 255), (0, 255, 255), (0, 255, 255), (0, 255, 0)]
-
-# listOfRGBColours = ["worst", "medium3", "medium2", "medium1", "best"]
-
-# worst magenta mediums in yellow and best in green
-
-# listOfRGBColours=range(0,5)
-# next card, indexing from 0 = most left side
-
-
-
-############### WINDOW THINGS
-
-      
-
-MainWindow = tk.Tk()
-MainWindow.geometry('1900x800+0+0')
-MainWindow.title('TFTDSS')
 
 
 
@@ -664,7 +664,6 @@ OriginCounters = [counterCultist, counterDivine, counterDusk, counterElderwood,
 
 
 
-OriginNames = sorted(list(set(df.OriginPrimary)))
 
 
 
@@ -768,10 +767,7 @@ ClassCountersList = [AdeptCounters, AssassinCounters, BrawlerCounters,
 # for clas in ClassSecondaryNames:
 #     print("counter" + clas +" = tk.IntVar()")
 
-Origin = namedtuple("Origin", ["Name", "Counter"])
 
-
-Cultist = Origin(OriginNames[0], OriginCounters[0])
 
 
 
@@ -1423,7 +1419,7 @@ def draw_rectangles_show_points_show_buttons_reset_counters():
             
             
 
-def show_champions_from_origin(originPositionInOriginList, OriginChampsFromDF, OriginCounterList, shiftBetweenUpsideDownside, flag = CHAMPIONFLAG):
+def show_champions_from_origin(originPositionInOriginList, OriginChampsFromDF, CHAMPIONSLIST, shiftBetweenUpsideDownside):
     """Adding buttons and text labels for single origin.
     In: originPositionInOriginList - its used to pickup origin from originlist,
     and place text on the window.
@@ -1431,26 +1427,47 @@ def show_champions_from_origin(originPositionInOriginList, OriginChampsFromDF, O
     OriginCounterList - list of champions counters in origin.
     shiftBetweenUpsideDownside - placing on the window, UPSIDE is upper location,
     DOWNSIDE is lower location.
-    flag - if 1 then text label is above counters, for origin champions should 
-    be CHAMPIONFLAG, for origins or classes should be ORIGINFLAG.
+
         """
     logging.debug("Function show_champions_from_origin() called")
     
-    if flag == 1:
-        labelTitle = tk.Label(MainWindow, text=originList[originPositionInOriginList]).grid(row=1+shiftBetweenUpsideDownside, column=OriginLabelPositionColumn*ShiftBetweenOrigins*originPositionInOriginList)
+    labelTitle = tk.Label(MainWindow, text=originList[originPositionInOriginList]).grid(row=1+shiftBetweenUpsideDownside, column=OriginLabelPositionColumn*ShiftBetweenOrigins*originPositionInOriginList)
 
-    for i,champ in enumerate(OriginChampsFromDF):
-        labelTitle = tk.Label(MainWindow, text=champ).grid(row=2+i+shiftBetweenUpsideDownside, column=OriginLabelPositionColumn*ShiftBetweenOrigins*originPositionInOriginList)
-        entryNum = tk.Entry(MainWindow, textvariable=OriginCounterList[i], width = 2).grid(row=2+i+shiftBetweenUpsideDownside, column=ShiftBetweenOrigins*originPositionInOriginList+1)
-        buttonCal = tk.Button(MainWindow, text="+", command=lambda counter=OriginCounterList[i]:add(counter)).grid(row=2+i+shiftBetweenUpsideDownside, column=ShiftBetweenOrigins*originPositionInOriginList+2)
-        buttonCal = tk.Button(MainWindow, text="-", command=lambda counter=OriginCounterList[i]:sub(counter)).grid(row=2+i+shiftBetweenUpsideDownside, column=ShiftBetweenOrigins*originPositionInOriginList+3)
-   
+    for i,champName in enumerate(OriginChampsFromDF):
+        labelTitle = tk.Label(MainWindow, text=champName).grid(row=2+i+shiftBetweenUpsideDownside, column=OriginLabelPositionColumn*ShiftBetweenOrigins*originPositionInOriginList)
+        for champ in CHAMPIONSLIST:
+            if champ.name == champName:
+                entryNum = tk.Entry(MainWindow, textvariable=champ.champCounter, width = 2).grid(row=2+i+shiftBetweenUpsideDownside, column=ShiftBetweenOrigins*originPositionInOriginList+1)
+                buttonCal = tk.Button(MainWindow, text="+", command=lambda counter=champ.champCounter:add(counter)).grid(row=2+i+shiftBetweenUpsideDownside, column=ShiftBetweenOrigins*originPositionInOriginList+2)
+                buttonCal = tk.Button(MainWindow, text="-", command=lambda counter=champ.champCounter:sub(counter)).grid(row=2+i+shiftBetweenUpsideDownside, column=ShiftBetweenOrigins*originPositionInOriginList+3)
+                break
     logging.debug("Function show_champions_from_origin() end")    
-    return
+    return None
 
 
+def show_classes_or_origins(originPositionInOriginList, originOrClassList, originOrClassCounterList, shiftBetweenUpsideDownside, originOrClassString = "origin"):
+    """Adding buttons and text labels for single origin.
+    In: originPositionInOriginList - its used to pickup origin from originlist,
+    and place text on the window.
+    originOrClassList  - list of origin or class names.
+    originOrClassCounterList - list counters for origin or class.
+    shiftBetweenUpsideDownside - placing on the window, UPSIDE is upper location,
+    DOWNSIDE is lower location.
+    flag - if 1 then text label is above counters, for origin champions should 
+    be CHAMPIONFLAG, for origins or classes should be ORIGINFLAG.
+        """
+    logging.debug("Function show_classes_or_origins() called")
 
+    labelTitle = tk.Label(MainWindow, text=originOrClassString).grid(row=1+shiftBetweenUpsideDownside, column=OriginLabelPositionColumn*ShiftBetweenOrigins*originPositionInOriginList)
 
+    for i,champ in enumerate(originOrClassList):
+        labelTitle = tk.Label(MainWindow, text=champ).grid(row=2+i+shiftBetweenUpsideDownside, column=OriginLabelPositionColumn*ShiftBetweenOrigins*originPositionInOriginList)
+        entryNum = tk.Entry(MainWindow, textvariable=originOrClassCounterList[i], width = 2).grid(row=2+i+shiftBetweenUpsideDownside, column=ShiftBetweenOrigins*originPositionInOriginList+1)
+        buttonCal = tk.Button(MainWindow, text="+", command=lambda counter=originOrClassCounterList[i]:add(counter)).grid(row=2+i+shiftBetweenUpsideDownside, column=ShiftBetweenOrigins*originPositionInOriginList+2)
+        buttonCal = tk.Button(MainWindow, text="-", command=lambda counter=originOrClassCounterList[i]:sub(counter)).grid(row=2+i+shiftBetweenUpsideDownside, column=ShiftBetweenOrigins*originPositionInOriginList+3)
+    
+    logging.debug("Function show_classes_or_origins() end")    
+    return None
 
 def reset_counters_in_list(list1d=OriginChampsCountersToBuy):
     """Reset counters to 0, used when roll or new round starts.
@@ -1727,16 +1744,16 @@ labelTitle = tk.Label(MainWindow, text="Champions to buy", font=boldedFont).grid
 
 ###### champions
 for i in range(0, len(OriginChampsFromDFList),1):
-    show_champions_from_origin(i, OriginChampsFromDFList[i], OriginChampsCountersList[i], UPSIDE)
+    show_champions_from_origin(i, OriginChampsFromDFList[i], championsList, UPSIDE)
 
 for i in range(0, len(OriginChampsFromDFList),1):
-    show_champions_from_origin(i, OriginChampsFromDFList[i], OriginChampsCountersBuyList[i], DOWNSIDE)
+    show_champions_from_origin(i, OriginChampsFromDFList[i], championsToBuyList, DOWNSIDE)
     
-####origins
-show_champions_from_origin(len(OriginChampsFromDFList),OriginNames, OriginCounters, UPSIDE,ORIGINFLAG)    
+# ####origins
+show_classes_or_origins(len(OriginChampsFromDFList), originList, OriginCounters, UPSIDE, "Origins")    
 
-#### primary class
-show_champions_from_origin((len(OriginChampsFromDFList)+1), classList, ClassCounters, UPSIDE, ORIGINFLAG )
+# #### primary class
+show_classes_or_origins((len(OriginChampsFromDFList)+1), classList, ClassCounters, UPSIDE, "Classes")
 labeling = tk.Label(MainWindow, text="Left to buy", font=boldedFont).grid(row=12+0, column=0)
 
 labeling = tk.Label(MainWindow, text="Points", font=boldedFont).grid(row=14+0, column=0)
