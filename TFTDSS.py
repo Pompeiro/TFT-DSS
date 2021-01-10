@@ -858,6 +858,37 @@ OriginChampsCountersListUseAsButtons = [counterAatrox, counterElise, counterEvel
                                         counterGaren, counterJarvanIV, counterKatarina,
                                         counterNidalee, counterVi, counterXinZhao]    
 
+
+if VARIABLEPRINTMODE:
+    print("OriginChampsCountersToBuy = [")
+    for champ in ChampsNames:
+        print("counterBuy"+champ,end = ", ")
+    print("]")
+    print()
+
+OriginChampsCountersToBuy = [counterBuyAatrox, counterBuyElise, counterBuyEvelynn,
+                             counterBuyJhin, counterBuyKalista, counterBuyPyke,
+                             counterBuyTwistedFate, counterBuyZilean, counterBuyJax,
+                             counterBuyLeeSin, counterBuyLux, counterBuyWarwick,
+                             counterBuyWukong, counterBuyCassiopeia, counterBuyLillia,
+                             counterBuyRiven, counterBuyThresh, counterBuyVayne,
+                             counterBuyAshe, counterBuyEzreal, counterBuyHecarim,
+                             counterBuyLulu, counterBuyMaokai, counterBuyNunu,
+                             counterBuyVeigar, counterBuyFiora, counterBuyIrelia,
+                             counterBuyJanna, counterBuyMorgana, counterBuyNami,
+                             counterBuyTalon, counterBuyYasuo, counterBuyYone,
+                             counterBuyAnnie, counterBuyJinx, counterBuySejuani,
+                             counterBuyTahmKench, counterBuyAphelios, counterBuyDiana,
+                             counterBuyLissandra, counterBuySylas, counterBuyAkali,
+                             counterBuyKennen, counterBuyShen, counterBuyZed,
+                             counterBuyAhri, counterBuyKindred, counterBuyTeemo,
+                             counterBuyYuumi, counterBuySett, counterBuyKayn,
+                             counterBuyAzir, counterBuyGaren, counterBuyJarvanIV,
+                             counterBuyKatarina, counterBuyNidalee, counterBuyVi,
+                             counterBuyXinZhao]
+
+
+
 # OriginChampsCountersList1d.pop(12)
 # OriginChampsCountersList1d.pop()
 # OriginChampsCountersList1d.pop()
@@ -882,75 +913,55 @@ for i,champ in enumerate(df.Champion):
                 df.OriginSecondary[i], df.ClassPrimary[i], df.ClassSecondary[i]])
 logging.debug("First filling championInfo has ended.")   
     
-logging.debug("Filling championInfo with originPrimCounter")
-for i,champ in enumerate(df.Champion):
-    if championInfo[i][4] == "None":
-        logging.info("Champion name: {}, champion index = {}".format(champ,i))
-        logging.info("origin primary == 'NONE' Appending None as originPrimCounter")
-        championInfo[i].append(None)
-    else:
-        logging.info("origin primary IS NOT 'NONE'")
-        for j,origin in enumerate(originList):
-            if championInfo[i][4] == origin:
-                logging.info("Champion name: {}, champion index = {}".format(champ,i))
-                logging.info("Found match in champion originPrimary and originList for origin: {}".format(origin))
-                logging.info("appending origin counter: {}".format(OriginCounters[j]))
-                championInfo[i].append(OriginCounters[j])
-logging.debug("Filling championInfo with originPrimCounter has ended.")
-            
-logging.debug("Filling championInfo with originSecCounter")
-for i,champ in enumerate(df.Champion):
-    if championInfo[i][5] == "None":
-        logging.info("Champion name: {}, champion index = {}".format(champ,i))
-        logging.info("origin secondary == 'NONE' Appending None as originSecCounter")
-        championInfo[i].append(None)
-    else:
-        logging.info("origin secondary IS NOT 'NONE'")
-        for j,origin in enumerate(originList):
-            if championInfo[i][5] == origin:
-                logging.info("Champion name: {}, champion index = {}".format(champ,i))
-                logging.info("Found match in champion originSecondary and originList for origin: {}".format(origin))
-                logging.info("appending origin counter: {}".format(OriginCounters[j]))
-                championInfo[i].append(OriginCounters[j])            
-logging.debug("Filling championInfo with originSecCounter has ended")
-
-logging.debug("Filling championInfo with classPrimCounter")
-for i,champ in enumerate(df.Champion):
-    if championInfo[i][6] == "None":
-        logging.info("Champion name: {}, champion index = {}".format(champ,i))
-        logging.info("class primary == 'NONE' Appending None as classPrimCounter")
-        championInfo[i].append(None)
-    else:
-        logging.info("class primary IS NOT 'NONE'")
-        for j,classPri in enumerate(classList):
-            if championInfo[i][6] == classPri:
-                logging.info("Champion name: {}, champion index = {}".format(champ,i))
-                logging.info("Found match in champion classPrimary and originList for class: {}".format(classPri))
-                logging.info("appending origin counter: {}".format(ClassCounters[j]))
-                championInfo[i].append(ClassCounters[j])            
-logging.debug("Filling championInfo with classPrimCounter has ended")                
-
-
-logging.debug("Filling championInfo with classSecCounter")
-for i,champ in enumerate(df.Champion):
-    if championInfo[i][7] == "None":
-        logging.info("Champion name: {}, champion index = {}".format(champ,i))
-        logging.info("class secondary == 'NONE' Appending None as classSecCounter")
-        championInfo[i].append(None)
-    else:
-        logging.info("class secondary IS NOT 'NONE'")
-        for j,classPri in enumerate(classList):
-            if championInfo[i][7] == classPri:
-                logging.info("Champion name: {}, champion index = {}".format(champ,i))
-                logging.info("Found match in champion classSecondary and classList for class: {}".format(classPri))
-                logging.info("appending origin counter: {}".format(ClassCounters[j]))
-                championInfo[i].append(ClassCounters[j])            
-logging.debug("Filling championInfo with classSecCounter has ended")  
 
 
 
+def filling_list_with_counter_for_namedtuple(fieldToCheck, inputList=championInfo):
+    logging.debug("Function filling_list_with_counter_for_namedtuple() called")
+    fieldToCheck2String = {4:"originPrim", 5:"originSec", 6:"classPrim",
+                           7:"classSec"}
+    fieldToCheck2CheckList = {4:originList, 5:originList, 6:classList, 7:classList}
+    fieldToCheck2CheckListString = {4:"originList", 5:"originList", 6:"classList", 7:"classList"}
+    fieldToCheck2CountersList = {4:OriginCounters, 5:OriginCounters, 6:ClassCounters, 7:ClassCounters}
+    listOfCounters = [None] * len(df.Champion)
+    for i,champ in enumerate(df.Champion):
+        if inputList[i][fieldToCheck] == "None":
+            logging.info("Champion name: {}, champion index = {}".format(champ,i))
+            logging.info("Field with index {} == 'NONE' filling None as {}Counter".format(fieldToCheck, 
+                                                                                            fieldToCheck2String[fieldToCheck]))
+            listOfCounters[i] = None
+        else:
+            logging.info("{} IS NOT 'NONE'".format(fieldToCheck2String[fieldToCheck]))
+            for j,classOrOrigin in enumerate(fieldToCheck2CheckList[fieldToCheck]):
+                if inputList[i][fieldToCheck] == classOrOrigin:
+                    logging.info("Champion name: {}, champion index = {}".format(champ,i))
+                    logging.info("Found match in champion {} and {} for : {}".format(fieldToCheck2String[fieldToCheck],
+                                                                                     fieldToCheck2CheckListString[fieldToCheck],
+                                                                                            classOrOrigin))
+                    logging.info("Filling {} counter: {}".format(fieldToCheck2String[fieldToCheck],
+                                                                 fieldToCheck2CountersList[fieldToCheck][j]))
+                    listOfCounters[i] = fieldToCheck2CountersList[fieldToCheck][j]
+    logging.debug("Function filling_list_with_counter_for_namedtuple() end")
+    return listOfCounters
 
-z = pd.DataFrame.from_records(championInfo, columns=['Champion','nameOcr','indexOcr','champCounter',
+def append_counters_to_input_list(inputList=championInfo):
+    logging.debug("Function filling_list_with_counter_for_namedtuple() called")
+
+    countersToAppend = [4, 5, 6, 7]
+    for j in countersToAppend:
+        listOfCountersToAppend = filling_list_with_counter_for_namedtuple(j)
+        for i,champ in enumerate(inputList):
+            champ.append(listOfCountersToAppend[i])
+    
+    logging.debug("Function filling_list_with_counter_for_namedtuple() end")
+
+    return None
+
+append_counters_to_input_list()
+
+
+championInfoDF = pd.DataFrame.from_records(championInfo, columns=['Champion','nameOcr',
+                                                                  'indexOcr','champCounter',
                            'originPrim', "originSec", "classPrim", "classSec",
                            "originPrimCounter", "originSecCounter", "classPrimCounter",
                            "classSecCounter"])
