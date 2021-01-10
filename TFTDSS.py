@@ -916,7 +916,7 @@ for i,champ in enumerate(df.Champion):
 logging.debug("First filling championToBuyInfo has ended.")   
 
 
-def filling_list_with_counter_for_namedtuple(fieldToCheck, inputList=championInfo):
+def filling_list_with_counter_for_namedtuple(fieldToCheck, inputList):
     """
     
 
@@ -958,14 +958,14 @@ def filling_list_with_counter_for_namedtuple(fieldToCheck, inputList=championInf
     logging.debug("Function filling_list_with_counter_for_namedtuple() end")
     return listOfCounters
 
-def append_counters_to_input_list(inputList=championInfo):
+def append_counters_to_input_list(inputList):
     """
     
 
     Parameters
     ----------
     inputList : Appending counters to list with fields like {4:"originPrim", 
-    5:"originSec", 6:"classPrim", 7:"classSec"}. The default is championInfo.
+    5:"originSec", 6:"classPrim", 7:"classSec"}.
 
     Returns
     -------
