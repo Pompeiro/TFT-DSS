@@ -81,27 +81,7 @@ wincap = None
 ####################################
 ##################################
 
-def add(intVariable):
-    """Adding one to counter"""
-    logging.debug("Function add() called")
-    
-    logging.info("input = {}".format(intVariable.get()))
-    intVariable.set(intVariable.get() + 1)
-    
-    logging.info("after call = {}".format(intVariable.get()))
-    logging.debug("Function add() end")
 
-
-def sub(intVariable):
-    """Minus one to counter"""
-    logging.debug("Function sub() called")
-    
-    logging.info("input = {}".format(intVariable.get()))
-    if intVariable.get() >0:
-        intVariable.set(intVariable.get() - 1)
-
-    logging.info("after call = {}".format(intVariable.get()))
-    logging.debug("Function sub() end")
 
 
 
@@ -1171,6 +1151,29 @@ championsToBuyList = [AatroxToBuy, EliseToBuy, EvelynnToBuy, JhinToBuy,
                       GarenToBuy, JarvanIVToBuy, KatarinaToBuy, NidaleeToBuy,
                       ViToBuy, XinZhaoToBuy]
 
+
+
+def add(intVariable):
+    """Adding one to counter"""
+    logging.debug("Function add() called")
+    
+    logging.info("input = {}".format(intVariable.get()))
+    intVariable.set(intVariable.get() + 1)
+    
+    logging.info("after call = {}".format(intVariable.get()))
+    logging.debug("Function add() end")
+
+
+def sub(intVariable):
+    """Minus one to counter"""
+    logging.debug("Function sub() called")
+    
+    logging.info("input = {}".format(intVariable.get()))
+    if intVariable.get() >0:
+        intVariable.set(intVariable.get() - 1)
+
+    logging.info("after call = {}".format(intVariable.get()))
+    logging.debug("Function sub() end")
 
 
 def sort_detected_champions_to_buy_by_position(OCRResultsSorted):
