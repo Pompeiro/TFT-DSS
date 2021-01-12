@@ -16,6 +16,22 @@ You can track my progress in projects section.
 
 When u want to update csv files by yourself, if not then scroll down to TFTDSS.py 
 
+
+# Installation
+
+I highly recommend you to create new virtual environment. I am using Anaconda distribution. Python 3.8.5 is working for me.
+
+conda create -n tft python=3.8.5
+
+then go to https://pytorch.org/ and check INSTALL PYTORCH section.
+
+"Note 1: for Windows, please install torch and torchvision first by following the official instruction here https://pytorch.org. On pytorch website, be sure to select the right CUDA version you have. If you intend to run on CPU mode only, select CUDA = None."
+Reference from https://github.com/JaidedAI/EasyOCR
+
+Then install requirements from requirements.txt
+
+Run TFTDSS.py in your IDE(for me working in Spyder and in Pycharm).
+
 # V1DSS directory
 It contains just decisive support system for game. It's for typical user. 
 
