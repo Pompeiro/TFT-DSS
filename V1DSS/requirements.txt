@@ -1,10 +1,8 @@
-easyocr==1.1.9
-matplotlib==3.2.2
-numpy==1.18.5
-opencv-python==4.3.0.38
-pandas==1.0.5
-pywin32==227
-pywin32-ctypes==0.2.0
-scikit-fuzzy==0.4.2
+easyocr==1.2.2
+pandas==1.2.0
+pywin32==228
+opencv-python==4.5.1.48
 selenium==3.141.0
-win32gui==221.6
+numpy==1.19.5
+scikit-fuzzy==0.4.2
+matplotlib==3.3.3
