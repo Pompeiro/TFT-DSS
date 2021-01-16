@@ -23,6 +23,8 @@ I highly recommend you to create new virtual environment. I am using Anaconda di
 
 conda create -n tft python=3.8.5
 
+conda activate tft
+
 then go to https://pytorch.org/ and check INSTALL PYTORCH section.
 
 "Note 1: for Windows, please install torch and torchvision first by following the official instruction here https://pytorch.org. On pytorch website, be sure to select the right CUDA version you have. If you intend to run on CPU mode only, select CUDA = None."
@@ -30,7 +32,7 @@ Reference from https://github.com/JaidedAI/EasyOCR
 
 Then install requirements from requirements.txt
 
-Run TFTDSS.py in your IDE(for me working in Spyder and in Pycharm).
+Run TFTDSS.py in your IDE(for me working in Spyder and in Pycharm). You need to use tft virtual env.
 
 # V1DSS directory
 It contains just decisive support system for game. It's for typical user. 
