@@ -127,7 +127,7 @@ This file is used for cropping screenshots to extract in game champion models wh
 
 
 # Data visualization.
-![StatsPlot](https://user-images.githubusercontent.com/60773657/85411123-3d6cfb00-b568-11ea-9eee-8dc245cdcd4e.png)
+![DataAnalysisTier4](https://user-images.githubusercontent.com/60773657/105047831-1e393c00-5a6b-11eb-9fb0-fbf8cf76db6e.png)
 
 
 # Using DSS in game.
