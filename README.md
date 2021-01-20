@@ -127,13 +127,14 @@ This file is used for cropping screenshots to extract in game champion models wh
 
 
 # Data visualization.
-![StatsPlot](https://user-images.githubusercontent.com/60773657/85411123-3d6cfb00-b568-11ea-9eee-8dc245cdcd4e.png)
+![DataAnalysisTier4](https://user-images.githubusercontent.com/60773657/105047831-1e393c00-5a6b-11eb-9fb0-fbf8cf76db6e.png)
 
 
 # Using DSS in game.
 
 
-![TFTDSS1](https://user-images.githubusercontent.com/60773657/86474906-0951c100-bd44-11ea-9c46-7b530c1c4cb4.png)
+![TFTDSSinGame](https://user-images.githubusercontent.com/60773657/105048410-d5ce4e00-5a6b-11eb-84ab-0ba6b5fe86e4.jpg)
+
 
 
 Results of first three attempts playing normal game with 54 points in silver 4.
@@ -141,9 +142,8 @@ You should pay attention that TFTDSS supported me only in choosing champion to b
 
 ![Scores](https://user-images.githubusercontent.com/60773657/86474581-6bf68d00-bd43-11ea-849a-700741035bc8.png)
 
-# Draw rectangles button(cross mode)
-![crosses](https://user-images.githubusercontent.com/60773657/97043409-b7db7500-1572-11eb-88b3-b801c00439d9.jpg)
-
+# Draw rectangles button(points mode)
+![DrawRectangles](https://user-images.githubusercontent.com/60773657/105048542-fd251b00-5a6b-11eb-8cd3-bcf2b701984b.jpg)
 
 
 # Champion object detection
