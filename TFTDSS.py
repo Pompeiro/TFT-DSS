@@ -16,8 +16,8 @@ import pandas as pd
 
 from windowcapture import WindowCapture
 
-################ REMEMBER TO SET GAME TO WINDOW MODE!!!!!!!!!!!!!!!!!!!!
-############# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# REMEMBER TO SET GAME TO WINDOW MODE!!!!!!!!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -53,11 +53,8 @@ IMAGESDEBUGMODE = 1
 reader = easyocr.Reader(["en"])
 
 
-######################################
-######################################
-###### IF U WANT TEST WITHOUT GAME THEN COMMENT HERE
-######################################
-######################################
+# IF U WANT TEST WITHOUT GAME THEN COMMENT HERE
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 wincap = WindowCapture("League of Legends (TM) Client")
@@ -67,9 +64,7 @@ LOADIMAGE = 0
 # LOADIMAGE = 1
 
 
-###################################
-####################################
-##################################
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 # drawing rectangles things
@@ -106,7 +101,7 @@ listOfRGBColours = [
 # next card, indexing from 0 = most left side
 
 
-############### WINDOW THINGS
+# WINDOW THINGS
 
 
 MainWindow = tk.Tk()
@@ -121,8 +116,8 @@ ShiftBetweenOrigins = 6
 OriginLabelPositionColumn = 1
 
 
-UPSIDE = 0  ############# champion pool
-DOWNSIDE = 16  ################ champions to buy
+UPSIDE = 0  # champion pool
+DOWNSIDE = 16  # champions to buy
 
 
 df = pd.read_csv("scaledChampionsdf.csv")
@@ -130,7 +125,7 @@ df = pd.read_csv("scaledChampionsdf.csv")
 df.drop("Unnamed: 0", axis=1, inplace=True)
 df.Points = df["Points"].round(3)
 
-######### order as in GUI
+# order as in GUI
 df.sort_values(by=["OriginPrimary", "Champion"], inplace=True)
 df.reset_index(drop=True, inplace=True)
 
@@ -266,7 +261,7 @@ championListForOCR = [
 ]
 
 
-############### COUNTERS FOR CHAMPIONS IN POOL $$$$$$$$$$$$$$$$$$
+# COUNTERS FOR CHAMPIONS IN POOL
 
 if VARIABLEPRINTMODE:
     for champ in df.Champion:
@@ -400,7 +395,7 @@ originChampsCounters = [
     counterXinZhao,
 ]
 
-####################### COUNTERS for champions to buy
+# COUNTERS for champions to buy
 
 if VARIABLEPRINTMODE:
     for champ in df.Champion:
@@ -535,7 +530,7 @@ originChampsCountersToBuy = [
     counterBuyXinZhao,
 ]
 
-################# counters for origins
+# counters for origins
 
 if VARIABLEPRINTMODE:
     for origin in originList:
@@ -581,7 +576,7 @@ OriginCounters = [
 ]
 
 
-###################### counters for classes
+# counters for classes
 
 
 if VARIABLEPRINTMODE:
@@ -627,7 +622,7 @@ ClassCounters = [
 ]
 
 
-############################################### Champion namedtuple things
+# Champion namedtuple things
 
 
 championInfo = []
@@ -1073,9 +1068,7 @@ championsToBuyList = [
 ]
 
 
-############################################################
-########################### FUNCTIONS ######################
-############################################################
+# FUNCTIONS
 
 
 def add(intVariable):
@@ -1226,7 +1219,7 @@ def update_champions_to_buy_from_ocr_detection():
         for i, champ in enumerate(championListForOCR):
             if champToBuy == champ:
                 logging.info(
-                    "from IF inside for loop in update_champions_to_buy_from_ocr_detection()"
+                    "IF inside for loop in update_champions_to_buy_from_ocr_detection()"
                 )
                 logging.info(
                     "Index in championListForOCR that is detected: {}".format(i)
@@ -1340,7 +1333,7 @@ def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
         for i in championsPositionToBuyOrderedByScreen
     ]
     logging.info(
-        "valuesByPointsIndexesOrderByPositionOnScreen 0 worst card 4 best card: {}".format(
+        "valuesByPointsIndexesOrderByPositionOnScreen 0 worst 4 best card: {}".format(
             valuesByPointsIndexesOrderByPositionOnScreen
         )
     )
@@ -1348,7 +1341,7 @@ def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
     screenshot = wincap.get_screenshot()
     # screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
 
-    ##### at the end
+    # at the end
     # valuesByPointsIndexesOrderByPositionOnScreen contains champions
     # sorted by points from lowest(0) to highest(4)
     # and indexes represents champion placement on the screen
@@ -1398,17 +1391,14 @@ def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
     return None
 
 
-######## need to fix double calculate points inside draw_on_champion_to_buy_cards
+# need to fix double calculate points inside draw_on_champion_to_buy_cards
 def draw_rectangles_show_points_show_buttons_reset_counters():
     logging.debug(
         "Function draw_rectangles_show_points_show_buttons_reset_counters() called"
     )
 
     update_classes_and_origins()
-    try:
-        reset_counters_in_list(originChampsCountersToBuy)
-    except:
-        pass
+    reset_counters_in_list(originChampsCountersToBuy)
     draw_on_champion_to_buy_cards()
 
     logging.debug(
@@ -1433,7 +1423,7 @@ def show_champions_from_origin(
     """
     logging.debug("Function show_champions_from_origin() called")
 
-    labelTitle = tk.Label(MainWindow, text=originList[originPositionInOriginList]).grid(
+    tk.Label(MainWindow, text=originList[originPositionInOriginList]).grid(
         row=1 + shiftBetweenUpsideDownside,
         column=OriginLabelPositionColumn
         * ShiftBetweenOrigins
@@ -1441,7 +1431,7 @@ def show_champions_from_origin(
     )
 
     for i, champName in enumerate(OriginChampsFromDF):
-        labelTitle = tk.Label(MainWindow, text=champName).grid(
+        tk.Label(MainWindow, text=champName).grid(
             row=2 + i + shiftBetweenUpsideDownside,
             column=OriginLabelPositionColumn
             * ShiftBetweenOrigins
@@ -1449,13 +1439,11 @@ def show_champions_from_origin(
         )
         for champ in CHAMPIONSLIST:
             if champ.name == champName:
-                entryNum = tk.Entry(
-                    MainWindow, textvariable=champ.champCounter, width=2
-                ).grid(
+                tk.Entry(MainWindow, textvariable=champ.champCounter, width=2).grid(
                     row=2 + i + shiftBetweenUpsideDownside,
                     column=ShiftBetweenOrigins * originPositionInOriginList + 1,
                 )
-                buttonCal = tk.Button(
+                tk.Button(
                     MainWindow,
                     text="+",
                     command=lambda counter=champ.champCounter: add(counter),
@@ -1463,7 +1451,7 @@ def show_champions_from_origin(
                     row=2 + i + shiftBetweenUpsideDownside,
                     column=ShiftBetweenOrigins * originPositionInOriginList + 2,
                 )
-                buttonCal = tk.Button(
+                tk.Button(
                     MainWindow,
                     text="-",
                     command=lambda counter=champ.champCounter: sub(counter),
@@ -1494,7 +1482,7 @@ def show_classes_or_origins(
     """
     logging.debug("Function show_classes_or_origins() called")
 
-    labelTitle = tk.Label(MainWindow, text=originOrClassString).grid(
+    tk.Label(MainWindow, text=originOrClassString).grid(
         row=1 + shiftBetweenUpsideDownside,
         column=OriginLabelPositionColumn
         * ShiftBetweenOrigins
@@ -1502,19 +1490,17 @@ def show_classes_or_origins(
     )
 
     for i, champ in enumerate(originOrClassList):
-        labelTitle = tk.Label(MainWindow, text=champ).grid(
+        tk.Label(MainWindow, text=champ).grid(
             row=2 + i + shiftBetweenUpsideDownside,
             column=OriginLabelPositionColumn
             * ShiftBetweenOrigins
             * originPositionInOriginList,
         )
-        entryNum = tk.Entry(
-            MainWindow, textvariable=originOrClassCounterList[i], width=2
-        ).grid(
+        tk.Entry(MainWindow, textvariable=originOrClassCounterList[i], width=2).grid(
             row=2 + i + shiftBetweenUpsideDownside,
             column=ShiftBetweenOrigins * originPositionInOriginList + 1,
         )
-        buttonCal = tk.Button(
+        tk.Button(
             MainWindow,
             text="+",
             command=lambda counter=originOrClassCounterList[i]: add(counter),
@@ -1522,7 +1508,7 @@ def show_classes_or_origins(
             row=2 + i + shiftBetweenUpsideDownside,
             column=ShiftBetweenOrigins * originPositionInOriginList + 2,
         )
-        buttonCal = tk.Button(
+        tk.Button(
             MainWindow,
             text="-",
             command=lambda counter=originOrClassCounterList[i]: sub(counter),
@@ -1656,7 +1642,7 @@ def show_points_for_nonzero_counters(rowOffset=2, showMode=1):
     )
 
     logging.info(
-        "Champions that are availbable to buy with calculated points list human readable: {}".format(
+        "Champions availbable to buy with calculated points list readable: {}".format(
             list(zip(pointsForChampionsToBuy, humanReadableChampions))
         )
     )
@@ -1836,16 +1822,17 @@ def delete_button(position):
 
 def delete_all_buttons():
     logging.debug("Function delete_all_buttons() called")
-
-    for button in buttonCalcList:
-        button.destroy()
+    try:
+        for button in buttonCalcList:
+            if button != 0:
+                button.destroy()
+    except (NameError):
+        print("There are no buttons to destroy.")
 
     logging.debug("Function delete_all_buttons() end")
 
 
-####################################################
-########################### GUI ####################
-####################################################
+# GUI
 
 
 labelTitle = tk.Label(MainWindow, text="Champion pool", font=boldedFont).grid(
@@ -1862,7 +1849,7 @@ labelTitle = tk.Label(MainWindow, text="Champions to buy", font=boldedFont).grid
 )
 
 
-######  CHAMPIONS
+# CHAMPIONS
 for i in range(0, len(OriginChampsFromDFList), 1):
     show_champions_from_origin(i, OriginChampsFromDFList[i], championsList, UPSIDE)
 
@@ -1871,12 +1858,12 @@ for i in range(0, len(OriginChampsFromDFList), 1):
         i, OriginChampsFromDFList[i], championsToBuyList, DOWNSIDE
     )
 
-# #### ORIGINS
+# ORIGINS
 show_classes_or_origins(
     len(OriginChampsFromDFList), originList, OriginCounters, UPSIDE, "Origins"
 )
 
-# #### CLASSES
+# CLASSES
 show_classes_or_origins(
     (len(OriginChampsFromDFList) + 1), classList, ClassCounters, UPSIDE, "Classes"
 )
@@ -1894,19 +1881,6 @@ buttonCal = tk.Button(
     text="reset",
     command=lambda: reset_counters_in_list(originChampsCountersToBuy),
 ).grid(row=DOWNSIDE, column=6)
-
-
-# buttonCal = tk.Button(MainWindow, text="nonzero", command=lambda:check_nonzero_counters(originChampsCountersToBuy)).grid(row=DOWNSIDE, column=12)
-
-# buttonCal = tk.Button(MainWindow, text="Shownonzero", command=lambda:show_nonzero_counters(0)).grid(row=DOWNSIDE, column=18)
-
-# buttonCal = tk.Button(MainWindow, text="Showpoints", command=lambda:show_points_for_nonzero_counters(2)).grid(row=DOWNSIDE, column=24)
-
-# buttonCal = tk.Button(MainWindow, text="update", command=lambda:update_origins()).grid(row=DOWNSIDE, column=30)
-
-
-# buttonCal = tk.Button(MainWindow, text="updateC", command=lambda:update_classes()).grid(row=DOWNSIDE, column=36)
-
 
 buttonCal = tk.Button(
     MainWindow, text="update classes", command=lambda: update_classes_and_origins()
