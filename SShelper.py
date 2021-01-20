@@ -13,26 +13,22 @@ Save cropped images.
 """
 
 
-
 import os
+
 import cv2 as cv
-
-from windowcapture import WindowCapture
-
 import keyboard
 
-
+from windowcapture import WindowCapture
 
 # show avaliable apps names
 WindowCapture.list_window_names()
 
 # wincap = WindowCapture('Spyder (Python 3.8)')
 
-# wincap = WindowCapture('League of Legends (TM) Client') 
+# wincap = WindowCapture('League of Legends (TM) Client')
 
 
 wincap = None
-
 
 
 ###################################
@@ -40,7 +36,7 @@ wincap = None
 ##################################
 
 line_color = (255, 0, 255)
-line_color_odd = (0,255,0)
+line_color_odd = (0, 255, 0)
 line_type = cv.LINE_4
 marker_color = (255, 0, 255)
 marker_type = cv.MARKER_CROSS
@@ -57,22 +53,37 @@ topLeftStart = [580, 130]
 
 topLeft = (topLeftStart[0], topLeftStart[1])
 bottomRight = (topLeft[0] + championWidth, topLeft[1] + championHeight)
-center = ((topLeft[0]+bottomRight[0])//2, (topLeft[1]+bottomRight[1])//2)
+center = ((topLeft[0] + bottomRight[0]) // 2, (topLeft[1] + bottomRight[1]) // 2)
 
 
 marker_position = [topLeft, bottomRight, center]
 
 
-basicSSname = 'C:\\Users\\janusz\\Pictures\\tft\\testingimages\\screen.jpg'
+basicSSname = "C:\\Users\\janusz\\Pictures\\tft\\testingimages\\screen.jpg"
 
 
-def make_ss_and_show(loadImage=1, window=wincap, croppingY=0, croppingX=0, croppingHeight=1080, croppingWidth=1920, showMode=0, saveMode=0, savingSSName=basicSSname):
+def make_ss_and_show(
+    loadImage=1,
+    window=wincap,
+    croppingY=0,
+    croppingX=0,
+    croppingHeight=1080,
+    croppingWidth=1920,
+    showMode=0,
+    saveMode=0,
+    savingSSName=basicSSname,
+):
     if loadImage:
-        screenshot = cv.imread("C:\\Users\\janusz\\Pictures\\tft\\testingimages\\graBack\\name00000002.jpg",cv.IMREAD_UNCHANGED)
+        screenshot = cv.imread(
+            "C:\\Users\\janusz\\Pictures\\tft\\testingimages\\graBack\\name00000002.jpg",
+            cv.IMREAD_UNCHANGED,
+        )
     else:
         screenshot = window.get_screenshot()
-    #print(screenshot)
-    crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
+    # print(screenshot)
+    crop_img = screenshot[
+        croppingY : croppingY + croppingHeight, croppingX : croppingX + croppingWidth
+    ]
     if showMode:
         cv.imshow("ss", crop_img)
     if saveMode:
@@ -83,95 +94,128 @@ def make_ss_and_show(loadImage=1, window=wincap, croppingY=0, croppingX=0, cropp
         # screenshot = window.get_screenshot()
         # crop_img = screenshot[croppingY:croppingY+croppingHeight, croppingX:croppingX+croppingWidth]
         cv.imwrite(savingSSName, crop_img)
-    
+
     return crop_img
 
 
-def draw_rectangle_and_center_and_show(screenshot, markerPosition=marker_position,line_coloring=line_color, showMode=0,name="wind"):
-    cv.drawMarker(screenshot, markerPosition[2], color=line_coloring,
-                  markerType=marker_type, markerSize=40, thickness=2)
-    cv.rectangle(screenshot, markerPosition[0], markerPosition[1], color=line_coloring,
-                          lineType=line_type, thickness=2)
+def draw_rectangle_and_center_and_show(
+    screenshot,
+    markerPosition=marker_position,
+    line_coloring=line_color,
+    showMode=0,
+    name="wind",
+):
+    cv.drawMarker(
+        screenshot,
+        markerPosition[2],
+        color=line_coloring,
+        markerType=marker_type,
+        markerSize=40,
+        thickness=2,
+    )
+    cv.rectangle(
+        screenshot,
+        markerPosition[0],
+        markerPosition[1],
+        color=line_coloring,
+        lineType=line_type,
+        thickness=2,
+    )
     if showMode:
         cv.imshow(name, screenshot)
     return screenshot
 
 
-
-
 # need to add row offset because hexes in row arent in the same positions
 
-rowOffset =[0,40,-20,25]
-championWidthOffset = [0,5,7,11]
+rowOffset = [0, 40, -20, 25]
+championWidthOffset = [0, 5, 7, 11]
 
 saving_marker_position = []
 
-for row in range(0,4,1):
-    for column in range(0,7,1):
+for row in range(0, 4, 1):
+    for column in range(0, 7, 1):
         if row % 2 == 0:
             line_coloring = line_color
         else:
             line_coloring = line_color_odd
-        
-        topLeftStart = [520 + rowOffset[row]  + (championWidth + championWidthOffset[row]) * column, 290 + championHeight//2 * row]
-        
-        
+
+        topLeftStart = [
+            520 + rowOffset[row] + (championWidth + championWidthOffset[row]) * column,
+            290 + championHeight // 2 * row,
+        ]
+
         topLeft = (topLeftStart[0], topLeftStart[1])
         bottomRight = (topLeft[0] + championWidth, topLeft[1] + championHeight)
-        center = ((topLeft[0]+bottomRight[0])//2, (topLeft[1]+bottomRight[1])//2)
-        
+        center = (
+            (topLeft[0] + bottomRight[0]) // 2,
+            (topLeft[1] + bottomRight[1]) // 2,
+        )
+
         marker_position = [topLeft, bottomRight, center]
         saving_marker_position.append(marker_position)
-        
+
         if column == 0 and row == 0:
-            u=draw_rectangle_and_center_and_show(make_ss_and_show(showMode=0,saveMode=0),markerPosition=marker_position, line_coloring=line_coloring, showMode=0)
+            u = draw_rectangle_and_center_and_show(
+                make_ss_and_show(showMode=0, saveMode=0),
+                markerPosition=marker_position,
+                line_coloring=line_coloring,
+                showMode=0,
+            )
         else:
-            u=draw_rectangle_and_center_and_show(u, markerPosition=marker_position, line_coloring=line_coloring, showMode=0)
-        
+            u = draw_rectangle_and_center_and_show(
+                u,
+                markerPosition=marker_position,
+                line_coloring=line_coloring,
+                showMode=0,
+            )
 
 
 #####  substitute's bench
-for column in range(0,9,1):
+for column in range(0, 9, 1):
 
-    
-    topLeftStart = [400 + rowOffset[0]  + (championWidth + 1) * column, 540 + championHeight//2 ]
-    
-    
+    topLeftStart = [
+        400 + rowOffset[0] + (championWidth + 1) * column,
+        540 + championHeight // 2,
+    ]
+
     topLeft = (topLeftStart[0], topLeftStart[1])
     bottomRight = (topLeft[0] + championWidth, topLeft[1] + championHeight)
-    center = ((topLeft[0]+bottomRight[0])//2, (topLeft[1]+bottomRight[1])//2)
-    
+    center = ((topLeft[0] + bottomRight[0]) // 2, (topLeft[1] + bottomRight[1]) // 2)
+
     marker_position = [topLeft, bottomRight, center]
     saving_marker_position.append(marker_position)
-    
+
     if column == 0 and row == 0:
-        u=draw_rectangle_and_center_and_show(make_ss_and_show(showMode=0,saveMode=0),markerPosition=marker_position, line_coloring=line_coloring, showMode=0)
+        u = draw_rectangle_and_center_and_show(
+            make_ss_and_show(showMode=0, saveMode=0),
+            markerPosition=marker_position,
+            line_coloring=line_coloring,
+            showMode=0,
+        )
     else:
-        u=draw_rectangle_and_center_and_show(u, markerPosition=marker_position, line_coloring=line_coloring, showMode=0)
-            
-        
-u=draw_rectangle_and_center_and_show(u, markerPosition=saving_marker_position[4], line_coloring=line_color_odd, showMode=0)       
+        u = draw_rectangle_and_center_and_show(
+            u, markerPosition=marker_position, line_coloring=line_coloring, showMode=0
+        )
 
-        
 
-        
+u = draw_rectangle_and_center_and_show(
+    u,
+    markerPosition=saving_marker_position[4],
+    line_coloring=line_color_odd,
+    showMode=0,
+)
+
+
 # cv.imshow("window",u)
-
-
-
-
-
 
 
 print("Main directory for screens in this game")
 mainDirectoryName = input()
-print("Your input for main directory is: ",mainDirectoryName)
-
-
+print("Your input for main directory is: ", mainDirectoryName)
 
 
 parentDirectory = "C:\\Users\\janusz\\Pictures\\tft\\testingimages\\"
-
 
 
 parentDirectory = os.path.join(parentDirectory, mainDirectoryName)
@@ -180,23 +224,24 @@ parentDirectory = os.path.join(parentDirectory, mainDirectoryName)
 try:
     os.mkdir(parentDirectory)
 except OSError:
-    print ("Creation of the directory %s failed" % parentDirectory)
+    print("Creation of the directory %s failed" % parentDirectory)
 else:
-    print ("Successfully created the directory %s " % parentDirectory)
+    print("Successfully created the directory %s " % parentDirectory)
 
-def create_directory(dirCounter=0, parentDir=parentDirectory): 
-    # Directory 
+
+def create_directory(dirCounter=0, parentDir=parentDirectory):
+    # Directory
     directory = "part{:02}".format(dirCounter)
-      
-    # Path 
-    path = os.path.join(parentDir, directory) 
-      
+
+    # Path
+    path = os.path.join(parentDir, directory)
+
     try:
         os.mkdir(path)
     except OSError:
-        print ("Creation of the directory %s failed" % path)
+        print("Creation of the directory %s failed" % path)
     else:
-        print ("Successfully created the directory %s " % path)
+        print("Successfully created the directory %s " % path)
     return path
 
 
@@ -204,27 +249,32 @@ global directoryCounter
 directoryCounter = 0
 
 
-
 #### saving cropped images with single champion
 def save_single_hexes_into_created_directory(parentDir=parentDirectory):
     global directoryCounter
     dirpath = create_directory(dirCounter=directoryCounter)
-    for i,markerpos in enumerate(saving_marker_position):
-        screenName='name{:08}.jpg'.format(i)
-        screenName = os.path.join(dirpath, screenName) 
-        make_ss_and_show(croppingY=markerpos[0][1], croppingX=markerpos[0][0], croppingHeight=markerpos[1][1]-markerpos[0][1], croppingWidth=markerpos[1][0]-markerpos[0][0], saveMode=1, savingSSName=screenName)
+    for i, markerpos in enumerate(saving_marker_position):
+        screenName = "name{:08}.jpg".format(i)
+        screenName = os.path.join(dirpath, screenName)
+        make_ss_and_show(
+            croppingY=markerpos[0][1],
+            croppingX=markerpos[0][0],
+            croppingHeight=markerpos[1][1] - markerpos[0][1],
+            croppingWidth=markerpos[1][0] - markerpos[0][0],
+            saveMode=1,
+            savingSSName=screenName,
+        )
     directoryCounter = directoryCounter + 1
 
 
 def make_ss_and_save_multiple_times_on_key_pressed():
     print("Now press p to save screenshots.")
-    for i in range(0,40,1):
+    for i in range(0, 40, 1):
         while True:
             if keyboard.is_pressed("p"):
                 print("You pressed p")
                 save_single_hexes_into_created_directory()
                 break
-        
 
 
 save_single_hexes_into_created_directory()
@@ -236,27 +286,23 @@ save_single_hexes_into_created_directory()
 #         line_coloring = line_color
 #     else:
 #         line_coloring = line_color_odd
-    
+
 #     topLeftStart = [490 , 300 + (championHeight//2) * row]
-    
-    
+
+
 #     topLeft = (topLeftStart[0], topLeftStart[1])
 #     bottomRight = (topLeft[0] + championWidth, topLeft[1] + championHeight)
 #     center = ((topLeft[0]+bottomRight[0])//2, (topLeft[1]+bottomRight[1])//2)
-    
+
 #     marker_position = [topLeft, bottomRight, center]
-    
+
 #     if  row == 0:
 #         u=draw_rectangle_and_center_and_show(make_ss_and_show(), line_coloring, 0)
 #     else:
 #         u=draw_rectangle_and_center_and_show(u, line_coloring, 0)
-    
-    
-    
-    
-    
-    
+
+
 #     print(topLeftStart)
 #     print(marker_position)
-        
+
 # cv.imshow("window",u)

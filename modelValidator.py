@@ -22,15 +22,13 @@ Plan:
 """
 
 import os
+import time
 
-from fastbook import *
-from fastai.vision.widgets import *
-
-import os
 import cv2 as cv
+from fastai.vision.widgets import *
+from fastbook import *
 
 from windowcapture import WindowCapture
-import time
 
 # starting time
 start = time.time()
@@ -367,7 +365,7 @@ print(f"Runtime of the program is {end - start}")
 
 
 
-
+models.py 3 C:\Users\janusz\Documents\TFT-DSS\models\Yolov4_epoch92.pth C:\Users\janusz\Pictures\tft\testingimages\test2ilony\ssIlony512.jpg _classes.txt
 
 
 

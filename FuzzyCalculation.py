@@ -4,24 +4,20 @@ Created on Fri Jun 26 11:39:30 2020
 
 @author: Janusz
 """
-import pandas as pd
+from collections import namedtuple
 
 import numpy as np
+import pandas as pd
 import skfuzzy as fuzz
 from skfuzzy import control as ctrl
 
+df = pd.read_csv("championsData.csv")
 
-from collections import namedtuple
-
-
-df = pd.read_csv("championsData.csv") 
-
-df.drop('Unnamed: 0', axis=1, inplace=True)
+df.drop("Unnamed: 0", axis=1, inplace=True)
 
 ############### Need to add effective HP
 
 #### formula for dmg reduction is: armor/(100+armor)
-
 
 
 ## from lol wiki
@@ -31,40 +27,55 @@ df.drop('Unnamed: 0', axis=1, inplace=True)
 
 
 ### formula for updated PHP after picking up bonus armor for combo or item
-### Wukong.PHP/Wukong.HP+BonusArmor/100 
+### Wukong.PHP/Wukong.HP+BonusArmor/100
 
 
 PHP = []
 MHP = []
 MEANHP = []
-for i in range(0,len(df),1):
+for i in range(0, len(df), 1):
     PHP.append(df.HP[i] * (1 + 0.01 * df.Armor[i]))
     MHP.append(df.HP[i] * (1 + 0.01 * df.MR[i]))
-    MEANHP.append((PHP[i]+MHP[i])/2)
+    MEANHP.append((PHP[i] + MHP[i]) / 2)
 
 
-df.insert(6,"PHP",PHP)
-df.insert(7,"MHP",MHP)
-df.insert(8,"MEANHP",MEANHP)
+df.insert(6, "PHP", PHP)
+df.insert(7, "MHP", MHP)
+df.insert(8, "MEANHP", MEANHP)
 
 
-
-Champion = namedtuple('Champ', ['Champion', 'DPS', 'AS', 'DMG', 'Range', 'HP', 
-                                'PHP', 'MHP', 'MEANHP', 'Mana', 'Armor', 'MR', 
-                                'OriginPrimary', 'OriginSecondary',
-                                'ClassPrimary', 'ClassSecondary', 'Cost','Tier'])
+Champion = namedtuple(
+    "Champ",
+    [
+        "Champion",
+        "DPS",
+        "AS",
+        "DMG",
+        "Range",
+        "HP",
+        "PHP",
+        "MHP",
+        "MEANHP",
+        "Mana",
+        "Armor",
+        "MR",
+        "OriginPrimary",
+        "OriginSecondary",
+        "ClassPrimary",
+        "ClassSecondary",
+        "Cost",
+        "Tier",
+    ],
+)
 
 dfList = df.T.values.tolist()
 
-for i,name in enumerate(dfList[0]): 
-    print(name, end='')
-    print(' = Champion(*df.loc[%d][0:])'%i)
-    
-    
-    
-    
-    
- ####################### Champions   
+for i, name in enumerate(dfList[0]):
+    print(name, end="")
+    print(" = Champion(*df.loc[%d][0:])" % i)
+
+
+####################### Champions
 Aatrox = Champion(*df.loc[0][0:])
 Ahri = Champion(*df.loc[1][0:])
 Akali = Champion(*df.loc[2][0:])
@@ -125,42 +136,77 @@ Zed = Champion(*df.loc[56][0:])
 Zilean = Champion(*df.loc[57][0:])
 
 
+for i, name in enumerate(
+    dfList[0]
+):  ######## wasted 2 hours for searching answer how to create variable variable
+    print(name, end=", ")
 
 
-
-for i,name in enumerate(dfList[0]): ######## wasted 2 hours for searching answer how to create variable variable
-    print(name, end=', ')
-
-
-championList = [Aatrox, Ahri, Akali, Annie, Aphelios, Ashe, Azir, Cassiopeia,
-                Diana, Elise, Evelynn, Ezreal, Fiora, Garen, Hecarim, Irelia,
-                Janna, JarvanIV, Jax, Jhin, Jinx, Kalista, Katarina, Kayn,
-                Kennen, Kindred, LeeSin, Lillia, Lissandra, Lulu, Lux, Maokai,
-                Morgana, Nami, Nidalee, Nunu, Pyke, Riven, Sejuani, Sett, Shen,
-                Sylas, TahmKench, Talon, Teemo, Thresh, TwistedFate, Vayne,
-                Veigar, Vi, Warwick, Wukong, XinZhao, Yasuo, Yone, Yuumi,
-                Zed, Zilean]
-
-
-
-
-
-
-
-
-
+championList = [
+    Aatrox,
+    Ahri,
+    Akali,
+    Annie,
+    Aphelios,
+    Ashe,
+    Azir,
+    Cassiopeia,
+    Diana,
+    Elise,
+    Evelynn,
+    Ezreal,
+    Fiora,
+    Garen,
+    Hecarim,
+    Irelia,
+    Janna,
+    JarvanIV,
+    Jax,
+    Jhin,
+    Jinx,
+    Kalista,
+    Katarina,
+    Kayn,
+    Kennen,
+    Kindred,
+    LeeSin,
+    Lillia,
+    Lissandra,
+    Lulu,
+    Lux,
+    Maokai,
+    Morgana,
+    Nami,
+    Nidalee,
+    Nunu,
+    Pyke,
+    Riven,
+    Sejuani,
+    Sett,
+    Shen,
+    Sylas,
+    TahmKench,
+    Talon,
+    Teemo,
+    Thresh,
+    TwistedFate,
+    Vayne,
+    Veigar,
+    Vi,
+    Warwick,
+    Wukong,
+    XinZhao,
+    Yasuo,
+    Yone,
+    Yuumi,
+    Zed,
+    Zilean,
+]
 
 
 ##############################################
 ### Performance calculation
 ##############################################
-
-
-
-
-
-
-
 
 
 #### Max stats
@@ -182,8 +228,6 @@ championList = [Aatrox, Ahri, Akali, Annie, Aphelios, Ashe, Azir, Cassiopeia,
 # ARMORMAX = max(championList, key=lambda k: k.Armor).Armor
 
 # MRMAX = max(championList, key=lambda k: k.MR).MR
-
-
 
 
 DPSMAX = max(df.DPS)
@@ -211,8 +255,19 @@ MRMAX = max(df.MR)
 
 ##### Max stats list
 
-maxStatsList = [DPSMAX, ASMAX, DMGMAX, RANGEMAX, HPMAX, PHPMAX, MHPMAX, 
-                MEANHPMAX, MANAMAX, ARMORMAX, MRMAX]
+maxStatsList = [
+    DPSMAX,
+    ASMAX,
+    DMGMAX,
+    RANGEMAX,
+    HPMAX,
+    PHPMAX,
+    MHPMAX,
+    MEANHPMAX,
+    MANAMAX,
+    ARMORMAX,
+    MRMAX,
+]
 
 
 ############################################
@@ -220,55 +275,33 @@ maxStatsList = [DPSMAX, ASMAX, DMGMAX, RANGEMAX, HPMAX, PHPMAX, MHPMAX,
 ############################################
 
 
-
-for i,maxstat in enumerate(maxStatsList):
-    df[df.columns[i+1]] = df[df.columns[i+1]]/maxstat
-    print(df[df.columns[i+1]])
+for i, maxstat in enumerate(maxStatsList):
+    df[df.columns[i + 1]] = df[df.columns[i + 1]] / maxstat
+    print(df[df.columns[i + 1]])
     print("The end of this stat")
 
 
+fHP = ctrl.Antecedent(np.arange(0, 1.01, 0.01), "fHP")
 
 
+fMEANHP = ctrl.Antecedent(np.arange(0, 1.01, 0.01), "fMEANHP")
 
 
+fPoints = ctrl.Consequent(np.arange(0, 1.01, 0.01), "fPoints")
 
 
+fHP["poor"] = fuzz.gbellmf(fHP.universe, 0.025, 0.95, 0.2)
+fHP["mediocre"] = fuzz.gbellmf(fHP.universe, 0.025, 0.95, 0.4)
+fHP["average"] = fuzz.gbellmf(fHP.universe, 0.025, 0.95, 0.6)
+fHP["decent"] = fuzz.gbellmf(fHP.universe, 0.025, 0.95, 0.8)
+fHP["good"] = fuzz.gbellmf(fHP.universe, 0.025, 0.95, 1.0)
 
 
-
-
-
-
-
-
-
-
-
-fHP = ctrl.Antecedent(np.arange(0, 1.01, 0.01), 'fHP')
-
-
-fMEANHP = ctrl.Antecedent(np.arange(0, 1.01, 0.01), 'fMEANHP')
-
-
-
-fPoints = ctrl.Consequent(np.arange(0, 1.01, 0.01), 'fPoints')
-
-
-
-fHP['poor'] = fuzz.gbellmf(fHP.universe, 0.025, 0.95, 0.2)
-fHP['mediocre'] = fuzz.gbellmf(fHP.universe, 0.025, 0.95, 0.4)
-fHP['average'] = fuzz.gbellmf(fHP.universe, 0.025, 0.95, 0.6)
-fHP['decent'] = fuzz.gbellmf(fHP.universe, 0.025, 0.95, 0.8)
-fHP['good'] = fuzz.gbellmf(fHP.universe, 0.025, 0.95, 1.0)
-
-
-
-
-fMEANHP['poor'] = fuzz.gbellmf(fMEANHP.universe, 0.025, 0.95, 0.2)
-fMEANHP['mediocre'] = fuzz.gbellmf(fMEANHP.universe, 0.025, 0.95, 0.4)
-fMEANHP['average'] = fuzz.gbellmf(fMEANHP.universe, 0.025, 0.95, 0.6)
-fMEANHP['decent'] = fuzz.gbellmf(fMEANHP.universe, 0.025, 0.95, 0.8)
-fMEANHP['good'] = fuzz.gbellmf(fMEANHP.universe, 0.025, 0.95, 1.0)
+fMEANHP["poor"] = fuzz.gbellmf(fMEANHP.universe, 0.025, 0.95, 0.2)
+fMEANHP["mediocre"] = fuzz.gbellmf(fMEANHP.universe, 0.025, 0.95, 0.4)
+fMEANHP["average"] = fuzz.gbellmf(fMEANHP.universe, 0.025, 0.95, 0.6)
+fMEANHP["decent"] = fuzz.gbellmf(fMEANHP.universe, 0.025, 0.95, 0.8)
+fMEANHP["good"] = fuzz.gbellmf(fMEANHP.universe, 0.025, 0.95, 1.0)
 
 # fSuits['hearts'] = fuzz.gbellmf(fSuits.universe, 0.025, 0.95, float(counterPreferencesHearts.get()))
 # fSuits['tiles'] = fuzz.gbellmf(fSuits.universe, 0.025, 0.95, float(counterPreferencesTiles.get()))
@@ -277,66 +310,78 @@ fMEANHP['good'] = fuzz.gbellmf(fMEANHP.universe, 0.025, 0.95, 1.0)
 # fSuits['xd'] = fuzz.gbellmf(fSuits.universe, 0.025, 0.95, 4.3)
 
 
-fPoints['poor'] = fuzz.gbellmf(fPoints.universe, 0.025, 0.95, 0.2)
-fPoints['mediocre'] = fuzz.gbellmf(fPoints.universe, 0.025, 0.95, 0.4)
-fPoints['average'] = fuzz.gbellmf(fPoints.universe, 0.025, 0.95, 0.6)
-fPoints['decent'] = fuzz.gbellmf(fPoints.universe, 0.025, 0.95, 0.8)
-fPoints['good'] = fuzz.gbellmf(fPoints.universe, 0.025, 0.95, 1.0)
-
+fPoints["poor"] = fuzz.gbellmf(fPoints.universe, 0.025, 0.95, 0.2)
+fPoints["mediocre"] = fuzz.gbellmf(fPoints.universe, 0.025, 0.95, 0.4)
+fPoints["average"] = fuzz.gbellmf(fPoints.universe, 0.025, 0.95, 0.6)
+fPoints["decent"] = fuzz.gbellmf(fPoints.universe, 0.025, 0.95, 0.8)
+fPoints["good"] = fuzz.gbellmf(fPoints.universe, 0.025, 0.95, 1.0)
 
 
 # fPoints.view()
 
 
-
 # fPoints.automf(5)
 
 
+rule1 = ctrl.Rule(fMEANHP["good"] & fHP["good"], fPoints["good"])
+rule2 = ctrl.Rule(fMEANHP["good"] & fHP["decent"], fPoints["good"])
+rule3 = ctrl.Rule(fMEANHP["good"] & fHP["average"], fPoints["decent"])
+rule4 = ctrl.Rule(fMEANHP["good"] & fHP["mediocre"], fPoints["decent"])
+rule5 = ctrl.Rule(fMEANHP["good"] & fHP["poor"], fPoints["average"])
 
 
+rule6 = ctrl.Rule(fMEANHP["decent"] & fHP["good"], fPoints["good"])
+rule7 = ctrl.Rule(fMEANHP["decent"] & fHP["decent"], fPoints["decent"])
+rule8 = ctrl.Rule(fMEANHP["decent"] & fHP["average"], fPoints["decent"])
+rule9 = ctrl.Rule(fMEANHP["decent"] & fHP["mediocre"], fPoints["average"])
+rule10 = ctrl.Rule(fMEANHP["decent"] & fHP["poor"], fPoints["mediocre"])
 
 
+rule11 = ctrl.Rule(fMEANHP["average"] & fHP["good"], fPoints["decent"])
+rule12 = ctrl.Rule(fMEANHP["average"] & fHP["decent"], fPoints["average"])
+rule13 = ctrl.Rule(fMEANHP["average"] & fHP["average"], fPoints["average"])
+rule14 = ctrl.Rule(fMEANHP["average"] & fHP["mediocre"], fPoints["average"])
+rule15 = ctrl.Rule(fMEANHP["average"] & fHP["poor"], fPoints["poor"])
 
+rule16 = ctrl.Rule(fMEANHP["mediocre"] & fHP["good"], fPoints["decent"])
+rule17 = ctrl.Rule(fMEANHP["mediocre"] & fHP["decent"], fPoints["average"])
+rule18 = ctrl.Rule(fMEANHP["mediocre"] & fHP["average"], fPoints["mediocre"])
+rule19 = ctrl.Rule(fMEANHP["mediocre"] & fHP["mediocre"], fPoints["mediocre"])
+rule20 = ctrl.Rule(fMEANHP["mediocre"] & fHP["poor"], fPoints["poor"])
 
+rule21 = ctrl.Rule(fMEANHP["poor"] & fHP["good"], fPoints["average"])
+rule22 = ctrl.Rule(fMEANHP["poor"] & fHP["decent"], fPoints["mediocre"])
+rule23 = ctrl.Rule(fMEANHP["poor"] & fHP["average"], fPoints["mediocre"])
+rule24 = ctrl.Rule(fMEANHP["poor"] & fHP["mediocre"], fPoints["poor"])
+rule25 = ctrl.Rule(fMEANHP["poor"] & fHP["poor"], fPoints["poor"])
 
-
-
-
-rule1 = ctrl.Rule(fMEANHP['good'] & fHP['good'], fPoints['good'])
-rule2 = ctrl.Rule(fMEANHP['good'] & fHP['decent'], fPoints['good'])
-rule3 = ctrl.Rule(fMEANHP['good'] & fHP['average'], fPoints['decent'])
-rule4 = ctrl.Rule(fMEANHP['good'] & fHP['mediocre'], fPoints['decent'])
-rule5 = ctrl.Rule(fMEANHP['good'] & fHP['poor'], fPoints['average'])
-
-
-rule6 = ctrl.Rule(fMEANHP['decent'] & fHP['good'], fPoints['good'])
-rule7 = ctrl.Rule(fMEANHP['decent'] & fHP['decent'], fPoints['decent'])
-rule8 = ctrl.Rule(fMEANHP['decent'] & fHP['average'], fPoints['decent'])
-rule9 = ctrl.Rule(fMEANHP['decent'] & fHP['mediocre'], fPoints['average'])
-rule10 = ctrl.Rule(fMEANHP['decent'] & fHP['poor'], fPoints['mediocre'])
-
-
-rule11 = ctrl.Rule(fMEANHP['average'] & fHP['good'], fPoints['decent'])
-rule12 = ctrl.Rule(fMEANHP['average'] & fHP['decent'], fPoints['average'])
-rule13 = ctrl.Rule(fMEANHP['average'] & fHP['average'], fPoints['average'])
-rule14 = ctrl.Rule(fMEANHP['average'] & fHP['mediocre'], fPoints['average'])
-rule15 = ctrl.Rule(fMEANHP['average'] & fHP['poor'], fPoints['poor'])
-
-rule16 = ctrl.Rule(fMEANHP['mediocre'] & fHP['good'], fPoints['decent'])
-rule17 = ctrl.Rule(fMEANHP['mediocre'] & fHP['decent'], fPoints['average'])
-rule18 = ctrl.Rule(fMEANHP['mediocre'] & fHP['average'], fPoints['mediocre'])
-rule19 = ctrl.Rule(fMEANHP['mediocre'] & fHP['mediocre'], fPoints['mediocre'])
-rule20 = ctrl.Rule(fMEANHP['mediocre'] & fHP['poor'], fPoints['poor'])
-
-rule21 = ctrl.Rule(fMEANHP['poor'] & fHP['good'], fPoints['average'])
-rule22 = ctrl.Rule(fMEANHP['poor'] & fHP['decent'], fPoints['mediocre'])
-rule23 = ctrl.Rule(fMEANHP['poor'] & fHP['average'], fPoints['mediocre'])
-rule24 = ctrl.Rule(fMEANHP['poor'] & fHP['mediocre'], fPoints['poor'])
-rule25 = ctrl.Rule(fMEANHP['poor'] & fHP['poor'], fPoints['poor'])
-
-rules = [rule1, rule2, rule3, rule4, rule5, rule6, rule7, rule8, rule9, rule10,
-         rule11, rule12, rule13, rule14, rule15, rule16, rule17, rule18, rule19,
-         rule20, rule21, rule22, rule23, rule24, rule25]
+rules = [
+    rule1,
+    rule2,
+    rule3,
+    rule4,
+    rule5,
+    rule6,
+    rule7,
+    rule8,
+    rule9,
+    rule10,
+    rule11,
+    rule12,
+    rule13,
+    rule14,
+    rule15,
+    rule16,
+    rule17,
+    rule18,
+    rule19,
+    rule20,
+    rule21,
+    rule22,
+    rule23,
+    rule24,
+    rule25,
+]
 
 
 # for i in range(1,26,1):
@@ -346,83 +391,63 @@ rules = [rule1, rule2, rule3, rule4, rule5, rule6, rule7, rule8, rule9, rule10,
 tanksPreferencesRulebase = ctrl.ControlSystem(rules)
 
 
-    
-
-    
-    
-    
-    
-
-    
 tanksPreferences = ctrl.ControlSystemSimulation(tanksPreferencesRulebase)
-
 
 
 tanksPreferencePoints = [0] * len(df)
 
 
+for i in range(0, len(df)):
 
-for i in range(0,len(df)):
-
-    
-    
-    
-    tanksPreferences.input['fMEANHP'] = df.MEANHP[i]
-    tanksPreferences.input['fHP'] = df.HP[i]
+    tanksPreferences.input["fMEANHP"] = df.MEANHP[i]
+    tanksPreferences.input["fHP"] = df.HP[i]
     tanksPreferences.compute()
-    
-    tanksPreferencePoints[i] = tanksPreferences.output['fPoints']
+
+    tanksPreferencePoints[i] = tanksPreferences.output["fPoints"]
 
 
 totalPointsList = [0] * len(df)
-for i,champ in enumerate(tanksPreferencePoints):
-    totalPointsList[i] = champ + df.DPS[i] + df.Tier[i]/5 -df.Cost[i]/20 #where champ is points for MEANHP>HP preference
-    
+for i, champ in enumerate(tanksPreferencePoints):
+    totalPointsList[i] = (
+        champ + df.DPS[i] + df.Tier[i] / 5 - df.Cost[i] / 20
+    )  # where champ is points for MEANHP>HP preference
 
 
-##### 18 mean end of the list should be automated    
-df.insert(18,"Points",totalPointsList)
+##### 18 mean end of the list should be automated
+df.insert(18, "Points", totalPointsList)
 
-df.to_csv('scaledChampionsdf.csv', encoding='utf-8')
-
-
+df.to_csv("scaledChampionsdf.csv", encoding="utf-8")
 
 
+ScaledChampion = namedtuple(
+    "ScaledChamp",
+    [
+        "Champion",
+        "DPS",
+        "AS",
+        "DMG",
+        "Range",
+        "HP",
+        "PHP",
+        "MHP",
+        "MEANHP",
+        "Mana",
+        "Armor",
+        "MR",
+        "OriginPrimary",
+        "OriginSecondary",
+        "ClassPrimary",
+        "ClassSecondary",
+        "Cost",
+        "Tier",
+        "Points",
+    ],
+)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-ScaledChampion = namedtuple('ScaledChamp', ['Champion', 'DPS', 'AS', 'DMG', 
-                                            'Range', 'HP', 'PHP', 'MHP', 'MEANHP',
-                                            'Mana', 'Armor', 'MR', 'OriginPrimary',
-                                            'OriginSecondary', 'ClassPrimary',
-                                            'ClassSecondary', 'Cost',
-                                            'Tier', 'Points'])
-
-
-
-
-for i,name in enumerate(dfList[0]): 
-    print('S'+name, end='')
-    print(' = ScaledChampion(*df.loc[%d][0:])'%i)
-
-
-
-
-
-
+for i, name in enumerate(dfList[0]):
+    print("S" + name, end="")
+    print(" = ScaledChampion(*df.loc[%d][0:])" % i)
 
 
 SAatrox = ScaledChampion(*df.loc[0][0:])
@@ -485,25 +510,72 @@ SZed = ScaledChampion(*df.loc[56][0:])
 SZilean = ScaledChampion(*df.loc[57][0:])
 
 
+for i, name in enumerate(
+    dfList[0]
+):  ######## wasted 2 hours for searching answer how to create variable variable
+    print("S" + name, end=", ")
 
 
-for i,name in enumerate(dfList[0]): ######## wasted 2 hours for searching answer how to create variable variable
-    print('S'+name, end=', ')
-
-
-
-SchampionList = [SAatrox, SAhri, SAkali, SAnnie, SAphelios, SAshe, SAzir, 
-                 SCassiopeia, SDiana, SElise, SEvelynn, SEzreal, SFiora,
-                 SGaren, SHecarim, SIrelia, SJanna, SJarvanIV, SJax, SJhin,
-                 SJinx, SKalista, SKatarina, SKayn, SKennen, SKindred, SLeeSin,
-                 SLillia, SLissandra, SLulu, SLux, SMaokai, SMorgana, SNami,
-                 SNidalee, SNunu, SPyke, SRiven, SSejuani, SSett, SShen, SSylas,
-                 STahmKench, STalon, STeemo, SThresh, STwistedFate, SVayne,
-                 SVeigar, SVi, SWarwick, SWukong, SXinZhao, SYasuo, SYone,
-                 SYuumi, SZed, SZilean]
-
-
-
+SchampionList = [
+    SAatrox,
+    SAhri,
+    SAkali,
+    SAnnie,
+    SAphelios,
+    SAshe,
+    SAzir,
+    SCassiopeia,
+    SDiana,
+    SElise,
+    SEvelynn,
+    SEzreal,
+    SFiora,
+    SGaren,
+    SHecarim,
+    SIrelia,
+    SJanna,
+    SJarvanIV,
+    SJax,
+    SJhin,
+    SJinx,
+    SKalista,
+    SKatarina,
+    SKayn,
+    SKennen,
+    SKindred,
+    SLeeSin,
+    SLillia,
+    SLissandra,
+    SLulu,
+    SLux,
+    SMaokai,
+    SMorgana,
+    SNami,
+    SNidalee,
+    SNunu,
+    SPyke,
+    SRiven,
+    SSejuani,
+    SSett,
+    SShen,
+    SSylas,
+    STahmKench,
+    STalon,
+    STeemo,
+    SThresh,
+    STwistedFate,
+    SVayne,
+    SVeigar,
+    SVi,
+    SWarwick,
+    SWukong,
+    SXinZhao,
+    SYasuo,
+    SYone,
+    SYuumi,
+    SZed,
+    SZilean,
+]
 
 
 # df.sort_values(by=['Points'])
