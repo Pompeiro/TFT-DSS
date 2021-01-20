@@ -5,19 +5,16 @@ Created on Wed Jun  3 10:54:45 2020
 @author: Janusz
 """
 
+import logging
 import tkinter as tk
 import tkinter.font as tkFont
-
-import pandas as pd
-
 from collections import namedtuple
 
-import easyocr
-
 import cv2 as cv
-from windowcapture import WindowCapture
+import easyocr
+import pandas as pd
 
-import logging
+from windowcapture import WindowCapture
 
 ################ REMEMBER TO SET GAME TO WINDOW MODE!!!!!!!!!!!!!!!!!!!!
 ############# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
