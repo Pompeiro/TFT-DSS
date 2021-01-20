@@ -10,7 +10,7 @@ import tkinter as tk
 import tkinter.font as tkFont
 from collections import namedtuple
 
-import cv2 as cv
+from cv2 import cv2 as cv
 import easyocr
 import pandas as pd
 
@@ -25,30 +25,28 @@ Champion = namedtuple(
     "Champion",
     [
         "name",
-        "nameOcr",
-        "indexOcr",
-        "champCounter",
-        "originPrim",
-        "originSec",
-        "classPrim",
-        "classSec",
-        "originPrimCounter",
-        "originSecCounter",
-        "classPrimCounter",
-        "classSecCounter",
+        "name_ocr",
+        "index_ocr",
+        "ChampCounter",
+        "origin_prim",
+        "origin_sec",
+        "class_prim",
+        "class_sec",
+        "OriginPrimCounter",
+        "OriginSecCounter",
+        "ClassPrimCounter",
+        "ClassSecCounter",
     ],
 )
 
 
-CARDSTOBUYAMOUNT = 5
+CARDS_TO_BUY_AMOUNT = 5
 
-pointsForChampionsToBuy = [0] * CARDSTOBUYAMOUNT
+VARIABLE_PRINT_MODE = 0
+# VARIABLE_PRINT_MODE = 1
 
-VARIABLEPRINTMODE = 0
-# VARIABLEPRINTMODE = 1
-
-# IMAGESDEBUGMODE = 0
-IMAGESDEBUGMODE = 1
+# IMAGE_DEBUG_MODE = 0
+IMAGE_DEBUG_MODE = 1
 
 reader = easyocr.Reader(["en"])
 
@@ -58,10 +56,10 @@ reader = easyocr.Reader(["en"])
 
 
 wincap = WindowCapture("League of Legends (TM) Client")
-LOADIMAGE = 0
+LOAD_IMAGE = 0
 
 # wincap = None
-# LOADIMAGE = 1
+# LOAD_IMAGE = 1
 
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -70,22 +68,22 @@ LOADIMAGE = 0
 # drawing rectangles things
 # First champion card to buy on screen
 
-xFirstChampionCard = 505
-wChampionCard = 175
-yFirstChampionCard = 865
-hChampionCard = 135
+X_FIRST_CHAMPION_CARD = 505
+W_CHAMPION_CARD = 175
+Y_FIRST_CHAMPION_CARD = 865
+H_CHAMPION_CARD = 135
 
-PADDINGBETWEENCHAMPIONCARDS = 14
+PADDING_BETWEEN_CHAMPION_CARDS = 14
 
 # drawing rectangles
 
 line_color = (255, 0, 255)
-line_type = cv.LINE_4
+LINE_TYPE = cv.LINE_4
 marker_color = (255, 0, 255)
-marker_type = cv.MARKER_CROSS
+MARKER_TYPE = cv.MARKER_CROSS
 
 
-listOfRGBColours = [
+rgb_colours_list = [
     (255, 0, 255),
     (0, 255, 255),
     (0, 255, 255),
@@ -93,11 +91,11 @@ listOfRGBColours = [
     (0, 255, 0),
 ]
 
-# listOfRGBColours = ["worst", "medium3", "medium2", "medium1", "best"]
+# rgb_colours_list = ["worst", "medium3", "medium2", "medium1", "best"]
 
 # worst magenta mediums in yellow and best in green
 
-# listOfRGBColours=range(0,5)
+# rgb_colours_list=range(0,5)
 # next card, indexing from 0 = most left side
 
 
@@ -109,11 +107,11 @@ MainWindow.geometry("1900x800+0+0")
 MainWindow.title("TFTDSS")
 
 
-boldedFont = tkFont.Font(family="Arial", size=10, weight=tkFont.BOLD)
+BOLDED_FONT = tkFont.Font(family="Arial", size=10, weight=tkFont.BOLD)
 
-ShiftBetweenOrigins = 6
+SHIFT_BETWEEN_ORIGINS = 6
 
-OriginLabelPositionColumn = 1
+ORIGIN_LABEL_POSITION_COLUMN = 1
 
 
 UPSIDE = 0  # champion pool
@@ -130,16 +128,16 @@ df.sort_values(by=["OriginPrimary", "Champion"], inplace=True)
 df.reset_index(drop=True, inplace=True)
 
 
-originList = list(set(df.OriginPrimary)) + list(set(df.OriginSecondary))
-originList = list(set(originList))
-originList.remove("None")
-originList.sort()
+origin_list = list(set(df.OriginPrimary)) + list(set(df.OriginSecondary))
+origin_list = list(set(origin_list))
+origin_list.remove("None")
+origin_list.sort()
 
-if VARIABLEPRINTMODE:
-    for origin in originList:
+if VARIABLE_PRINT_MODE:
+    for origin in origin_list:
         print(
-            origin
-            + "Champs = list(df.query("
+            origin.lower()
+            + "_champs = list(df.query("
             + "'OriginPrimary == "
             + '"'
             + "%s" % origin
@@ -147,59 +145,59 @@ if VARIABLEPRINTMODE:
             + "').Champion)"
         )
 
-if VARIABLEPRINTMODE:
-    print("OriginChampsFromDFList = [", end=" ")
-    for origin in originList:
-        print(origin + "Champs", end=", ")
+if VARIABLE_PRINT_MODE:
+    print("origin_champs_from_df_list = [", end=" ")
+    for origin in origin_list:
+        print(origin.lower() + "_champs", end=", ")
     print("]")
 
-CultistChamps = list(df.query('OriginPrimary == "Cultist"').Champion)
-DivineChamps = list(df.query('OriginPrimary == "Divine"').Champion)
-DuskChamps = list(df.query('OriginPrimary == "Dusk"').Champion)
-ElderwoodChamps = list(df.query('OriginPrimary == "Elderwood"').Champion)
-EnlightenedChamps = list(df.query('OriginPrimary == "Enlightened"').Champion)
-ExileChamps = list(df.query('OriginPrimary == "Exile"').Champion)
-FortuneChamps = list(df.query('OriginPrimary == "Fortune"').Champion)
-MoonlightChamps = list(df.query('OriginPrimary == "Moonlight"').Champion)
-NinjaChamps = list(df.query('OriginPrimary == "Ninja"').Champion)
-SpiritChamps = list(df.query('OriginPrimary == "Spirit"').Champion)
-TheBossChamps = list(df.query('OriginPrimary == "TheBoss"').Champion)
-TormentedChamps = list(df.query('OriginPrimary == "Tormented"').Champion)
-WarlordChamps = list(df.query('OriginPrimary == "Warlord"').Champion)
+cultist_champs = list(df.query('OriginPrimary == "Cultist"').Champion)
+divine_champs = list(df.query('OriginPrimary == "Divine"').Champion)
+dusk_champs = list(df.query('OriginPrimary == "Dusk"').Champion)
+elderwood_champs = list(df.query('OriginPrimary == "Elderwood"').Champion)
+enlightened_champs = list(df.query('OriginPrimary == "Enlightened"').Champion)
+exile_champs = list(df.query('OriginPrimary == "Exile"').Champion)
+fortune_champs = list(df.query('OriginPrimary == "Fortune"').Champion)
+moonlight_champs = list(df.query('OriginPrimary == "Moonlight"').Champion)
+ninja_champs = list(df.query('OriginPrimary == "Ninja"').Champion)
+spirit_champs = list(df.query('OriginPrimary == "Spirit"').Champion)
+the_boss_champs = list(df.query('OriginPrimary == "TheBoss"').Champion)
+tormented_champs = list(df.query('OriginPrimary == "Tormented"').Champion)
+warlord_champs = list(df.query('OriginPrimary == "Warlord"').Champion)
 
-OriginChampsFromDFList = [
-    CultistChamps,
-    DivineChamps,
-    DuskChamps,
-    ElderwoodChamps,
-    EnlightenedChamps,
-    ExileChamps,
-    FortuneChamps,
-    MoonlightChamps,
-    NinjaChamps,
-    SpiritChamps,
-    TheBossChamps,
-    TormentedChamps,
-    WarlordChamps,
+origin_champs_from_df_list = [
+    cultist_champs,
+    divine_champs,
+    dusk_champs,
+    elderwood_champs,
+    enlightened_champs,
+    exile_champs,
+    fortune_champs,
+    moonlight_champs,
+    ninja_champs,
+    spirit_champs,
+    the_boss_champs,
+    tormented_champs,
+    warlord_champs,
 ]
 
 
-classList = list(set(df.ClassPrimary)) + list(set(df.ClassSecondary))
-classList = list(set(classList))
-classList.remove("None")
-classList.sort()
+class_list = list(set(df.ClassPrimary)) + list(set(df.ClassSecondary))
+class_list = list(set(class_list))
+class_list.remove("None")
+class_list.sort()
 
 
 # OCR things
 
-if VARIABLEPRINTMODE:
-    print("championListForOCR = [", end=" ")
+if VARIABLE_PRINT_MODE:
+    print("champions_list_for_ocr = [", end=" ")
     for champ in df.Champion:
         print("'" + champ + "'", end=", ")
     print("]")
 
 
-championListForOCR = [
+champions_list_for_ocr = [
     "Aatrox",
     "Elise",
     "Evelynn",
@@ -263,482 +261,486 @@ championListForOCR = [
 
 # COUNTERS FOR CHAMPIONS IN POOL
 
-if VARIABLEPRINTMODE:
+if VARIABLE_PRINT_MODE:
     for champ in df.Champion:
-        print("counter" + champ + " = tk.IntVar()")
+        print("Counter" + champ + " = tk.IntVar()")
 
 
-counterAatrox = tk.IntVar()
-counterElise = tk.IntVar()
-counterEvelynn = tk.IntVar()
-counterJhin = tk.IntVar()
-counterKalista = tk.IntVar()
-counterPyke = tk.IntVar()
-counterTwistedFate = tk.IntVar()
-counterZilean = tk.IntVar()
-counterJax = tk.IntVar()
-counterLeeSin = tk.IntVar()
-counterLux = tk.IntVar()
-counterWarwick = tk.IntVar()
-counterWukong = tk.IntVar()
-counterCassiopeia = tk.IntVar()
-counterLillia = tk.IntVar()
-counterRiven = tk.IntVar()
-counterThresh = tk.IntVar()
-counterVayne = tk.IntVar()
-counterAshe = tk.IntVar()
-counterEzreal = tk.IntVar()
-counterHecarim = tk.IntVar()
-counterLulu = tk.IntVar()
-counterMaokai = tk.IntVar()
-counterNunu = tk.IntVar()
-counterVeigar = tk.IntVar()
-counterFiora = tk.IntVar()
-counterIrelia = tk.IntVar()
-counterJanna = tk.IntVar()
-counterMorgana = tk.IntVar()
-counterNami = tk.IntVar()
-counterTalon = tk.IntVar()
-counterYasuo = tk.IntVar()
-counterYone = tk.IntVar()
-counterAnnie = tk.IntVar()
-counterJinx = tk.IntVar()
-counterSejuani = tk.IntVar()
-counterTahmKench = tk.IntVar()
-counterAphelios = tk.IntVar()
-counterDiana = tk.IntVar()
-counterLissandra = tk.IntVar()
-counterSylas = tk.IntVar()
-counterAkali = tk.IntVar()
-counterKennen = tk.IntVar()
-counterShen = tk.IntVar()
-counterZed = tk.IntVar()
-counterAhri = tk.IntVar()
-counterKindred = tk.IntVar()
-counterTeemo = tk.IntVar()
-counterYuumi = tk.IntVar()
-counterSett = tk.IntVar()
-counterKayn = tk.IntVar()
-counterAzir = tk.IntVar()
-counterGaren = tk.IntVar()
-counterJarvanIV = tk.IntVar()
-counterKatarina = tk.IntVar()
-counterNidalee = tk.IntVar()
-counterVi = tk.IntVar()
-counterXinZhao = tk.IntVar()
+CounterAatrox = tk.IntVar()
+CounterElise = tk.IntVar()
+CounterEvelynn = tk.IntVar()
+CounterJhin = tk.IntVar()
+CounterKalista = tk.IntVar()
+CounterPyke = tk.IntVar()
+CounterTwistedFate = tk.IntVar()
+CounterZilean = tk.IntVar()
+CounterJax = tk.IntVar()
+CounterLeeSin = tk.IntVar()
+CounterLux = tk.IntVar()
+CounterWarwick = tk.IntVar()
+CounterWukong = tk.IntVar()
+CounterCassiopeia = tk.IntVar()
+CounterLillia = tk.IntVar()
+CounterRiven = tk.IntVar()
+CounterThresh = tk.IntVar()
+CounterVayne = tk.IntVar()
+CounterAshe = tk.IntVar()
+CounterEzreal = tk.IntVar()
+CounterHecarim = tk.IntVar()
+CounterLulu = tk.IntVar()
+CounterMaokai = tk.IntVar()
+CounterNunu = tk.IntVar()
+CounterVeigar = tk.IntVar()
+CounterFiora = tk.IntVar()
+CounterIrelia = tk.IntVar()
+CounterJanna = tk.IntVar()
+CounterMorgana = tk.IntVar()
+CounterNami = tk.IntVar()
+CounterTalon = tk.IntVar()
+CounterYasuo = tk.IntVar()
+CounterYone = tk.IntVar()
+CounterAnnie = tk.IntVar()
+CounterJinx = tk.IntVar()
+CounterSejuani = tk.IntVar()
+CounterTahmKench = tk.IntVar()
+CounterAphelios = tk.IntVar()
+CounterDiana = tk.IntVar()
+CounterLissandra = tk.IntVar()
+CounterSylas = tk.IntVar()
+CounterAkali = tk.IntVar()
+CounterKennen = tk.IntVar()
+CounterShen = tk.IntVar()
+CounterZed = tk.IntVar()
+CounterAhri = tk.IntVar()
+CounterKindred = tk.IntVar()
+CounterTeemo = tk.IntVar()
+CounterYuumi = tk.IntVar()
+CounterSett = tk.IntVar()
+CounterKayn = tk.IntVar()
+CounterAzir = tk.IntVar()
+CounterGaren = tk.IntVar()
+CounterJarvanIV = tk.IntVar()
+CounterKatarina = tk.IntVar()
+CounterNidalee = tk.IntVar()
+CounterVi = tk.IntVar()
+CounterXinZhao = tk.IntVar()
 
-if VARIABLEPRINTMODE:
-    print("originChampsCounters = [")
+if VARIABLE_PRINT_MODE:
+    print("origin_champs_counters = [")
     for champ in df.Champion:
-        print("counter" + champ, end=", ")
+        print("Counter" + champ, end=", ")
     print("]")
     print()
 
-originChampsCounters = [
-    counterAatrox,
-    counterElise,
-    counterEvelynn,
-    counterJhin,
-    counterKalista,
-    counterPyke,
-    counterTwistedFate,
-    counterZilean,
-    counterJax,
-    counterLeeSin,
-    counterLux,
-    counterWarwick,
-    counterWukong,
-    counterCassiopeia,
-    counterLillia,
-    counterRiven,
-    counterThresh,
-    counterVayne,
-    counterAshe,
-    counterEzreal,
-    counterHecarim,
-    counterLulu,
-    counterMaokai,
-    counterNunu,
-    counterVeigar,
-    counterFiora,
-    counterIrelia,
-    counterJanna,
-    counterMorgana,
-    counterNami,
-    counterTalon,
-    counterYasuo,
-    counterYone,
-    counterAnnie,
-    counterJinx,
-    counterSejuani,
-    counterTahmKench,
-    counterAphelios,
-    counterDiana,
-    counterLissandra,
-    counterSylas,
-    counterAkali,
-    counterKennen,
-    counterShen,
-    counterZed,
-    counterAhri,
-    counterKindred,
-    counterTeemo,
-    counterYuumi,
-    counterSett,
-    counterKayn,
-    counterAzir,
-    counterGaren,
-    counterJarvanIV,
-    counterKatarina,
-    counterNidalee,
-    counterVi,
-    counterXinZhao,
+origin_champs_counters = [
+    CounterAatrox,
+    CounterElise,
+    CounterEvelynn,
+    CounterJhin,
+    CounterKalista,
+    CounterPyke,
+    CounterTwistedFate,
+    CounterZilean,
+    CounterJax,
+    CounterLeeSin,
+    CounterLux,
+    CounterWarwick,
+    CounterWukong,
+    CounterCassiopeia,
+    CounterLillia,
+    CounterRiven,
+    CounterThresh,
+    CounterVayne,
+    CounterAshe,
+    CounterEzreal,
+    CounterHecarim,
+    CounterLulu,
+    CounterMaokai,
+    CounterNunu,
+    CounterVeigar,
+    CounterFiora,
+    CounterIrelia,
+    CounterJanna,
+    CounterMorgana,
+    CounterNami,
+    CounterTalon,
+    CounterYasuo,
+    CounterYone,
+    CounterAnnie,
+    CounterJinx,
+    CounterSejuani,
+    CounterTahmKench,
+    CounterAphelios,
+    CounterDiana,
+    CounterLissandra,
+    CounterSylas,
+    CounterAkali,
+    CounterKennen,
+    CounterShen,
+    CounterZed,
+    CounterAhri,
+    CounterKindred,
+    CounterTeemo,
+    CounterYuumi,
+    CounterSett,
+    CounterKayn,
+    CounterAzir,
+    CounterGaren,
+    CounterJarvanIV,
+    CounterKatarina,
+    CounterNidalee,
+    CounterVi,
+    CounterXinZhao,
 ]
 
 # COUNTERS for champions to buy
 
-if VARIABLEPRINTMODE:
+if VARIABLE_PRINT_MODE:
     for champ in df.Champion:
-        print("counterBuy" + champ + " = tk.IntVar()")
+        print("CounterBuy" + champ + " = tk.IntVar()")
 
 
-counterBuyAatrox = tk.IntVar()
-counterBuyElise = tk.IntVar()
-counterBuyEvelynn = tk.IntVar()
-counterBuyJhin = tk.IntVar()
-counterBuyKalista = tk.IntVar()
-counterBuyPyke = tk.IntVar()
-counterBuyTwistedFate = tk.IntVar()
-counterBuyZilean = tk.IntVar()
-counterBuyJax = tk.IntVar()
-counterBuyLeeSin = tk.IntVar()
-counterBuyLux = tk.IntVar()
-counterBuyWarwick = tk.IntVar()
-counterBuyWukong = tk.IntVar()
-counterBuyCassiopeia = tk.IntVar()
-counterBuyLillia = tk.IntVar()
-counterBuyRiven = tk.IntVar()
-counterBuyThresh = tk.IntVar()
-counterBuyVayne = tk.IntVar()
-counterBuyAshe = tk.IntVar()
-counterBuyEzreal = tk.IntVar()
-counterBuyHecarim = tk.IntVar()
-counterBuyLulu = tk.IntVar()
-counterBuyMaokai = tk.IntVar()
-counterBuyNunu = tk.IntVar()
-counterBuyVeigar = tk.IntVar()
-counterBuyFiora = tk.IntVar()
-counterBuyIrelia = tk.IntVar()
-counterBuyJanna = tk.IntVar()
-counterBuyMorgana = tk.IntVar()
-counterBuyNami = tk.IntVar()
-counterBuyTalon = tk.IntVar()
-counterBuyYasuo = tk.IntVar()
-counterBuyYone = tk.IntVar()
-counterBuyAnnie = tk.IntVar()
-counterBuyJinx = tk.IntVar()
-counterBuySejuani = tk.IntVar()
-counterBuyTahmKench = tk.IntVar()
-counterBuyAphelios = tk.IntVar()
-counterBuyDiana = tk.IntVar()
-counterBuyLissandra = tk.IntVar()
-counterBuySylas = tk.IntVar()
-counterBuyAkali = tk.IntVar()
-counterBuyKennen = tk.IntVar()
-counterBuyShen = tk.IntVar()
-counterBuyZed = tk.IntVar()
-counterBuyAhri = tk.IntVar()
-counterBuyKindred = tk.IntVar()
-counterBuyTeemo = tk.IntVar()
-counterBuyYuumi = tk.IntVar()
-counterBuySett = tk.IntVar()
-counterBuyKayn = tk.IntVar()
-counterBuyAzir = tk.IntVar()
-counterBuyGaren = tk.IntVar()
-counterBuyJarvanIV = tk.IntVar()
-counterBuyKatarina = tk.IntVar()
-counterBuyNidalee = tk.IntVar()
-counterBuyVi = tk.IntVar()
-counterBuyXinZhao = tk.IntVar()
+CounterBuyAatrox = tk.IntVar()
+CounterBuyElise = tk.IntVar()
+CounterBuyEvelynn = tk.IntVar()
+CounterBuyJhin = tk.IntVar()
+CounterBuyKalista = tk.IntVar()
+CounterBuyPyke = tk.IntVar()
+CounterBuyTwistedFate = tk.IntVar()
+CounterBuyZilean = tk.IntVar()
+CounterBuyJax = tk.IntVar()
+CounterBuyLeeSin = tk.IntVar()
+CounterBuyLux = tk.IntVar()
+CounterBuyWarwick = tk.IntVar()
+CounterBuyWukong = tk.IntVar()
+CounterBuyCassiopeia = tk.IntVar()
+CounterBuyLillia = tk.IntVar()
+CounterBuyRiven = tk.IntVar()
+CounterBuyThresh = tk.IntVar()
+CounterBuyVayne = tk.IntVar()
+CounterBuyAshe = tk.IntVar()
+CounterBuyEzreal = tk.IntVar()
+CounterBuyHecarim = tk.IntVar()
+CounterBuyLulu = tk.IntVar()
+CounterBuyMaokai = tk.IntVar()
+CounterBuyNunu = tk.IntVar()
+CounterBuyVeigar = tk.IntVar()
+CounterBuyFiora = tk.IntVar()
+CounterBuyIrelia = tk.IntVar()
+CounterBuyJanna = tk.IntVar()
+CounterBuyMorgana = tk.IntVar()
+CounterBuyNami = tk.IntVar()
+CounterBuyTalon = tk.IntVar()
+CounterBuyYasuo = tk.IntVar()
+CounterBuyYone = tk.IntVar()
+CounterBuyAnnie = tk.IntVar()
+CounterBuyJinx = tk.IntVar()
+CounterBuySejuani = tk.IntVar()
+CounterBuyTahmKench = tk.IntVar()
+CounterBuyAphelios = tk.IntVar()
+CounterBuyDiana = tk.IntVar()
+CounterBuyLissandra = tk.IntVar()
+CounterBuySylas = tk.IntVar()
+CounterBuyAkali = tk.IntVar()
+CounterBuyKennen = tk.IntVar()
+CounterBuyShen = tk.IntVar()
+CounterBuyZed = tk.IntVar()
+CounterBuyAhri = tk.IntVar()
+CounterBuyKindred = tk.IntVar()
+CounterBuyTeemo = tk.IntVar()
+CounterBuyYuumi = tk.IntVar()
+CounterBuySett = tk.IntVar()
+CounterBuyKayn = tk.IntVar()
+CounterBuyAzir = tk.IntVar()
+CounterBuyGaren = tk.IntVar()
+CounterBuyJarvanIV = tk.IntVar()
+CounterBuyKatarina = tk.IntVar()
+CounterBuyNidalee = tk.IntVar()
+CounterBuyVi = tk.IntVar()
+CounterBuyXinZhao = tk.IntVar()
 
 
-if VARIABLEPRINTMODE:
-    print("originChampsCountersToBuy = [")
+if VARIABLE_PRINT_MODE:
+    print("origin_champs_counters_to_buy = [")
     for champ in df.Champion:
-        print("counterBuy" + champ, end=", ")
+        print("CounterBuy" + champ, end=", ")
     print("]")
     print()
 
-originChampsCountersToBuy = [
-    counterBuyAatrox,
-    counterBuyElise,
-    counterBuyEvelynn,
-    counterBuyJhin,
-    counterBuyKalista,
-    counterBuyPyke,
-    counterBuyTwistedFate,
-    counterBuyZilean,
-    counterBuyJax,
-    counterBuyLeeSin,
-    counterBuyLux,
-    counterBuyWarwick,
-    counterBuyWukong,
-    counterBuyCassiopeia,
-    counterBuyLillia,
-    counterBuyRiven,
-    counterBuyThresh,
-    counterBuyVayne,
-    counterBuyAshe,
-    counterBuyEzreal,
-    counterBuyHecarim,
-    counterBuyLulu,
-    counterBuyMaokai,
-    counterBuyNunu,
-    counterBuyVeigar,
-    counterBuyFiora,
-    counterBuyIrelia,
-    counterBuyJanna,
-    counterBuyMorgana,
-    counterBuyNami,
-    counterBuyTalon,
-    counterBuyYasuo,
-    counterBuyYone,
-    counterBuyAnnie,
-    counterBuyJinx,
-    counterBuySejuani,
-    counterBuyTahmKench,
-    counterBuyAphelios,
-    counterBuyDiana,
-    counterBuyLissandra,
-    counterBuySylas,
-    counterBuyAkali,
-    counterBuyKennen,
-    counterBuyShen,
-    counterBuyZed,
-    counterBuyAhri,
-    counterBuyKindred,
-    counterBuyTeemo,
-    counterBuyYuumi,
-    counterBuySett,
-    counterBuyKayn,
-    counterBuyAzir,
-    counterBuyGaren,
-    counterBuyJarvanIV,
-    counterBuyKatarina,
-    counterBuyNidalee,
-    counterBuyVi,
-    counterBuyXinZhao,
+origin_champs_counters_to_buy = [
+    CounterBuyAatrox,
+    CounterBuyElise,
+    CounterBuyEvelynn,
+    CounterBuyJhin,
+    CounterBuyKalista,
+    CounterBuyPyke,
+    CounterBuyTwistedFate,
+    CounterBuyZilean,
+    CounterBuyJax,
+    CounterBuyLeeSin,
+    CounterBuyLux,
+    CounterBuyWarwick,
+    CounterBuyWukong,
+    CounterBuyCassiopeia,
+    CounterBuyLillia,
+    CounterBuyRiven,
+    CounterBuyThresh,
+    CounterBuyVayne,
+    CounterBuyAshe,
+    CounterBuyEzreal,
+    CounterBuyHecarim,
+    CounterBuyLulu,
+    CounterBuyMaokai,
+    CounterBuyNunu,
+    CounterBuyVeigar,
+    CounterBuyFiora,
+    CounterBuyIrelia,
+    CounterBuyJanna,
+    CounterBuyMorgana,
+    CounterBuyNami,
+    CounterBuyTalon,
+    CounterBuyYasuo,
+    CounterBuyYone,
+    CounterBuyAnnie,
+    CounterBuyJinx,
+    CounterBuySejuani,
+    CounterBuyTahmKench,
+    CounterBuyAphelios,
+    CounterBuyDiana,
+    CounterBuyLissandra,
+    CounterBuySylas,
+    CounterBuyAkali,
+    CounterBuyKennen,
+    CounterBuyShen,
+    CounterBuyZed,
+    CounterBuyAhri,
+    CounterBuyKindred,
+    CounterBuyTeemo,
+    CounterBuyYuumi,
+    CounterBuySett,
+    CounterBuyKayn,
+    CounterBuyAzir,
+    CounterBuyGaren,
+    CounterBuyJarvanIV,
+    CounterBuyKatarina,
+    CounterBuyNidalee,
+    CounterBuyVi,
+    CounterBuyXinZhao,
 ]
 
 # counters for origins
 
-if VARIABLEPRINTMODE:
-    for origin in originList:
-        print("counter" + origin + " = tk.IntVar()")
+if VARIABLE_PRINT_MODE:
+    for origin in origin_list:
+        print("Counter" + origin + " = tk.IntVar()")
 
 
-counterCultist = tk.IntVar()
-counterDivine = tk.IntVar()
-counterDusk = tk.IntVar()
-counterElderwood = tk.IntVar()
-counterEnlightened = tk.IntVar()
-counterExile = tk.IntVar()
-counterFortune = tk.IntVar()
-counterMoonlight = tk.IntVar()
-counterNinja = tk.IntVar()
-counterSpirit = tk.IntVar()
-counterTheBoss = tk.IntVar()
-counterTormented = tk.IntVar()
-counterWarlord = tk.IntVar()
+CounterCultist = tk.IntVar()
+CounterDivine = tk.IntVar()
+CounterDusk = tk.IntVar()
+CounterElderwood = tk.IntVar()
+CounterEnlightened = tk.IntVar()
+CounterExile = tk.IntVar()
+CounterFortune = tk.IntVar()
+CounterMoonlight = tk.IntVar()
+CounterNinja = tk.IntVar()
+CounterSpirit = tk.IntVar()
+CounterTheBoss = tk.IntVar()
+CounterTormented = tk.IntVar()
+CounterWarlord = tk.IntVar()
 
 
-if VARIABLEPRINTMODE:
-    print("OriginCounters = [")
-    for origin in originList:
-        print("counter" + origin, end=", ")
+if VARIABLE_PRINT_MODE:
+    print("origin_counters = [")
+    for origin in origin_list:
+        print("Counter" + origin, end=", ")
     print("]")
 
 
-OriginCounters = [
-    counterCultist,
-    counterDivine,
-    counterDusk,
-    counterElderwood,
-    counterEnlightened,
-    counterExile,
-    counterFortune,
-    counterMoonlight,
-    counterNinja,
-    counterSpirit,
-    counterTheBoss,
-    counterTormented,
-    counterWarlord,
+origin_counters = [
+    CounterCultist,
+    CounterDivine,
+    CounterDusk,
+    CounterElderwood,
+    CounterEnlightened,
+    CounterExile,
+    CounterFortune,
+    CounterMoonlight,
+    CounterNinja,
+    CounterSpirit,
+    CounterTheBoss,
+    CounterTormented,
+    CounterWarlord,
 ]
-
 
 # counters for classes
 
 
-if VARIABLEPRINTMODE:
-    for clas in classList:
-        print("counter" + clas + " = tk.IntVar()")
+if VARIABLE_PRINT_MODE:
+    for clas in class_list:
+        print("Counter" + clas + " = tk.IntVar()")
 
 
-counterAdept = tk.IntVar()
-counterAssassin = tk.IntVar()
-counterBrawler = tk.IntVar()
-counterDazzler = tk.IntVar()
-counterDuelist = tk.IntVar()
-counterEmperor = tk.IntVar()
-counterHunter = tk.IntVar()
-counterKeeper = tk.IntVar()
-counterMage = tk.IntVar()
-counterMystic = tk.IntVar()
-counterShade = tk.IntVar()
-counterSharpshooter = tk.IntVar()
-counterVanguard = tk.IntVar()
+CounterAdept = tk.IntVar()
+CounterAssassin = tk.IntVar()
+CounterBrawler = tk.IntVar()
+CounterDazzler = tk.IntVar()
+CounterDuelist = tk.IntVar()
+CounterEmperor = tk.IntVar()
+CounterHunter = tk.IntVar()
+CounterKeeper = tk.IntVar()
+CounterMage = tk.IntVar()
+CounterMystic = tk.IntVar()
+CounterShade = tk.IntVar()
+CounterSharpshooter = tk.IntVar()
+CounterVanguard = tk.IntVar()
 
 
-if VARIABLEPRINTMODE:
-    print("ClassCounters = [")
-    for clas in classList:
-        print("counter" + clas, end=", ")
+if VARIABLE_PRINT_MODE:
+    print("class_counters = [")
+    for clas in class_list:
+        print("Counter" + clas, end=", ")
     print("]")
 
-ClassCounters = [
-    counterAdept,
-    counterAssassin,
-    counterBrawler,
-    counterDazzler,
-    counterDuelist,
-    counterEmperor,
-    counterHunter,
-    counterKeeper,
-    counterMage,
-    counterMystic,
-    counterShade,
-    counterSharpshooter,
-    counterVanguard,
+class_counters = [
+    CounterAdept,
+    CounterAssassin,
+    CounterBrawler,
+    CounterDazzler,
+    CounterDuelist,
+    CounterEmperor,
+    CounterHunter,
+    CounterKeeper,
+    CounterMage,
+    CounterMystic,
+    CounterShade,
+    CounterSharpshooter,
+    CounterVanguard,
 ]
 
 
 # Champion namedtuple things
 
 
-championInfo = []
-logging.debug("Filling championInfo in purpose of creating namedtuple")
+champion_info = []
+logging.debug("Filling champion_info in purpose of creating namedtuple")
 for i, champ in enumerate(df.Champion):
-    championInfo.append(
+    champion_info.append(
         [
             champ,
-            championListForOCR[i],
+            champions_list_for_ocr[i],
             i,
-            originChampsCounters[i],
+            origin_champs_counters[i],
             df.OriginPrimary[i],
             df.OriginSecondary[i],
             df.ClassPrimary[i],
             df.ClassSecondary[i],
         ]
     )
-logging.debug("First filling championInfo has ended.")
+logging.debug("First filling champion_info has ended.")
 
 
-championToBuyInfo = []
-logging.debug("Filling championToBuyInfo in purpose of creating namedtuple")
+champion_to_buy_info = []
+logging.debug("Filling champion_to_buy_info in purpose of creating namedtuple")
 for i, champ in enumerate(df.Champion):
-    championToBuyInfo.append(
+    champion_to_buy_info.append(
         [
             champ,
-            championListForOCR[i],
+            champions_list_for_ocr[i],
             i,
-            originChampsCountersToBuy[i],
+            origin_champs_counters_to_buy[i],
             df.OriginPrimary[i],
             df.OriginSecondary[i],
             df.ClassPrimary[i],
             df.ClassSecondary[i],
         ]
     )
-logging.debug("First filling championToBuyInfo has ended.")
+logging.debug("First filling champion_to_buy_info has ended.")
 
 
-def filling_list_with_counter_for_namedtuple(fieldToCheck, inputList):
+def filling_list_with_counter_for_namedtuple(field_to_check, input_list):
     """
 
 
     Parameters
     ----------
-    fieldToCheck : {4:"originPrim", 5:"originSec", 6:"classPrim",
-                           7:"classSec"}
-    inputList : List with 4,5,6,7 field == fieldToCheck. The default is championInfo.
+    field_to_check : {4:"origin_prim", 5:"origin_sec", 6:"class_prim",
+                           7:"class_sec"}
+    input_list : List with 4,5,6,7 field == field_to_check. The default is champion_info.
 
     Returns
     -------
-    listOfCounters : List of GUI counters
+    list_of_counters : List of GUI counters
 
     """
     logging.debug("Function filling_list_with_counter_for_namedtuple() called")
-    fieldToCheck2String = {
-        4: "originPrim",
-        5: "originSec",
-        6: "classPrim",
-        7: "classSec",
+    field_to_check_2_string = {
+        4: "origin_prim",
+        5: "origin_sec",
+        6: "class_prim",
+        7: "class_sec",
     }
-    fieldToCheck2CheckList = {4: originList, 5: originList, 6: classList, 7: classList}
-    fieldToCheck2CheckListString = {
-        4: "originList",
-        5: "originList",
-        6: "classList",
-        7: "classList",
+    field_to_check_2_check_list = {
+        4: origin_list,
+        5: origin_list,
+        6: class_list,
+        7: class_list,
     }
-    fieldToCheck2CountersList = {
-        4: OriginCounters,
-        5: OriginCounters,
-        6: ClassCounters,
-        7: ClassCounters,
+    field_to_check_2_check_list_string = {
+        4: "origin_list",
+        5: "origin_list",
+        6: "class_list",
+        7: "class_list",
     }
-    listOfCounters = [None] * len(df.Champion)
+    field_to_check_2_counters_list = {
+        4: origin_counters,
+        5: origin_counters,
+        6: class_counters,
+        7: class_counters,
+    }
+    list_of_counters = [None] * len(df.Champion)
     for i, champ in enumerate(df.Champion):
-        if inputList[i][fieldToCheck] == "None":
-            logging.info("Champion name: {}, champion index = {}".format(champ, i))
+        if input_list[i][field_to_check] == "None":
+            logging.info("Champion name: %s, champion index = %d", champ, i)
             logging.info(
-                "Field with index {} == 'NONE' filling None as {}Counter".format(
-                    fieldToCheck, fieldToCheck2String[fieldToCheck]
-                )
+                "Field with index %d == 'NONE' filling None as %sCounter",
+                field_to_check,
+                field_to_check_2_string[field_to_check],
             )
-            listOfCounters[i] = None
+            list_of_counters[i] = None
         else:
-            logging.info("{} IS NOT 'NONE'".format(fieldToCheck2String[fieldToCheck]))
-            for j, classOrOrigin in enumerate(fieldToCheck2CheckList[fieldToCheck]):
-                if inputList[i][fieldToCheck] == classOrOrigin:
+            logging.info("%s IS NOT 'NONE'", field_to_check_2_string[field_to_check])
+            for j, class_or_origin in enumerate(
+                field_to_check_2_check_list[field_to_check]
+            ):
+                if input_list[i][field_to_check] == class_or_origin:
+                    logging.info("Champion name: %s, champion index = %d", champ, i)
                     logging.info(
-                        "Champion name: {}, champion index = {}".format(champ, i)
+                        "Found match in champion %s and %s for : %s",
+                        field_to_check_2_string[field_to_check],
+                        field_to_check_2_check_list_string[field_to_check],
+                        class_or_origin,
                     )
                     logging.info(
-                        "Found match in champion {} and {} for : {}".format(
-                            fieldToCheck2String[fieldToCheck],
-                            fieldToCheck2CheckListString[fieldToCheck],
-                            classOrOrigin,
-                        )
+                        "Filling %s counter: %s",
+                        field_to_check_2_string[field_to_check],
+                        field_to_check_2_counters_list[field_to_check][j],
                     )
-                    logging.info(
-                        "Filling {} counter: {}".format(
-                            fieldToCheck2String[fieldToCheck],
-                            fieldToCheck2CountersList[fieldToCheck][j],
-                        )
-                    )
-                    listOfCounters[i] = fieldToCheck2CountersList[fieldToCheck][j]
+                    list_of_counters[i] = field_to_check_2_counters_list[
+                        field_to_check
+                    ][j]
     logging.debug("Function filling_list_with_counter_for_namedtuple() end")
-    return listOfCounters
+    return list_of_counters
 
 
-def append_counters_to_input_list(inputList):
+def append_counters_to_input_list(input_list):
     """
 
 
     Parameters
     ----------
-    inputList : Appending counters to list with fields like {4:"originPrim",
-    5:"originSec", 6:"classPrim", 7:"classSec"}.
+    input_list : Appending counters to list with fields like {4:"origin_prim",
+    5:"origin_sec", 6:"class_prim", 7:"class_sec"}.
 
     Returns
     -------
@@ -748,131 +750,131 @@ def append_counters_to_input_list(inputList):
 
     logging.debug("Function filling_list_with_counter_for_namedtuple() called")
 
-    countersToAppend = [4, 5, 6, 7]
-    for j in countersToAppend:
-        listOfCountersToAppend = filling_list_with_counter_for_namedtuple(j, inputList)
-        for i, champ in enumerate(inputList):
-            champ.append(listOfCountersToAppend[i])
+    counters_to_append = [4, 5, 6, 7]
+    for j in counters_to_append:
+        list_of_counters_to_append = filling_list_with_counter_for_namedtuple(
+            j, input_list
+        )
+        for i, champ in enumerate(input_list):
+            champ.append(list_of_counters_to_append[i])
 
     logging.debug("Function filling_list_with_counter_for_namedtuple() end")
 
-    return None
 
+append_counters_to_input_list(champion_info)
 
-append_counters_to_input_list(championInfo)
+append_counters_to_input_list(champion_to_buy_info)
 
-append_counters_to_input_list(championToBuyInfo)
-
-championInfoDF = pd.DataFrame.from_records(
-    championInfo,
+champion_info_df = pd.DataFrame.from_records(
+    champion_info,
     columns=[
         "Champion",
-        "nameOcr",
-        "indexOcr",
-        "champCounter",
-        "originPrim",
-        "originSec",
-        "classPrim",
-        "classSec",
-        "originPrimCounter",
-        "originSecCounter",
-        "classPrimCounter",
-        "classSecCounter",
+        "name_ocr",
+        "index_ocr",
+        "ChampCounter",
+        "origin_prim",
+        "origin_sec",
+        "class_prim",
+        "class_sec",
+        "OriginPrimCounter",
+        "OriginSecCounter",
+        "ClassPrimCounter",
+        "ClassSecCounter",
     ],
 )
 
-championToBuyInfoDF = pd.DataFrame.from_records(
-    championInfo,
+champion_to_buy_info_df = pd.DataFrame.from_records(
+    champion_info,
     columns=[
         "Champion",
-        "nameOcr",
-        "indexOcr",
-        "champCounter",
-        "originPrim",
-        "originSec",
-        "classPrim",
-        "classSec",
-        "originPrimCounter",
-        "originSecCounter",
-        "classPrimCounter",
-        "classSecCounter",
+        "name_ocr",
+        "index_ocr",
+        "ChampCounter",
+        "origin_prim",
+        "origin_sec",
+        "class_prim",
+        "class_sec",
+        "OriginPrimCounter",
+        "OriginSecCounter",
+        "ClassPrimCounter",
+        "ClassSecCounter",
     ],
 )
 
 
-if VARIABLEPRINTMODE:
-    for i, champ in enumerate(championInfo):
-        print(champ[0] + " = Champion(*championInfo[%d])" % i)
+if VARIABLE_PRINT_MODE:
+    for i, champ in enumerate(champion_info):
+        print(champ[0] + " = Champion(*champion_info[%d])" % i)
 
-Aatrox = Champion(*championInfo[0])
-Elise = Champion(*championInfo[1])
-Evelynn = Champion(*championInfo[2])
-Jhin = Champion(*championInfo[3])
-Kalista = Champion(*championInfo[4])
-Pyke = Champion(*championInfo[5])
-TwistedFate = Champion(*championInfo[6])
-Zilean = Champion(*championInfo[7])
-Jax = Champion(*championInfo[8])
-LeeSin = Champion(*championInfo[9])
-Lux = Champion(*championInfo[10])
-Warwick = Champion(*championInfo[11])
-Wukong = Champion(*championInfo[12])
-Cassiopeia = Champion(*championInfo[13])
-Lillia = Champion(*championInfo[14])
-Riven = Champion(*championInfo[15])
-Thresh = Champion(*championInfo[16])
-Vayne = Champion(*championInfo[17])
-Ashe = Champion(*championInfo[18])
-Ezreal = Champion(*championInfo[19])
-Hecarim = Champion(*championInfo[20])
-Lulu = Champion(*championInfo[21])
-Maokai = Champion(*championInfo[22])
-Nunu = Champion(*championInfo[23])
-Veigar = Champion(*championInfo[24])
-Fiora = Champion(*championInfo[25])
-Irelia = Champion(*championInfo[26])
-Janna = Champion(*championInfo[27])
-Morgana = Champion(*championInfo[28])
-Nami = Champion(*championInfo[29])
-Talon = Champion(*championInfo[30])
-Yasuo = Champion(*championInfo[31])
-Yone = Champion(*championInfo[32])
-Annie = Champion(*championInfo[33])
-Jinx = Champion(*championInfo[34])
-Sejuani = Champion(*championInfo[35])
-TahmKench = Champion(*championInfo[36])
-Aphelios = Champion(*championInfo[37])
-Diana = Champion(*championInfo[38])
-Lissandra = Champion(*championInfo[39])
-Sylas = Champion(*championInfo[40])
-Akali = Champion(*championInfo[41])
-Kennen = Champion(*championInfo[42])
-Shen = Champion(*championInfo[43])
-Zed = Champion(*championInfo[44])
-Ahri = Champion(*championInfo[45])
-Kindred = Champion(*championInfo[46])
-Teemo = Champion(*championInfo[47])
-Yuumi = Champion(*championInfo[48])
-Sett = Champion(*championInfo[49])
-Kayn = Champion(*championInfo[50])
-Azir = Champion(*championInfo[51])
-Garen = Champion(*championInfo[52])
-JarvanIV = Champion(*championInfo[53])
-Katarina = Champion(*championInfo[54])
-Nidalee = Champion(*championInfo[55])
-Vi = Champion(*championInfo[56])
-XinZhao = Champion(*championInfo[57])
+Aatrox = Champion(*champion_info[0])
+Elise = Champion(*champion_info[1])
+Evelynn = Champion(*champion_info[2])
+Jhin = Champion(*champion_info[3])
+Kalista = Champion(*champion_info[4])
+Pyke = Champion(*champion_info[5])
+TwistedFate = Champion(*champion_info[6])
+Zilean = Champion(*champion_info[7])
+Jax = Champion(*champion_info[8])
+LeeSin = Champion(*champion_info[9])
+Lux = Champion(*champion_info[10])
+Warwick = Champion(*champion_info[11])
+Wukong = Champion(*champion_info[12])
+Cassiopeia = Champion(*champion_info[13])
+Lillia = Champion(*champion_info[14])
+Riven = Champion(*champion_info[15])
+Thresh = Champion(*champion_info[16])
+Vayne = Champion(*champion_info[17])
+Ashe = Champion(*champion_info[18])
+Ezreal = Champion(*champion_info[19])
+Hecarim = Champion(*champion_info[20])
+Lulu = Champion(*champion_info[21])
+Maokai = Champion(*champion_info[22])
+Nunu = Champion(*champion_info[23])
+Veigar = Champion(*champion_info[24])
+Fiora = Champion(*champion_info[25])
+Irelia = Champion(*champion_info[26])
+Janna = Champion(*champion_info[27])
+Morgana = Champion(*champion_info[28])
+Nami = Champion(*champion_info[29])
+Talon = Champion(*champion_info[30])
+Yasuo = Champion(*champion_info[31])
+Yone = Champion(*champion_info[32])
+Annie = Champion(*champion_info[33])
+Jinx = Champion(*champion_info[34])
+Sejuani = Champion(*champion_info[35])
+TahmKench = Champion(*champion_info[36])
+Aphelios = Champion(*champion_info[37])
+Diana = Champion(*champion_info[38])
+Lissandra = Champion(*champion_info[39])
+Sylas = Champion(*champion_info[40])
+Akali = Champion(*champion_info[41])
+Kennen = Champion(*champion_info[42])
+Shen = Champion(*champion_info[43])
+Zed = Champion(*champion_info[44])
+Ahri = Champion(*champion_info[45])
+Kindred = Champion(*champion_info[46])
+Teemo = Champion(*champion_info[47])
+Yuumi = Champion(*champion_info[48])
+Sett = Champion(*champion_info[49])
+Kayn = Champion(*champion_info[50])
+Azir = Champion(*champion_info[51])
+Garen = Champion(*champion_info[52])
+JarvanIV = Champion(*champion_info[53])
+Katarina = Champion(*champion_info[54])
+Nidalee = Champion(*champion_info[55])
+Vi = Champion(*champion_info[56])
+XinZhao = Champion(*champion_info[57])
 
 
-if VARIABLEPRINTMODE:
-    print("championsList = [")
-    for champ in championInfo:
+if VARIABLE_PRINT_MODE:
+    print("champions_list = [")
+    for champ in champion_info:
         print(champ[0], end=", ")
     print("]")
     print()
 
 
-championsList = [
+champions_list = [
     Aatrox,
     Elise,
     Evelynn,
@@ -934,79 +936,79 @@ championsList = [
 ]
 
 
-if VARIABLEPRINTMODE:
-    for i, champ in enumerate(championToBuyInfo):
-        print(champ[0] + "ToBuy" + " = Champion(*championToBuyInfo[%d])" % i)
+if VARIABLE_PRINT_MODE:
+    for i, champ in enumerate(champion_to_buy_info):
+        print(champ[0] + "ToBuy" + " = Champion(*champion_to_buy_info[{}])".format(i))
 
-AatroxToBuy = Champion(*championToBuyInfo[0])
-EliseToBuy = Champion(*championToBuyInfo[1])
-EvelynnToBuy = Champion(*championToBuyInfo[2])
-JhinToBuy = Champion(*championToBuyInfo[3])
-KalistaToBuy = Champion(*championToBuyInfo[4])
-PykeToBuy = Champion(*championToBuyInfo[5])
-TwistedFateToBuy = Champion(*championToBuyInfo[6])
-ZileanToBuy = Champion(*championToBuyInfo[7])
-JaxToBuy = Champion(*championToBuyInfo[8])
-LeeSinToBuy = Champion(*championToBuyInfo[9])
-LuxToBuy = Champion(*championToBuyInfo[10])
-WarwickToBuy = Champion(*championToBuyInfo[11])
-WukongToBuy = Champion(*championToBuyInfo[12])
-CassiopeiaToBuy = Champion(*championToBuyInfo[13])
-LilliaToBuy = Champion(*championToBuyInfo[14])
-RivenToBuy = Champion(*championToBuyInfo[15])
-ThreshToBuy = Champion(*championToBuyInfo[16])
-VayneToBuy = Champion(*championToBuyInfo[17])
-AsheToBuy = Champion(*championToBuyInfo[18])
-EzrealToBuy = Champion(*championToBuyInfo[19])
-HecarimToBuy = Champion(*championToBuyInfo[20])
-LuluToBuy = Champion(*championToBuyInfo[21])
-MaokaiToBuy = Champion(*championToBuyInfo[22])
-NunuToBuy = Champion(*championToBuyInfo[23])
-VeigarToBuy = Champion(*championToBuyInfo[24])
-FioraToBuy = Champion(*championToBuyInfo[25])
-IreliaToBuy = Champion(*championToBuyInfo[26])
-JannaToBuy = Champion(*championToBuyInfo[27])
-MorganaToBuy = Champion(*championToBuyInfo[28])
-NamiToBuy = Champion(*championToBuyInfo[29])
-TalonToBuy = Champion(*championToBuyInfo[30])
-YasuoToBuy = Champion(*championToBuyInfo[31])
-YoneToBuy = Champion(*championToBuyInfo[32])
-AnnieToBuy = Champion(*championToBuyInfo[33])
-JinxToBuy = Champion(*championToBuyInfo[34])
-SejuaniToBuy = Champion(*championToBuyInfo[35])
-TahmKenchToBuy = Champion(*championToBuyInfo[36])
-ApheliosToBuy = Champion(*championToBuyInfo[37])
-DianaToBuy = Champion(*championToBuyInfo[38])
-LissandraToBuy = Champion(*championToBuyInfo[39])
-SylasToBuy = Champion(*championToBuyInfo[40])
-AkaliToBuy = Champion(*championToBuyInfo[41])
-KennenToBuy = Champion(*championToBuyInfo[42])
-ShenToBuy = Champion(*championToBuyInfo[43])
-ZedToBuy = Champion(*championToBuyInfo[44])
-AhriToBuy = Champion(*championToBuyInfo[45])
-KindredToBuy = Champion(*championToBuyInfo[46])
-TeemoToBuy = Champion(*championToBuyInfo[47])
-YuumiToBuy = Champion(*championToBuyInfo[48])
-SettToBuy = Champion(*championToBuyInfo[49])
-KaynToBuy = Champion(*championToBuyInfo[50])
-AzirToBuy = Champion(*championToBuyInfo[51])
-GarenToBuy = Champion(*championToBuyInfo[52])
-JarvanIVToBuy = Champion(*championToBuyInfo[53])
-KatarinaToBuy = Champion(*championToBuyInfo[54])
-NidaleeToBuy = Champion(*championToBuyInfo[55])
-ViToBuy = Champion(*championToBuyInfo[56])
-XinZhaoToBuy = Champion(*championToBuyInfo[57])
+AatroxToBuy = Champion(*champion_to_buy_info[0])
+EliseToBuy = Champion(*champion_to_buy_info[1])
+EvelynnToBuy = Champion(*champion_to_buy_info[2])
+JhinToBuy = Champion(*champion_to_buy_info[3])
+KalistaToBuy = Champion(*champion_to_buy_info[4])
+PykeToBuy = Champion(*champion_to_buy_info[5])
+TwistedFateToBuy = Champion(*champion_to_buy_info[6])
+ZileanToBuy = Champion(*champion_to_buy_info[7])
+JaxToBuy = Champion(*champion_to_buy_info[8])
+LeeSinToBuy = Champion(*champion_to_buy_info[9])
+LuxToBuy = Champion(*champion_to_buy_info[10])
+WarwickToBuy = Champion(*champion_to_buy_info[11])
+WukongToBuy = Champion(*champion_to_buy_info[12])
+CassiopeiaToBuy = Champion(*champion_to_buy_info[13])
+LilliaToBuy = Champion(*champion_to_buy_info[14])
+RivenToBuy = Champion(*champion_to_buy_info[15])
+ThreshToBuy = Champion(*champion_to_buy_info[16])
+VayneToBuy = Champion(*champion_to_buy_info[17])
+AsheToBuy = Champion(*champion_to_buy_info[18])
+EzrealToBuy = Champion(*champion_to_buy_info[19])
+HecarimToBuy = Champion(*champion_to_buy_info[20])
+LuluToBuy = Champion(*champion_to_buy_info[21])
+MaokaiToBuy = Champion(*champion_to_buy_info[22])
+NunuToBuy = Champion(*champion_to_buy_info[23])
+VeigarToBuy = Champion(*champion_to_buy_info[24])
+FioraToBuy = Champion(*champion_to_buy_info[25])
+IreliaToBuy = Champion(*champion_to_buy_info[26])
+JannaToBuy = Champion(*champion_to_buy_info[27])
+MorganaToBuy = Champion(*champion_to_buy_info[28])
+NamiToBuy = Champion(*champion_to_buy_info[29])
+TalonToBuy = Champion(*champion_to_buy_info[30])
+YasuoToBuy = Champion(*champion_to_buy_info[31])
+YoneToBuy = Champion(*champion_to_buy_info[32])
+AnnieToBuy = Champion(*champion_to_buy_info[33])
+JinxToBuy = Champion(*champion_to_buy_info[34])
+SejuaniToBuy = Champion(*champion_to_buy_info[35])
+TahmKenchToBuy = Champion(*champion_to_buy_info[36])
+ApheliosToBuy = Champion(*champion_to_buy_info[37])
+DianaToBuy = Champion(*champion_to_buy_info[38])
+LissandraToBuy = Champion(*champion_to_buy_info[39])
+SylasToBuy = Champion(*champion_to_buy_info[40])
+AkaliToBuy = Champion(*champion_to_buy_info[41])
+KennenToBuy = Champion(*champion_to_buy_info[42])
+ShenToBuy = Champion(*champion_to_buy_info[43])
+ZedToBuy = Champion(*champion_to_buy_info[44])
+AhriToBuy = Champion(*champion_to_buy_info[45])
+KindredToBuy = Champion(*champion_to_buy_info[46])
+TeemoToBuy = Champion(*champion_to_buy_info[47])
+YuumiToBuy = Champion(*champion_to_buy_info[48])
+SettToBuy = Champion(*champion_to_buy_info[49])
+KaynToBuy = Champion(*champion_to_buy_info[50])
+AzirToBuy = Champion(*champion_to_buy_info[51])
+GarenToBuy = Champion(*champion_to_buy_info[52])
+JarvanIVToBuy = Champion(*champion_to_buy_info[53])
+KatarinaToBuy = Champion(*champion_to_buy_info[54])
+NidaleeToBuy = Champion(*champion_to_buy_info[55])
+ViToBuy = Champion(*champion_to_buy_info[56])
+XinZhaoToBuy = Champion(*champion_to_buy_info[57])
 
 
-if VARIABLEPRINTMODE:
-    print("championsToBuyList = [")
-    for champ in championToBuyInfo:
+if VARIABLE_PRINT_MODE:
+    print("champions_to_buy_list = [")
+    for champ in champion_to_buy_info:
         print(champ[0] + "ToBuy", end=", ")
     print("]")
     print()
 
 
-championsToBuyList = [
+champions_to_buy_list = [
     AatroxToBuy,
     EliseToBuy,
     EvelynnToBuy,
@@ -1071,30 +1073,30 @@ championsToBuyList = [
 # FUNCTIONS
 
 
-def add(intVariable):
+def add(counter):
     """Adding one to counter"""
     logging.debug("Function add() called")
 
-    logging.info("input = {}".format(intVariable.get()))
-    intVariable.set(intVariable.get() + 1)
+    logging.info("input = %d", counter.get())
+    counter.set(counter.get() + 1)
 
-    logging.info("after call = {}".format(intVariable.get()))
+    logging.info("after call = %d", counter.get())
     logging.debug("Function add() end")
 
 
-def sub(intVariable):
+def sub(counter):
     """Minus one to counter"""
     logging.debug("Function sub() called")
 
-    logging.info("input = {}".format(intVariable.get()))
-    if intVariable.get() > 0:
-        intVariable.set(intVariable.get() - 1)
+    logging.info("input = %d", counter.get())
+    if counter.get() > 0:
+        counter.set(counter.get() - 1)
 
-    logging.info("after call = {}".format(intVariable.get()))
+    logging.info("after call = %d", counter.get())
     logging.debug("Function sub() end")
 
 
-def sort_detected_champions_to_buy_by_position(OCRResultsSorted):
+def sort_detected_champions_to_buy_by_position(ocr_results_sorted):
     """
 
     Sorting input in order from left to right by placement on the screen
@@ -1103,56 +1105,56 @@ def sort_detected_champions_to_buy_by_position(OCRResultsSorted):
 
     Parameters
     ----------
-    OCRResultsSorted : Typical == ocr_on_cropped_img(make_cropped_ss())
+    ocr_results_sorted : Typical == ocr_on_cropped_img(make_cropped_ss())
 
     Returns
     -------
-    sortedChampionsToBuy : List of champions that were found in input.
+    sorted_champions_to_buy : List of champions that were found in input.
 
     """
 
     logging.debug("Function sort_detected_champions_to_buy_by_position() called")
     # sort from lowest width (left to right side)
-    OCRResultsSorted = sorted(OCRResultsSorted, key=lambda x: x[0])
-    sortedChampionsToBuy = []
-    for text in OCRResultsSorted:
-        for champ in championListForOCR:
+    ocr_results_sorted = sorted(ocr_results_sorted, key=lambda x: x[0])
+    sorted_champions_to_buy = []
+    for text in ocr_results_sorted:
+        for champ in champions_list_for_ocr:
             if champ in text:  # filters champion names
-                sortedChampionsToBuy.append(champ)
+                sorted_champions_to_buy.append(champ)
                 logging.info(
                     "from for loop in sort_detected_champions_to_buy_by_position()"
                 )
-                logging.info("found {}".format(champ))
+                logging.info("found %s", champ)
     logging.info("return in sort_detected_champions_to_buy_by_position()")
-    logging.info("List of sorted champions to buy: {}".format(sortedChampionsToBuy))
+    logging.info("List of sorted champions to buy: %s", sorted_champions_to_buy)
 
     logging.debug("Function sort_detected_champions_to_buy_by_position() end")
-    return sortedChampionsToBuy
+    return sorted_champions_to_buy
 
 
 def make_cropped_ss(
-    loadImage=LOADIMAGE,
+    load_image=LOAD_IMAGE,
     window=wincap,
-    croppingX=450,
-    croppingY=970,
-    croppingWidth=1000,
-    croppingHeight=30,
+    cropping_x=450,
+    cropping_y=970,
+    cropping_width=1000,
+    cropping_height=30,
 ):
     """
 
 
     Parameters
     ----------
-    loadImage : If want to open without game then change to 1.
+    LOAD_IMAGE : If want to open without game then change to 1.
         The default is 0.
     window : Window to be captured, set to None if want to open without game.
         The default is wincap.
 
         Defaults to cropp screenshot from first to fifth(1-5) champion card name.
-    croppingX :  The default is 450.
-    croppingY :  The default is 970.
-    croppingWidth :  The default is 1000.
-    croppingHeight :  The default is 30.
+    cropping_x :  The default is 450.
+    cropping_y :  The default is 970.
+    cropping_width :  The default is 1000.
+    cropping_height :  The default is 30.
 
     Returns
     -------
@@ -1161,48 +1163,49 @@ def make_cropped_ss(
     """
     logging.debug("Function make_cropped_ss() called")
 
-    if loadImage:
+    if load_image:
         screenshot = cv.imread("ss.jpg", cv.IMREAD_UNCHANGED)
     else:
         screenshot = window.get_screenshot()
     crop_img = screenshot[
-        croppingY : croppingY + croppingHeight, croppingX : croppingX + croppingWidth
+        cropping_y : cropping_y + cropping_height,
+        cropping_x : cropping_x + cropping_width,
     ]
 
-    if IMAGESDEBUGMODE:
+    if IMAGE_DEBUG_MODE:
         cv.imshow("make_cropped_ss()", crop_img)
 
     logging.debug("Function make_cropped_ss() end")
     return crop_img, screenshot
 
 
-def ocr_on_cropped_img(croppedSSWithChampionCardNames):
+def ocr_on_cropped_img(cropped_ss_with_champion_card_names):
     """
 
 
     Parameters
     ----------
-    croppedSSWithChampionCardNames : for example if want to OCR card names then
-    input there make_cropped_ss(loadImage=0, window=wincap, croppingX=450,
-                                croppingY=970, croppingWidth=1000, croppingHeight=30)
+    cropped_ss_with_champion_card_names : for example if want to OCR card names then
+    input there make_cropped_ss(LOAD_IMAGE=0, window=wincap, cropping_x=450,
+                                cropping_y=970, cropping_width=1000, cropping_height=30)
 
     Returns
     -------
-    OCRResult :
+    ocr_result :
 
     """
     logging.debug("Function ocr_on_cropped_img() called")
 
-    OCRResult = reader.readtext(croppedSSWithChampionCardNames)
-    logging.info("OCR results(return): {}".format(OCRResult))
+    ocr_result = reader.readtext(cropped_ss_with_champion_card_names)
+    logging.info("OCR results(return): %s", ocr_result)
 
     logging.debug("Function ocr_on_cropped_img() end")
-    return OCRResult
+    return ocr_result
 
 
 def update_champions_to_buy_from_ocr_detection():
     """
-    Add 1 to every champion to buy counter detected in OCRResults.
+    Add 1 to every champion to buy counter detected in ocr_result.
     champion to buy counters GLOBAL STATE CHANGE !!!!!!!!!!!!!!!!!!!!
 
     Returns
@@ -1212,71 +1215,80 @@ def update_champions_to_buy_from_ocr_detection():
     """
     logging.debug("Function update_champions_to_buy_from_ocr_detection() called")
 
-    listOfChampsToBuyThisTurn = sort_detected_champions_to_buy_by_position(
+    list_of_champs_to_buy_this_turn = sort_detected_champions_to_buy_by_position(
         ocr_on_cropped_img(make_cropped_ss()[0])
     )
-    for champToBuy in listOfChampsToBuyThisTurn:
-        for i, champ in enumerate(championListForOCR):
-            if champToBuy == champ:
+    for champ_to_buy in list_of_champs_to_buy_this_turn:
+        for i, champ in enumerate(champions_list_for_ocr):
+            if champ_to_buy == champ:
                 logging.info(
                     "IF inside for loop in update_champions_to_buy_from_ocr_detection()"
                 )
-                logging.info(
-                    "Index in championListForOCR that is detected: {}".format(i)
-                )
-                logging.info("Champ name in this index: {}".format(champ))
-                add(originChampsCountersToBuy[i])
+                logging.info("Index in champions_list_for_ocr that is detected: %d", i)
+                logging.info("Champ name in this index: %s", champ)
+                add(origin_champs_counters_to_buy[i])
                 break
 
     logging.debug("Function update_champions_to_buy_from_ocr_detection() end")
-    return listOfChampsToBuyThisTurn
+    return list_of_champs_to_buy_this_turn
 
 
-def calculate_card_position_on_screen(cardIndex):
+def calculate_card_position_on_screen(card_index):
     """
 
 
     Parameters
     ----------
-    cardIndex : simply from 0-4(first to fifth card)
+    card_index : simply from 0-4(first to fifth card)
 
     Returns
     -------
-    xCard : x Position on the screen of the top left corner for card
+    x_card : x Position on the screen of the top left corner for card
 
     """
     logging.debug("Function calculate_card_position_on_screen() called")
 
-    xCard = (
-        xFirstChampionCard
-        + PADDINGBETWEENCHAMPIONCARDS * cardIndex
-        + wChampionCard * cardIndex
+    x_card = (
+        X_FIRST_CHAMPION_CARD
+        + PADDING_BETWEEN_CHAMPION_CARDS * card_index
+        + W_CHAMPION_CARD * card_index
     )
-    logging.info("X coord of card with index= {} is: {}".format(cardIndex, xCard))
+    logging.info("X coord of card with index= %d is: %s", card_index, x_card)
     logging.debug("Function calculate_card_position_on_screen() end")
-    return xCard
+    return x_card
 
 
 def build_list_of_champion_cards_rectangles():
+    """
+    This function building list of card rectangles position on screen.
+
+    Returns
+    -------
+    cards_rectangles : list of card rectangles position on screen
+
+    """
     logging.debug("Function build_list_of_champion_cards_rectangles() called")
 
-    cardsRectangles = [0] * CARDSTOBUYAMOUNT
-    for i in range(0, CARDSTOBUYAMOUNT):
-        topLeft = (calculate_card_position_on_screen(i), yFirstChampionCard)
-        bottomRight = (
-            calculate_card_position_on_screen(i) + wChampionCard,
-            yFirstChampionCard + hChampionCard,
+    cards_rectangles = [0] * CARDS_TO_BUY_AMOUNT
+    for i in range(0, CARDS_TO_BUY_AMOUNT):
+        top_left = (calculate_card_position_on_screen(i), Y_FIRST_CHAMPION_CARD)
+        bottom_right = (
+            calculate_card_position_on_screen(i) + W_CHAMPION_CARD,
+            Y_FIRST_CHAMPION_CARD + H_CHAMPION_CARD,
         )
-        center = (topLeft[0] + wChampionCard // 2, topLeft[1] + hChampionCard // 2)
+        center = (
+            top_left[0] + W_CHAMPION_CARD // 2,
+            top_left[1] + H_CHAMPION_CARD // 2,
+        )
         # print("Type" ,type(center))
-        cardsRectangles[i] = [topLeft, bottomRight, center]
+        cards_rectangles[i] = [top_left, bottom_right, center]
 
     logging.debug("Function build_list_of_champion_cards_rectangles() end")
-    return cardsRectangles
+    return cards_rectangles
 
 
 # https://stackoverflow.com/questions/6618515/sorting-list-based-on-values-from-another-list
-def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
+def draw_on_champion_to_buy_cards(colors=rgb_colours_list, mode="points"):
     """
     This function is making OCR detection on champion cards, and then draws by
     input mode like default points on screenshot.
@@ -1284,7 +1296,7 @@ def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
     Parameters
     ----------
     colors : ["worst", "medium3", "medium2", "medium1", "best"]. list of RGB tuples.
-    The default is listOfRGBColours.
+    The default is rgb_colours_list.
     mode :  The default is "points". Also there are cross and rectangle.
 
     Returns
@@ -1294,111 +1306,119 @@ def draw_on_champion_to_buy_cards(colors=listOfRGBColours, mode="points"):
     """
     logging.debug("Function draw_on_champion_to_buy_cards() called")
 
-    championsToBuyInOrderAsInScreen = update_champions_to_buy_from_ocr_detection()
-    championsToBuyPointsAndPosition = show_nonzero_counters_with_points()
+    champions_to_buy_in_order_as_in_screen = (
+        update_champions_to_buy_from_ocr_detection()
+    )
+    champions_to_buy_points_and_position = show_nonzero_counters_with_points()
 
-    championsPositionToBuyOrderedByScreen = [
-        championListForOCR.index(i) for i in championsToBuyInOrderAsInScreen
+    champions_position_to_buy_ordered_by_screen = [
+        champions_list_for_ocr.index(i) for i in champions_to_buy_in_order_as_in_screen
     ]
     logging.info(
-        "championsPositionToBuyOrderedByScreen: {}".format(
-            championsPositionToBuyOrderedByScreen
-        )
+        "champions_position_to_buy_ordered_by_screen: %s",
+        champions_position_to_buy_ordered_by_screen,
     )
 
-    championsToBuyPoints = list(zip(*championsToBuyPointsAndPosition))[0]
-    championsToBuyPosition = list(zip(*championsToBuyPointsAndPosition))[1]
+    champions_to_buy_points = list(zip(*champions_to_buy_points_and_position))[0]
+    champions_to_buy_position = list(zip(*champions_to_buy_points_and_position))[1]
     logging.info(
-        "Points (in alphabetical by champ name order?): {}".format(championsToBuyPoints)
+        "Points (in alphabetical by champ name order?): %s", champions_to_buy_points
     )
     logging.info(
-        "Champions position (in alphabetical by champ name order?): {}".format(
-            championsToBuyPosition
-        )
+        "Champions position (in alphabetical by champ name order?): %s",
+        champions_to_buy_position,
     )
-    sortedChampionsToBuyPointsAndPosition = sorted(championsToBuyPointsAndPosition)
+    sorted_champions_to_buy_points_and_position = sorted(
+        champions_to_buy_points_and_position
+    )
     logging.info(
-        "Points and Champions position (in alphabetical by champ name order?): {}".format(
-            sortedChampionsToBuyPointsAndPosition
-        )
+        "Points and Champions position (in alphabetical by champ name order?): %s",
+        sorted_champions_to_buy_points_and_position,
     )
-    sortedChampionsToBuyPosition = list(zip(*sortedChampionsToBuyPointsAndPosition))[1]
+    sorted_champions_to_buy_position = list(
+        zip(*sorted_champions_to_buy_points_and_position)
+    )[1]
     logging.info(
-        "sortedChampionsToBuyPosition in alphabetical order?: {}".format(
-            sortedChampionsToBuyPosition
-        )
+        "sorted_champions_to_buy_position in alphabetical order?: %s",
+        sorted_champions_to_buy_position,
     )
-    valuesByPointsIndexesOrderByPositionOnScreen = [
-        sortedChampionsToBuyPosition.index(i)
-        for i in championsPositionToBuyOrderedByScreen
+    values_by_points_indexes_order_by_position_on_screen = [
+        sorted_champions_to_buy_position.index(i)
+        for i in champions_position_to_buy_ordered_by_screen
     ]
     logging.info(
-        "valuesByPointsIndexesOrderByPositionOnScreen 0 worst 4 best card: {}".format(
-            valuesByPointsIndexesOrderByPositionOnScreen
-        )
+        "values_by_points_indexes_order_by_position_on_screen 0 worst 4 best card: %s",
+        values_by_points_indexes_order_by_position_on_screen,
     )
-    cardsRectangles = build_list_of_champion_cards_rectangles()
+    cards_rectangles = build_list_of_champion_cards_rectangles()
     screenshot = wincap.get_screenshot()
     # screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
 
     # at the end
-    # valuesByPointsIndexesOrderByPositionOnScreen contains champions
+    # values_by_points_indexes_order_by_position_on_screen contains champions
     # sorted by points from lowest(0) to highest(4)
     # and indexes represents champion placement on the screen
 
     if mode == "rectangle":
-        for i in range(0, CARDSTOBUYAMOUNT):
+        for i in range(0, CARDS_TO_BUY_AMOUNT):
             cv.rectangle(
                 screenshot,
-                cardsRectangles[i][0],
-                cardsRectangles[i][1],
-                color=colors[valuesByPointsIndexesOrderByPositionOnScreen[i]],
-                lineType=line_type,
+                cards_rectangles[i][0],
+                cards_rectangles[i][1],
+                color=colors[values_by_points_indexes_order_by_position_on_screen[i]],
+                lineType=LINE_TYPE,
                 thickness=2,
             )
         cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
     elif mode == "cross":
-        for i in range(0, CARDSTOBUYAMOUNT):
+        for i in range(0, CARDS_TO_BUY_AMOUNT):
             # Draw the center point
             cv.drawMarker(
                 screenshot,
-                cardsRectangles[i][2],
-                color=colors[valuesByPointsIndexesOrderByPositionOnScreen[i]],
-                markerType=marker_type,
+                cards_rectangles[i][2],
+                color=colors[values_by_points_indexes_order_by_position_on_screen[i]],
+                markerType=MARKER_TYPE,
                 markerSize=40,
                 thickness=2,
             )
         cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
     elif mode == "points":
-        for i in range(0, CARDSTOBUYAMOUNT):
+        for i in range(0, CARDS_TO_BUY_AMOUNT):
             # Draw the center point
             cv.putText(
                 screenshot,
                 "{:.3f}".format(
-                    sortedChampionsToBuyPointsAndPosition[
-                        valuesByPointsIndexesOrderByPositionOnScreen[i]
+                    sorted_champions_to_buy_points_and_position[
+                        values_by_points_indexes_order_by_position_on_screen[i]
                     ][0]
                 ),
-                cardsRectangles[i][2],
+                cards_rectangles[i][2],
                 cv.FONT_HERSHEY_SIMPLEX,
                 0.6,
-                colors[valuesByPointsIndexesOrderByPositionOnScreen[i]],
+                colors[values_by_points_indexes_order_by_position_on_screen[i]],
                 2,
             )
         cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
 
     logging.debug("Function draw_on_champion_to_buy_cards() end")
-    return None
 
 
 # need to fix double calculate points inside draw_on_champion_to_buy_cards
 def draw_rectangles_show_points_show_buttons_reset_counters():
+    """
+    Draws rectangles then show points with buttons and reset counters.
+
+    Returns
+    -------
+    None.
+
+    """
     logging.debug(
         "Function draw_rectangles_show_points_show_buttons_reset_counters() called"
     )
 
     update_classes_and_origins()
-    reset_counters_in_list(originChampsCountersToBuy)
+    reset_counters_in_list(origin_champs_counters_to_buy)
     draw_on_champion_to_buy_cards()
 
     logging.debug(
@@ -1407,263 +1427,273 @@ def draw_rectangles_show_points_show_buttons_reset_counters():
 
 
 def show_champions_from_origin(
-    originPositionInOriginList,
-    OriginChampsFromDF,
-    CHAMPIONSLIST,
-    shiftBetweenUpsideDownside,
+    origin_position_in_origin_list,
+    origin_champs_from_df,
+    champs_list,
+    shift_between_upside_downside,
 ):
     """Adding buttons and text labels for single origin.
-    In: originPositionInOriginList - its used to pickup origin from originlist,
+    In: origin_position_in_origin_list - its used to pickup origin from origin_list,
     and place text on the window.
-    OriginChampsFromDF  - list of champions in origin.
-    CHAMPIONSLIST - list of champions namedtuples.
-    shiftBetweenUpsideDownside - placing on the window, UPSIDE is upper location,
+    origin_champs_from_df  - list of champions in origin.
+    champs_list - list of champions namedtuples.
+    shift_between_upside_downside - placing on the window, UPSIDE is upper location,
     DOWNSIDE is lower location.
 
     """
     logging.debug("Function show_champions_from_origin() called")
 
-    tk.Label(MainWindow, text=originList[originPositionInOriginList]).grid(
-        row=1 + shiftBetweenUpsideDownside,
-        column=OriginLabelPositionColumn
-        * ShiftBetweenOrigins
-        * originPositionInOriginList,
+    tk.Label(MainWindow, text=origin_list[origin_position_in_origin_list]).grid(
+        row=1 + shift_between_upside_downside,
+        column=ORIGIN_LABEL_POSITION_COLUMN
+        * SHIFT_BETWEEN_ORIGINS
+        * origin_position_in_origin_list,
     )
 
-    for i, champName in enumerate(OriginChampsFromDF):
-        tk.Label(MainWindow, text=champName).grid(
-            row=2 + i + shiftBetweenUpsideDownside,
-            column=OriginLabelPositionColumn
-            * ShiftBetweenOrigins
-            * originPositionInOriginList,
+    for i, champ_name in enumerate(origin_champs_from_df):
+        tk.Label(MainWindow, text=champ_name).grid(
+            row=2 + i + shift_between_upside_downside,
+            column=ORIGIN_LABEL_POSITION_COLUMN
+            * SHIFT_BETWEEN_ORIGINS
+            * origin_position_in_origin_list,
         )
-        for champ in CHAMPIONSLIST:
-            if champ.name == champName:
-                tk.Entry(MainWindow, textvariable=champ.champCounter, width=2).grid(
-                    row=2 + i + shiftBetweenUpsideDownside,
-                    column=ShiftBetweenOrigins * originPositionInOriginList + 1,
+        for champ in champs_list:
+            if champ.name == champ_name:
+                tk.Entry(MainWindow, textvariable=champ.ChampCounter, width=2).grid(
+                    row=2 + i + shift_between_upside_downside,
+                    column=SHIFT_BETWEEN_ORIGINS * origin_position_in_origin_list + 1,
                 )
                 tk.Button(
                     MainWindow,
                     text="+",
-                    command=lambda counter=champ.champCounter: add(counter),
+                    command=lambda counter=champ.ChampCounter: add(counter),
                 ).grid(
-                    row=2 + i + shiftBetweenUpsideDownside,
-                    column=ShiftBetweenOrigins * originPositionInOriginList + 2,
+                    row=2 + i + shift_between_upside_downside,
+                    column=SHIFT_BETWEEN_ORIGINS * origin_position_in_origin_list + 2,
                 )
                 tk.Button(
                     MainWindow,
                     text="-",
-                    command=lambda counter=champ.champCounter: sub(counter),
+                    command=lambda counter=champ.ChampCounter: sub(counter),
                 ).grid(
-                    row=2 + i + shiftBetweenUpsideDownside,
-                    column=ShiftBetweenOrigins * originPositionInOriginList + 3,
+                    row=2 + i + shift_between_upside_downside,
+                    column=SHIFT_BETWEEN_ORIGINS * origin_position_in_origin_list + 3,
                 )
                 break
     logging.debug("Function show_champions_from_origin() end")
-    return None
 
 
 def show_classes_or_origins(
-    originPositionInOriginList,
-    originOrClassList,
-    originOrClassCounterList,
-    shiftBetweenUpsideDownside,
-    originOrClassString,
+    origin_position_in_origin_list,
+    origin_or_class_list,
+    origin_or_class_counter_list,
+    shift_between_upside_downside,
+    origin_or_class_string,
 ):
     """Adding buttons and text labels for single origin.
-    In: originPositionInOriginList - its used to pickup origin from originlist,
+    In: origin_position_in_origin_list - its used to pickup origin from origin_list,
     and place text on the window.
-    originOrClassList  - list of origin or class names.
-    originOrClassCounterList - list counters for origin or class.
-    shiftBetweenUpsideDownside - placing on the window, UPSIDE is upper location,
+    origin_or_class_list  - list of origin or class names.
+    origin_or_class_counter_list - list counters for origin or class.
+    shift_between_upside_downside - placing on the window, UPSIDE is upper location,
     DOWNSIDE is lower location.
-    originOrClassString - Title above counters
+    origin_or_class_string - Title above counters
     """
     logging.debug("Function show_classes_or_origins() called")
 
-    tk.Label(MainWindow, text=originOrClassString).grid(
-        row=1 + shiftBetweenUpsideDownside,
-        column=OriginLabelPositionColumn
-        * ShiftBetweenOrigins
-        * originPositionInOriginList,
+    tk.Label(MainWindow, text=origin_or_class_string).grid(
+        row=1 + shift_between_upside_downside,
+        column=ORIGIN_LABEL_POSITION_COLUMN
+        * SHIFT_BETWEEN_ORIGINS
+        * origin_position_in_origin_list,
     )
 
-    for i, champ in enumerate(originOrClassList):
+    for i, champ in enumerate(origin_or_class_list):
         tk.Label(MainWindow, text=champ).grid(
-            row=2 + i + shiftBetweenUpsideDownside,
-            column=OriginLabelPositionColumn
-            * ShiftBetweenOrigins
-            * originPositionInOriginList,
+            row=2 + i + shift_between_upside_downside,
+            column=ORIGIN_LABEL_POSITION_COLUMN
+            * SHIFT_BETWEEN_ORIGINS
+            * origin_position_in_origin_list,
         )
-        tk.Entry(MainWindow, textvariable=originOrClassCounterList[i], width=2).grid(
-            row=2 + i + shiftBetweenUpsideDownside,
-            column=ShiftBetweenOrigins * originPositionInOriginList + 1,
+        tk.Entry(
+            MainWindow, textvariable=origin_or_class_counter_list[i], width=2
+        ).grid(
+            row=2 + i + shift_between_upside_downside,
+            column=SHIFT_BETWEEN_ORIGINS * origin_position_in_origin_list + 1,
         )
         tk.Button(
             MainWindow,
             text="+",
-            command=lambda counter=originOrClassCounterList[i]: add(counter),
+            command=lambda counter=origin_or_class_counter_list[i]: add(counter),
         ).grid(
-            row=2 + i + shiftBetweenUpsideDownside,
-            column=ShiftBetweenOrigins * originPositionInOriginList + 2,
+            row=2 + i + shift_between_upside_downside,
+            column=SHIFT_BETWEEN_ORIGINS * origin_position_in_origin_list + 2,
         )
         tk.Button(
             MainWindow,
             text="-",
-            command=lambda counter=originOrClassCounterList[i]: sub(counter),
+            command=lambda counter=origin_or_class_counter_list[i]: sub(counter),
         ).grid(
-            row=2 + i + shiftBetweenUpsideDownside,
-            column=ShiftBetweenOrigins * originPositionInOriginList + 3,
+            row=2 + i + shift_between_upside_downside,
+            column=SHIFT_BETWEEN_ORIGINS * origin_position_in_origin_list + 3,
         )
 
     logging.debug("Function show_classes_or_origins() end")
-    return None
 
 
-def reset_counters_in_list(list1d=originChampsCountersToBuy):
+def reset_counters_in_list(list1d=origin_champs_counters_to_buy):
     """Reset counters to 0, used when roll or new round starts.
-    In: list1d by default its originChampsCountersToBuy."""
+    In: list1d by default its origin_champs_counters_to_buy."""
     logging.debug("Function reset_counters_in_list() called")
 
-    for champCounter in list1d:
-        champCounter.set(0)
+    for champ_counter in list1d:
+        champ_counter.set(0)
 
     delete_all_buttons()
 
     logging.debug("Function reset_counters_in_list() end")
-    return
 
 
-def check_nonzero_counters(list1d=originChampsCountersToBuy):
+def check_nonzero_counters(list1d=origin_champs_counters_to_buy):
     """Check how much champion counters are nonzero.
     IF ladder to append repetitions to list.
-    In: list1d by default its originChampsCountersToBuy.
+    In: list1d by default its origin_champs_counters_to_buy.
     Out: position of counters in champions list that are nonzero"""
     logging.debug("Function check_nonzero_counters() called")
 
-    nonzeroCountersList = []
-    nonzeroCountersNumberList = []
-    for i, champCounter in enumerate(list1d):
-        if champCounter.get() >= 1:
-            nonzeroCountersList.append(champCounter)
-            nonzeroCountersNumberList.append(i)
-            if champCounter.get() >= 2:
-                nonzeroCountersList.append(champCounter)
-                nonzeroCountersNumberList.append(i)
-                if champCounter.get() >= 3:
-                    nonzeroCountersList.append(champCounter)
-                    nonzeroCountersNumberList.append(i)
-                    if champCounter.get() >= 4:
-                        nonzeroCountersList.append(champCounter)
-                        nonzeroCountersNumberList.append(i)
+    nonzero_counters_list = []
+    nonzero_counters_number_list = []
+    for i, champ_counter in enumerate(list1d):
+        if champ_counter.get() >= 1:
+            nonzero_counters_list.append(champ_counter)
+            nonzero_counters_number_list.append(i)
+            if champ_counter.get() >= 2:
+                nonzero_counters_list.append(champ_counter)
+                nonzero_counters_number_list.append(i)
+                if champ_counter.get() >= 3:
+                    nonzero_counters_list.append(champ_counter)
+                    nonzero_counters_number_list.append(i)
+                    if champ_counter.get() >= 4:
+                        nonzero_counters_list.append(champ_counter)
+                        nonzero_counters_number_list.append(i)
     logging.info("Nonzero counters list human readable: ")
-    for champIndex in nonzeroCountersNumberList:
-        logging.info("{}".format(championsList[champIndex].name))
-    logging.info(
-        "Nonzero counters indexes(return): {}".format(nonzeroCountersNumberList)
-    )
-    logging.info("This is nonzero Counter list: {}".format(nonzeroCountersList))
+    for champ_index in nonzero_counters_number_list:
+        logging.info("%s", champions_list[champ_index].name)
+    logging.info("Nonzero counters indexes(return): %s", nonzero_counters_number_list)
+    logging.info("This is nonzero Counter list: %s", nonzero_counters_list)
 
     logging.debug("Function check_nonzero_counters() end")
-    return nonzeroCountersNumberList
+    return nonzero_counters_number_list
 
 
-def show_nonzero_counters(rowOffset=0):
+def show_nonzero_counters(row_offset=0):
     """It shows up champions to buy that counters are nonzero, as a button.
     Created button will add one to champion pool counter, delete itself from window
     and sub one from counters champions that can be bought.
-    In: rowOffset by default = 0 for buttons row placement."""
+    In: row_offset by default = 0 for buttons row placement."""
     logging.debug("Function show_nonzero_counters() called")
 
-    global buttonCalcList
-    buttonCalcList = [0] * CARDSTOBUYAMOUNT
-    championPositionInListOrderedByOrigin = check_nonzero_counters()
-    for i in range(0, len(championPositionInListOrderedByOrigin), 1):
-        buttonCalcList[i] = tk.Button(
+    global button_calc_list
+    button_calc_list = [0] * CARDS_TO_BUY_AMOUNT
+    champion_position_in_list_ordered_by_origin = check_nonzero_counters()
+    for i in range(0, len(champion_position_in_list_ordered_by_origin), 1):
+        button_calc_list[i] = tk.Button(
             MainWindow,
-            text=(df.Champion[championPositionInListOrderedByOrigin[i]]),
+            text=(df.Champion[champion_position_in_list_ordered_by_origin[i]]),
             command=lambda i=i: [
-                add(originChampsCounters[championPositionInListOrderedByOrigin[i]]),
+                add(
+                    origin_champs_counters[
+                        champion_position_in_list_ordered_by_origin[i]
+                    ]
+                ),
                 delete_button(i),
                 sub(
-                    originChampsCountersToBuy[championPositionInListOrderedByOrigin[i]]
+                    origin_champs_counters_to_buy[
+                        champion_position_in_list_ordered_by_origin[i]
+                    ]
                 ),
             ],
         )
-        buttonCalcList[i].grid(row=12 + rowOffset, column=ShiftBetweenOrigins * (i + 1))
+        button_calc_list[i].grid(
+            row=12 + row_offset, column=SHIFT_BETWEEN_ORIGINS * (i + 1)
+        )
 
     logging.debug("Function show_nonzero_counters() end")
-    return None
 
 
-def show_points_for_nonzero_counters(rowOffset=2, showMode=1):
+def show_points_for_nonzero_counters(row_offset=2, show_mode=1):
     """It shows up champions POINTS to buy that counters are nonzero, as a text.
     Doesnt disappear currently, should be fixed.
-    In: rowOffset by default = 0 for buttons row placement."""
+    In: row_offset by default = 0 for buttons row placement."""
     logging.debug("Function show_points_for_nonzero_counters() called")
 
-    global textLabelList
-    pointsForChampionsToBuy = [0] * CARDSTOBUYAMOUNT
-    textLabelList = [0] * CARDSTOBUYAMOUNT
-    championPositionInListOrderedByOrigin = check_nonzero_counters()
-    for i in range(0, len(championPositionInListOrderedByOrigin), 1):
-        pointsForChampionsToBuy[i] = (
-            df.Points[championPositionInListOrderedByOrigin[i]]
+    global text_label_list
+    points_for_champion_to_buy = [0] * CARDS_TO_BUY_AMOUNT
+    text_label_list = [0] * CARDS_TO_BUY_AMOUNT
+    champion_position_in_list_ordered_by_origin = check_nonzero_counters()
+    for i in range(0, len(champion_position_in_list_ordered_by_origin), 1):
+        points_for_champion_to_buy[i] = (
+            df.Points[champion_position_in_list_ordered_by_origin[i]]
             + additional_points_from_origin_combo(
-                championPositionInListOrderedByOrigin[i]
+                champion_position_in_list_ordered_by_origin[i]
             )
             + additional_points_from_class_combo(
-                championPositionInListOrderedByOrigin[i]
+                champion_position_in_list_ordered_by_origin[i]
             )
             + additional_points_from_champions_in_pool(
-                championPositionInListOrderedByOrigin[i]
+                champion_position_in_list_ordered_by_origin[i]
             )
         )
-        pointsForChampionsToBuy[i] = round(pointsForChampionsToBuy[i], 3)
-        if showMode:
-            textLabelList[i] = tk.Label(
-                MainWindow, text=pointsForChampionsToBuy[i]
-            ).grid(row=12 + rowOffset, column=ShiftBetweenOrigins * (i + 1))
+        points_for_champion_to_buy[i] = round(points_for_champion_to_buy[i], 3)
+        if show_mode:
+            text_label_list[i] = tk.Label(
+                MainWindow, text=points_for_champion_to_buy[i]
+            )
+            text_label_list[i].grid(
+                row=12 + row_offset, column=SHIFT_BETWEEN_ORIGINS * (i + 1)
+            )
     logging.info(
-        "Points and championPositionInListOrderedByOrigin: {}".format(
-            list(zip(pointsForChampionsToBuy, championPositionInListOrderedByOrigin))
-        )
+        "Points and champion_position_in_list_ordered_by_origin: %s",
+        list(
+            zip(
+                points_for_champion_to_buy,
+                champion_position_in_list_ordered_by_origin,
+            )
+        ),
     )
 
-    humanReadableChampions = []
-    logging.info("Should be empty list: {}".format(humanReadableChampions))
-    for champIndex in championPositionInListOrderedByOrigin:
-        humanReadableChampions.append(championsList[champIndex].name)
+    human_readable_champions = []
+    logging.info("Should be empty list: %s", human_readable_champions)
+    for champ_index in champion_position_in_list_ordered_by_origin:
+        human_readable_champions.append(champions_list[champ_index].name)
     logging.info(
-        "Should be filled with nonzero champions to buy: {}".format(
-            humanReadableChampions
-        )
+        "Should be filled with nonzero champions to buy: %s", human_readable_champions
     )
 
     logging.info(
-        "Champions availbable to buy with calculated points list readable: {}".format(
-            list(zip(pointsForChampionsToBuy, humanReadableChampions))
-        )
+        "Champions availbable to buy with calculated points list readable: %s",
+        list(zip(points_for_champion_to_buy, human_readable_champions)),
     )
 
     logging.debug("Function show_points_for_nonzero_counters() end")
-    return list(zip(pointsForChampionsToBuy, championPositionInListOrderedByOrigin))
+    return list(
+        zip(points_for_champion_to_buy, champion_position_in_list_ordered_by_origin)
+    )
 
 
-def show_nonzero_counters_with_points(rowOffset1=0, rowOffset2=2):
+def show_nonzero_counters_with_points(row_offset_buttons=0, row_offset_points=2):
     """First updates classes and origins to get points updated, then shows
     champions to buy as a buttons and their points as a text.
-    In: rowOffset1 by default 0 for buttons.
-    rowOffset2 by default 2 for points as a text."""
+    In: row_offset_buttons by default 0 for buttons.
+    row_offset_points by default 2 for points as a text."""
     logging.debug("Function show_nonzero_counters_with_points() called")
 
     update_classes_and_origins()
-    show_nonzero_counters(rowOffset1)
-    pointsWithPositionZip = show_points_for_nonzero_counters(rowOffset2)
+    show_nonzero_counters(row_offset_buttons)
+    points_with_position_zip = show_points_for_nonzero_counters(row_offset_points)
 
     logging.debug("Function show_nonzero_counters_with_points() end")
-    return pointsWithPositionZip
+    return points_with_position_zip
 
 
 def update_origins():
@@ -1671,35 +1701,31 @@ def update_origins():
     setting origin counters."""
     logging.debug("Function update_origins() called")
 
-    originIntCounters = [0] * len(originList)
-    for i, originChamp in enumerate(
-        originList
-    ):  # looping over counters for every origin
-        logging.info("Current origin: {}".format(originChamp))
-        for j, champ in enumerate(
-            championsList
+    origin_counters_value_list = [0] * len(origin_list)
+    for i, origin_ in enumerate(origin_list):  # looping over counters for every origin
+        logging.info("Current origin: %s", origin_)
+        for (
+            champ
+        ) in (
+            champions_list
         ):  # for loop to assign how much champions are nonzero in origin
-            if champ.champCounter.get() >= 1:
-                logging.info("Current champ with counter >=1: {}".format(champ.name))
-                if (originChamp == champ.originPrim) or (
-                    originChamp == champ.originSec
-                ):
+            if champ.ChampCounter.get() >= 1:
+                logging.info("Current champ with counter >=1: %s", champ.name)
+                if origin_ in (champ.origin_prim, champ.origin_sec):
                     logging.info(
                         "Current champ with counter >=1 match origin Prim or Sec \
-                                 : {} or {}".format(
-                            champ.originPrim, champ.originSec
-                        )
+                                 : %s or %s",
+                        champ.origin_prim,
+                        champ.origin_sec,
                     )
-                    originIntCounters[i] = originIntCounters[i] + 1
+                    origin_counters_value_list[i] = origin_counters_value_list[i] + 1
         logging.info(
-            "Number of nonzero champions in this origin: {}".format(
-                originIntCounters[i]
-            )
+            "Number of nonzero champions in this origin: %s",
+            origin_counters_value_list[i],
         )
-        OriginCounters[i].set(originIntCounters[i])
+        origin_counters[i].set(origin_counters_value_list[i])
 
     logging.debug("Function update_origins() end")
-    return None
 
 
 def update_classes():
@@ -1707,29 +1733,31 @@ def update_classes():
     setting class counters."""
     logging.debug("Function update_classes() called")
 
-    classIntCounters = [0] * len(classList)
-    for i, classChamp in enumerate(classList):  # looping over counters for every class
-        logging.info("Current class: {}".format(classChamp))
-        for j, champ in enumerate(
-            championsList
+    class_counters_value_list = [0] * len(class_list)
+    for i, class_ in enumerate(class_list):  # looping over counters for every class
+        logging.info("Current class: %s", class_)
+        for (
+            champ
+        ) in (
+            champions_list
         ):  # for loop to assign how much champions are nonzero in class
-            if champ.champCounter.get() >= 1:
-                logging.info("Current champ with counter >=1: {}".format(champ.name))
-                if (classChamp == champ.classPrim) or (classChamp == champ.classSec):
+            if champ.ChampCounter.get() >= 1:
+                logging.info("Current champ with counter >=1: %s", champ.name)
+                if class_ in (champ.class_prim, champ.class_sec):
                     logging.info(
                         "Current champ with counter >=1 match class Prim or Sec \
-                                 : {} or {}".format(
-                            champ.classPrim, champ.classSec
-                        )
+                                 : %s or %s",
+                        champ.class_prim,
+                        champ.class_sec,
                     )
-                    classIntCounters[i] = classIntCounters[i] + 1
+                    class_counters_value_list[i] = class_counters_value_list[i] + 1
         logging.info(
-            "Number of nonzero champions in this class = {}".format(classIntCounters[i])
+            "Number of nonzero champions in this class = %s",
+            class_counters_value_list[i],
         )
-        ClassCounters[i].set(classIntCounters[i])
+        class_counters[i].set(class_counters_value_list[i])
 
     logging.debug("Function update_classes() end")
-    return None
 
 
 def update_classes_and_origins():
@@ -1742,91 +1770,101 @@ def update_classes_and_origins():
     logging.debug("Function update_classes_and_origins() end")
 
 
-def additional_points_from_origin_combo(championNumber):
+def additional_points_from_origin_combo(champion_position):
     """Part of sum points, bonus from origin for specific champion.
-    In: championNumber its just position of champion in list by primal
+    In: champion_position its just position of champion in list by primal
     champions to buy list.
     Out: Bonus points from origin."""
     logging.debug("Function additional_points_from_origin_combo() called")
 
     logging.info(
-        "Calculating origin points for champ named: {} ".format(
-            championsList[championNumber].name
-        )
+        "Calculating origin points for champ named: %s",
+        champions_list[champion_position].name,
     )
-    bonusPointsFromOriginNew = 0.2
-    totalCount = championsList[championNumber].originPrimCounter.get()
-    logging.info("Origin primary counter = {}".format(totalCount))
-    if championsList[championNumber].originSec != "None":
-        totalCount = championsList[championNumber].originSecCounter.get() + totalCount
-        logging.info("Origin primary + secondary counter = {}".format(totalCount))
+    bonus_points_from_origin = 0.2
+    total_count = champions_list[champion_position].OriginPrimCounter.get()
+    logging.info("Origin primary counter = %d", total_count)
+    if champions_list[champion_position].origin_sec != "None":
+        total_count = (
+            champions_list[champion_position].OriginSecCounter.get() + total_count
+        )
+        logging.info("Origin primary + secondary counter = %f", total_count)
 
-    originBonus = totalCount * bonusPointsFromOriginNew
-    logging.info("Bonus(return) = {}".format(originBonus))
+    origin_bonus = total_count * bonus_points_from_origin
+    logging.info("Bonus(return) = %f", origin_bonus)
     logging.debug("Function additional_points_from_origin_combo() end")
-    return originBonus
+    return origin_bonus
 
 
-def additional_points_from_class_combo(championNumber):
+def additional_points_from_class_combo(champion_position):
     """Part of sum points, bonus from class for specific champion.
-    In: championNumber its just position of champion in list by primal
+    In: champion_position its just position of champion in list by primal
     champions to buy list.
     Out: Bonus points from class."""
     logging.debug("Function additional_points_from_class_combo() called")
 
     logging.info(
-        "Calculating class points for champ named: {} ".format(
-            championsList[championNumber].name
-        )
+        "Calculating class points for champ named: %s ",
+        champions_list[champion_position].name,
     )
-    bonusPointsFromClassNew = 0.2
-    totalCount = championsList[championNumber].classPrimCounter.get()
-    if championsList[championNumber].classSec != "None":
-        totalCount = championsList[championNumber].classSecCounter.get() + totalCount
-        logging.info("Class primary + secondary counter = {}".format(totalCount))
+    bonus_points_from_class = 0.2
+    total_count = champions_list[champion_position].ClassPrimCounter.get()
+    if champions_list[champion_position].class_sec != "None":
+        total_count = (
+            champions_list[champion_position].ClassSecCounter.get() + total_count
+        )
+        logging.info("Class primary + secondary counter = %f", total_count)
 
-    classBonus = totalCount * bonusPointsFromClassNew
-    logging.info("Bonus(return) = {}".format(classBonus))
+    class_bonus = total_count * bonus_points_from_class
+    logging.info("Bonus(return) = %f", class_bonus)
     logging.debug("Function additional_points_from_class_combo() end")
-    return classBonus
+    return class_bonus
 
 
-def additional_points_from_champions_in_pool(championNumber):
+def additional_points_from_champions_in_pool(champion_position):
     """Part of sum points, bonus from champion in pool.
-    In: championNumber its just position of champion in list by primal
+    In: champion_position its just position of champion in list by primal
     champions to buy list.
     Out: Bonus points from champions that are already in pool."""
     logging.debug("Function additional_points_from_champions_in_pool() called")
 
-    bonusPointsFromChampionPool = (
-        championsList[championNumber].champCounter.get() - 1
+    champion_pool_bonus = (
+        champions_list[champion_position].ChampCounter.get() - 1
     ) * 0.2
     logging.info(
-        "bonusPointsFromChampionPool = {} for champ named: {} ".format(
-            bonusPointsFromChampionPool, championsList[championNumber].name
-        )
+        "champion_pool_bonus = %f for champ named: %s ",
+        champion_pool_bonus,
+        champions_list[champion_position].name,
     )
 
     logging.debug("Function additional_points_from_champions_in_pool() end")
-    return bonusPointsFromChampionPool
+    return champion_pool_bonus
 
 
 def delete_button(position):
     """Deleting buttons"""
     logging.debug("Function delete_button() called")
 
-    buttonCalcList[position].destroy()
+    button_calc_list[position].destroy()
 
     logging.debug("Function delete_button() end")
 
 
 def delete_all_buttons():
+    """
+    Deleting all buttons.
+
+    Returns
+    -------
+    None.
+
+    """
     logging.debug("Function delete_all_buttons() called")
     try:
-        for button in buttonCalcList:
+        for button in button_calc_list:
             if button != 0:
                 button.destroy()
-    except (NameError):
+    except NameError:
         print("There are no buttons to destroy.")
 
     logging.debug("Function delete_all_buttons() end")
@@ -1835,75 +1873,72 @@ def delete_all_buttons():
 # GUI
 
 
-labelTitle = tk.Label(MainWindow, text="Champion pool", font=boldedFont).grid(
-    row=0, column=ShiftBetweenOrigins * 5
-)
+LabelTitle = tk.Label(MainWindow, text="Champion pool", font=BOLDED_FONT)
+LabelTitle.grid(row=0, column=SHIFT_BETWEEN_ORIGINS * 5)
 
-labelTitle = tk.Label(MainWindow, text=originList[0]).grid(
-    row=1, column=OriginLabelPositionColumn
-)
+LabelTitle = tk.Label(MainWindow, text=origin_list[0])
+LabelTitle.grid(row=1, column=ORIGIN_LABEL_POSITION_COLUMN)
 
-
-labelTitle = tk.Label(MainWindow, text="Champions to buy", font=boldedFont).grid(
-    row=DOWNSIDE - 1, column=ShiftBetweenOrigins * 5
-)
-
+LabelTitle = tk.Label(MainWindow, text="Champions to buy", font=BOLDED_FONT)
+LabelTitle.grid(row=DOWNSIDE - 1, column=SHIFT_BETWEEN_ORIGINS * 5)
 
 # CHAMPIONS
-for i in range(0, len(OriginChampsFromDFList), 1):
-    show_champions_from_origin(i, OriginChampsFromDFList[i], championsList, UPSIDE)
+for i in range(0, len(origin_champs_from_df_list), 1):
+    show_champions_from_origin(i, origin_champs_from_df_list[i], champions_list, UPSIDE)
 
-for i in range(0, len(OriginChampsFromDFList), 1):
+for i in range(0, len(origin_champs_from_df_list), 1):
     show_champions_from_origin(
-        i, OriginChampsFromDFList[i], championsToBuyList, DOWNSIDE
+        i, origin_champs_from_df_list[i], champions_to_buy_list, DOWNSIDE
     )
 
 # ORIGINS
 show_classes_or_origins(
-    len(OriginChampsFromDFList), originList, OriginCounters, UPSIDE, "Origins"
+    len(origin_champs_from_df_list), origin_list, origin_counters, UPSIDE, "Origins"
 )
 
 # CLASSES
 show_classes_or_origins(
-    (len(OriginChampsFromDFList) + 1), classList, ClassCounters, UPSIDE, "Classes"
+    (len(origin_champs_from_df_list) + 1), class_list, class_counters, UPSIDE, "Classes"
 )
-labeling = tk.Label(MainWindow, text="Left to buy", font=boldedFont).grid(
-    row=12 + 0, column=0
-)
+Labeling = tk.Label(MainWindow, text="Left to buy", font=BOLDED_FONT)
+Labeling.grid(row=12 + 0, column=0)
 
-labeling = tk.Label(MainWindow, text="Points", font=boldedFont).grid(
-    row=14 + 0, column=0
-)
+Labeling = tk.Label(MainWindow, text="Points", font=BOLDED_FONT)
+Labeling.grid(row=14 + 0, column=0)
 
-
-buttonCal = tk.Button(
+ButtonCal = tk.Button(
     MainWindow,
     text="reset",
-    command=lambda: reset_counters_in_list(originChampsCountersToBuy),
-).grid(row=DOWNSIDE, column=6)
+    command=lambda: reset_counters_in_list(origin_champs_counters_to_buy),
+)
+ButtonCal.grid(row=DOWNSIDE, column=6)
 
-buttonCal = tk.Button(
+ButtonCal = tk.Button(
     MainWindow, text="update classes", command=lambda: update_classes_and_origins()
-).grid(row=DOWNSIDE, column=12)
+)
+ButtonCal.grid(row=DOWNSIDE, column=12)
 
-buttonCal = tk.Button(
+ButtonCal = tk.Button(
     MainWindow, text="show points", command=lambda: show_nonzero_counters_with_points()
-).grid(row=DOWNSIDE, column=18)
+)
+ButtonCal.grid(row=DOWNSIDE, column=18)
 
-buttonCal = tk.Button(
+ButtonCal = tk.Button(
     MainWindow, text="OCR", command=lambda: update_champions_to_buy_from_ocr_detection()
-).grid(row=DOWNSIDE, column=24)
+)
+ButtonCal.grid(row=DOWNSIDE, column=24)
 
-buttonCal = tk.Button(
+ButtonCal = tk.Button(
     MainWindow, text="draw rectangles", command=lambda: draw_on_champion_to_buy_cards()
-).grid(row=DOWNSIDE, column=30)
+)
+ButtonCal.grid(row=DOWNSIDE, column=30)
 
-buttonCal = tk.Button(
+ButtonCal = tk.Button(
     MainWindow,
     text="scan&go",
     command=lambda: draw_rectangles_show_points_show_buttons_reset_counters(),
-).grid(row=DOWNSIDE, column=36)
-
+)
+ButtonCal.grid(row=DOWNSIDE, column=36)
 
 MainWindow.attributes("-alpha", 0.9)
 MainWindow.mainloop()
