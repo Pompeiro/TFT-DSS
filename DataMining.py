@@ -39,37 +39,29 @@ for t in tiers:
         driver.find_elements_by_xpath('//a[@class="characters-item c%d"]' % t)
     )
 
-champion_row_list = driver.find_elements_by_xpath('//div[@class="rt-tr-group"]')
-
 
 champion_names = driver.find_elements_by_css_selector("a")
 
-first_champion_index_in_a_selector = 0
-last_champion_index_in_a_selector = 0
 for i in range(0, len(champion_names), 1):
-    if champion_names[i].text == "Aatrox":  ############ First champion sorted by name
-        first_champion_index_in_a_selector = i
+    if champion_names[i].text == "Aatrox":  # First champion sorted by name
+        FIRST_CHAMPION_IN_A_SELECTOR = i
         logging.info(
             "Found first champion index in 'a' selector: %d",
-            first_champion_index_in_a_selector,
+            FIRST_CHAMPION_IN_A_SELECTOR,
         )
-    if champion_names[i].text == "Zilean":  ############ Last champion sorted by name
-        last_champion_index_in_a_selector = (
-            i + 1
-        )  ####  +1 because for loop stops at i +1
+    if champion_names[i].text == "Zilean":  # Last champion sorted by name
+        LAST_CHAMPION_INDEX_IN_A_SELECTOR = i + 1  # +1 because for loop stops at i +1
         logging.info(
             "Found last champion index in 'a' selector: %d",
-            last_champion_index_in_a_selector,
+            LAST_CHAMPION_INDEX_IN_A_SELECTOR,
         )
         break
 
-found_champions = last_champion_index_in_a_selector - first_champion_index_in_a_selector
+found_champions = LAST_CHAMPION_INDEX_IN_A_SELECTOR - FIRST_CHAMPION_IN_A_SELECTOR
 logging.info("Number of found champions: %d", found_champions)
 
 champions_list = []
-for i in range(
-    first_champion_index_in_a_selector, last_champion_index_in_a_selector, 1
-):
+for i in range(FIRST_CHAMPION_IN_A_SELECTOR, LAST_CHAMPION_INDEX_IN_A_SELECTOR, 1):
     logging.info(
         "Appending champion name: %s with index in 'a' css selector %d",
         champion_names[i].text,
@@ -78,14 +70,14 @@ for i in range(
     champions_list.append(champion_names[i].text)
 
 
-def find(s, ch):
+def find(string, character):
     """
     https://stackoverflow.com/questions/11122291/how-to-find-char-in-string-and-get-all-the-indexes
 
     Parameters
     ----------
-    s : string.
-    ch : character to be found in string.
+    string : string.
+    character : character to be found in string.
 
     Returns
     -------
@@ -94,15 +86,27 @@ def find(s, ch):
 
     """
     logging.info(
-        "find(s = %s, ch = %s) found character in string on indexes: %s",
-        s,
-        ch,
-        [i for i, ltr in enumerate(s) if ltr == ch],
+        "find(string = %s, character = %s) found character in string on indexes: %s",
+        string,
+        character,
+        [i for i, ltr in enumerate(string) if ltr == character],
     )
-    return [i for i, ltr in enumerate(s) if ltr == ch]
+    return [i for i, ltr in enumerate(string) if ltr == character]
 
 
 def stats_gathering(to_fill_list):
+    """
+    Gathering stats from site.
+
+    Parameters
+    ----------
+    to_fill_list : empty list.
+
+    Returns
+    -------
+    to_fill_list : list filled with stats from site.
+
+    """
     champion_row_list = driver.find_elements_by_xpath('//div[@class="rt-tr-group"]')
 
     for i in range(0, len(champions_list), 1):
@@ -171,7 +175,7 @@ class_list = sorted(list(set(class_list)))
 
 new_classes = []
 for stat in origin_stats:
-    if stat[2] not in (["None"] + class_list):
+    if stat[2] not in ["None"] + class_list:
         if len(stat) == 5:
             # double origin without secondary class
             logging.info(
@@ -183,13 +187,13 @@ for stat in origin_stats:
                 stat,
                 len(stat),
             )
-    if stat[3] not in (["None"] + origins_list):
+    if stat[3] not in ["None"] + origins_list:
         if len(stat) == 5:
             # double class without secondary origin
             logging.info(
                 "Double class for champ: %s,second class: %s", stat[0], stat[3]
             )
-            if stat[3] not in (["None"] + origins_list + new_classes):
+            if stat[3] not in ["None"] + origins_list + new_classes:
                 logging.info(
                     "Class not seen yet appending into new_classes: %s", stat[3]
                 )
@@ -217,7 +221,7 @@ for tier in tier_elements_list:
     )
     len_of_tier_elements_list.append(len(champs_tier_elements_list))
 
-#### count how many champs are in each tier
+# count how many champs are in each tier
 ChampionTier = namedtuple("ChampTier", ["champion", "tier"])
 s_tier = len_of_tier_elements_list[0]
 a_tier = len_of_tier_elements_list[1]
