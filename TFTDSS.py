@@ -61,7 +61,7 @@ LOAD_IMAGE = 0
 # wincap = None
 # LOAD_IMAGE = 1
 
-
+# to change example screenshot then change name inside make_cropped_ss()
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
@@ -1167,7 +1167,7 @@ def make_cropped_ss(
     logging.debug("Function make_cropped_ss() called")
 
     if load_image:
-        screenshot = cv.imread("ss.jpg", cv.IMREAD_UNCHANGED)
+        screenshot = cv.imread("examples/ss3.jpg", cv.IMREAD_UNCHANGED)
     else:
         screenshot = window.get_screenshot()
     crop_img = screenshot[
@@ -1354,8 +1354,7 @@ def draw_on_champion_to_buy_cards(colors=rgb_colours_list, mode="points"):
         values_by_points_indexes_order_by_position_on_screen,
     )
     cards_rectangles = build_list_of_champion_cards_rectangles()
-    screenshot = wincap.get_screenshot()
-    # screenshot = cv.imread("ss.jpg",cv.IMREAD_UNCHANGED)
+    screenshot = make_cropped_ss()[1]
 
     # at the end
     # values_by_points_indexes_order_by_position_on_screen contains champions
