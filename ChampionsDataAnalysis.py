@@ -15,7 +15,7 @@ from matplotlib.projections.polar import PolarAxes
 from matplotlib.spines import Spine
 from matplotlib.transforms import Affine2D
 
-df = pd.read_csv("scaledChampionsdf.csv")
+df = pd.read_csv("champions_data_scaled.csv")
 
 df.drop("Unnamed: 0", axis=1, inplace=True)
 
@@ -111,44 +111,44 @@ def radar_factory(num_vars, frame="circle"):
 
 #################### Frames with champions that cost x
 
-ChampionsThatCostOne = df.query("Cost == 1.0")
-ChampionsThatCostOneList = ChampionsThatCostOne.T.values.tolist()
+ChampionsThatcostOne = df.query("cost == 1.0")
+ChampionsThatcostOneList = ChampionsThatcostOne.T.values.tolist()
 
 
-ChampionsThatCostOneDF = pd.DataFrame(ChampionsThatCostOneList).transpose()
-ChampionsThatCostOneDF.columns = list(df.columns)
+ChampionsThatcostOneDF = pd.DataFrame(ChampionsThatcostOneList).transpose()
+ChampionsThatcostOneDF.columns = list(df.columns)
 
 
-ChampionsThatCostTwo = df.query("Cost == 2.0")
-ChampionsThatCostTwoList = ChampionsThatCostTwo.T.values.tolist()
+ChampionsThatcostTwo = df.query("cost == 2.0")
+ChampionsThatcostTwoList = ChampionsThatcostTwo.T.values.tolist()
 
 
-ChampionsThatCostTwoDF = pd.DataFrame(ChampionsThatCostTwoList).transpose()
-ChampionsThatCostTwoDF.columns = list(df.columns)
+ChampionsThatcostTwoDF = pd.DataFrame(ChampionsThatcostTwoList).transpose()
+ChampionsThatcostTwoDF.columns = list(df.columns)
 
 
-ChampionsThatCostThree = df.query("Cost == 3.0")
-ChampionsThatCostThreeList = ChampionsThatCostThree.T.values.tolist()
+ChampionsThatcostThree = df.query("cost == 3.0")
+ChampionsThatcostThreeList = ChampionsThatcostThree.T.values.tolist()
 
 
-ChampionsThatCostThreeDF = pd.DataFrame(ChampionsThatCostThreeList).transpose()
-ChampionsThatCostThreeDF.columns = list(df.columns)
+ChampionsThatcostThreeDF = pd.DataFrame(ChampionsThatcostThreeList).transpose()
+ChampionsThatcostThreeDF.columns = list(df.columns)
 
 
-ChampionsThatCostFour = df.query("Cost == 4.0")
-ChampionsThatCostFourList = ChampionsThatCostFour.T.values.tolist()
+ChampionsThatcostFour = df.query("cost == 4.0")
+ChampionsThatcostFourList = ChampionsThatcostFour.T.values.tolist()
 
 
-ChampionsThatCostFourDF = pd.DataFrame(ChampionsThatCostFourList).transpose()
-ChampionsThatCostFourDF.columns = list(df.columns)
+ChampionsThatcostFourDF = pd.DataFrame(ChampionsThatcostFourList).transpose()
+ChampionsThatcostFourDF.columns = list(df.columns)
 
 
-ChampionsThatCostFive = df.query("Cost == 5.0")
-ChampionsThatCostFiveList = ChampionsThatCostFive.T.values.tolist()
+ChampionsThatcostFive = df.query("cost == 5.0")
+ChampionsThatcostFiveList = ChampionsThatcostFive.T.values.tolist()
 
 
-ChampionsThatCostFiveDF = pd.DataFrame(ChampionsThatCostFiveList).transpose()
-ChampionsThatCostFiveDF.columns = list(df.columns)
+ChampionsThatcostFiveDF = pd.DataFrame(ChampionsThatcostFiveList).transpose()
+ChampionsThatcostFiveDF.columns = list(df.columns)
 
 
 ##########################
@@ -159,25 +159,25 @@ data = [
 ]
 
 
-def plotChampionsThatCost(ChampionsThatCostXDF=ChampionsThatCostFiveDF):
+def plotChampionsThatcost(ChampionsThatcostXDF=ChampionsThatcostFiveDF):
     for i in range(0, 11, 1):
         data.append(
             (
-                r"$\bf{" + ChampionsThatCostXDF.Champion[i] + "}$",
+                r"$\bf{" + ChampionsThatcostXDF.champion[i] + "}$",
                 [
                     [
-                        ChampionsThatCostXDF.AS[i],
-                        ChampionsThatCostXDF.DMG[i],
-                        ChampionsThatCostXDF.DPS[i],
-                        ChampionsThatCostXDF.HP[i],
-                        ChampionsThatCostXDF.MEANHP[i],
+                        ChampionsThatcostXDF.as_[i],
+                        ChampionsThatcostXDF.dmg[i],
+                        ChampionsThatcostXDF.dps[i],
+                        ChampionsThatcostXDF.hp[i],
+                        ChampionsThatcostXDF.mean_hp[i],
                     ]
                 ],
             )
         )
 
 
-plotChampionsThatCost(ChampionsThatCostFourDF)
+plotChampionsThatcost(ChampionsThatcostFourDF)
 
 N = len(data[0])
 theta = radar_factory(N, frame="polygon")

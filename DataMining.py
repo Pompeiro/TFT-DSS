@@ -283,10 +283,10 @@ df = pd.DataFrame.from_records(
 )
 
 
-df.to_csv("championsData.csv", encoding="utf-8")
+df.to_csv("champions_data.csv", encoding="utf-8")
 
 
-championNamesList = df.champion.to_list()
+champion_names_list = df.champion.to_list()
 
 
 Champion = namedtuple(
@@ -311,7 +311,7 @@ Champion = namedtuple(
 )
 
 
-for i, name in enumerate(championNamesList):
+for i, name in enumerate(champion_names_list):
     # wasted 2 hours for searching answer how to create variable variable
     print(name.replace(" ", ""), end="")
     print(" = Champion(*gathered_stats_list[%d])" % i)

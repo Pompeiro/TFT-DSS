@@ -11,7 +11,7 @@ import pandas as pd
 import skfuzzy as fuzz
 from skfuzzy import control as ctrl
 
-df = pd.read_csv("championsData.csv")
+df = pd.read_csv("champions_data.csv")
 
 df.drop("Unnamed: 0", axis=1, inplace=True)
 
@@ -399,7 +399,7 @@ for i, champ in enumerate(tanks_preference_points):
 
 df.insert(18, "points", total_points_list)
 
-df.to_csv("scaledChampionsdf.csv", encoding="utf-8")
+df.to_csv("champions_data_scaled.csv", encoding="utf-8")
 
 
 ScaledChampion = namedtuple(
