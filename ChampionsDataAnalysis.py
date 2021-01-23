@@ -109,46 +109,46 @@ def radar_factory(num_vars, frame="circle"):
     return theta
 
 
-#################### Frames with champions that cost x
+# Frames with champions that cost x
 
-ChampionsThatcostOne = df.query("cost == 1.0")
-ChampionsThatcostOneList = ChampionsThatcostOne.T.values.tolist()
-
-
-ChampionsThatcostOneDF = pd.DataFrame(ChampionsThatcostOneList).transpose()
-ChampionsThatcostOneDF.columns = list(df.columns)
+champions_that_cost_one = df.query("cost == 1.0")
+champions_that_cost_one_list = champions_that_cost_one.T.values.tolist()
 
 
-ChampionsThatcostTwo = df.query("cost == 2.0")
-ChampionsThatcostTwoList = ChampionsThatcostTwo.T.values.tolist()
+champions_that_cost_one_df = pd.DataFrame(champions_that_cost_one_list).transpose()
+champions_that_cost_one_df.columns = list(df.columns)
 
 
-ChampionsThatcostTwoDF = pd.DataFrame(ChampionsThatcostTwoList).transpose()
-ChampionsThatcostTwoDF.columns = list(df.columns)
+champions_that_cost_two = df.query("cost == 2.0")
+champions_that_cost_two_list = champions_that_cost_two.T.values.tolist()
 
 
-ChampionsThatcostThree = df.query("cost == 3.0")
-ChampionsThatcostThreeList = ChampionsThatcostThree.T.values.tolist()
+champions_that_cost_two_df = pd.DataFrame(champions_that_cost_two_list).transpose()
+champions_that_cost_two_df.columns = list(df.columns)
 
 
-ChampionsThatcostThreeDF = pd.DataFrame(ChampionsThatcostThreeList).transpose()
-ChampionsThatcostThreeDF.columns = list(df.columns)
+champions_that_cost_three = df.query("cost == 3.0")
+champions_that_cost_three_list = champions_that_cost_three.T.values.tolist()
 
 
-ChampionsThatcostFour = df.query("cost == 4.0")
-ChampionsThatcostFourList = ChampionsThatcostFour.T.values.tolist()
+champions_that_cost_three_df = pd.DataFrame(champions_that_cost_three_list).transpose()
+champions_that_cost_three_df.columns = list(df.columns)
 
 
-ChampionsThatcostFourDF = pd.DataFrame(ChampionsThatcostFourList).transpose()
-ChampionsThatcostFourDF.columns = list(df.columns)
+champions_that_cost_four = df.query("cost == 4.0")
+champions_that_cost_four_list = champions_that_cost_four.T.values.tolist()
 
 
-ChampionsThatcostFive = df.query("cost == 5.0")
-ChampionsThatcostFiveList = ChampionsThatcostFive.T.values.tolist()
+champions_that_cost_four_df = pd.DataFrame(champions_that_cost_four_list).transpose()
+champions_that_cost_four_df.columns = list(df.columns)
 
 
-ChampionsThatcostFiveDF = pd.DataFrame(ChampionsThatcostFiveList).transpose()
-ChampionsThatcostFiveDF.columns = list(df.columns)
+champions_that_cost_five = df.query("cost == 5.0")
+champions_that_cost_five_list = champions_that_cost_five.T.values.tolist()
+
+
+champions_that_cost_five_df = pd.DataFrame(champions_that_cost_five_list).transpose()
+champions_that_cost_five_df.columns = list(df.columns)
 
 
 ##########################
@@ -159,25 +159,25 @@ data = [
 ]
 
 
-def plotChampionsThatcost(ChampionsThatcostXDF=ChampionsThatcostFiveDF):
+def plot_champions_that_cost(champions_that_cost_x_df=champions_that_cost_five_df):
     for i in range(0, 11, 1):
         data.append(
             (
-                r"$\bf{" + ChampionsThatcostXDF.champion[i] + "}$",
+                r"$\bf{" + champions_that_cost_x_df.champion[i] + "}$",
                 [
                     [
-                        ChampionsThatcostXDF.as_[i],
-                        ChampionsThatcostXDF.dmg[i],
-                        ChampionsThatcostXDF.dps[i],
-                        ChampionsThatcostXDF.hp[i],
-                        ChampionsThatcostXDF.mean_hp[i],
+                        champions_that_cost_x_df.as_[i],
+                        champions_that_cost_x_df.dmg[i],
+                        champions_that_cost_x_df.dps[i],
+                        champions_that_cost_x_df.hp[i],
+                        champions_that_cost_x_df.mean_hp[i],
                     ]
                 ],
             )
         )
 
 
-plotChampionsThatcost(ChampionsThatcostFourDF)
+plot_champions_that_cost(champions_that_cost_four_df)
 
 N = len(data[0])
 theta = radar_factory(N, frame="polygon")
