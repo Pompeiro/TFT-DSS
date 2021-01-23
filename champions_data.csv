@@ -1,0 +1,59 @@
+,champion,dps,as_,dmg,range,hp,mana,armor,mr,origin_prim,origin_sec,class_prim,class_sec,cost,tier
+0,Aatrox,39,0.65,60,1,850,150,70,40,Cultist,None,Vanguard,None,4,4
+1,Akali,47,0.85,55,1,650,20,20,20,Ninja,None,Assassin,None,3,3
+2,Annie,27,0.6,45,2,750,65,40,40,Fortune,None,Mage,None,2,3
+3,Aurelion Sol,30,0.75,40,4,650,80,20,80,Dragonsoul,None,Mage,None,4,4
+4,Azir,60,0.85,70,4,950,150,30,20,Warlord,None,Keeper,Emperor,5,4
+5,Brand,26,0.65,40,3,500,60,20,40,Dragonsoul,None,Mage,None,1,2
+6,Braum,24,0.6,40,1,800,70,60,60,Dragonsoul,None,Vanguard,None,2,1
+7,Chogath,60,0.6,100,1,1400,180,40,40,Fabled,None,Brawler,None,4,4
+8,Darius,49,0.7,70,1,800,50,60,60,Fortune,None,Slayer,None,3,3
+9,Diana,35,0.7,50,1,550,70,30,20,Spirit,None,Assassin,None,1,3
+10,Elise,29,0.65,45,2,600,75,30,20,Cultist,None,Keeper,None,1,2
+11,Fiora,34,0.75,45,1,600,75,35,30,Enlightened,None,Duelist,None,1,2
+12,Garen,30,0.6,50,1,600,100,50,35,Warlord,None,Vanguard,None,1,2
+13,Irelia,36,0.65,55,1,800,100,40,40,Enlightened,Divine,Adept,None,3,4
+14,Janna,24,0.6,40,4,550,70,20,20,Enlightened,None,Mystic,None,2,3
+15,Jarvan IV,36,0.6,60,1,600,100,45,30,Warlord,None,Keeper,None,2,3
+16,Jax,45,0.75,60,1,750,110,40,30,Divine,None,Duelist,None,2,3
+17,Kalista,65,1,65,3,650,0,20,20,Cultist,None,Duelist,None,3,3
+18,Katarina,42,0.65,65,1,500,90,20,20,Warlord,Fortune,Assassin,None,3,4
+19,Kayle,68,0.9,75,3,650,60,20,20,Divine,None,Executioner,None,4,4
+20,Kennen,39,0.65,60,2,650,125,30,30,Ninja,None,Keeper,None,3,3
+21,Kindred,56,0.8,70,3,650,35,20,20,Spirit,None,Executioner,None,3,3
+22,Lee Sin,51,0.85,60,1,1000,40,60,60,Divine,None,Duelist,None,5,4
+23,Lulu,30,0.6,50,3,500,120,20,20,Elderwood,None,Mage,None,2,3
+24,Maokai,28,0.5,55,1,700,75,40,30,Elderwood,None,Brawler,None,1,1
+25,Morgana,35,0.7,50,3,750,120,30,60,Enlightened,None,Syphoner,None,4,3
+26,Nasus,29,0.65,45,1,650,60,50,50,Divine,None,Syphoner,None,1,2
+27,Nautilus,33,0.6,55,1,750,150,45,30,Fabled,None,Vanguard,None,2,3
+28,Neeko,31,0.7,45,3,700,70,20,20,Fabled,None,Mystic,None,3,3
+29,Nidalee,31,0.7,45,4,550,70,30,20,Warlord,None,Sharpshooter,None,1,3
+30,Nunu,36,0.55,65,1,750,85,50,30,Elderwood,None,Brawler,None,3,2
+31,Olaf,64,0.8,80,1,900,70,60,60,Dragonsoul,None,Slayer,None,4,4
+32,Ornn,55,0.55,100,1,900,160,50,50,Elderwood,None,Vanguard,Blacksmith,5,4
+33,Pyke,30,0.6,50,1,700,120,50,30,Cultist,None,Assassin,Slayer,2,4
+34,Rakan,42,0.7,60,2,600,80,40,40,Elderwood,None,Keeper,None,2,3
+35,Samira,55,0.85,65,3,900,0,30,30,Daredevil,None,Sharpshooter,Slayer,5,5
+36,Sejuani,25,0.55,45,1,1000,160,60,40,Fortune,None,Vanguard,None,4,4
+37,Sett,45,0.75,60,1,1100,175,60,30,The Boss,None,Brawler,None,5,4
+38,Shen,39,0.65,60,1,950,100,60,40,Ninja,None,Adept,Mystic,4,4
+39,Shyvana,53,0.75,70,1,750,75,35,80,Dragonsoul,None,Brawler,None,3,4
+40,Sivir,60,0.85,70,3,650,70,20,20,Cultist,None,Sharpshooter,None,3,3
+41,Swain,39,0.65,60,2,1000,100,60,80,Dragonsoul,None,Syphoner,None,5,4
+42,Tahm Kench,43,0.5,85,1,700,0,40,30,Fortune,None,Brawler,None,1,1
+43,Talon,72,0.8,90,1,800,40,30,20,Enlightened,None,Assassin,None,4,4
+44,Teemo,39,0.7,55,3,500,60,20,20,Spirit,None,Sharpshooter,None,2,2
+45,Tristana,35,0.7,50,4,500,40,20,40,Dragonsoul,None,Sharpshooter,None,1,2
+46,Tryndamere,72,0.85,85,1,850,100,60,60,Warlord,None,Duelist,Slayer,4,3
+47,Twisted Fate,29,0.65,45,3,550,70,20,20,Cultist,None,Mage,None,1,2
+48,Veigar,26,0.65,40,3,600,55,20,20,Elderwood,None,Mage,None,3,3
+49,Vi,39,0.6,65,1,700,50,40,30,Warlord,None,Brawler,None,2,2
+50,Vladimir,24,0.6,40,2,750,60,30,40,Cultist,None,Syphoner,None,2,1
+51,Wukong,36,0.65,55,1,650,50,40,30,Divine,None,Vanguard,None,1,1
+52,Xayah,68,0.85,80,3,600,130,20,20,Elderwood,None,Keeper,Executioner,4,4
+53,Yasuo,35,0.7,50,1,550,45,30,20,Exile,None,Duelist,None,1,3
+54,Yone,76,0.95,80,1,950,60,40,40,Exile,None,Adept,None,5,5
+55,Yuumi,24,0.6,40,3,650,40,20,20,Spirit,None,Mystic,None,3,4
+56,Zed,44,0.8,55,1,600,0,20,20,Ninja,None,Slayer,None,2,4
+57,Zilean,34,0.75,45,3,750,150,20,20,Cultist,None,Mystic,None,5,4
