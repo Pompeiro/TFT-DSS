@@ -297,6 +297,7 @@ def update_champions_to_buy_from_ocr_detection(
     list_of_champs_to_buy_this_turn = sort_detected_champions_to_buy_by_position(
         ocr_on_cropped_img(make_cropped_ss()[0], reader_), champions_list_for_ocr_
     )
+    champs_to_buy_indexes = []
     for champ_to_buy in list_of_champs_to_buy_this_turn:
         for i, champ in enumerate(champions_list_for_ocr_):
             if champ_to_buy == champ:
@@ -306,10 +307,11 @@ def update_champions_to_buy_from_ocr_detection(
                 logging.info("Index in champions_list_for_ocr that is detected: %d", i)
                 logging.info("Champ name in this index: %s", champ)
                 add(origin_champs_counters_to_buy_[i])
+                champs_to_buy_indexes.append(i)
                 break
-
+    logging.info("Champions to buy indexes: %s", champs_to_buy_indexes)
     logging.debug("Function update_champions_to_buy_from_ocr_detection() end")
-    return list_of_champs_to_buy_this_turn
+    return list_of_champs_to_buy_this_turn, champs_to_buy_indexes
 
 
 def calculate_card_position_on_screen(
@@ -377,7 +379,7 @@ def build_list_of_champion_cards_rectangles(
 
 
 # https://stackoverflow.com/questions/6618515/sorting-list-based-on-values-from-another-list
-def draw_on_champion_to_buy_cards(
+def draw_rectangles_show_points_show_buttons_reset_counters(
     rgb_colours_list_,
     champions_list_for_ocr_,
     origin_champs_counters_to_buy_,
@@ -410,17 +412,25 @@ def draw_on_champion_to_buy_cards(
     None.
 
     """
-    logging.debug("Function draw_on_champion_to_buy_cards() called")
-
-    champions_to_buy_in_order_as_in_screen = update_champions_to_buy_from_ocr_detection(
+    logging.debug(
+        "Function draw_rectangles_show_points_show_buttons_reset_counters() called"
+    )
+    reset_counters_in_list(origin_champs_counters_to_buy_)
+    (
+        list_of_champs_to_buy_this_turn,
+        index_list,
+    ) = update_champions_to_buy_from_ocr_detection(
         champions_list_for_ocr_, origin_champs_counters_to_buy_, reader_
     )
-    champions_to_buy_points_and_position = show_nonzero_counters_with_points(
+
+    champions_to_buy_in_order_as_in_screen = list_of_champs_to_buy_this_turn
+    champions_to_buy_points_and_position = show_nonzero_counters_with_points_from_ocr(
         tk_window,
         origin_champs_counters_,
         origin_champs_counters_to_buy_,
         champions_list_,
         df_,
+        index_list,
         origin_list_,
         origin_counters_,
         class_list_,
@@ -486,7 +496,9 @@ def draw_on_champion_to_buy_cards(
                 lineType=LINE_TYPE_,
                 thickness=2,
             )
-        cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
+        cv.imshow(
+            "draw_rectangles_show_points_show_buttons_reset_counters()", screenshot
+        )
     elif mode == "cross":
         for i in range(0, CARDS_TO_BUY_AMOUNT_):
             # Draw the center point
@@ -500,7 +512,9 @@ def draw_on_champion_to_buy_cards(
                 markerSize=40,
                 thickness=2,
             )
-        cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
+        cv.imshow(
+            "draw_rectangles_show_points_show_buttons_reset_counters()", screenshot
+        )
     elif mode == "points":
         for i in range(0, CARDS_TO_BUY_AMOUNT_):
             # Draw the center point
@@ -519,56 +533,9 @@ def draw_on_champion_to_buy_cards(
                 ],
                 2,
             )
-        cv.imshow("draw_on_champion_to_buy_cards()", screenshot)
-
-    logging.debug("Function draw_on_champion_to_buy_cards() end")
-
-
-# need to fix double calculate points inside draw_on_champion_to_buy_cards
-def draw_rectangles_show_points_show_buttons_reset_counters(
-    rgb_colours_list_,
-    champions_list_for_ocr_,
-    origin_champs_counters_to_buy_,
-    reader_,
-    champions_list_,
-    tk_window,
-    origin_champs_counters_,
-    df_,
-    origin_list_,
-    origin_counters_,
-    class_list_,
-    class_counters_,
-):
-    """
-    Draws rectangles then show points with buttons and reset counters.
-
-    Returns
-    -------
-    None.
-
-    """
-    logging.debug(
-        "Function draw_rectangles_show_points_show_buttons_reset_counters() called"
-    )
-
-    update_classes_and_origins(
-        origin_list_, champions_list_, origin_counters_, class_list_, class_counters_
-    )
-    reset_counters_in_list(origin_champs_counters_to_buy_)
-    draw_on_champion_to_buy_cards(
-        rgb_colours_list_,
-        champions_list_for_ocr_,
-        origin_champs_counters_to_buy_,
-        reader_,
-        champions_list_,
-        tk_window,
-        origin_champs_counters_,
-        df_,
-        origin_list_,
-        origin_counters_,
-        class_list_,
-        class_counters_,
-    )
+        cv.imshow(
+            "draw_rectangles_show_points_show_buttons_reset_counters()", screenshot
+        )
 
     logging.debug(
         "Function draw_rectangles_show_points_show_buttons_reset_counters() end"
@@ -781,6 +748,51 @@ def show_nonzero_counters(
     logging.debug("Function show_nonzero_counters() end")
 
 
+def show_nonzero_counters_from_ocr(
+    tk_window,
+    origin_champs_counters_,
+    origin_champs_counters_to_buy_,
+    champions_list_,
+    df_,
+    index_list,
+    row_offset=0,
+    CARDS_TO_BUY_AMOUNT_=CARDS_TO_BUY_AMOUNT,
+    SHIFT_BETWEEN_ORIGINS_=SHIFT_BETWEEN_ORIGINS,
+):
+    """It shows up champions to buy that counters are nonzero, as a button.
+    Created button will add one to champion pool counter, delete itself from window
+    and sub one from counters champions that can be bought.
+    In: row_offset by default = 0 for buttons row placement."""
+    logging.debug("Function show_nonzero_counters_from_ocr() called")
+
+    global button_calc_list
+    button_calc_list = [0] * CARDS_TO_BUY_AMOUNT_
+    champion_position_in_list_ordered_by_origin = index_list
+    for i in range(0, len(champion_position_in_list_ordered_by_origin), 1):
+        button_calc_list[i] = tk.Button(
+            tk_window,
+            text=(df_.champion[champion_position_in_list_ordered_by_origin[i]]),
+            command=lambda i=i: [
+                add(
+                    origin_champs_counters_[
+                        champion_position_in_list_ordered_by_origin[i]
+                    ]
+                ),
+                delete_button(i),
+                sub(
+                    origin_champs_counters_to_buy_[
+                        champion_position_in_list_ordered_by_origin[i]
+                    ]
+                ),
+            ],
+        )
+        button_calc_list[i].grid(
+            row=12 + row_offset, column=SHIFT_BETWEEN_ORIGINS_ * (i + 1)
+        )
+
+    logging.debug("Function show_nonzero_counters_from_ocr() end")
+
+
 def show_points_for_nonzero_counters(
     tk_window,
     origin_champs_counters_to_buy_,
@@ -802,6 +814,73 @@ def show_points_for_nonzero_counters(
     champion_position_in_list_ordered_by_origin = check_nonzero_counters(
         origin_champs_counters_to_buy_, champions_list_
     )
+    for i in range(0, len(champion_position_in_list_ordered_by_origin), 1):
+        points_for_champion_to_buy[i] = (
+            df_.points[champion_position_in_list_ordered_by_origin[i]]
+            + additional_points_from_origin_combo(
+                champion_position_in_list_ordered_by_origin[i], champions_list_
+            )
+            + additional_points_from_class_combo(
+                champion_position_in_list_ordered_by_origin[i], champions_list_
+            )
+            + additional_points_from_champions_in_pool(
+                champion_position_in_list_ordered_by_origin[i], champions_list_
+            )
+        )
+        points_for_champion_to_buy[i] = round(points_for_champion_to_buy[i], 3)
+        if show_mode:
+            text_label_list[i] = tk.Label(tk_window, text=points_for_champion_to_buy[i])
+            text_label_list[i].grid(
+                row=12 + row_offset, column=SHIFT_BETWEEN_ORIGINS_ * (i + 1)
+            )
+    logging.info(
+        "Points and champion_position_in_list_ordered_by_origin: %s",
+        list(
+            zip(
+                points_for_champion_to_buy,
+                champion_position_in_list_ordered_by_origin,
+            )
+        ),
+    )
+    human_readable_champions = []
+    logging.info("Should be empty list: %s", human_readable_champions)
+    for champ_index in champion_position_in_list_ordered_by_origin:
+        human_readable_champions.append(champions_list_[champ_index].name)
+    logging.info(
+        "Should be filled with nonzero champions to buy: %s", human_readable_champions
+    )
+
+    logging.info(
+        "Champions availbable to buy with calculated points list readable: %s",
+        list(zip(points_for_champion_to_buy, human_readable_champions)),
+    )
+
+    logging.debug("Function show_points_for_nonzero_counters() end")
+    return list(
+        zip(points_for_champion_to_buy, champion_position_in_list_ordered_by_origin)
+    )
+
+
+def show_points_for_nonzero_counters_from_ocr(
+    tk_window,
+    origin_champs_counters_to_buy_,
+    champions_list_,
+    df_,
+    index_list,
+    row_offset=2,
+    show_mode=1,
+    CARDS_TO_BUY_AMOUNT_=CARDS_TO_BUY_AMOUNT,
+    SHIFT_BETWEEN_ORIGINS_=SHIFT_BETWEEN_ORIGINS,
+):
+    """It shows up champions POINTS to buy that counters are nonzero, as a text.
+    Doesnt disappear currently, should be fixed.
+    In: row_offset by default = 0 for buttons row placement."""
+    logging.debug("Function show_points_for_nonzero_counters() called")
+
+    global text_label_list
+    points_for_champion_to_buy = [0] * CARDS_TO_BUY_AMOUNT_
+    text_label_list = [0] * CARDS_TO_BUY_AMOUNT_
+    champion_position_in_list_ordered_by_origin = index_list
     for i in range(0, len(champion_position_in_list_ordered_by_origin), 1):
         points_for_champion_to_buy[i] = (
             df_.points[champion_position_in_list_ordered_by_origin[i]]
@@ -878,6 +957,47 @@ def show_nonzero_counters_with_points(
     )
     points_with_position_zip = show_points_for_nonzero_counters(
         tk_window, origin_champs_counters_to_buy_, champions_list_, df_
+    )
+
+    logging.debug("Function show_nonzero_counters_with_points() end")
+    return points_with_position_zip
+
+
+def show_nonzero_counters_with_points_from_ocr(
+    tk_window,
+    origin_champs_counters_,
+    origin_champs_counters_to_buy_,
+    champions_list_,
+    df_,
+    index_list,
+    origin_list_,
+    origin_counters_,
+    class_list_,
+    class_counters_,
+):
+    """First updates classes and origins to get points updated, then shows
+    champions to buy as a buttons and their points as a text.
+    In: row_offset_buttons by default 0 for buttons.
+    row_offset_points by default 2 for points as a text."""
+    logging.debug("Function show_nonzero_counters_with_points() called")
+
+    update_classes_and_origins(
+        origin_list_, champions_list_, origin_counters_, class_list_, class_counters_
+    )
+    show_nonzero_counters_from_ocr(
+        tk_window,
+        origin_champs_counters_,
+        origin_champs_counters_to_buy_,
+        champions_list_,
+        df_,
+        index_list,
+    )
+    points_with_position_zip = show_points_for_nonzero_counters_from_ocr(
+        tk_window,
+        origin_champs_counters_to_buy_,
+        champions_list_,
+        df_,
+        index_list,
     )
 
     logging.debug("Function show_nonzero_counters_with_points() end")

@@ -1040,31 +1040,23 @@ ButtonCal.grid(row=DOWNSIDE, column=18)
 ButtonCal = tk.Button(
     MainWindow,
     text="OCR",
-    command=lambda: dss.update_champions_to_buy_from_ocr_detection(
-        champions_list_for_ocr, origin_champs_counters_to_buy, reader_=reader
-    ),
-)
-ButtonCal.grid(row=DOWNSIDE, column=24)
-
-ButtonCal = tk.Button(
-    MainWindow,
-    text="draw rectangles",
-    command=lambda: dss.draw_on_champion_to_buy_cards(
-        rgb_colours_list_=rgb_colours_list,
-        champions_list_for_ocr_=champions_list_for_ocr,
-        origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
-        reader_=reader,
+    command=lambda: dss.show_nonzero_counters_with_points_from_ocr(
         tk_window=MainWindow,
         origin_champs_counters_=origin_champs_counters,
-        df_=df,
-        origin_list_=origin_list,
+        origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
         champions_list_=champions_list,
+        df_=df,
+        index_list=dss.update_champions_to_buy_from_ocr_detection(
+            champions_list_for_ocr, origin_champs_counters_to_buy, reader
+        )[1],
+        origin_list_=origin_list,
         origin_counters_=origin_counters,
         class_list_=class_list,
         class_counters_=class_counters,
     ),
 )
-ButtonCal.grid(row=DOWNSIDE, column=30)
+ButtonCal.grid(row=DOWNSIDE, column=24)
+
 
 ButtonCal = tk.Button(
     MainWindow,
@@ -1084,7 +1076,7 @@ ButtonCal = tk.Button(
         class_counters_=class_counters,
     ),
 )
-ButtonCal.grid(row=DOWNSIDE, column=36)
+ButtonCal.grid(row=DOWNSIDE, column=30)
 
 MainWindow.attributes("-alpha", 0.9)
 MainWindow.mainloop()
