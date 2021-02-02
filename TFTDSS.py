@@ -138,7 +138,7 @@ champions_list_for_ocr = [
     "Talon",
     "Yasuo",
     "Yone",
-    "Cho'gath",
+    "Cho Gath",
     "Nautilus",
     "Neeko",
     "Annie",
