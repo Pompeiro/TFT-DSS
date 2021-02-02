@@ -1,15 +1,9 @@
 # TFT-DSS
 Teamfight Tactics Decisive Support System  
 
-10.01 TFTDSS.py file after refactoring.
-
-29.11 new file botActions.py check description at the bottom.
-
-15.11 First try to build champions detector based on CNN with FastAI. Results at the bottom.
-
 This is my current project, and I will work on advices which champion should user pick from 5 random champions that user can buy.  
 
-I will use my knowledge to build fuzzy logic system that will calculate uncertain utility for every single champion and their combinations as a team.  I dont recommend using it in ranked games especially its was tested only about 30 times in game on my personal machine.
+[![TFTvideo](https://user-images.githubusercontent.com/60773657/106586367-a67a0f80-6548-11eb-85ad-be8c59a92b8e.JPG)](https://user-images.githubusercontent.com/60773657/106585948-2e134e80-6548-11eb-8d20-d817a1261879.mp4)
 
 You can track my progress in projects section.
 
