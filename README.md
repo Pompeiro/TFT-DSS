@@ -3,9 +3,9 @@ Teamfight Tactics Decisive Support System
 
 This is my current project, and I will work on advices which champion should user pick from 5 random champions that user can buy.  
 
-[![TFTvideo](https://user-images.githubusercontent.com/60773657/106586367-a67a0f80-6548-11eb-85ad-be8c59a92b8e.JPG)](https://user-images.githubusercontent.com/60773657/106585948-2e134e80-6548-11eb-8d20-d817a1261879.mp4)
+# Click on image to watch the video
 
-You can track my progress in projects section.
+[![TFTvideo](https://user-images.githubusercontent.com/60773657/106586367-a67a0f80-6548-11eb-85ad-be8c59a92b8e.JPG)](https://user-images.githubusercontent.com/60773657/106585948-2e134e80-6548-11eb-8d20-d817a1261879.mp4)
 
 
 When u want to update csv files by yourself, if not then scroll down to TFTDSS.py 
