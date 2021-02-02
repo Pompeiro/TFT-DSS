@@ -6,3 +6,5 @@ selenium==3.141.0
 numpy==1.19.5
 scikit-fuzzy==0.4.2
 matplotlib==3.3.3
+pyautogui==0.9.52
+mouseinfo==0.1.3
