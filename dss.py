@@ -11,6 +11,10 @@ import tkinter.font as tkFont
 from cv2 import cv2 as cv
 
 from windowcapture import WindowCapture
+import pyautogui
+import time
+from win32gui import GetForegroundWindow, GetWindowText
+
 
 LOAD_IMAGE = 0
 # LOAD_IMAGE = 1
@@ -26,6 +30,16 @@ LINE_TYPE = cv.LINE_4
 MARKER_TYPE = cv.MARKER_CROSS
 ORIGIN_LABEL_POSITION_COLUMN = 1
 SHIFT_BETWEEN_ORIGINS = 6
+CARDS_CENTER_LIST = [(592, 932),
+ (781, 932),
+ (970, 932),
+ (1159, 932),
+ (1348, 932),
+ ]
+BUY_XP_CENTER = (400,925)
+REFRESH_CENTER = (400,995)
+pyautogui.PAUSE = 0.02
+pyautogui.FAILSAFE = False
 
 
 def filling_list_with_counter_for_namedtuple(
@@ -748,6 +762,81 @@ def show_nonzero_counters(
     logging.debug("Function show_nonzero_counters() end")
 
 
+def activate_window(mode, delay=0.02):
+    """
+
+
+    Parameters
+    ----------
+    mode : "client" or "game"
+    delay : Delay between actions. The default is 0.5.
+
+    Returns
+    -------
+    None.
+
+    """
+
+    logging.debug("Function activate_window() called with passed: %s.", mode)
+    logging.info("Current active window: %s", GetWindowText(GetForegroundWindow()))
+    if mode == "client":
+        window = pyautogui.getWindowsWithTitle("League of Legends")[0]
+        window_text = "League of Legends"
+    elif mode == "game":
+        window = pyautogui.getWindowsWithTitle("League of Legends (TM) Client")[0]
+        window_text = "League of Legends (TM) Client"
+    elif mode == "dss":
+        window = pyautogui.getWindowsWithTitle("TFTDSS")[0]
+        window_text = "TFTDSS"
+    if GetWindowText(GetForegroundWindow()) != window_text:
+        logging.info("active window != desired window, window activation goes on")
+        window.minimize()
+        time.sleep(delay)
+        window.restore()
+        window.activate()
+        time.sleep(delay)
+    logging.info("Current active window: %s", GetWindowText(GetForegroundWindow()))
+
+    logging.debug("Function activate_window end.")
+    
+
+def buy_champ(location_index, CARDS_CENTER_LIST_=CARDS_CENTER_LIST):
+    start = pyautogui.position()
+    activate_window("game")
+    pyautogui.moveTo(CARDS_CENTER_LIST_[location_index])
+    pyautogui.mouseDown()
+    time.sleep(0.05)
+    pyautogui.mouseUp()
+    activate_window("dss")
+    pyautogui.moveTo(start)
+    
+
+def refresh(REFRESH_CENTER_=REFRESH_CENTER):
+    start = pyautogui.position()
+    activate_window("game")
+    pyautogui.moveTo(REFRESH_CENTER_)
+    pyautogui.mouseDown()
+    time.sleep(0.05)
+    pyautogui.mouseUp()
+    activate_window("dss")
+    pyautogui.moveTo(start)
+    time.sleep(0.1)
+
+
+    
+    
+def buy_xp(BUY_XP_CENTER_=BUY_XP_CENTER):
+    start = pyautogui.position()
+    activate_window("game")
+    pyautogui.moveTo(BUY_XP_CENTER)
+    pyautogui.mouseDown()
+    time.sleep(0.05)
+    pyautogui.mouseUp()
+    activate_window("dss")
+    pyautogui.moveTo(start)
+
+    
+
 def show_nonzero_counters_from_ocr(
     tk_window,
     origin_champs_counters_,
@@ -784,6 +873,7 @@ def show_nonzero_counters_from_ocr(
                         champion_position_in_list_ordered_by_origin[i]
                     ]
                 ),
+                buy_champ(i),
             ],
         )
         button_calc_list[i].grid(

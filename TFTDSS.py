@@ -46,6 +46,8 @@ UPSIDE = 0  # champion pool
 DOWNSIDE = 16  # champions to buy
 SHIFT_BETWEEN_ORIGINS = 6
 ORIGIN_LABEL_POSITION_COLUMN = 1
+CHAMPIONS_TO_BUY_VISIBLE = 0
+# CHAMPIONS_TO_BUY_VISIBLE = 1
 
 Champion = namedtuple(
     "Champion",
@@ -68,10 +70,15 @@ Champion = namedtuple(
 
 # WINDOW THINGS
 
-
-MainWindow = tk.Tk()
-MainWindow.geometry("1900x800+0+0")
-MainWindow.title("TFTDSS")
+if CHAMPIONS_TO_BUY_VISIBLE:
+    MainWindow = tk.Tk()
+    MainWindow.geometry("1900x800+0+0")
+    MainWindow.title("TFTDSS")
+else:
+    MainWindow = tk.Tk()
+    MainWindow.geometry("1900x450+0+0")
+    MainWindow.title("TFTDSS")
+    
 
 
 BOLDED_FONT = tkFont.Font(family="Arial", size=10, weight=tkFont.BOLD)
@@ -131,7 +138,7 @@ champions_list_for_ocr = [
     "Talon",
     "Yasuo",
     "Yone",
-    "Chogath",
+    "Cho'gath",
     "Nautilus",
     "Neeko",
     "Annie",
@@ -966,15 +973,16 @@ for i in range(0, len(origin_champs_from_df_list), 1):
         shift_between_upside_downside=UPSIDE,
     )
 
-for i in range(0, len(origin_champs_from_df_list), 1):
-    dss.show_champions_from_origin(
-        window_tk=MainWindow,
-        origin_index=i,
-        origin_champs_from_df_list_=origin_champs_from_df_list[i],
-        origin_list_=origin_list,
-        champions_list_=champions_to_buy_list,
-        shift_between_upside_downside=DOWNSIDE,
-    )
+if CHAMPIONS_TO_BUY_VISIBLE:
+    for i in range(0, len(origin_champs_from_df_list), 1):
+        dss.show_champions_from_origin(
+            window_tk=MainWindow,
+            origin_index=i,
+            origin_champs_from_df_list_=origin_champs_from_df_list[i],
+            origin_list_=origin_list,
+            champions_list_=champions_to_buy_list,
+            shift_between_upside_downside=DOWNSIDE,
+        )
 
 # ORIGINS
 dss.show_classes_or_origins(
@@ -1077,6 +1085,37 @@ ButtonCal = tk.Button(
     ),
 )
 ButtonCal.grid(row=DOWNSIDE, column=30)
+
+
+ButtonCal = tk.Button(
+    MainWindow,
+    text="buy xp",
+    command=lambda: dss.buy_xp(),
+)
+ButtonCal.grid(row=DOWNSIDE, column=36)
+
+
+ButtonCal = tk.Button(
+    MainWindow,
+    text="refresh",
+    command=lambda: [dss.refresh(),
+                     dss.draw_rectangles_show_points_show_buttons_reset_counters(
+        rgb_colours_list_=rgb_colours_list,
+        champions_list_for_ocr_=champions_list_for_ocr,
+        origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+        reader_=reader,
+        tk_window=MainWindow,
+        origin_champs_counters_=origin_champs_counters,
+        df_=df,
+        origin_list_=origin_list,
+        champions_list_=champions_list,
+        origin_counters_=origin_counters,
+        class_list_=class_list,
+        class_counters_=class_counters,
+    ),
+    ],
+)
+ButtonCal.grid(row=DOWNSIDE, column=42)
 
 MainWindow.attributes("-alpha", 0.9)
 MainWindow.mainloop()
