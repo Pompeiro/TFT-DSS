@@ -28,9 +28,8 @@ Then install requirements from requirements.txt
 
 Run TFTDSS.py in your IDE(for me working in Spyder and in Pycharm). You need to use tft virtual env.
 
-# V1DSS directory
-It contains just decisive support system for game. It's for typical user. 
-
+# 14.04.2021 I'm back
+Thanks to @detergent I'm back to business.
 
 
 # Web scraping with DataMining.py
