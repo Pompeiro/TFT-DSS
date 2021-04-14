@@ -5,21 +5,21 @@ Created on Thu Jan 28 10:12:03 2021
 @author: janusz
 """
 import logging
-import tkinter as tk
-import tkinter.font as tkFont
-
-from cv2 import cv2 as cv
-
-from windowcapture import WindowCapture
-import pyautogui
 import time
+import tkinter as tk
+
+import numpy as np
+import pyautogui
+from cv2 import cv2 as cv
 from win32gui import GetForegroundWindow, GetWindowText
+logging.basicConfig(level=logging.DEBUG)
 
 
 LOAD_IMAGE = 0
 # LOAD_IMAGE = 1
 # ^ swap comment on LOAD_IMAGE to test in game
 IMAGE_DEBUG_MODE = 1
+IMAGE_DEBUG_MODE_FULLSCREEN_ = 0
 X_FIRST_CHAMPION_CARD = 505
 PADDING_BETWEEN_CHAMPION_CARDS = 14
 W_CHAMPION_CARD = 175
@@ -30,14 +30,15 @@ LINE_TYPE = cv.LINE_4
 MARKER_TYPE = cv.MARKER_CROSS
 ORIGIN_LABEL_POSITION_COLUMN = 1
 SHIFT_BETWEEN_ORIGINS = 6
-CARDS_CENTER_LIST = [(592, 932),
- (781, 932),
- (970, 932),
- (1159, 932),
- (1348, 932),
- ]
-BUY_XP_CENTER = (400,925)
-REFRESH_CENTER = (400,995)
+CARDS_CENTER_LIST = [
+    (592, 932),
+    (781, 932),
+    (970, 932),
+    (1159, 932),
+    (1348, 932),
+]
+BUY_XP_CENTER = (400, 925)
+REFRESH_CENTER = (400, 995)
 pyautogui.PAUSE = 0.02
 pyautogui.FAILSAFE = False
 
@@ -222,10 +223,29 @@ def sort_detected_champions_to_buy_by_position(
     return sorted_champions_to_buy
 
 
+def imshow_fullscreen(window_name="img", image=[0]):
+    """
+    https://stackoverflow.com/questions/9446733/opencv-window-in-fullscreen-and-without-any-borders#comment97925305_53005272
+
+    Parameters
+    ----------
+    image : openCV image matrix.
+    window_name : string, name for hidden window. The default is "img".
+
+    Returns
+    -------
+    None.
+
+    """
+    cv.namedWindow(window_name, cv.WND_PROP_FULLSCREEN)
+    cv.setWindowProperty(window_name, cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
+    cv.imshow(window_name, image)
+
+
 def make_cropped_ss(
     LOAD_IMAGE_=LOAD_IMAGE,
     cropping_x=450,
-    cropping_y=970,
+    cropping_y=1000,
     cropping_width=1000,
     cropping_height=30,
     IMAGE_DEBUG_MODE_=IMAGE_DEBUG_MODE,
@@ -256,15 +276,25 @@ def make_cropped_ss(
     if LOAD_IMAGE_:
         screenshot = cv.imread("examples/ss3.jpg", cv.IMREAD_UNCHANGED)
     else:
-        wincap = WindowCapture("League of Legends (TM) Client")
-        screenshot = wincap.get_screenshot()
+        activate_window(mode="game", delay=0.2)
+        screenshot = pyautogui.screenshot()
+        screenshot = cv.cvtColor(np.array(screenshot), cv.COLOR_RGB2BGR)
     crop_img = screenshot[
         cropping_y : cropping_y + cropping_height,
         cropping_x : cropping_x + cropping_width,
     ]
+    activate_window(mode="dss", delay=0.2)
+
 
     if IMAGE_DEBUG_MODE_:
-        cv.imshow("make_cropped_ss()", crop_img)
+        if not IMAGE_DEBUG_MODE_FULLSCREEN_:
+            cv.imshow("make_cropped_ss() screenshot", screenshot)
+            cv.imshow("make_cropped_ss() crop_img", crop_img)
+        else:
+            imshow_fullscreen(
+                window_name="make_cropped_ss() screenshot", image=screenshot
+            )
+            cv.imshow("make_cropped_ss() crop_img", crop_img)
 
     logging.debug("Function make_cropped_ss() end")
     return crop_img, screenshot
@@ -798,7 +828,7 @@ def activate_window(mode, delay=0.02):
     logging.info("Current active window: %s", GetWindowText(GetForegroundWindow()))
 
     logging.debug("Function activate_window end.")
-    
+
 
 def buy_champ(location_index, CARDS_CENTER_LIST_=CARDS_CENTER_LIST):
     start = pyautogui.position()
@@ -809,7 +839,7 @@ def buy_champ(location_index, CARDS_CENTER_LIST_=CARDS_CENTER_LIST):
     pyautogui.mouseUp()
     activate_window("dss")
     pyautogui.moveTo(start)
-    
+
 
 def refresh(REFRESH_CENTER_=REFRESH_CENTER):
     start = pyautogui.position()
@@ -823,8 +853,6 @@ def refresh(REFRESH_CENTER_=REFRESH_CENTER):
     time.sleep(0.1)
 
 
-    
-    
 def buy_xp(BUY_XP_CENTER_=BUY_XP_CENTER):
     start = pyautogui.position()
     activate_window("game")
@@ -835,7 +863,6 @@ def buy_xp(BUY_XP_CENTER_=BUY_XP_CENTER):
     activate_window("dss")
     pyautogui.moveTo(start)
 
-    
 
 def show_nonzero_counters_from_ocr(
     tk_window,
