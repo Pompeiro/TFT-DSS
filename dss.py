@@ -594,6 +594,23 @@ def create_gui_counter_with_plus_minus(
     i=0,
     SHIFT_BETWEEN_ORIGINS_=SHIFT_BETWEEN_ORIGINS,
 ):
+    """
+    Creating counter with plus and minus buttons.
+
+    Parameters
+    ----------
+    window_tk : tkinter window.
+    origin_index : to organize origins in columns.
+    counter : Name of counter.
+    shift_between_upside_downside : Shift to place upside or downside.
+    i : counter index. The default is 0 for adding single button without loop.
+    SHIFT_BETWEEN_ORIGINS_ :  The default is SHIFT_BETWEEN_ORIGINS.
+
+    Returns
+    -------
+    None.
+
+    """
     tk.Entry(window_tk, textvariable=counter, width=2).grid(
         row=2 + i + shift_between_upside_downside,
         column=SHIFT_BETWEEN_ORIGINS_ * origin_index + 1,
