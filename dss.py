@@ -12,6 +12,7 @@ import numpy as np
 import pyautogui
 from cv2 import cv2 as cv
 from win32gui import GetForegroundWindow, GetWindowText
+
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -284,7 +285,6 @@ def make_cropped_ss(
         cropping_x : cropping_x + cropping_width,
     ]
     activate_window(mode="dss", delay=0.2)
-
 
     if IMAGE_DEBUG_MODE_:
         if not IMAGE_DEBUG_MODE_FULLSCREEN_:
@@ -586,6 +586,28 @@ def draw_rectangles_show_points_show_buttons_reset_counters(
     )
 
 
+def create_gui_counter_with_plus_minus(
+    window_tk,
+    origin_index,
+    counter,
+    shift_between_upside_downside,
+    i=0,
+    SHIFT_BETWEEN_ORIGINS_=SHIFT_BETWEEN_ORIGINS,
+):
+    tk.Entry(window_tk, textvariable=counter, width=2).grid(
+        row=2 + i + shift_between_upside_downside,
+        column=SHIFT_BETWEEN_ORIGINS_ * origin_index + 1,
+    )
+    tk.Button(window_tk, text="+", command=lambda counter=counter: add(counter),).grid(
+        row=2 + i + shift_between_upside_downside,
+        column=SHIFT_BETWEEN_ORIGINS_ * origin_index + 2,
+    )
+    tk.Button(window_tk, text="-", command=lambda counter=counter: sub(counter),).grid(
+        row=2 + i + shift_between_upside_downside,
+        column=SHIFT_BETWEEN_ORIGINS_ * origin_index + 3,
+    )
+
+
 def show_champions_from_origin(
     window_tk,
     origin_index,
@@ -621,25 +643,13 @@ def show_champions_from_origin(
         )
         for champ in champions_list_:
             if champ.name == champ_name:
-                tk.Entry(window_tk, textvariable=champ.ChampCounter, width=2).grid(
-                    row=2 + i + shift_between_upside_downside,
-                    column=SHIFT_BETWEEN_ORIGINS_ * origin_index + 1,
-                )
-                tk.Button(
-                    window_tk,
-                    text="+",
-                    command=lambda counter=champ.ChampCounter: add(counter),
-                ).grid(
-                    row=2 + i + shift_between_upside_downside,
-                    column=SHIFT_BETWEEN_ORIGINS_ * origin_index + 2,
-                )
-                tk.Button(
-                    window_tk,
-                    text="-",
-                    command=lambda counter=champ.ChampCounter: sub(counter),
-                ).grid(
-                    row=2 + i + shift_between_upside_downside,
-                    column=SHIFT_BETWEEN_ORIGINS_ * origin_index + 3,
+                create_gui_counter_with_plus_minus(
+                    window_tk=window_tk,
+                    origin_index=origin_index,
+                    counter=champ.ChampCounter,
+                    shift_between_upside_downside=shift_between_upside_downside,
+                    i=i,
+                    SHIFT_BETWEEN_ORIGINS_=SHIFT_BETWEEN_ORIGINS,
                 )
                 break
     logging.debug("Function show_champions_from_origin() end")
@@ -675,29 +685,15 @@ def show_classes_or_origins(
             row=2 + i + shift_between_upside_downside,
             column=ORIGIN_LABEL_POSITION_COLUMN_ * SHIFT_BETWEEN_ORIGINS_ * column_pos,
         )
-        tk.Entry(
-            window_tk, textvariable=origin_or_class_counters_list[i], width=2
-        ).grid(
-            row=2 + i + shift_between_upside_downside,
-            column=SHIFT_BETWEEN_ORIGINS_ * column_pos + 1,
-        )
-        tk.Button(
-            window_tk,
-            text="+",
-            command=lambda counter=origin_or_class_counters_list[i]: add(counter),
-        ).grid(
-            row=2 + i + shift_between_upside_downside,
-            column=SHIFT_BETWEEN_ORIGINS_ * column_pos + 2,
-        )
-        tk.Button(
-            window_tk,
-            text="-",
-            command=lambda counter=origin_or_class_counters_list[i]: sub(counter),
-        ).grid(
-            row=2 + i + shift_between_upside_downside,
-            column=SHIFT_BETWEEN_ORIGINS_ * column_pos + 3,
-        )
 
+        create_gui_counter_with_plus_minus(
+            window_tk=window_tk,
+            origin_index=column_pos,
+            counter=origin_or_class_counters_list[i],
+            shift_between_upside_downside=shift_between_upside_downside,
+            i=i,
+            SHIFT_BETWEEN_ORIGINS_=SHIFT_BETWEEN_ORIGINS,
+        )
     logging.debug("Function show_classes_or_origins() end")
 
 
@@ -809,22 +805,27 @@ def activate_window(mode, delay=0.02):
 
     logging.debug("Function activate_window() called with passed: %s.", mode)
     logging.info("Current active window: %s", GetWindowText(GetForegroundWindow()))
-    if mode == "client":
-        window = pyautogui.getWindowsWithTitle("League of Legends")[0]
-        window_text = "League of Legends"
-    elif mode == "game":
-        window = pyautogui.getWindowsWithTitle("League of Legends (TM) Client")[0]
-        window_text = "League of Legends (TM) Client"
-    elif mode == "dss":
-        window = pyautogui.getWindowsWithTitle("TFTDSS")[0]
-        window_text = "TFTDSS"
-    if GetWindowText(GetForegroundWindow()) != window_text:
-        logging.info("active window != desired window, window activation goes on")
-        window.minimize()
-        time.sleep(delay)
-        window.restore()
-        window.activate()
-        time.sleep(delay)
+    try:
+        if mode == "client":
+            window = pyautogui.getWindowsWithTitle("League of Legends")[0]
+            window_text = "League of Legends"
+        elif mode == "game":
+            window = pyautogui.getWindowsWithTitle("League of Legends (TM) Client")[0]
+            window_text = "League of Legends (TM) Client"
+        elif mode == "dss":
+            window = pyautogui.getWindowsWithTitle("TFTDSS")[0]
+            window_text = "TFTDSS"
+        if GetWindowText(GetForegroundWindow()) != window_text:
+            logging.info("active window != desired window, window activation goes on")
+            window.minimize()
+            time.sleep(delay)
+            window.restore()
+            window.activate()
+            time.sleep(delay)
+    except IndexError:
+        logging.error("Couldnt find window in mode: %s.", mode)
+        raise
+
     logging.info("Current active window: %s", GetWindowText(GetForegroundWindow()))
 
     logging.debug("Function activate_window end.")
