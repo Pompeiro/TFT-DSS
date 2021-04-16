@@ -20,7 +20,7 @@ LOAD_IMAGE = 0
 # LOAD_IMAGE = 1
 # ^ swap comment on LOAD_IMAGE to test in game
 IMAGE_DEBUG_MODE = 1
-IMAGE_DEBUG_MODE_FULLSCREEN_ = 0
+IMAGE_DEBUG_MODE_FULLSCREEN = 0
 X_FIRST_CHAMPION_CARD = 505
 PADDING_BETWEEN_CHAMPION_CARDS = 14
 W_CHAMPION_CARD = 175
@@ -250,6 +250,7 @@ def make_cropped_ss(
     cropping_width=1000,
     cropping_height=30,
     IMAGE_DEBUG_MODE_=IMAGE_DEBUG_MODE,
+    IMAGE_DEBUG_MODE_FULLSCREEN_=IMAGE_DEBUG_MODE_FULLSCREEN,
 ):
     """
 
@@ -263,7 +264,7 @@ def make_cropped_ss(
 
         Defaults to cropp screenshot from first to fifth(1-5) champion card name.
     cropping_x :  The default is 450.
-    cropping_y :  The default is 970.
+    cropping_y :  The default is 1000.
     cropping_width :  The default is 1000.
     cropping_height :  The default is 30.
 
@@ -275,16 +276,17 @@ def make_cropped_ss(
     logging.debug("Function make_cropped_ss() called")
 
     if LOAD_IMAGE_:
-        screenshot = cv.imread("examples/ss3.jpg", cv.IMREAD_UNCHANGED)
+        screenshot = cv.imread("examples/windowed_pyauto_ss.jpg", cv.IMREAD_UNCHANGED)
     else:
         activate_window(mode="game", delay=0.2)
         screenshot = pyautogui.screenshot()
         screenshot = cv.cvtColor(np.array(screenshot), cv.COLOR_RGB2BGR)
+        activate_window(mode="dss", delay=0.2)
+
     crop_img = screenshot[
         cropping_y : cropping_y + cropping_height,
         cropping_x : cropping_x + cropping_width,
     ]
-    activate_window(mode="dss", delay=0.2)
 
     if IMAGE_DEBUG_MODE_:
         if not IMAGE_DEBUG_MODE_FULLSCREEN_:
@@ -308,7 +310,7 @@ def ocr_on_cropped_img(cropped_ss_with_champion_card_names, reader_):
     ----------
     cropped_ss_with_champion_card_names : for example if want to OCR card names then
     input there make_cropped_ss(LOAD_IMAGE_=0, window=wincap, cropping_x=450,
-                                cropping_y=970, cropping_width=1000, cropping_height=30)
+                                cropping_y=1000, cropping_width=1000, cropping_height=30)
 
     Returns
     -------
