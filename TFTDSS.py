@@ -24,6 +24,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 VARIABLE_PRINT_MODE = 0
 # VARIABLE_PRINT_MODE = 1
+IMAGE_DEBUG_MODE_FULLSCREEN = 0
 
 reader = easyocr.Reader(["en"])
 
@@ -48,6 +49,8 @@ SHIFT_BETWEEN_ORIGINS = 6
 ORIGIN_LABEL_POSITION_COLUMN = 1
 CHAMPIONS_TO_BUY_VISIBLE = 0
 # CHAMPIONS_TO_BUY_VISIBLE = 1
+TEST_BUTTON_VISIBLE = 0
+# TEST_BUTTON_VISIBLE = 1
 
 Champion = namedtuple(
     "Champion",
@@ -78,7 +81,6 @@ else:
     MainWindow = tk.Tk()
     MainWindow.geometry("1900x450+0+0")
     MainWindow.title("TFTDSS")
-    
 
 
 BOLDED_FONT = tkFont.Font(family="Arial", size=10, weight=tkFont.BOLD)
@@ -1098,24 +1100,234 @@ ButtonCal.grid(row=DOWNSIDE, column=36)
 ButtonCal = tk.Button(
     MainWindow,
     text="refresh",
-    command=lambda: [dss.refresh(),
-                     dss.draw_rectangles_show_points_show_buttons_reset_counters(
-        rgb_colours_list_=rgb_colours_list,
-        champions_list_for_ocr_=champions_list_for_ocr,
-        origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
-        reader_=reader,
-        tk_window=MainWindow,
-        origin_champs_counters_=origin_champs_counters,
-        df_=df,
-        origin_list_=origin_list,
-        champions_list_=champions_list,
-        origin_counters_=origin_counters,
-        class_list_=class_list,
-        class_counters_=class_counters,
-    ),
+    command=lambda: [
+        dss.refresh(),
+        dss.draw_rectangles_show_points_show_buttons_reset_counters(
+            rgb_colours_list_=rgb_colours_list,
+            champions_list_for_ocr_=champions_list_for_ocr,
+            origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+            reader_=reader,
+            tk_window=MainWindow,
+            origin_champs_counters_=origin_champs_counters,
+            df_=df,
+            origin_list_=origin_list,
+            champions_list_=champions_list,
+            origin_counters_=origin_counters,
+            class_list_=class_list,
+            class_counters_=class_counters,
+        ),
     ],
 )
 ButtonCal.grid(row=DOWNSIDE, column=42)
+
+if TEST_BUTTON_VISIBLE:
+    ButtonCal = tk.Button(
+        MainWindow,
+        text="TEST",
+        command=lambda: create_new_window(),
+    )
+    ButtonCal.grid(row=DOWNSIDE, column=48)
+
+
+def create_new_window():
+    """
+    Create window with buttons that will let to test DSS functions.
+
+    Returns
+    -------
+    None.
+
+    """
+    logging.debug("Function create_new_window() called")
+
+    new_window = tk.Toplevel()
+    new_window.title("Test functions")
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="update_origins()",
+        command=lambda: dss.update_origins(
+            origin_list_=origin_list,
+            champions_list_=champions_list,
+            origin_counters_=origin_counters,
+        ),
+    )
+    ButtonCal.grid(row=1, column=0)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="update_classes()",
+        command=lambda: dss.update_classes(
+            class_list_=class_list,
+            champions_list_=champions_list,
+            class_counters_=class_counters,
+        ),
+    )
+    ButtonCal.grid(row=2, column=0)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="update_classes_and_origins()",
+        command=lambda: dss.update_classes_and_origins(
+            origin_list_=origin_list,
+            champions_list_=champions_list,
+            origin_counters_=origin_counters,
+            class_list_=class_list,
+            class_counters_=class_counters,
+        ),
+    )
+    ButtonCal.grid(row=3, column=0)
+
+    # is_in_game = tk.IntVar()
+    # dss.create_gui_counter_with_plus_minus(window_tk=new_window, origin_index=1, counter=is_in_game, shift_between_upside_downside=0)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="update_champions_to_buy_from_ocr_detection()",
+        command=lambda: dss.update_champions_to_buy_from_ocr_detection(
+            champions_list_for_ocr_=champions_list_for_ocr,
+            origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+            reader_=reader,
+        ),
+    )
+    ButtonCal.grid(row=4, column=0)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="show_nonzero_counters_from_ocr()",
+        command=lambda: dss.show_nonzero_counters_from_ocr(
+            tk_window=MainWindow,
+            origin_champs_counters_=origin_champs_counters,
+            origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+            champions_list_=champions_list,
+            df_=df,
+            index_list=dss.update_champions_to_buy_from_ocr_detection(
+                champions_list_for_ocr, origin_champs_counters_to_buy, reader
+            )[1],
+        ),
+    )
+    ButtonCal.grid(row=5, column=0)
+
+    Labeling = tk.Label(
+        new_window, text="Care additional points in below", font=BOLDED_FONT
+    )
+    Labeling.grid(row=6, column=0)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="show_points_for_nonzero_counters_from_ocr()",
+        command=lambda: dss.show_points_for_nonzero_counters_from_ocr(
+            tk_window=MainWindow,
+            origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+            champions_list_=champions_list,
+            df_=df,
+            index_list=dss.update_champions_to_buy_from_ocr_detection(
+                champions_list_for_ocr, origin_champs_counters_to_buy, reader
+            )[1],
+        ),
+    )
+    ButtonCal.grid(row=7, column=0)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="show_nonzero_counters_with_points_from_ocr() OCR button",
+        command=lambda: dss.show_nonzero_counters_with_points_from_ocr(
+            tk_window=MainWindow,
+            origin_champs_counters_=origin_champs_counters,
+            origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+            champions_list_=champions_list,
+            df_=df,
+            index_list=dss.update_champions_to_buy_from_ocr_detection(
+                champions_list_for_ocr, origin_champs_counters_to_buy, reader
+            )[1],
+            origin_list_=origin_list,
+            origin_counters_=origin_counters,
+            class_list_=class_list,
+            class_counters_=class_counters,
+        ),
+    )
+    ButtonCal.grid(row=8, column=0)
+
+    Labeling = tk.Label(new_window, text="with Game", font=BOLDED_FONT)
+    Labeling.grid(row=0, column=1)
+
+    ButtonCal = tk.Button(
+        new_window, text="make_cropped_ss()", command=lambda: dss.make_cropped_ss()
+    )
+    ButtonCal.grid(row=1, column=1)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="ocr_on_cropped_img()",
+        command=lambda: dss.ocr_on_cropped_img(
+            dss.make_cropped_ss()[0], reader_=reader
+        ),
+    )
+    ButtonCal.grid(row=2, column=1)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="sort_detected_champions_to_buy_by_position()",
+        command=lambda: dss.sort_detected_champions_to_buy_by_position(
+            dss.ocr_on_cropped_img(dss.make_cropped_ss()[0], reader_=reader),
+            champions_list_for_ocr_=champions_list_for_ocr,
+        ),
+    )
+    ButtonCal.grid(row=3, column=1)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="update_champions_to_buy_from_ocr_detection()",
+        command=lambda: dss.update_champions_to_buy_from_ocr_detection(
+            champions_list_for_ocr_=champions_list_for_ocr,
+            origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+            reader_=reader,
+        ),
+    )
+    ButtonCal.grid(row=4, column=1)
+
+    Labeling = tk.Label(new_window, text="w/o Game", font=BOLDED_FONT)
+    Labeling.grid(row=0, column=2)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="make_cropped_ss()",
+        command=lambda: dss.make_cropped_ss(
+            LOAD_IMAGE_=1, IMAGE_DEBUG_MODE_FULLSCREEN_=IMAGE_DEBUG_MODE_FULLSCREEN
+        ),
+    )
+    ButtonCal.grid(row=1, column=2)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="ocr_on_cropped_img()",
+        command=lambda: dss.ocr_on_cropped_img(
+            dss.make_cropped_ss(
+                LOAD_IMAGE_=1, IMAGE_DEBUG_MODE_FULLSCREEN_=IMAGE_DEBUG_MODE_FULLSCREEN
+            )[0],
+            reader_=reader,
+        ),
+    )
+    ButtonCal.grid(row=2, column=2)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="sort_detected_champions_to_buy_by_position()",
+        command=lambda: dss.sort_detected_champions_to_buy_by_position(
+            dss.ocr_on_cropped_img(
+                dss.make_cropped_ss(
+                    LOAD_IMAGE_=1,
+                    IMAGE_DEBUG_MODE_FULLSCREEN_=IMAGE_DEBUG_MODE_FULLSCREEN,
+                )[0],
+                reader_=reader,
+            ),
+            champions_list_for_ocr_=champions_list_for_ocr,
+        ),
+    )
+    ButtonCal.grid(row=3, column=2)
+
+    logging.debug("Function create_new_window() end")
+
 
 MainWindow.attributes("-alpha", 0.9)
 MainWindow.mainloop()
