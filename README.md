@@ -29,7 +29,9 @@ Then install requirements from requirements.txt
 Run TFTDSS.py in your IDE(for me working in Spyder and in Pycharm). You need to use tft virtual env.
 
 # 14.04.2021 I'm back
-Thanks to @Detergent13 I'm back to business.
+Thanks to @Detergent13 I'm back to business. To test functions swap comments in TFTDSS.py
+52 | TEST_BUTTON_VISIBLE = 0
+53 | # TEST_BUTTON_VISIBLE = 1
 
 
 # Web scraping with DataMining.py
