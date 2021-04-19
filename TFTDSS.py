@@ -1326,6 +1326,118 @@ def create_new_window():
     )
     ButtonCal.grid(row=3, column=2)
 
+    ButtonCal = tk.Button(
+        new_window,
+        text="filling_list_with_counter_for_namedtuple(4)",
+        command=lambda: dss.filling_list_with_counter_for_namedtuple(
+            field_to_check=4,
+            input_list=champion_info,
+            origin_list_=origin_list,
+            class_list_=class_list,
+            origin_counters_=origin_counters,
+            class_counters_=class_counters,
+            df_=df,
+        ),
+    )
+    ButtonCal.grid(row=0, column=3)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="filling_list_with_counter_for_namedtuple(5)",
+        command=lambda: dss.filling_list_with_counter_for_namedtuple(
+            field_to_check=5,
+            input_list=champion_info,
+            origin_list_=origin_list,
+            class_list_=class_list,
+            origin_counters_=origin_counters,
+            class_counters_=class_counters,
+            df_=df,
+        ),
+    )
+    ButtonCal.grid(row=1, column=3)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="filling_list_with_counter_for_namedtuple(6)",
+        command=lambda: dss.filling_list_with_counter_for_namedtuple(
+            field_to_check=6,
+            input_list=champion_info,
+            origin_list_=origin_list,
+            class_list_=class_list,
+            origin_counters_=origin_counters,
+            class_counters_=class_counters,
+            df_=df,
+        ),
+    )
+    ButtonCal.grid(row=2, column=3)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="filling_list_with_counter_for_namedtuple(7)",
+        command=lambda: dss.filling_list_with_counter_for_namedtuple(
+            field_to_check=7,
+            input_list=champion_info,
+            origin_list_=origin_list,
+            class_list_=class_list,
+            origin_counters_=origin_counters,
+            class_counters_=class_counters,
+            df_=df,
+        ),
+    )
+    ButtonCal.grid(row=3, column=3)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="append_counters_to_input_list(champion_info)",
+        command=lambda: dss.append_counters_to_input_list(
+            input_list=champion_info,
+            origin_list_=origin_list,
+            class_list_=class_list,
+            origin_counters_=origin_counters,
+            class_counters_=class_counters,
+            df_=df,
+        ),
+    )
+    ButtonCal.grid(row=4, column=3)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="append_counters_to_input_list(champion_to_buy_info)",
+        command=lambda: dss.append_counters_to_input_list(
+            input_list=champion_to_buy_info,
+            origin_list_=origin_list,
+            class_list_=class_list,
+            origin_counters_=origin_counters,
+            class_counters_=class_counters,
+            df_=df,
+        ),
+    )
+    ButtonCal.grid(row=5, column=3)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="calculate_card_position_on_screen(2)",
+        command=lambda: dss.calculate_card_position_on_screen(
+            card_index=2,
+            X_FIRST_CHAMPION_CARD_=dss.X_FIRST_CHAMPION_CARD,
+            PADDING_BETWEEN_CHAMPION_CARDS_=dss.PADDING_BETWEEN_CHAMPION_CARDS,
+            W_CHAMPION_CARD_=dss.W_CHAMPION_CARD,
+        ),
+    )
+    ButtonCal.grid(row=0, column=4)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="build_list_of_champion_cards_rectangles()",
+        command=lambda: dss.build_list_of_champion_cards_rectangles(
+            CARDS_TO_BUY_AMOUNT_=dss.CARDS_TO_BUY_AMOUNT,
+            Y_FIRST_CHAMPION_CARD_=dss.Y_FIRST_CHAMPION_CARD,
+            W_CHAMPION_CARD_=dss.W_CHAMPION_CARD,
+            H_CHAMPION_CARD_=dss.H_CHAMPION_CARD,
+        ),
+    )
+    ButtonCal.grid(row=1, column=4)
+
     logging.debug("Function create_new_window() end")
 
 
