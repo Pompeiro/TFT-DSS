@@ -408,9 +408,10 @@ def build_list_of_champion_cards_rectangles(
 
     cards_rectangles = [0] * CARDS_TO_BUY_AMOUNT_
     for i in range(0, CARDS_TO_BUY_AMOUNT_):
-        top_left = (calculate_card_position_on_screen(i), Y_FIRST_CHAMPION_CARD_)
+        x_current_champ_card = calculate_card_position_on_screen(i)
+        top_left = (x_current_champ_card, Y_FIRST_CHAMPION_CARD_)
         bottom_right = (
-            calculate_card_position_on_screen(i) + W_CHAMPION_CARD_,
+            x_current_champ_card + W_CHAMPION_CARD_,
             Y_FIRST_CHAMPION_CARD_ + H_CHAMPION_CARD_,
         )
         center = (
@@ -419,6 +420,9 @@ def build_list_of_champion_cards_rectangles(
         )
         # print("Type" ,type(center))
         cards_rectangles[i] = [top_left, bottom_right, center]
+        logging.info(
+            "Card rectangle = [top_left, bottom_right, center]: %s", cards_rectangles[i]
+        )
 
     logging.debug("Function build_list_of_champion_cards_rectangles() end")
     return cards_rectangles
