@@ -1438,6 +1438,155 @@ def create_new_window():
     )
     ButtonCal.grid(row=1, column=4)
 
+    Labeling = tk.Label(
+        new_window, text="Another cases below this row", font=BOLDED_FONT
+    )
+    Labeling.grid(row=9, column=0)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="check_nonzero_counters()",
+        command=lambda: dss.check_nonzero_counters(
+            origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+            champions_list_=champions_list,
+        ),
+    )
+    ButtonCal.grid(row=10, column=0)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="show_nonzero_counters()",
+        command=lambda: dss.show_nonzero_counters(
+            tk_window=MainWindow,
+            origin_champs_counters_=origin_champs_counters,
+            origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+            champions_list_=champions_list,
+            df_=df,
+            row_offset=0,
+            CARDS_TO_BUY_AMOUNT_=dss.CARDS_TO_BUY_AMOUNT,
+            SHIFT_BETWEEN_ORIGINS_=dss.SHIFT_BETWEEN_ORIGINS,
+        ),
+    )
+    ButtonCal.grid(row=11, column=0)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="update_classes_and_origins()",
+        command=lambda: dss.update_classes_and_origins(
+            origin_list_=origin_list,
+            champions_list_=champions_list,
+            origin_counters_=origin_counters,
+            class_list_=class_list,
+            class_counters_=class_counters,
+        ),
+    )
+    ButtonCal.grid(row=12, column=0)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="show_points_for_nonzero_counters()",
+        command=lambda: dss.show_points_for_nonzero_counters(
+            tk_window=MainWindow,
+            origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+            champions_list_=champions_list,
+            df_=df,
+            row_offset=2,
+            show_mode=1,
+            CARDS_TO_BUY_AMOUNT_=dss.CARDS_TO_BUY_AMOUNT,
+            SHIFT_BETWEEN_ORIGINS_=dss.SHIFT_BETWEEN_ORIGINS,
+        ),
+    )
+    ButtonCal.grid(row=13, column=0)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="show_nonzero_counters_with_points()",
+        command=lambda: dss.show_nonzero_counters_with_points(
+            tk_window=MainWindow,
+            origin_champs_counters_=origin_champs_counters,
+            origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+            champions_list_=champions_list,
+            df_=df,
+            origin_list_=origin_list,
+            origin_counters_=origin_counters,
+            class_list_=class_list,
+            class_counters_=class_counters,
+        ),
+    )
+    ButtonCal.grid(row=14, column=0)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="reset_counters_in_list()",
+        command=lambda: dss.reset_counters_in_list(
+            origin_champs_counters_to_buy_=origin_champs_counters_to_buy
+        ),
+    )
+    ButtonCal.grid(row=10, column=1)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="update_champions_to_buy_from_ocr_detection()",
+        command=lambda: dss.update_champions_to_buy_from_ocr_detection(
+            champions_list_for_ocr_=champions_list_for_ocr,
+            origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+            reader_=reader,
+        ),
+    )
+    ButtonCal.grid(row=11, column=1)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="show_nonzero_counters_with_points_from_ocr()",
+        command=lambda: dss.show_nonzero_counters_with_points_from_ocr(
+            tk_window=MainWindow,
+            origin_champs_counters_=origin_champs_counters,
+            origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+            champions_list_=champions_list,
+            df_=df,
+            index_list=dss.update_champions_to_buy_from_ocr_detection(
+                champions_list_for_ocr, origin_champs_counters_to_buy, reader
+            )[1],
+            origin_list_=origin_list,
+            origin_counters_=origin_counters,
+            class_list_=class_list,
+            class_counters_=class_counters,
+        ),
+    )
+    ButtonCal.grid(row=12, column=1)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="build_list_of_champion_cards_rectangles()",
+        command=lambda: dss.build_list_of_champion_cards_rectangles(
+            CARDS_TO_BUY_AMOUNT_=dss.CARDS_TO_BUY_AMOUNT,
+            Y_FIRST_CHAMPION_CARD_=dss.Y_FIRST_CHAMPION_CARD,
+            W_CHAMPION_CARD_=dss.W_CHAMPION_CARD,
+            H_CHAMPION_CARD_=dss.H_CHAMPION_CARD,
+        ),
+    )
+    ButtonCal.grid(row=13, column=1)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="draw_rectangles_show_points_show_buttons_reset_counters() scan&go",
+        command=lambda: dss.draw_rectangles_show_points_show_buttons_reset_counters(
+            rgb_colours_list_=rgb_colours_list,
+            champions_list_for_ocr_=champions_list_for_ocr,
+            origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+            reader_=reader,
+            tk_window=MainWindow,
+            origin_champs_counters_=origin_champs_counters,
+            df_=df,
+            origin_list_=origin_list,
+            champions_list_=champions_list,
+            origin_counters_=origin_counters,
+            class_list_=class_list,
+            class_counters_=class_counters,
+        ),
+    )
+    ButtonCal.grid(row=14, column=1)
+
     logging.debug("Function create_new_window() end")
 
 
