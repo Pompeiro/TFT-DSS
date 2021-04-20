@@ -1016,7 +1016,7 @@ def show_points_for_nonzero_counters_from_ocr(
     """It shows up champions POINTS to buy that counters are nonzero, as a text.
     Doesnt disappear currently, should be fixed.
     In: row_offset by default = 0 for buttons row placement."""
-    logging.debug("Function show_points_for_nonzero_counters() called")
+    logging.debug("Function show_points_for_nonzero_counters_from_ocr() called")
 
     global text_label_list
     points_for_champion_to_buy = [0] * CARDS_TO_BUY_AMOUNT_
@@ -1063,7 +1063,7 @@ def show_points_for_nonzero_counters_from_ocr(
         list(zip(points_for_champion_to_buy, human_readable_champions)),
     )
 
-    logging.debug("Function show_points_for_nonzero_counters() end")
+    logging.debug("Function show_points_for_nonzero_counters_from_ocr() end")
     return list(
         zip(points_for_champion_to_buy, champion_position_in_list_ordered_by_origin)
     )
@@ -1120,7 +1120,7 @@ def show_nonzero_counters_with_points_from_ocr(
     champions to buy as a buttons and their points as a text.
     In: row_offset_buttons by default 0 for buttons.
     row_offset_points by default 2 for points as a text."""
-    logging.debug("Function show_nonzero_counters_with_points() called")
+    logging.debug("Function show_nonzero_counters_with_points_from_ocr() called")
 
     update_classes_and_origins(
         origin_list_, champions_list_, origin_counters_, class_list_, class_counters_
@@ -1141,7 +1141,7 @@ def show_nonzero_counters_with_points_from_ocr(
         index_list,
     )
 
-    logging.debug("Function show_nonzero_counters_with_points() end")
+    logging.debug("Function show_nonzero_counters_with_points_from_ocr() end")
     return points_with_position_zip
 
 
