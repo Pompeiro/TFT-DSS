@@ -28,6 +28,7 @@ import pyautogui
 from recordtype import recordtype
 from win32gui import GetForegroundWindow, GetWindowText
 
+import dss
 from windowcapture1 import WindowCapture
 
 # import pydirectinput
@@ -37,42 +38,6 @@ logging.getLogger().setLevel(logging.DEBUG)
 LOAD_IMAGE = 0
 IMAGE_DEBUG_MODE = 1
 VARIABLE_PRINT_MODE = 0
-
-
-def activate_window(mode, delay=0.5):
-    """
-
-
-    Parameters
-    ----------
-    mode : "client" or "game"
-    delay : Delay between actions. The default is 0.5.
-
-    Returns
-    -------
-    None.
-
-    """
-
-    logging.debug("Function activate_window() called with passed: %s.", mode)
-    logging.info("Current active window: %s", GetWindowText(GetForegroundWindow()))
-    if mode == "client":
-        window = pyautogui.getWindowsWithTitle("League of Legends")[0]
-        window_text = "League of Legends"
-    elif mode == "game":
-        window = pyautogui.getWindowsWithTitle("League of Legends (TM) Client")[0]
-        window_text = "League of Legends (TM) Client"
-
-    if GetWindowText(GetForegroundWindow()) != window_text:
-        logging.info("active window != desired window, window activation goes on")
-        window.minimize()
-        time.sleep(delay)
-        window.restore()
-        window.activate()
-        time.sleep(delay)
-    logging.info("Current active window: %s", GetWindowText(GetForegroundWindow()))
-
-    logging.debug("Function activate_window end.")
 
 
 def start_tft_match(templates_list, delay=3):
@@ -90,7 +55,7 @@ def start_tft_match(templates_list, delay=3):
     None.
 
     """
-    activate_window("client")
+    dss.activate_window("client")
     for i, templ in enumerate(templates_list):
         if i < len(templates_list) - 1:
             point = client_match_template(templ)
@@ -153,7 +118,7 @@ def click_button_in_game(mode="xp"):
         regio = (680, 440, 960, 600)
 
     EXIT_FLAG = False
-    activate_window("game")
+    dss.activate_window("game")
     point = client_match_template(template_button, conf=0.95, region_=regio)
     logging.info("point is: %s", point)
     if point is not None:
@@ -174,63 +139,6 @@ def click_button_in_game(mode="xp"):
         logging.info("Button isnt available, couldnt find button or not enough gold.")
     logging.debug("Function click_button_in_game end.")
     return EXIT_FLAG
-
-
-def make_cropped_ss(
-    window,
-    load_image=LOAD_IMAGE,
-    cropping_x=450,
-    cropping_y=970,
-    cropping_width=1000,
-    cropping_height=30,
-    img_to_load="examples/bot/game/game1.jpg",
-):
-    """
-
-
-    Parameters
-    ----------
-    LOAD_IMAGE : If want to open without game then change to 1.
-        The default is 0.
-    window : Window to be captured, set to None if want to open without game.
-        The default is wincap.
-
-        Defaults to cropp screenshot from first to fifth(1-5) champion card name.
-    cropping_x :  The default is 450.
-    cropping_y :  The default is 970.
-    cropping_width :  The default is 1000.
-    cropping_height :  The default is 30.
-
-    Returns
-    -------
-    crop_img : Cropped screenshot.
-
-    """
-    logging.debug("Function make_cropped_ss() called")
-
-    WINDOWCAPTUREFLAG = 1
-    if load_image:
-        screenshot = cv.imread(img_to_load)
-    else:
-        try:
-            screenshot = window.get_screenshot()
-        except:
-            logging.info("Window not found")
-            WINDOWCAPTUREFLAG = 0
-            return None
-    if WINDOWCAPTUREFLAG or load_image:
-
-        crop_img = screenshot[
-            cropping_y : cropping_y + cropping_height,
-            cropping_x : cropping_x + cropping_width,
-        ]
-
-    if IMAGE_DEBUG_MODE:
-        cv.imshow("make_cropped_ss()[1] ss", screenshot)
-        cv.imshow("make_cropped_ss()[0] crop_img", crop_img)
-
-    logging.debug("Function make_cropped_ss() end")
-    return crop_img, screenshot
 
 
 def unique_file(basename, ext):
@@ -312,40 +220,30 @@ def make_cropped_ss_and_get_gold(
 
 
 def make_cropped_ss_and_get_round(
-    window,
     load_image=LOAD_IMAGE,
-    croppingY=0,
+    croppingY=30,
     croppingX=760,
     croppingHeight=40,
     croppingWidth=60,
 ):
-    WINDOWCAPTUREFLAG = 1
-    if load_image:
-        screenshot = cv.imread("examples/ss1.jpg", cv.IMREAD_UNCHANGED)
-    else:
-        try:
-            screenshot = window.get_screenshot()
-        except:
-            print(
-                "Not found teamfight tactics game window!!!!!!!!!!!!! From make_cropped_ss()"
-            )
-            WINDOWCAPTUREFLAG = 0
-            return None
-    # print(screenshot)
-    if WINDOWCAPTUREFLAG:
-        crop_img = screenshot[
-            croppingY : croppingY + croppingHeight,
-            croppingX : croppingX + croppingWidth,
-        ]
-        cv.imshow("ss", crop_img)
-        OCRResult = reader.readtext(crop_img)
-        try:
-            print(OCRResult[0][1])
-            currentRound = OCRResult[0][1]
-            return currentRound.replace("-", "")  ######### delete -
-        except (IndexError):
-            print("Couldnt find round")
-            return None
+    crop_img = dss.make_cropped_ss(
+        LOAD_IMAGE_=LOAD_IMAGE,
+        cropping_x=760,
+        cropping_y=30,
+        cropping_width=60,
+        cropping_height=40,
+        TFTDSS_ON=0,
+    )[0]
+
+    cv.imshow("make_cropped_ss_and_get_round", crop_img)
+    OCRResult = reader.readtext(crop_img)
+    try:
+        print(OCRResult[0][1])
+        currentRound = OCRResult[0][1]
+        return currentRound.replace("-", "")  ######### delete -
+    except (IndexError):
+        print("Couldnt find round")
+        return None
 
 
 def filling_list_with_counter_for_namedtuple(field_to_check, input_list):
@@ -664,7 +562,7 @@ def update_champions_to_buy_from_ocr_detection():
 
     champs_to_buy_index_list = []
     list_of_champs_to_buy_this_turn = sort_detected_champions_to_buy_by_position(
-        ocr_on_cropped_img(make_cropped_ss(wincap)[0]), champions_list_for_ocr
+        ocr_on_cropped_img(dss.make_cropped_ss(TFTDSS_ON=0)[0]), champions_list_for_ocr
     )
     for champ_to_buy in list_of_champs_to_buy_this_turn:
         for i, champ in enumerate(champions_list_for_ocr):
@@ -761,7 +659,7 @@ def buy_best_available_champions_by_points_threshold(
     threshold=1.8,
     mousePathDelay=0.05,
 ):
-    activate_window(mode="game")
+    dss.activate_window(mode="game")
     points_zip = (
         create_list_sorted_champions_to_buy_points_then_indexes_then_position_on_screen(
             show_points_for_nonzero_counters()
@@ -786,7 +684,7 @@ def buy_best_available_champions_by_points_threshold(
         pyautogui.moveTo(300, 300)
         update_champion_counter(points_zip[i])
 
-        ss_to_save = make_cropped_ss(wincap)[1]
+        ss_to_save = dss.make_cropped_ss(TFTDSS_ON=0)[1]
         cv.imwrite(
             unique_file((current_bot_images_directory / "ssIlony"), "jpg"), ss_to_save
         )
@@ -800,11 +698,9 @@ def boost_up_points_for_class(clas='"Brawler"'):
 
 
 def check_round_change(roundCurr):
-    roundLocal = make_cropped_ss_and_get_round(window=wincap)
+    roundLocal = make_cropped_ss_and_get_round()
     if roundLocal == None:  ########### different round placement on screen
-        roundLocal = make_cropped_ss_and_get_round(
-            window=wincap, croppingX=820, croppingWidth=60
-        )
+        roundLocal = make_cropped_ss_and_get_round(croppingX=820, croppingWidth=60)
         try:
             if "#" in roundLocal:
                 print("# in roundLocal something went wrong from check round change")
@@ -814,7 +710,7 @@ def check_round_change(roundCurr):
     if roundLocal:
         try:
             roundCapturedNow = int(roundLocal)
-        except (TypeError):
+        except (TypeError, ValueError):
             roundLocal = None
         if roundCurr == roundCapturedNow:
             print("roundSaved, roundCapturedNow:", roundCurr, roundCapturedNow)
@@ -830,7 +726,6 @@ def check_round_change(roundCurr):
 
 # list of window names
 WindowCapture.list_window_names()
-
 
 
 # game things
@@ -1457,14 +1352,14 @@ roundNow = None
 while True:
     try:
 
-
         EXIT_FLAG_ = click_button_in_game("exit")
         if EXIT_FLAG_ is True:
-            #time to close
+            # time to close
             time.sleep(10)
             if not (
                 "League of Legends (TM) Client" in WindowCapture.list_window_names()
             ):
+                time.sleep(10)
                 logging.info("Exit from game succesfull")
                 break
 
@@ -1476,7 +1371,7 @@ while True:
             )
 
             try:
-                capturedRound = make_cropped_ss_and_get_round(window=wincap)
+                capturedRound = make_cropped_ss_and_get_round()
                 buy_best_available_champions_by_points_threshold()
                 if roundNow in ROUNDSTOBUYXP:
                     for i in range(0, 15, 1):
@@ -1504,9 +1399,6 @@ while True:
 
 pyautogui.PAUSE = 0.02
 pyautogui.FAILSAFE = False
-
-
-
 
 
 ###################################################################################
@@ -1793,9 +1685,6 @@ pyautogui.FAILSAFE = False
 # ##############################################################################
 
 
-
-
-
 # def move_champion_from_x_to_y(startingPoint, metaPoint):
 #     activate_window(mode="game")
 #     # time.sleep(0.02)
@@ -2000,9 +1889,6 @@ pyautogui.FAILSAFE = False
 #         )
 
 
-
-
-
 # def shuffle_champs():
 #     pyautogui.moveTo(x=300, y=300, duration=0.5)  # to avoid blocking screen
 #     shuffle_champions_on_first_and_third_row_of_hexes_and_subsitute_bench()
@@ -2076,7 +1962,7 @@ pyautogui.FAILSAFE = False
 #         #     pyautogui.mouseDown()
 #         #     time.sleep(0.1)
 #         #     pyautogui.mouseUp()
-    
+
 #         if match_template_with_screen(
 #             hexesToCheckListJPG=gameExitNowButtonJPG,
 #             hexesLocationWithOffset=gameExitNowButtonXY,
@@ -2084,19 +1970,19 @@ pyautogui.FAILSAFE = False
 #             threshold=0.95,
 #         ):
 #             print("Found exit game button!!!!!")
-    
+
 #             pyautogui.moveTo(x=834, y=545, duration=0.15)  # exit now
 #             pyautogui.mouseDown()
 #             time.sleep(0.1)
 #             pyautogui.mouseUp()
-    
+
 #         checkingRound = check_round_change(roundNow)
 #         if checkingRound[1]:
 #             roundNow = checkingRound[0]
 #             print(
 #                 "Changed round or there is no round on the screen!!!!!!!!!!!!!!!!!!!!!!! From while loop"
 #             )
-    
+
 #         # try:
 #             championsToBuyIndexes = (
 #                 from_OCR_champions_to_buy_list_to_counter_index_list()
@@ -2110,16 +1996,16 @@ pyautogui.FAILSAFE = False
 #                     click_button_in_game("xp")
 #                 ):  ### buy XP till bot has gold to do it
 #                     print("Buying XP")
-    
+
 #             if roundNow in ROUNDSTOBUYREFRESH:
 #                 for i in range(0, int(capturedRound[0]) + 1, 1):
 #                     click_button_in_game("refresh")
 #                     time.sleep(0.1)
 #                     buy_champ_if_has_more_points_than_threshold()
-    
+
 #             if roundNow in SHUFFLEROUNDS:
 #                 shuffle_champs()
-    
+
 #             # except (TypeError):
 #             #     print("end of the game")
 #                 # break
