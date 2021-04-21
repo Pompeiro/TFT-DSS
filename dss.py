@@ -251,7 +251,6 @@ def make_cropped_ss(
     cropping_height=30,
     IMAGE_DEBUG_MODE_=IMAGE_DEBUG_MODE,
     IMAGE_DEBUG_MODE_FULLSCREEN_=IMAGE_DEBUG_MODE_FULLSCREEN,
-    TFTDSS_ON=1,
 ):
     """
 
@@ -282,8 +281,7 @@ def make_cropped_ss(
         activate_window(mode="game", delay=0.2)
         screenshot = pyautogui.screenshot()
         screenshot = cv.cvtColor(np.array(screenshot), cv.COLOR_RGB2BGR)
-        if TFTDSS_ON:
-            activate_window(mode="dss", delay=0.2)
+        activate_window(mode="dss", delay=0.2)
 
     crop_img = screenshot[
         cropping_y : cropping_y + cropping_height,
