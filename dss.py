@@ -187,7 +187,7 @@ def sub(counter):
 
 
 def sort_detected_champions_to_buy_by_position(
-    ocr_results_sorted, champions_list_for_ocr_
+    ocr_results_sorted=None, champions_list_for_ocr_=None
 ):
     """
         Sorting input in order from left to right by placement on the screen
@@ -302,7 +302,7 @@ def make_cropped_ss(
     return crop_img, screenshot
 
 
-def ocr_on_cropped_img(cropped_ss_with_champion_card_names, reader_):
+def ocr_on_cropped_img(cropped_ss_with_champion_card_names=None, reader_=None):
     """
 
 
@@ -326,8 +326,29 @@ def ocr_on_cropped_img(cropped_ss_with_champion_card_names, reader_):
     return ocr_result
 
 
+def test(ocr_on_cropped_img, **kwargs):
+    # https://stackoverflow.com/questions/6289646/python-function-as-a-function-argument
+    return ocr_on_cropped_img(**kwargs)
+
+
+def generate_list_of_champions_to_buy_this_turn(
+    sort_detected_champions_to_buy_by_position, **kwargs
+):
+    list_of_champs_to_buy_this_turn = sort_detected_champions_to_buy_by_position(
+        **kwargs
+    )
+    print(list_of_champs_to_buy_this_turn)
+    return list_of_champs_to_buy_this_turn
+
+
+# generate_list_of_champions_to_buy_this_turn(sort_detected_champions_to_buy_by_position, ocr_results_sorted=ocr_on_cropped_img(make_cropped_ss(LOAD_IMAGE_=1)[0], reader_=reader),champions_list_for_ocr_=champions_list_for_ocr)
+
+
 def update_champions_to_buy_from_ocr_detection(
-    champions_list_for_ocr_, origin_champs_counters_to_buy_, reader_
+    champions_list_for_ocr__,
+    origin_champs_counters_to_buy_,
+    sort_detected_champions_to_buy_by_position,
+    **kwargs,
 ):
     """
     Add 1 to every champion to buy counter detected in ocr_result.
@@ -341,11 +362,11 @@ def update_champions_to_buy_from_ocr_detection(
     logging.debug("Function update_champions_to_buy_from_ocr_detection() called")
 
     list_of_champs_to_buy_this_turn = sort_detected_champions_to_buy_by_position(
-        ocr_on_cropped_img(make_cropped_ss()[0], reader_), champions_list_for_ocr_
+        **kwargs,
     )
     champs_to_buy_indexes = []
     for champ_to_buy in list_of_champs_to_buy_this_turn:
-        for i, champ in enumerate(champions_list_for_ocr_):
+        for i, champ in enumerate(champions_list_for_ocr__):
             if champ_to_buy == champ:
                 logging.info(
                     "IF inside for loop in update_champions_to_buy_from_ocr_detection()"
@@ -470,7 +491,13 @@ def draw_rectangles_show_points_show_buttons_reset_counters(
         list_of_champs_to_buy_this_turn,
         index_list,
     ) = update_champions_to_buy_from_ocr_detection(
-        champions_list_for_ocr_, origin_champs_counters_to_buy_, reader_
+        champions_list_for_ocr_,
+        origin_champs_counters_to_buy_,
+        sort_detected_champions_to_buy_by_position=sort_detected_champions_to_buy_by_position,
+        ocr_results_sorted=ocr_on_cropped_img(
+            cropped_ss_with_champion_card_names=make_cropped_ss()[0], reader_=reader_
+        ),
+        champions_list_for_ocr_=champions_list_for_ocr_,
     )
 
     champions_to_buy_in_order_as_in_screen = list_of_champs_to_buy_this_turn

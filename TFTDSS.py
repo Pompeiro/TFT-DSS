@@ -1057,7 +1057,14 @@ ButtonCal = tk.Button(
         champions_list_=champions_list,
         df_=df,
         index_list=dss.update_champions_to_buy_from_ocr_detection(
-            champions_list_for_ocr, origin_champs_counters_to_buy, reader
+            champions_list_for_ocr__=champions_list_for_ocr,
+            origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+            sort_detected_champions_to_buy_by_position=dss.sort_detected_champions_to_buy_by_position,
+            ocr_results_sorted=dss.ocr_on_cropped_img(
+                cropped_ss_with_champion_card_names=dss.make_cropped_ss()[0],
+                reader_=reader,
+            ),
+            champions_list_for_ocr_=champions_list_for_ocr,
         )[1],
         origin_list_=origin_list,
         origin_counters_=origin_counters,
@@ -1185,9 +1192,14 @@ def create_new_window():
         new_window,
         text="update_champions_to_buy_from_ocr_detection()",
         command=lambda: dss.update_champions_to_buy_from_ocr_detection(
-            champions_list_for_ocr_=champions_list_for_ocr,
+            champions_list_for_ocr__=champions_list_for_ocr,
             origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
-            reader_=reader,
+            sort_detected_champions_to_buy_by_position=dss.sort_detected_champions_to_buy_by_position,
+            ocr_results_sorted=dss.ocr_on_cropped_img(
+                cropped_ss_with_champion_card_names=dss.make_cropped_ss()[0],
+                reader_=reader,
+            ),
+            champions_list_for_ocr_=champions_list_for_ocr,
         ),
     )
     ButtonCal.grid(row=4, column=0)
@@ -1202,7 +1214,14 @@ def create_new_window():
             champions_list_=champions_list,
             df_=df,
             index_list=dss.update_champions_to_buy_from_ocr_detection(
-                champions_list_for_ocr, origin_champs_counters_to_buy, reader
+                champions_list_for_ocr__=champions_list_for_ocr,
+                origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+                sort_detected_champions_to_buy_by_position=dss.sort_detected_champions_to_buy_by_position,
+                ocr_results_sorted=dss.ocr_on_cropped_img(
+                    cropped_ss_with_champion_card_names=dss.make_cropped_ss()[0],
+                    reader_=reader,
+                ),
+                champions_list_for_ocr_=champions_list_for_ocr,
             )[1],
         ),
     )
@@ -1222,7 +1241,14 @@ def create_new_window():
             champions_list_=champions_list,
             df_=df,
             index_list=dss.update_champions_to_buy_from_ocr_detection(
-                champions_list_for_ocr, origin_champs_counters_to_buy, reader
+                champions_list_for_ocr__=champions_list_for_ocr,
+                origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+                sort_detected_champions_to_buy_by_position=dss.sort_detected_champions_to_buy_by_position,
+                ocr_results_sorted=dss.ocr_on_cropped_img(
+                    cropped_ss_with_champion_card_names=dss.make_cropped_ss()[0],
+                    reader_=reader,
+                ),
+                champions_list_for_ocr_=champions_list_for_ocr,
             )[1],
         ),
     )
@@ -1238,7 +1264,14 @@ def create_new_window():
             champions_list_=champions_list,
             df_=df,
             index_list=dss.update_champions_to_buy_from_ocr_detection(
-                champions_list_for_ocr, origin_champs_counters_to_buy, reader
+                champions_list_for_ocr__=champions_list_for_ocr,
+                origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+                sort_detected_champions_to_buy_by_position=dss.sort_detected_champions_to_buy_by_position,
+                ocr_results_sorted=dss.ocr_on_cropped_img(
+                    cropped_ss_with_champion_card_names=dss.make_cropped_ss()[0],
+                    reader_=reader,
+                ),
+                champions_list_for_ocr_=champions_list_for_ocr,
             )[1],
             origin_list_=origin_list,
             origin_counters_=origin_counters,
@@ -1279,9 +1312,14 @@ def create_new_window():
         new_window,
         text="update_champions_to_buy_from_ocr_detection()",
         command=lambda: dss.update_champions_to_buy_from_ocr_detection(
-            champions_list_for_ocr_=champions_list_for_ocr,
+            champions_list_for_ocr__=champions_list_for_ocr,
             origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
-            reader_=reader,
+            sort_detected_champions_to_buy_by_position=dss.sort_detected_champions_to_buy_by_position,
+            ocr_results_sorted=dss.ocr_on_cropped_img(
+                cropped_ss_with_champion_card_names=dss.make_cropped_ss()[0],
+                reader_=reader,
+            ),
+            champions_list_for_ocr_=champions_list_for_ocr,
         ),
     )
     ButtonCal.grid(row=4, column=1)
@@ -1325,6 +1363,24 @@ def create_new_window():
         ),
     )
     ButtonCal.grid(row=3, column=2)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="update_champions_to_buy_from_ocr_detection()",
+        command=lambda: dss.update_champions_to_buy_from_ocr_detection(
+            champions_list_for_ocr__=champions_list_for_ocr,
+            origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+            sort_detected_champions_to_buy_by_position=dss.sort_detected_champions_to_buy_by_position,
+            ocr_results_sorted=dss.ocr_on_cropped_img(
+                cropped_ss_with_champion_card_names=dss.make_cropped_ss(LOAD_IMAGE_=1)[
+                    0
+                ],
+                reader_=reader,
+            ),
+            champions_list_for_ocr_=champions_list_for_ocr,
+        ),
+    )
+    ButtonCal.grid(row=4, column=2)
 
     ButtonCal = tk.Button(
         new_window,
@@ -1528,9 +1584,14 @@ def create_new_window():
         new_window,
         text="update_champions_to_buy_from_ocr_detection()",
         command=lambda: dss.update_champions_to_buy_from_ocr_detection(
-            champions_list_for_ocr_=champions_list_for_ocr,
+            champions_list_for_ocr__=champions_list_for_ocr,
             origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
-            reader_=reader,
+            sort_detected_champions_to_buy_by_position=dss.sort_detected_champions_to_buy_by_position,
+            ocr_results_sorted=dss.ocr_on_cropped_img(
+                cropped_ss_with_champion_card_names=dss.make_cropped_ss()[0],
+                reader_=reader,
+            ),
+            champions_list_for_ocr_=champions_list_for_ocr,
         ),
     )
     ButtonCal.grid(row=11, column=1)
@@ -1545,7 +1606,14 @@ def create_new_window():
             champions_list_=champions_list,
             df_=df,
             index_list=dss.update_champions_to_buy_from_ocr_detection(
-                champions_list_for_ocr, origin_champs_counters_to_buy, reader
+                champions_list_for_ocr__=champions_list_for_ocr,
+                origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
+                sort_detected_champions_to_buy_by_position=dss.sort_detected_champions_to_buy_by_position,
+                ocr_results_sorted=dss.ocr_on_cropped_img(
+                    cropped_ss_with_champion_card_names=dss.make_cropped_ss()[0],
+                    reader_=reader,
+                ),
+                champions_list_for_ocr_=champions_list_for_ocr,
             )[1],
             origin_list_=origin_list,
             origin_counters_=origin_counters,
