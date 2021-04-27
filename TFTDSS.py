@@ -1544,8 +1544,9 @@ def create_new_window():
         command=lambda: dss.show_points_for_nonzero_counters(
             tk_window=MainWindow,
             origin_champs_counters_to_buy_=origin_champs_counters_to_buy,
-            champions_list_=champions_list,
+            champions_list_for_ocr_=champions_list_for_ocr,
             df_=df,
+            reader_=reader,
             row_offset=2,
             show_mode=1,
             CARDS_TO_BUY_AMOUNT_=dss.CARDS_TO_BUY_AMOUNT,
