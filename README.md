@@ -1,3 +1,6 @@
+# SET5 update will be fully released: 5th May 2021
+Till now u can clone code from set5 branch but it doesnt work properly due to some classes are in origins secondary in some champions. Will need to fix it in DataMining.py
+
 # TFT-DSS
 Teamfight Tactics Decisive Support System  
 
