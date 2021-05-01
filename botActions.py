@@ -29,7 +29,7 @@ from recordtype import recordtype
 from win32gui import GetForegroundWindow, GetWindowText
 
 import dss
-from windowcapture1 import WindowCapture
+from windowcapture import WindowCapture
 
 # import pydirectinput
 logging.basicConfig(level=logging.DEBUG)
@@ -39,7 +39,7 @@ LOAD_IMAGE = 0
 IMAGE_DEBUG_MODE = 1
 VARIABLE_PRINT_MODE = 0
 IMAGE_DEBUG_MODE = 1
-IMAGE_DEBUG_MODE_FULLSCREEN = 0
+IMAGE_DEBUG_MODE_FULLSCREEN = 1
 
 
 CROPPING_X_CHAMPIONS = 450
@@ -58,6 +58,7 @@ CROPPING_Y_GOLD = 850
 CROPPING_WIDTH_GOLD = 100
 CROPPING_HEIGHT_GOLD = 40
 
+screenshot = cv.imread("examples/windowed_pyauto_ss.jpg", cv.IMREAD_UNCHANGED)
 
 
 def start_tft_match(templates_list, delay=3):
@@ -227,6 +228,65 @@ def make_cropped_ss(
     return crop_img, screenshot
 
 
+def make_ss(
+    IMAGE_DEBUG_MODE_=IMAGE_DEBUG_MODE,
+    IMAGE_DEBUG_MODE_FULLSCREEN_=IMAGE_DEBUG_MODE_FULLSCREEN,
+):
+    """
+
+
+    Parameters
+    ----------
+    IMAGE_DEBUG_MODE_ : 0 or 1, calls cv.imshow().
+        The default is IMAGE_DEBUG_MODE.
+    IMAGE_DEBUG_MODE_FULLSCREEN_ : 0 or 1, calls dss.imshow_fullscreen().
+        The default is IMAGE_DEBUG_MODE_FULLSCREEN.
+
+    Returns
+    -------
+    screenshot : screenshot of game.
+
+    """
+    logging.debug("Function make_ss() called")
+    dss.activate_window(mode="game", delay=0.2)
+    screenshot = pyautogui.screenshot()
+    screenshot = cv.cvtColor(np.array(screenshot), cv.COLOR_RGB2BGR)
+    if IMAGE_DEBUG_MODE_:
+        if not IMAGE_DEBUG_MODE_FULLSCREEN_:
+            cv.imshow("make_ss() screenshot", screenshot)
+        else:
+            dss.imshow_fullscreen(window_name="make_ss() screenshot", image=screenshot)
+    logging.debug("Function make_ss() end")
+    return screenshot
+
+
+def crop_ss(
+    screenshot_=screenshot,
+    cropping_x=CROPPING_X_CHAMPIONS,
+    cropping_y=CROPPING_Y_CHAMPIONS,
+    cropping_width=CROPPING_WIDTH_CHAMPIONS,
+    cropping_height=CROPPING_HEIGHT_CHAMPIONS,
+    IMAGE_DEBUG_MODE_=IMAGE_DEBUG_MODE,
+    IMAGE_DEBUG_MODE_FULLSCREEN_=IMAGE_DEBUG_MODE_FULLSCREEN,
+):
+    logging.debug("Function crop_ss() called")
+
+    crop_img = screenshot_[
+        cropping_y : cropping_y + cropping_height,
+        cropping_x : cropping_x + cropping_width,
+    ]
+    if IMAGE_DEBUG_MODE_:
+        if not IMAGE_DEBUG_MODE_FULLSCREEN_:
+            cv.imshow("crop_ss() screenshot", screenshot_)
+            cv.imshow("crop_ss() crop_img", crop_img)
+        else:
+            dss.imshow_fullscreen(window_name="crop_ss() screenshot", image=screenshot_)
+            cv.imshow("crop_ss() crop_img", crop_img)
+
+    logging.debug("Function crop_ss() end")
+    return crop_img
+
+
 def make_cropped_ss_and_get_champions_to_buy(reader_=None):
     crop_img = make_cropped_ss(
         LOAD_IMAGE_=LOAD_IMAGE,
@@ -235,8 +295,11 @@ def make_cropped_ss_and_get_champions_to_buy(reader_=None):
         cropping_width=CROPPING_WIDTH_CHAMPIONS,
         cropping_height=CROPPING_HEIGHT_CHAMPIONS,
     )[0]
-    OCRResult = dss.ocr_on_cropped_img(cropped_ss_with_champion_card_names=crop_img, reader_=reader_)
+    OCRResult = dss.ocr_on_cropped_img(
+        cropped_ss_with_champion_card_names=crop_img, reader_=reader_
+    )
     print(OCRResult)
+
 
 def make_cropped_ss_and_get_gold(reader_=None):
     crop_img = make_cropped_ss(
@@ -246,7 +309,9 @@ def make_cropped_ss_and_get_gold(reader_=None):
         cropping_width=CROPPING_WIDTH_GOLD,
         cropping_height=CROPPING_HEIGHT_GOLD,
     )[0]
-    OCRResult = dss.ocr_on_cropped_img(cropped_ss_with_champion_card_names=crop_img, reader_=reader_)
+    OCRResult = dss.ocr_on_cropped_img(
+        cropped_ss_with_champion_card_names=crop_img, reader_=reader_
+    )
     try:
         print(OCRResult[0][1])
         goldAmount = OCRResult[0][1]
@@ -266,7 +331,9 @@ def make_cropped_ss_and_get_round(reader_=None, crop_x=CROPPING_X_ROUND):
     )[0]
 
     cv.imshow("make_cropped_ss_and_get_round", crop_img)
-    OCRResult = dss.ocr_on_cropped_img(cropped_ss_with_champion_card_names=crop_img, reader_=reader_)
+    OCRResult = dss.ocr_on_cropped_img(
+        cropped_ss_with_champion_card_names=crop_img, reader_=reader_
+    )
     try:
         print(OCRResult[0][1])
         currentRound = OCRResult[0][1]
@@ -552,6 +619,7 @@ def update_champions_to_buy_from_ocr_detection(
     logging.debug("Function update_champions_to_buy_from_ocr_detection() end")
     return list_of_champs_to_buy_this_turn, champs_to_buy_indexes
 
+
 def show_points_for_nonzero_counters(row_offset=2, show_mode=1):
     """It shows up champions POINTS to buy that counters are nonzero, as a text.
     Doesnt disappear currently, should be fixed.
@@ -559,17 +627,17 @@ def show_points_for_nonzero_counters(row_offset=2, show_mode=1):
     logging.debug("Function show_points_for_nonzero_counters() called")
     position_on_screen = [0, 1, 2, 3, 4]
     points_for_champion_to_buy = [0] * 5
-    champion_position_in_list_ordered_by_origin = (
-        update_champions_to_buy_from_ocr_detection(
-            champions_list_for_ocr__=champions_list_for_ocr,
-            sort_detected_champions_to_buy_by_position=dss.sort_detected_champions_to_buy_by_position,
-            ocr_results_sorted=dss.ocr_on_cropped_img(
-                cropped_ss_with_champion_card_names=make_cropped_ss()[0],
-                reader_=reader,
-            ),
-            champions_list_for_ocr_=champions_list_for_ocr,
-        )[1]
-    )
+    champion_position_in_list_ordered_by_origin = update_champions_to_buy_from_ocr_detection(
+        champions_list_for_ocr__=champions_list_for_ocr,
+        sort_detected_champions_to_buy_by_position=dss.sort_detected_champions_to_buy_by_position,
+        ocr_results_sorted=dss.ocr_on_cropped_img(
+            cropped_ss_with_champion_card_names=make_cropped_ss()[0],
+            reader_=reader,
+        ),
+        champions_list_for_ocr_=champions_list_for_ocr,
+    )[
+        1
+    ]
     for i in range(0, len(champion_position_in_list_ordered_by_origin), 1):
         points_for_champion_to_buy[i] = (
             df.points[champion_position_in_list_ordered_by_origin[i]]
@@ -681,7 +749,9 @@ def boost_up_points_for_class(clas='"Brawler"'):
 def check_round_change(roundCurr):
     roundLocal = make_cropped_ss_and_get_round(reader_=reader)
     if roundLocal == None:  ########### different round placement on screen first rounds
-        roundLocal = make_cropped_ss_and_get_round(reader_=reader, crop_x=CROPPING_X_ROUND_FIRST)
+        roundLocal = make_cropped_ss_and_get_round(
+            reader_=reader, crop_x=CROPPING_X_ROUND_FIRST
+        )
         try:
             if "#" in roundLocal:
                 print("# in roundLocal something went wrong from check round change")
