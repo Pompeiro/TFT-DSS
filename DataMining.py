@@ -49,7 +49,7 @@ for i in range(0, len(champion_names), 1):
             "Found first champion index in 'a' selector: %d",
             FIRST_CHAMPION_IN_A_SELECTOR,
         )
-    if champion_names[i].text == "Zilean":  # Last champion sorted by name
+    if champion_names[i].text == "Zyra":  # Last champion sorted by name
         LAST_CHAMPION_INDEX_IN_A_SELECTOR = i + 1  # +1 because for loop stops at i +1
         logging.info(
             "Found last champion index in 'a' selector: %d",
