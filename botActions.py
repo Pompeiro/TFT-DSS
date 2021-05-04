@@ -845,64 +845,64 @@ if VARIABLE_PRINT_MODE:
 
 
 champions_list_for_ocr = [
-    "Aatrox",
-    "Elise",
-    "Kalista",
-    "Pyke",
-    "Sivir",
-    "Twisted Fate",
-    "Vladimir",
-    "Zilean",
-    "Samira",
-    "Jax",
-    "Kayle",
-    "Lee Sin",
-    "Nasus",
-    "Wukong",
-    "Aurelion Sol",
     "Brand",
-    "Braum",
-    "Olaf",
-    "Shyvana",
-    "Swain",
-    "Tristana",
-    "Lulu",
-    "Maokai",
+    "Kalista",
     "Nunu & Willump",
-    "Ornn",
-    "Rakan",
-    "Veigar",
-    "Xayah",
-    "Fiora",
-    "Irelia",
-    "Janna",
-    "Morgana",
-    "Talon",
-    "Yasuo",
-    "Yone",
-    "Cho Gath",
-    "Nautilus",
-    "Neeko",
-    "Annie",
-    "Darius",
-    "Sejuani",
-    "Tahm Kench",
-    "Akali",
-    "Kennen",
-    "Shen",
-    "Zed",
-    "Diana",
-    "Kindred",
-    "Teemo",
-    "Yuumi",
-    "Sett",
-    "Azir",
+    "LeBlanc",
+    "Lissandra",
     "Garen",
-    "Jarvan IV",
-    "Katarina",
+    "Gragas",
+    "Karma",
+    "Kha Zix",
     "Nidalee",
-    "Tryndamere",
-    "Vi",
+    "Riven",
+    "Soraka",
+    "Heimerdinger",
+    "Sett",
+    "Udyr",
+    "Zyra",
+    "Diana",
+    "Mordekaiser",
+    "Pantheon",
+    "Trundle",
+    "Kindred",
+    "Draven",
+    "Hecarim",
+    "Katarina",
+    "Ryze",
+    "Thresh",
+    "Vayne",
+    "Viego",
+    "Viktor",
+    "Warwick",
+    "Kennen",
+    "Kled",
+    "Lulu",
+    "Poppy",
+    "Teemo",
+    "Ziggs",
+    "Jax",
+    "Nautilus",
+    "Aphelios",
+    "Darius",
+    "Lee Sin",
+    "Morgana",
+    "Sejuani",
+    "Vladimir",
+    "Yasuo",
+    "Aatrox",
+    "Kayle",
+    "Leona",
+    "Lux",
+    "Rell",
+    "Syndra",
+    "Varus",
+    "Vel Koz",
+    "Ivern",
+    "Nocturne",
+    "Volibear",
+    "Ashe",
+    "Taric",
 ]
 
 
@@ -943,34 +943,34 @@ if VARIABLE_PRINT_MODE:
         print(origin.lower() + "_champs", end=", ")
     print("]")
 
-cultist_champs = list(df.query('origin_prim == "Cultist"').champion)
-daredevil_champs = list(df.query('origin_prim == "Daredevil"').champion)
-divine_champs = list(df.query('origin_prim == "Divine"').champion)
-dragonsoul_champs = list(df.query('origin_prim == "Dragonsoul"').champion)
-elderwood_champs = list(df.query('origin_prim == "Elderwood"').champion)
-enlightened_champs = list(df.query('origin_prim == "Enlightened"').champion)
-exile_champs = list(df.query('origin_prim == "Exile"').champion)
-fabled_champs = list(df.query('origin_prim == "Fabled"').champion)
-fortune_champs = list(df.query('origin_prim == "Fortune"').champion)
-ninja_champs = list(df.query('origin_prim == "Ninja"').champion)
-spirit_champs = list(df.query('origin_prim == "Spirit"').champion)
-the_boss_champs = list(df.query('origin_prim == "The Boss"').champion)
-warlord_champs = list(df.query('origin_prim == "Warlord"').champion)
+abomination_champs = list(df.query('origin_prim == "Abomination"').champion)
+coven_champs = list(df.query('origin_prim == "Coven"').champion)
+dawnbringer_champs = list(df.query('origin_prim == "Dawnbringer"').champion)
+draconic_champs = list(df.query('origin_prim == "Draconic"').champion)
+dragonslayer_champs = list(df.query('origin_prim == "Dragonslayer"').champion)
+eternal_champs = list(df.query('origin_prim == "Eternal"').champion)
+forgotten_champs = list(df.query('origin_prim == "Forgotten"').champion)
+hellion_champs = list(df.query('origin_prim == "Hellion"').champion)
+ironclad_champs = list(df.query('origin_prim == "Ironclad"').champion)
+nightbringer_champs = list(df.query('origin_prim == "Nightbringer"').champion)
+redeemed_champs = list(df.query('origin_prim == "Redeemed"').champion)
+revenant_champs = list(df.query('origin_prim == "Revenant"').champion)
+verdant_champs = list(df.query('origin_prim == "Verdant"').champion)
 
 origin_champs_from_df_list = [
-    cultist_champs,
-    daredevil_champs,
-    divine_champs,
-    dragonsoul_champs,
-    elderwood_champs,
-    enlightened_champs,
-    exile_champs,
-    fabled_champs,
-    fortune_champs,
-    ninja_champs,
-    spirit_champs,
-    the_boss_champs,
-    warlord_champs,
+    abomination_champs,
+    coven_champs,
+    dawnbringer_champs,
+    draconic_champs,
+    dragonslayer_champs,
+    eternal_champs,
+    forgotten_champs,
+    hellion_champs,
+    ironclad_champs,
+    nightbringer_champs,
+    redeemed_champs,
+    revenant_champs,
+    verdant_champs,
 ]
 
 
@@ -986,64 +986,64 @@ if VARIABLE_PRINT_MODE:
 
 
 # champions counters
-CounterAatrox = 0
-CounterElise = 0
-CounterKalista = 0
-CounterPyke = 0
-CounterSivir = 0
-CounterTwistedFate = 0
-CounterVladimir = 0
-CounterZilean = 0
-CounterSamira = 0
-CounterJax = 0
-CounterKayle = 0
-CounterLeeSin = 0
-CounterNasus = 0
-CounterWukong = 0
-CounterAurelionSol = 0
 CounterBrand = 0
-CounterBraum = 0
-CounterOlaf = 0
-CounterShyvana = 0
-CounterSwain = 0
-CounterTristana = 0
-CounterLulu = 0
-CounterMaokai = 0
+CounterKalista = 0
 CounterNunu = 0
-CounterOrnn = 0
-CounterRakan = 0
-CounterVeigar = 0
-CounterXayah = 0
-CounterFiora = 0
-CounterIrelia = 0
-CounterJanna = 0
-CounterMorgana = 0
-CounterTalon = 0
-CounterYasuo = 0
-CounterYone = 0
-CounterChogath = 0
-CounterNautilus = 0
-CounterNeeko = 0
-CounterAnnie = 0
-CounterDarius = 0
-CounterSejuani = 0
-CounterTahmKench = 0
-CounterAkali = 0
-CounterKennen = 0
-CounterShen = 0
-CounterZed = 0
-CounterDiana = 0
-CounterKindred = 0
-CounterTeemo = 0
-CounterYuumi = 0
-CounterSett = 0
-CounterAzir = 0
+CounterLeblanc = 0
+CounterLissandra = 0
 CounterGaren = 0
-CounterJarvanIV = 0
-CounterKatarina = 0
+CounterGragas = 0
+CounterKarma = 0
+CounterKhazix = 0
 CounterNidalee = 0
-CounterTryndamere = 0
-CounterVi = 0
+CounterRiven = 0
+CounterSoraka = 0
+CounterHeimerdinger = 0
+CounterSett = 0
+CounterUdyr = 0
+CounterZyra = 0
+CounterDiana = 0
+CounterMordekaiser = 0
+CounterPantheon = 0
+CounterTrundle = 0
+CounterKindred = 0
+CounterDraven = 0
+CounterHecarim = 0
+CounterKatarina = 0
+CounterRyze = 0
+CounterThresh = 0
+CounterVayne = 0
+CounterViego = 0
+CounterViktor = 0
+CounterWarwick = 0
+CounterKennen = 0
+CounterKled = 0
+CounterLulu = 0
+CounterPoppy = 0
+CounterTeemo = 0
+CounterZiggs = 0
+CounterJax = 0
+CounterNautilus = 0
+CounterAphelios = 0
+CounterDarius = 0
+CounterLeeSin = 0
+CounterMorgana = 0
+CounterSejuani = 0
+CounterVladimir = 0
+CounterYasuo = 0
+CounterAatrox = 0
+CounterKayle = 0
+CounterLeona = 0
+CounterLux = 0
+CounterRell = 0
+CounterSyndra = 0
+CounterVarus = 0
+CounterVelkoz = 0
+CounterIvern = 0
+CounterNocturne = 0
+CounterVolibear = 0
+CounterAshe = 0
+CounterTaric = 0
 
 if VARIABLE_PRINT_MODE:
     print("origin_champs_counters = [")
@@ -1053,64 +1053,64 @@ if VARIABLE_PRINT_MODE:
     print()
 
 origin_champs_counters = [
-    CounterAatrox,
-    CounterElise,
-    CounterKalista,
-    CounterPyke,
-    CounterSivir,
-    CounterTwistedFate,
-    CounterVladimir,
-    CounterZilean,
-    CounterSamira,
-    CounterJax,
-    CounterKayle,
-    CounterLeeSin,
-    CounterNasus,
-    CounterWukong,
-    CounterAurelionSol,
     CounterBrand,
-    CounterBraum,
-    CounterOlaf,
-    CounterShyvana,
-    CounterSwain,
-    CounterTristana,
-    CounterLulu,
-    CounterMaokai,
+    CounterKalista,
     CounterNunu,
-    CounterOrnn,
-    CounterRakan,
-    CounterVeigar,
-    CounterXayah,
-    CounterFiora,
-    CounterIrelia,
-    CounterJanna,
-    CounterMorgana,
-    CounterTalon,
-    CounterYasuo,
-    CounterYone,
-    CounterChogath,
-    CounterNautilus,
-    CounterNeeko,
-    CounterAnnie,
-    CounterDarius,
-    CounterSejuani,
-    CounterTahmKench,
-    CounterAkali,
-    CounterKennen,
-    CounterShen,
-    CounterZed,
-    CounterDiana,
-    CounterKindred,
-    CounterTeemo,
-    CounterYuumi,
-    CounterSett,
-    CounterAzir,
+    CounterLeblanc,
+    CounterLissandra,
     CounterGaren,
-    CounterJarvanIV,
-    CounterKatarina,
+    CounterGragas,
+    CounterKarma,
+    CounterKhazix,
     CounterNidalee,
-    CounterTryndamere,
-    CounterVi,
+    CounterRiven,
+    CounterSoraka,
+    CounterHeimerdinger,
+    CounterSett,
+    CounterUdyr,
+    CounterZyra,
+    CounterDiana,
+    CounterMordekaiser,
+    CounterPantheon,
+    CounterTrundle,
+    CounterKindred,
+    CounterDraven,
+    CounterHecarim,
+    CounterKatarina,
+    CounterRyze,
+    CounterThresh,
+    CounterVayne,
+    CounterViego,
+    CounterViktor,
+    CounterWarwick,
+    CounterKennen,
+    CounterKled,
+    CounterLulu,
+    CounterPoppy,
+    CounterTeemo,
+    CounterZiggs,
+    CounterJax,
+    CounterNautilus,
+    CounterAphelios,
+    CounterDarius,
+    CounterLeeSin,
+    CounterMorgana,
+    CounterSejuani,
+    CounterVladimir,
+    CounterYasuo,
+    CounterAatrox,
+    CounterKayle,
+    CounterLeona,
+    CounterLux,
+    CounterRell,
+    CounterSyndra,
+    CounterVarus,
+    CounterVelkoz,
+    CounterIvern,
+    CounterNocturne,
+    CounterVolibear,
+    CounterAshe,
+    CounterTaric,
 ]
 
 # counters for origins
@@ -1120,19 +1120,19 @@ if VARIABLE_PRINT_MODE:
         print("Counter" + origin + " = 0")
 
 
-CounterCultist = 0
-CounterDaredevil = 0
-CounterDivine = 0
-CounterDragonsoul = 0
-CounterElderwood = 0
-CounterEnlightened = 0
-CounterExile = 0
-CounterFabled = 0
-CounterFortune = 0
-CounterNinja = 0
-CounterSpirit = 0
-CounterTheBoss = 0
-CounterWarlord = 0
+CounterAbomination = 0
+CounterCoven = 0
+CounterDawnbringer = 0
+CounterDraconic = 0
+CounterDragonslayer = 0
+CounterEternal = 0
+CounterForgotten = 0
+CounterHellion = 0
+CounterIronclad = 0
+CounterNightbringer = 0
+CounterRedeemed = 0
+CounterRevenant = 0
+CounterVerdant = 0
 
 
 if VARIABLE_PRINT_MODE:
@@ -1143,19 +1143,19 @@ if VARIABLE_PRINT_MODE:
 
 
 origin_counters = [
-    CounterCultist,
-    CounterDaredevil,
-    CounterDivine,
-    CounterDragonsoul,
-    CounterElderwood,
-    CounterEnlightened,
-    CounterExile,
-    CounterFabled,
-    CounterFortune,
-    CounterNinja,
-    CounterSpirit,
-    CounterTheBoss,
-    CounterWarlord,
+    CounterAbomination,
+    CounterCoven,
+    CounterDawnbringer,
+    CounterDraconic,
+    CounterDragonslayer,
+    CounterEternal,
+    CounterForgotten,
+    CounterHellion,
+    CounterIronclad,
+    CounterNightbringer,
+    CounterRedeemed,
+    CounterRevenant,
+    CounterVerdant,
 ]
 
 # counters for classes
@@ -1166,20 +1166,20 @@ if VARIABLE_PRINT_MODE:
         print("Counter" + clas + " = 0")
 
 
-CounterAdept = 0
 CounterAssassin = 0
-CounterBlacksmith = 0
 CounterBrawler = 0
-CounterDuelist = 0
-CounterEmperor = 0
-CounterExecutioner = 0
-CounterKeeper = 0
-CounterMage = 0
+CounterCaretaker = 0
+CounterCavalier = 0
+CounterCruel = 0
+CounterGodKing = 0
+CounterInvoker = 0
+CounterKnight = 0
+CounterLegionnaire = 0
 CounterMystic = 0
-CounterSharpshooter = 0
-CounterSlayer = 0
-CounterSyphoner = 0
-CounterVanguard = 0
+CounterRanger = 0
+CounterRenewer = 0
+CounterSkirmisher = 0
+CounterSpellweaver = 0
 
 
 if VARIABLE_PRINT_MODE:
@@ -1189,20 +1189,20 @@ if VARIABLE_PRINT_MODE:
     print("]")
 
 class_counters = [
-    CounterAdept,
     CounterAssassin,
-    CounterBlacksmith,
     CounterBrawler,
-    CounterDuelist,
-    CounterEmperor,
-    CounterExecutioner,
-    CounterKeeper,
-    CounterMage,
+    CounterCaretaker,
+    CounterCavalier,
+    CounterCruel,
+    CounterGodKing,
+    CounterInvoker,
+    CounterKnight,
+    CounterLegionnaire,
     CounterMystic,
-    CounterSharpshooter,
-    CounterSlayer,
-    CounterSyphoner,
-    CounterVanguard,
+    CounterRanger,
+    CounterRenewer,
+    CounterSkirmisher,
+    CounterSpellweaver,
 ]
 
 # Champion namedtuple things
@@ -1250,64 +1250,64 @@ if VARIABLE_PRINT_MODE:
     for i, champ in enumerate(champion_info):
         print(champ[0] + " = Champion(*champion_info[%d])" % i)
 
-Aatrox = Champion(*champion_info[0])
-Elise = Champion(*champion_info[1])
-Kalista = Champion(*champion_info[2])
-Pyke = Champion(*champion_info[3])
-Sivir = Champion(*champion_info[4])
-TwistedFate = Champion(*champion_info[5])
-Vladimir = Champion(*champion_info[6])
-Zilean = Champion(*champion_info[7])
-Samira = Champion(*champion_info[8])
-Jax = Champion(*champion_info[9])
-Kayle = Champion(*champion_info[10])
-LeeSin = Champion(*champion_info[11])
-Nasus = Champion(*champion_info[12])
-Wukong = Champion(*champion_info[13])
-AurelionSol = Champion(*champion_info[14])
-Brand = Champion(*champion_info[15])
-Braum = Champion(*champion_info[16])
-Olaf = Champion(*champion_info[17])
-Shyvana = Champion(*champion_info[18])
-Swain = Champion(*champion_info[19])
-Tristana = Champion(*champion_info[20])
-Lulu = Champion(*champion_info[21])
-Maokai = Champion(*champion_info[22])
-Nunu = Champion(*champion_info[23])
-Ornn = Champion(*champion_info[24])
-Rakan = Champion(*champion_info[25])
-Veigar = Champion(*champion_info[26])
-Xayah = Champion(*champion_info[27])
-Fiora = Champion(*champion_info[28])
-Irelia = Champion(*champion_info[29])
-Janna = Champion(*champion_info[30])
-Morgana = Champion(*champion_info[31])
-Talon = Champion(*champion_info[32])
-Yasuo = Champion(*champion_info[33])
-Yone = Champion(*champion_info[34])
-Chogath = Champion(*champion_info[35])
-Nautilus = Champion(*champion_info[36])
-Neeko = Champion(*champion_info[37])
-Annie = Champion(*champion_info[38])
+Brand = Champion(*champion_info[0])
+Kalista = Champion(*champion_info[1])
+Nunu = Champion(*champion_info[2])
+Leblanc = Champion(*champion_info[3])
+Lissandra = Champion(*champion_info[4])
+Garen = Champion(*champion_info[5])
+Gragas = Champion(*champion_info[6])
+Karma = Champion(*champion_info[7])
+Khazix = Champion(*champion_info[8])
+Nidalee = Champion(*champion_info[9])
+Riven = Champion(*champion_info[10])
+Soraka = Champion(*champion_info[11])
+Heimerdinger = Champion(*champion_info[12])
+Sett = Champion(*champion_info[13])
+Udyr = Champion(*champion_info[14])
+Zyra = Champion(*champion_info[15])
+Diana = Champion(*champion_info[16])
+Mordekaiser = Champion(*champion_info[17])
+Pantheon = Champion(*champion_info[18])
+Trundle = Champion(*champion_info[19])
+Kindred = Champion(*champion_info[20])
+Draven = Champion(*champion_info[21])
+Hecarim = Champion(*champion_info[22])
+Katarina = Champion(*champion_info[23])
+Ryze = Champion(*champion_info[24])
+Thresh = Champion(*champion_info[25])
+Vayne = Champion(*champion_info[26])
+Viego = Champion(*champion_info[27])
+Viktor = Champion(*champion_info[28])
+Warwick = Champion(*champion_info[29])
+Kennen = Champion(*champion_info[30])
+Kled = Champion(*champion_info[31])
+Lulu = Champion(*champion_info[32])
+Poppy = Champion(*champion_info[33])
+Teemo = Champion(*champion_info[34])
+Ziggs = Champion(*champion_info[35])
+Jax = Champion(*champion_info[36])
+Nautilus = Champion(*champion_info[37])
+Aphelios = Champion(*champion_info[38])
 Darius = Champion(*champion_info[39])
-Sejuani = Champion(*champion_info[40])
-TahmKench = Champion(*champion_info[41])
-Akali = Champion(*champion_info[42])
-Kennen = Champion(*champion_info[43])
-Shen = Champion(*champion_info[44])
-Zed = Champion(*champion_info[45])
-Diana = Champion(*champion_info[46])
-Kindred = Champion(*champion_info[47])
-Teemo = Champion(*champion_info[48])
-Yuumi = Champion(*champion_info[49])
-Sett = Champion(*champion_info[50])
-Azir = Champion(*champion_info[51])
-Garen = Champion(*champion_info[52])
-JarvanIV = Champion(*champion_info[53])
-Katarina = Champion(*champion_info[54])
-Nidalee = Champion(*champion_info[55])
-Tryndamere = Champion(*champion_info[56])
-Vi = Champion(*champion_info[57])
+LeeSin = Champion(*champion_info[40])
+Morgana = Champion(*champion_info[41])
+Sejuani = Champion(*champion_info[42])
+Vladimir = Champion(*champion_info[43])
+Yasuo = Champion(*champion_info[44])
+Aatrox = Champion(*champion_info[45])
+Kayle = Champion(*champion_info[46])
+Leona = Champion(*champion_info[47])
+Lux = Champion(*champion_info[48])
+Rell = Champion(*champion_info[49])
+Syndra = Champion(*champion_info[50])
+Varus = Champion(*champion_info[51])
+Velkoz = Champion(*champion_info[52])
+Ivern = Champion(*champion_info[53])
+Nocturne = Champion(*champion_info[54])
+Volibear = Champion(*champion_info[55])
+Ashe = Champion(*champion_info[56])
+Taric = Champion(*champion_info[57])
 
 
 if VARIABLE_PRINT_MODE:
@@ -1319,64 +1319,64 @@ if VARIABLE_PRINT_MODE:
 
 
 champions_list = [
-    Aatrox,
-    Elise,
-    Kalista,
-    Pyke,
-    Sivir,
-    TwistedFate,
-    Vladimir,
-    Zilean,
-    Samira,
-    Jax,
-    Kayle,
-    LeeSin,
-    Nasus,
-    Wukong,
-    AurelionSol,
     Brand,
-    Braum,
-    Olaf,
-    Shyvana,
-    Swain,
-    Tristana,
-    Lulu,
-    Maokai,
+    Kalista,
     Nunu,
-    Ornn,
-    Rakan,
-    Veigar,
-    Xayah,
-    Fiora,
-    Irelia,
-    Janna,
-    Morgana,
-    Talon,
-    Yasuo,
-    Yone,
-    Chogath,
-    Nautilus,
-    Neeko,
-    Annie,
-    Darius,
-    Sejuani,
-    TahmKench,
-    Akali,
-    Kennen,
-    Shen,
-    Zed,
-    Diana,
-    Kindred,
-    Teemo,
-    Yuumi,
-    Sett,
-    Azir,
+    Leblanc,
+    Lissandra,
     Garen,
-    JarvanIV,
-    Katarina,
+    Gragas,
+    Karma,
+    Khazix,
     Nidalee,
-    Tryndamere,
-    Vi,
+    Riven,
+    Soraka,
+    Heimerdinger,
+    Sett,
+    Udyr,
+    Zyra,
+    Diana,
+    Mordekaiser,
+    Pantheon,
+    Trundle,
+    Kindred,
+    Draven,
+    Hecarim,
+    Katarina,
+    Ryze,
+    Thresh,
+    Vayne,
+    Viego,
+    Viktor,
+    Warwick,
+    Kennen,
+    Kled,
+    Lulu,
+    Poppy,
+    Teemo,
+    Ziggs,
+    Jax,
+    Nautilus,
+    Aphelios,
+    Darius,
+    LeeSin,
+    Morgana,
+    Sejuani,
+    Vladimir,
+    Yasuo,
+    Aatrox,
+    Kayle,
+    Leona,
+    Lux,
+    Rell,
+    Syndra,
+    Varus,
+    Velkoz,
+    Ivern,
+    Nocturne,
+    Volibear,
+    Ashe,
+    Taric,
 ]
 
 
@@ -1389,7 +1389,7 @@ championToBuyPositionOnGame = [
 ]
 
 
-boost_up_points_for_class(clas='"Sharpshooter"')
+boost_up_points_for_class(clas='"Assassin"')
 
 
 ROUNDSTOBUYREFRESH = [22, 25, 31, 32, 35, 41, 42, 45, 51, 52, 55, 61, 62, 65]
