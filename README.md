@@ -1,5 +1,7 @@
-# SET5 update will be fully released: 5th May 2021
-Till now u can clone code from set5 branch but it doesnt work properly due to some classes are in origins secondary in some champions. Will need to fix it in DataMining.py
+# SET5 update released: 4th May 2021
+
+# Community
+Help me to push this project forward by providing feedback in [Issues](https://github.com/Pompeiro/TFT-DSS/issues) or [Discussions](https://github.com/Pompeiro/TFT-DSS/discussions). U can even find me in Discord Papaj#3719, if u want to commit into the project.
 
 # TFT-DSS
 Teamfight Tactics Decisive Support System  
@@ -9,9 +11,6 @@ This is my current project, and I will work on advices which champion should use
 # Click on image to watch the video
 
 [![TFTvideo](https://user-images.githubusercontent.com/60773657/106586367-a67a0f80-6548-11eb-85ad-be8c59a92b8e.JPG)](https://user-images.githubusercontent.com/60773657/106585948-2e134e80-6548-11eb-8d20-d817a1261879.mp4)
-
-
-When u want to update csv files by yourself, if not then scroll down to TFTDSS.py 
 
 
 # Installation
@@ -36,6 +35,8 @@ Thanks to @Detergent13 I'm back to business. To test functions swap comments in 
 52 | TEST_BUTTON_VISIBLE = 0
 53 | # TEST_BUTTON_VISIBLE = 1
 
+When u want to update csv files by yourself, if not then scroll down to TFTDSS.py 
+
 
 # Web scraping with DataMining.py
 This file uses selenium, pandas, collections/namedtuple and time.
@@ -49,9 +50,6 @@ Run DataMining.py -> in the back there are gathered and refined data filled into
 This dataframe is converted into championsData.csv
 This file contains csv such as: Champion(name), DPS, AS, DMG, Range, HP, Mana, Armor, MR, OriginPrimary, OriginSecondary, ClassPrimary, ClassSecondary, Cost, Tier
 
-Pros: works
-
-Cons: some code should be more automated
 
 # FuzzyCalculation.py
 This file uses pandas, numpy, skfuzzy, namedtuple.
@@ -90,18 +88,20 @@ note: you should use window mode on full hd resolution in game.
 -------------------------------------------------------------
 GUI
 
--Semi automated GUI building
--Champions as counters
--Classes and origins as counters
+- Semi automated GUI building
+- Champions as counters
+- Classes and origins as counters
 
--User can add(1) or sub(1) from counter
--User can reset every counter on Champions to buy pool to 0 value with single button(reset)
--User can update classes and origins based on Champion pool counters with single button(update classes)
--User can show points for champions to buy(show points button) // points are calculated basing on champion pool, origin and class counters
--User can use OCR to update champions to buy counters(OCR button)
--User can visualize which champion to buy, where champ with most points is bordered with green rectangle, then 3 champions with worse points score are presented with blue rectangles, and the worst champion has red rectangle(draw rectangles button)
--Scan&go button is reseting champions to buy counters. Then updating champion pool, origin and class counters. Next it uses OCR to detect champions to buy from buy zone. Finally it shows points for champions to buy.
--User can add(1) to Champion pool counter by clicking champion name that appear with points
+- User can add(1) or sub(1) from counter
+- User can reset every counter on Champions to buy pool to 0 value with single button(reset)
+- User can update classes and origins based on Champion pool counters with single button(update classes)
+- User can show points for champions to buy(show points button) // points are calculated basing on champion pool, origin and class counters
+- User can use OCR to update champions to buy counters(OCR button)
+- User can visualize which champion to buy, where champ with most points is bordered with green rectangle, then 3 champions with worse points score are presented with blue rectangles, and the worst champion has red rectangle(draw rectangles button)
+- Scan&go button is reseting champions to buy counters. Then updating champion pool, origin and class counters. Next it uses OCR to detect champions to buy from buy zone. Finally it shows points for champions to buy.
+- User can add(1) to Champion pool counter by clicking champion name that appear with points
+- User can directly refresh shop from GUI.
+- User can directly buy xp from GUI.
 
 
 You should use +- buttons in champion pool to feed system with ur current champion pool.
@@ -113,15 +113,6 @@ Points calculation with champion pool included(not single champion like in Fuzzy
 Formula is based on my experience in game and my playstyle.
 
 Points = single champion points(already calculated in FuzzyCalculation.py file) + bonus for the same origin(counter * 0.2) + bonus for the same class(counter * 0.2) + bonus for the same champion in pool((counter -1) * 0.2)
-
-
-# SShelper.py
-This file is used for cropping screenshots to extract in game champion models which im going to feed neural network model.
-
-
-
-
-
 
 
 # Data visualization.
