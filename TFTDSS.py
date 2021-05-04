@@ -4,9 +4,6 @@ Created on Wed Jun  3 10:54:45 2020
 
 @author: Janusz
 """
-
-# kha'zix is Kha Zix in ocr
-
 import logging
 import tkinter as tk
 import tkinter.font as tkFont
@@ -24,8 +21,8 @@ from windowcapture import WindowCapture
 # IF you want to test GUI without game then change LOAD_IMAGE in dss.py file
 logging.basicConfig(level=logging.DEBUG)
 
-# VARIABLE_PRINT_MODE = 0
-VARIABLE_PRINT_MODE = 1
+VARIABLE_PRINT_MODE = 0
+# VARIABLE_PRINT_MODE = 1
 IMAGE_DEBUG_MODE_FULLSCREEN = 0
 
 reader = easyocr.Reader(["en"])
@@ -51,8 +48,8 @@ SHIFT_BETWEEN_ORIGINS = 6
 ORIGIN_LABEL_POSITION_COLUMN = 1
 CHAMPIONS_TO_BUY_VISIBLE = 0
 # CHAMPIONS_TO_BUY_VISIBLE = 1
-# TEST_BUTTON_VISIBLE = 0
-TEST_BUTTON_VISIBLE = 1
+TEST_BUTTON_VISIBLE = 0
+# TEST_BUTTON_VISIBLE = 1
 
 Champion = namedtuple(
     "Champion",
