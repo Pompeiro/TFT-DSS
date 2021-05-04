@@ -5,6 +5,8 @@ Created on Wed Jun  3 10:54:45 2020
 @author: Janusz
 """
 
+# kha'zix is Kha Zix in ocr
+
 import logging
 import tkinter as tk
 import tkinter.font as tkFont
@@ -49,8 +51,8 @@ SHIFT_BETWEEN_ORIGINS = 6
 ORIGIN_LABEL_POSITION_COLUMN = 1
 CHAMPIONS_TO_BUY_VISIBLE = 0
 # CHAMPIONS_TO_BUY_VISIBLE = 1
-TEST_BUTTON_VISIBLE = 0
-# TEST_BUTTON_VISIBLE = 1
+# TEST_BUTTON_VISIBLE = 0
+TEST_BUTTON_VISIBLE = 1
 
 Champion = namedtuple(
     "Champion",
@@ -104,7 +106,66 @@ if VARIABLE_PRINT_MODE:
     print("]")
 
 
-champions_list_for_ocr = [ 'Brand', 'Kalista', 'Nunu', 'Leblanc', 'Lissandra', 'Garen', 'Gragas', 'Karma', 'Khazix', 'Nidalee', 'Riven', 'Soraka', 'Heimerdinger', 'Sett', 'Udyr', 'Zyra', 'Diana', 'Mordekaiser', 'Pantheon', 'Trundle', 'Kindred', 'Draven', 'Hecarim', 'Katarina', 'Ryze', 'Thresh', 'Vayne', 'Viego', 'Viktor', 'Warwick', 'Kennen', 'Kled', 'Lulu', 'Poppy', 'Teemo', 'Ziggs', 'Jax', 'Nautilus', 'Aphelios', 'Darius', 'LeeSin', 'Morgana', 'Sejuani', 'Vladimir', 'Yasuo', 'Aatrox', 'Kayle', 'Leona', 'Lux', 'Rell', 'Syndra', 'Varus', 'Velkoz', 'Ivern', 'Nocturne', 'Volibear', 'Ashe', 'Taric', ]
+champions_list_for_ocr = [
+    "Brand",
+    "Kalista",
+    "Nunu & Willump",
+    "LeBlanc",
+    "Lissandra",
+    "Garen",
+    "Gragas",
+    "Karma",
+    "Kha Zix",
+    "Nidalee",
+    "Riven",
+    "Soraka",
+    "Heimerdinger",
+    "Sett",
+    "Udyr",
+    "Zyra",
+    "Diana",
+    "Mordekaiser",
+    "Pantheon",
+    "Trundle",
+    "Kindred",
+    "Draven",
+    "Hecarim",
+    "Katarina",
+    "Ryze",
+    "Thresh",
+    "Vayne",
+    "Viego",
+    "Viktor",
+    "Warwick",
+    "Kennen",
+    "Kled",
+    "Lulu",
+    "Poppy",
+    "Teemo",
+    "Ziggs",
+    "Jax",
+    "Nautilus",
+    "Aphelios",
+    "Darius",
+    "Lee Sin",
+    "Morgana",
+    "Sejuani",
+    "Vladimir",
+    "Yasuo",
+    "Aatrox",
+    "Kayle",
+    "Leona",
+    "Lux",
+    "Rell",
+    "Syndra",
+    "Varus",
+    "Vel Koz",
+    "Ivern",
+    "Nocturne",
+    "Volibear",
+    "Ashe",
+    "Taric",
+]
 
 df.champion = df.champion.str.replace(" ", "")
 
@@ -134,13 +195,11 @@ if VARIABLE_PRINT_MODE:
 
 abomination_champs = list(df.query('origin_prim == "Abomination"').champion)
 coven_champs = list(df.query('origin_prim == "Coven"').champion)
-cruel_champs = list(df.query('origin_prim == "Cruel"').champion)
 dawnbringer_champs = list(df.query('origin_prim == "Dawnbringer"').champion)
 draconic_champs = list(df.query('origin_prim == "Draconic"').champion)
 dragonslayer_champs = list(df.query('origin_prim == "Dragonslayer"').champion)
 eternal_champs = list(df.query('origin_prim == "Eternal"').champion)
 forgotten_champs = list(df.query('origin_prim == "Forgotten"').champion)
-god_king_champs = list(df.query('origin_prim == "God-King"').champion)
 hellion_champs = list(df.query('origin_prim == "Hellion"').champion)
 ironclad_champs = list(df.query('origin_prim == "Ironclad"').champion)
 nightbringer_champs = list(df.query('origin_prim == "Nightbringer"').champion)
@@ -148,7 +207,21 @@ redeemed_champs = list(df.query('origin_prim == "Redeemed"').champion)
 revenant_champs = list(df.query('origin_prim == "Revenant"').champion)
 verdant_champs = list(df.query('origin_prim == "Verdant"').champion)
 
-origin_champs_from_df_list = [ abomination_champs, coven_champs, dawnbringer_champs, draconic_champs, dragonslayer_champs, eternal_champs, forgotten_champs, hellion_champs, ironclad_champs, nightbringer_champs, redeemed_champs, revenant_champs, verdant_champs, ]
+origin_champs_from_df_list = [
+    abomination_champs,
+    coven_champs,
+    dawnbringer_champs,
+    draconic_champs,
+    dragonslayer_champs,
+    eternal_champs,
+    forgotten_champs,
+    hellion_champs,
+    ironclad_champs,
+    nightbringer_champs,
+    redeemed_champs,
+    revenant_champs,
+    verdant_champs,
+]
 
 
 class_list = list(set(df.class_prim)) + list(set(df.class_sec))
@@ -231,7 +304,65 @@ if VARIABLE_PRINT_MODE:
     print()
 
 origin_champs_counters = [
-CounterBrand, CounterKalista, CounterNunu, CounterLeblanc, CounterLissandra, CounterGaren, CounterGragas, CounterKarma, CounterKhazix, CounterNidalee, CounterRiven, CounterSoraka, CounterHeimerdinger, CounterSett, CounterUdyr, CounterZyra, CounterDiana, CounterMordekaiser, CounterPantheon, CounterTrundle, CounterKindred, CounterDraven, CounterHecarim, CounterKatarina, CounterRyze, CounterThresh, CounterVayne, CounterViego, CounterViktor, CounterWarwick, CounterKennen, CounterKled, CounterLulu, CounterPoppy, CounterTeemo, CounterZiggs, CounterJax, CounterNautilus, CounterAphelios, CounterDarius, CounterLeeSin, CounterMorgana, CounterSejuani, CounterVladimir, CounterYasuo, CounterAatrox, CounterKayle, CounterLeona, CounterLux, CounterRell, CounterSyndra, CounterVarus, CounterVelkoz, CounterIvern, CounterNocturne, CounterVolibear, CounterAshe, CounterTaric, ]
+    CounterBrand,
+    CounterKalista,
+    CounterNunu,
+    CounterLeblanc,
+    CounterLissandra,
+    CounterGaren,
+    CounterGragas,
+    CounterKarma,
+    CounterKhazix,
+    CounterNidalee,
+    CounterRiven,
+    CounterSoraka,
+    CounterHeimerdinger,
+    CounterSett,
+    CounterUdyr,
+    CounterZyra,
+    CounterDiana,
+    CounterMordekaiser,
+    CounterPantheon,
+    CounterTrundle,
+    CounterKindred,
+    CounterDraven,
+    CounterHecarim,
+    CounterKatarina,
+    CounterRyze,
+    CounterThresh,
+    CounterVayne,
+    CounterViego,
+    CounterViktor,
+    CounterWarwick,
+    CounterKennen,
+    CounterKled,
+    CounterLulu,
+    CounterPoppy,
+    CounterTeemo,
+    CounterZiggs,
+    CounterJax,
+    CounterNautilus,
+    CounterAphelios,
+    CounterDarius,
+    CounterLeeSin,
+    CounterMorgana,
+    CounterSejuani,
+    CounterVladimir,
+    CounterYasuo,
+    CounterAatrox,
+    CounterKayle,
+    CounterLeona,
+    CounterLux,
+    CounterRell,
+    CounterSyndra,
+    CounterVarus,
+    CounterVelkoz,
+    CounterIvern,
+    CounterNocturne,
+    CounterVolibear,
+    CounterAshe,
+    CounterTaric,
+]
 
 # COUNTERS for champions to buy
 
@@ -308,7 +439,65 @@ if VARIABLE_PRINT_MODE:
     print()
 
 origin_champs_counters_to_buy = [
-CounterBuyBrand, CounterBuyKalista, CounterBuyNunu, CounterBuyLeblanc, CounterBuyLissandra, CounterBuyGaren, CounterBuyGragas, CounterBuyKarma, CounterBuyKhazix, CounterBuyNidalee, CounterBuyRiven, CounterBuySoraka, CounterBuyHeimerdinger, CounterBuySett, CounterBuyUdyr, CounterBuyZyra, CounterBuyDiana, CounterBuyMordekaiser, CounterBuyPantheon, CounterBuyTrundle, CounterBuyKindred, CounterBuyDraven, CounterBuyHecarim, CounterBuyKatarina, CounterBuyRyze, CounterBuyThresh, CounterBuyVayne, CounterBuyViego, CounterBuyViktor, CounterBuyWarwick, CounterBuyKennen, CounterBuyKled, CounterBuyLulu, CounterBuyPoppy, CounterBuyTeemo, CounterBuyZiggs, CounterBuyJax, CounterBuyNautilus, CounterBuyAphelios, CounterBuyDarius, CounterBuyLeeSin, CounterBuyMorgana, CounterBuySejuani, CounterBuyVladimir, CounterBuyYasuo, CounterBuyAatrox, CounterBuyKayle, CounterBuyLeona, CounterBuyLux, CounterBuyRell, CounterBuySyndra, CounterBuyVarus, CounterBuyVelkoz, CounterBuyIvern, CounterBuyNocturne, CounterBuyVolibear, CounterBuyAshe, CounterBuyTaric, ]
+    CounterBuyBrand,
+    CounterBuyKalista,
+    CounterBuyNunu,
+    CounterBuyLeblanc,
+    CounterBuyLissandra,
+    CounterBuyGaren,
+    CounterBuyGragas,
+    CounterBuyKarma,
+    CounterBuyKhazix,
+    CounterBuyNidalee,
+    CounterBuyRiven,
+    CounterBuySoraka,
+    CounterBuyHeimerdinger,
+    CounterBuySett,
+    CounterBuyUdyr,
+    CounterBuyZyra,
+    CounterBuyDiana,
+    CounterBuyMordekaiser,
+    CounterBuyPantheon,
+    CounterBuyTrundle,
+    CounterBuyKindred,
+    CounterBuyDraven,
+    CounterBuyHecarim,
+    CounterBuyKatarina,
+    CounterBuyRyze,
+    CounterBuyThresh,
+    CounterBuyVayne,
+    CounterBuyViego,
+    CounterBuyViktor,
+    CounterBuyWarwick,
+    CounterBuyKennen,
+    CounterBuyKled,
+    CounterBuyLulu,
+    CounterBuyPoppy,
+    CounterBuyTeemo,
+    CounterBuyZiggs,
+    CounterBuyJax,
+    CounterBuyNautilus,
+    CounterBuyAphelios,
+    CounterBuyDarius,
+    CounterBuyLeeSin,
+    CounterBuyMorgana,
+    CounterBuySejuani,
+    CounterBuyVladimir,
+    CounterBuyYasuo,
+    CounterBuyAatrox,
+    CounterBuyKayle,
+    CounterBuyLeona,
+    CounterBuyLux,
+    CounterBuyRell,
+    CounterBuySyndra,
+    CounterBuyVarus,
+    CounterBuyVelkoz,
+    CounterBuyIvern,
+    CounterBuyNocturne,
+    CounterBuyVolibear,
+    CounterBuyAshe,
+    CounterBuyTaric,
+]
 
 # counters for origins
 
@@ -319,13 +508,11 @@ if VARIABLE_PRINT_MODE:
 
 CounterAbomination = tk.IntVar()
 CounterCoven = tk.IntVar()
-CounterCruel = tk.IntVar()
 CounterDawnbringer = tk.IntVar()
 CounterDraconic = tk.IntVar()
 CounterDragonslayer = tk.IntVar()
 CounterEternal = tk.IntVar()
 CounterForgotten = tk.IntVar()
-CounterGod_King = tk.IntVar()
 CounterHellion = tk.IntVar()
 CounterIronclad = tk.IntVar()
 CounterNightbringer = tk.IntVar()
@@ -342,7 +529,20 @@ if VARIABLE_PRINT_MODE:
 
 
 origin_counters = [
-CounterAbomination, CounterCoven, CounterCruel, CounterDawnbringer, CounterDraconic, CounterDragonslayer, CounterEternal, CounterForgotten, CounterGod_King, CounterHellion, CounterIronclad, CounterNightbringer, CounterRedeemed, CounterRevenant, CounterVerdant, ]
+    CounterAbomination,
+    CounterCoven,
+    CounterDawnbringer,
+    CounterDraconic,
+    CounterDragonslayer,
+    CounterEternal,
+    CounterForgotten,
+    CounterHellion,
+    CounterIronclad,
+    CounterNightbringer,
+    CounterRedeemed,
+    CounterRevenant,
+    CounterVerdant,
+]
 
 # counters for classes
 
@@ -356,6 +556,8 @@ CounterAssassin = tk.IntVar()
 CounterBrawler = tk.IntVar()
 CounterCaretaker = tk.IntVar()
 CounterCavalier = tk.IntVar()
+CounterCruel = tk.IntVar()
+CounterGodKing = tk.IntVar()
 CounterInvoker = tk.IntVar()
 CounterKnight = tk.IntVar()
 CounterLegionnaire = tk.IntVar()
@@ -373,7 +575,21 @@ if VARIABLE_PRINT_MODE:
     print("]")
 
 class_counters = [
-CounterAssassin, CounterBrawler, CounterCaretaker, CounterCavalier, CounterInvoker, CounterKnight, CounterLegionnaire, CounterMystic, CounterRanger, CounterRenewer, CounterSkirmisher, CounterSpellweaver, ]
+    CounterAssassin,
+    CounterBrawler,
+    CounterCaretaker,
+    CounterCavalier,
+    CounterCruel,
+    CounterGodKing,
+    CounterInvoker,
+    CounterKnight,
+    CounterLegionnaire,
+    CounterMystic,
+    CounterRanger,
+    CounterRenewer,
+    CounterSkirmisher,
+    CounterSpellweaver,
+]
 
 
 # Champion namedtuple things
@@ -543,7 +759,65 @@ if VARIABLE_PRINT_MODE:
 
 
 champions_list = [
-Brand, Kalista, Nunu, Leblanc, Lissandra, Garen, Gragas, Karma, Khazix, Nidalee, Riven, Soraka, Heimerdinger, Sett, Udyr, Zyra, Diana, Mordekaiser, Pantheon, Trundle, Kindred, Draven, Hecarim, Katarina, Ryze, Thresh, Vayne, Viego, Viktor, Warwick, Kennen, Kled, Lulu, Poppy, Teemo, Ziggs, Jax, Nautilus, Aphelios, Darius, LeeSin, Morgana, Sejuani, Vladimir, Yasuo, Aatrox, Kayle, Leona, Lux, Rell, Syndra, Varus, Velkoz, Ivern, Nocturne, Volibear, Ashe, Taric, ]
+    Brand,
+    Kalista,
+    Nunu,
+    Leblanc,
+    Lissandra,
+    Garen,
+    Gragas,
+    Karma,
+    Khazix,
+    Nidalee,
+    Riven,
+    Soraka,
+    Heimerdinger,
+    Sett,
+    Udyr,
+    Zyra,
+    Diana,
+    Mordekaiser,
+    Pantheon,
+    Trundle,
+    Kindred,
+    Draven,
+    Hecarim,
+    Katarina,
+    Ryze,
+    Thresh,
+    Vayne,
+    Viego,
+    Viktor,
+    Warwick,
+    Kennen,
+    Kled,
+    Lulu,
+    Poppy,
+    Teemo,
+    Ziggs,
+    Jax,
+    Nautilus,
+    Aphelios,
+    Darius,
+    LeeSin,
+    Morgana,
+    Sejuani,
+    Vladimir,
+    Yasuo,
+    Aatrox,
+    Kayle,
+    Leona,
+    Lux,
+    Rell,
+    Syndra,
+    Varus,
+    Velkoz,
+    Ivern,
+    Nocturne,
+    Volibear,
+    Ashe,
+    Taric,
+]
 
 
 if VARIABLE_PRINT_MODE:
@@ -619,7 +893,65 @@ if VARIABLE_PRINT_MODE:
 
 
 champions_to_buy_list = [
-BrandToBuy, KalistaToBuy, NunuToBuy, LeblancToBuy, LissandraToBuy, GarenToBuy, GragasToBuy, KarmaToBuy, KhazixToBuy, NidaleeToBuy, RivenToBuy, SorakaToBuy, HeimerdingerToBuy, SettToBuy, UdyrToBuy, ZyraToBuy, DianaToBuy, MordekaiserToBuy, PantheonToBuy, TrundleToBuy, KindredToBuy, DravenToBuy, HecarimToBuy, KatarinaToBuy, RyzeToBuy, ThreshToBuy, VayneToBuy, ViegoToBuy, ViktorToBuy, WarwickToBuy, KennenToBuy, KledToBuy, LuluToBuy, PoppyToBuy, TeemoToBuy, ZiggsToBuy, JaxToBuy, NautilusToBuy, ApheliosToBuy, DariusToBuy, LeeSinToBuy, MorganaToBuy, SejuaniToBuy, VladimirToBuy, YasuoToBuy, AatroxToBuy, KayleToBuy, LeonaToBuy, LuxToBuy, RellToBuy, SyndraToBuy, VarusToBuy, VelkozToBuy, IvernToBuy, NocturneToBuy, VolibearToBuy, AsheToBuy, TaricToBuy, ]
+    BrandToBuy,
+    KalistaToBuy,
+    NunuToBuy,
+    LeblancToBuy,
+    LissandraToBuy,
+    GarenToBuy,
+    GragasToBuy,
+    KarmaToBuy,
+    KhazixToBuy,
+    NidaleeToBuy,
+    RivenToBuy,
+    SorakaToBuy,
+    HeimerdingerToBuy,
+    SettToBuy,
+    UdyrToBuy,
+    ZyraToBuy,
+    DianaToBuy,
+    MordekaiserToBuy,
+    PantheonToBuy,
+    TrundleToBuy,
+    KindredToBuy,
+    DravenToBuy,
+    HecarimToBuy,
+    KatarinaToBuy,
+    RyzeToBuy,
+    ThreshToBuy,
+    VayneToBuy,
+    ViegoToBuy,
+    ViktorToBuy,
+    WarwickToBuy,
+    KennenToBuy,
+    KledToBuy,
+    LuluToBuy,
+    PoppyToBuy,
+    TeemoToBuy,
+    ZiggsToBuy,
+    JaxToBuy,
+    NautilusToBuy,
+    ApheliosToBuy,
+    DariusToBuy,
+    LeeSinToBuy,
+    MorganaToBuy,
+    SejuaniToBuy,
+    VladimirToBuy,
+    YasuoToBuy,
+    AatroxToBuy,
+    KayleToBuy,
+    LeonaToBuy,
+    LuxToBuy,
+    RellToBuy,
+    SyndraToBuy,
+    VarusToBuy,
+    VelkozToBuy,
+    IvernToBuy,
+    NocturneToBuy,
+    VolibearToBuy,
+    AsheToBuy,
+    TaricToBuy,
+]
 
 
 # GUI

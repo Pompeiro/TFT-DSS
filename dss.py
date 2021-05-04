@@ -727,13 +727,13 @@ def show_classes_or_origins(
     column_pos = len(origin_or_class_list)
     tk.Label(window_tk, text=origin_or_class_string).grid(
         row=1 + shift_between_upside_downside,
-        column=ORIGIN_LABEL_POSITION_COLUMN_ * SHIFT_BETWEEN_ORIGINS_ * column_pos + 4,
+        column=ORIGIN_LABEL_POSITION_COLUMN_ * SHIFT_BETWEEN_ORIGINS_ * column_pos,
     )
 
     for i, champ in enumerate(origin_or_class_list):
         tk.Label(window_tk, text=champ).grid(
             row=2 + i + shift_between_upside_downside,
-            column=ORIGIN_LABEL_POSITION_COLUMN_ * SHIFT_BETWEEN_ORIGINS_ * column_pos + 4,
+            column=ORIGIN_LABEL_POSITION_COLUMN_ * SHIFT_BETWEEN_ORIGINS_ * column_pos,
         )
 
         create_gui_counter_with_plus_minus(
@@ -742,7 +742,7 @@ def show_classes_or_origins(
             counter=origin_or_class_counters_list[i],
             shift_between_upside_downside=shift_between_upside_downside,
             i=i,
-            SHIFT_BETWEEN_ORIGINS_=SHIFT_BETWEEN_ORIGINS + 2,
+            SHIFT_BETWEEN_ORIGINS_=SHIFT_BETWEEN_ORIGINS,
         )
     logging.debug("Function show_classes_or_origins() end")
 
