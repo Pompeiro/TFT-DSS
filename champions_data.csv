@@ -3,14 +3,14 @@
 1,Aphelios,72,0.9,80,4,650,100,25,25,Nightbringer,None,Ranger,None,4,5
 2,Ashe,49,0.75,65,5,550,90,20,20,Verdant,Draconic,Ranger,None,3,3
 3,Brand,29,0.65,45,3,550,20,20,20,Abomination,None,Spellweaver,None,2,2
-4,Darius,68,0.75,90,1,1050,100,60,60,Nightbringer,God-King,Knight,None,5,4
+4,Darius,68,0.75,90,1,1050,100,60,60,Nightbringer,None,God-King,Knight,5,4
 5,Diana,36,0.65,55,1,650,160,40,40,Dragonslayer,Nightbringer,Assassin,None,4,4
 6,Draven,68,0.75,90,3,700,50,30,30,Forgotten,None,Legionnaire,None,4,4
-7,Garen,60,0.75,80,1,1050,100,60,60,Dawnbringer,God-King,Knight,None,5,4
+7,Garen,60,0.75,80,1,1050,100,60,60,Dawnbringer,None,God-King,Knight,5,4
 8,Gragas,25,0.5,50,1,750,70,40,40,Dawnbringer,None,Brawler,None,1,1
 9,Hecarim,30,0.55,55,1,750,90,45,45,Forgotten,None,Cavalier,None,2,3
 10,Heimerdinger,34,0.75,45,4,800,120,30,30,Draconic,None,Renewer,Caretaker,5,5
-11,Ivern,30,0.75,40,2,1000,180,50,50,Revenant,None,Invoker,Renewer,4,4
+11,Ivern,30,0.75,40,2,1000,180,50,50,Revenant,None,Invoker,Renewer,4,5
 12,Jax,68,0.85,80,1,900,20,50,50,Ironclad,None,Skirmisher,None,4,4
 13,Kalista,45,0.75,60,4,500,120,15,15,Abomination,None,Legionnaire,None,1,2
 14,Karma,31,0.7,45,4,700,60,25,25,Dawnbringer,None,Invoker,None,4,4
@@ -20,7 +20,7 @@
 18,Khazix,39,0.7,55,1,500,60,25,25,Dawnbringer,None,Assassin,None,1,3
 19,Kindred,45,0.75,60,3,750,200,30,30,Eternal,None,Mystic,Ranger,5,4
 20,Kled,42,0.7,60,1,400,0,30,30,Hellion,None,Cavalier,None,1,2
-21,Leblanc,41,0.75,55,3,550,50,20,20,Coven,None,Assassin,None,2,4
+21,Leblanc,41,0.75,55,3,550,50,20,20,Coven,None,Assassin,None,2,5
 22,Lee Sin,45,0.75,60,1,800,70,35,35,Nightbringer,None,Skirmisher,None,3,3
 23,Leona,28,0.55,50,1,700,60,40,40,Redeemed,None,Knight,None,1,1
 24,Lissandra,26,0.65,40,3,550,50,20,20,Coven,None,Renewer,None,1,3
@@ -42,7 +42,7 @@
 40,Soraka,24,0.6,40,3,550,80,25,25,Dawnbringer,None,Renewer,None,2,2
 41,Syndra,26,0.65,40,4,550,90,20,20,Redeemed,None,Invoker,None,2,3
 42,Taric,36,0.6,60,1,950,200,60,60,Verdant,None,Knight,None,4,5
-43,Teemo,52,0.8,65,4,800,60,30,30,Hellion,Cruel,Invoker,None,5,3
+43,Teemo,52,0.8,65,4,800,60,30,30,Hellion,None,Cruel,Invoker,5,4
 44,Thresh,33,0.6,55,2,800,80,40,40,Forgotten,None,Knight,None,2,3
 45,Trundle,46,0.7,65,1,700,70,35,35,Dragonslayer,None,Skirmisher,None,2,2
 46,Udyr,41,0.75,55,1,700,40,30,30,Draconic,None,Skirmisher,None,1,2
