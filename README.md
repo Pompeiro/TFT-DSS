@@ -88,20 +88,20 @@ note: you should use window mode on full hd resolution in game.
 -------------------------------------------------------------
 GUI
 
--Semi automated GUI building
--Champions as counters
--Classes and origins as counters
+- Semi automated GUI building
+- Champions as counters
+- Classes and origins as counters
 
--User can add(1) or sub(1) from counter
--User can reset every counter on Champions to buy pool to 0 value with single button(reset)
--User can update classes and origins based on Champion pool counters with single button(update classes)
--User can show points for champions to buy(show points button) // points are calculated basing on champion pool, origin and class counters
--User can use OCR to update champions to buy counters(OCR button)
--User can visualize which champion to buy, where champ with most points is bordered with green rectangle, then 3 champions with worse points score are presented with blue rectangles, and the worst champion has red rectangle(draw rectangles button)
--Scan&go button is reseting champions to buy counters. Then updating champion pool, origin and class counters. Next it uses OCR to detect champions to buy from buy zone. Finally it shows points for champions to buy.
--User can add(1) to Champion pool counter by clicking champion name that appear with points
--User can directly refresh shop from GUI.
--User can directly buy xp from GUI.
+- User can add(1) or sub(1) from counter
+- User can reset every counter on Champions to buy pool to 0 value with single button(reset)
+- User can update classes and origins based on Champion pool counters with single button(update classes)
+- User can show points for champions to buy(show points button) // points are calculated basing on champion pool, origin and class counters
+- User can use OCR to update champions to buy counters(OCR button)
+- User can visualize which champion to buy, where champ with most points is bordered with green rectangle, then 3 champions with worse points score are presented with blue rectangles, and the worst champion has red rectangle(draw rectangles button)
+- Scan&go button is reseting champions to buy counters. Then updating champion pool, origin and class counters. Next it uses OCR to detect champions to buy from buy zone. Finally it shows points for champions to buy.
+- User can add(1) to Champion pool counter by clicking champion name that appear with points
+- User can directly refresh shop from GUI.
+- User can directly buy xp from GUI.
 
 
 You should use +- buttons in champion pool to feed system with ur current champion pool.
