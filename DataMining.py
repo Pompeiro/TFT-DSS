@@ -17,7 +17,7 @@ from selenium import webdriver
 
 logging.basicConfig(level=logging.INFO)
 driver = webdriver.Opera()
-driver.get("https://tftactics.gg/db/champion-stats")
+driver.get("https://tftactics.gg/tierlist/origins")
 driver.maximize_window()
 time.sleep(3)
 accept_all_cookies_button = driver.find_element_by_xpath(
@@ -25,6 +25,46 @@ accept_all_cookies_button = driver.find_element_by_xpath(
 )
 accept_all_cookies_button.click()
 time.sleep(1)
+
+origin_container_class = "characters-item"
+
+elements_inside_origin_container_class = driver.find_elements_by_class_name(
+    origin_container_class
+)
+
+origin_list = []
+for element in elements_inside_origin_container_class:
+    logging.info(
+        "Element inside elements_inside_origin_container_class text: %s", element.text
+    )
+    if element.text:
+        # if string isnt void then append element to list
+        origin_list.append(element.text)
+
+# to avoid duplicates
+origin_list = list(set(origin_list))
+
+driver.get("https://tftactics.gg/tierlist/classes")
+time.sleep(2)
+class_container_class = "characters-item"
+elements_inside_class_container_class = driver.find_elements_by_class_name(
+    class_container_class
+)
+
+class_list = []
+for element in elements_inside_class_container_class:
+    logging.info(
+        "Element inside elements_inside_class_container_class text: %s", element.text
+    )
+    if element.text:
+        # if string isnt void then append element to list
+        class_list.append(element.text)
+
+# to avoid duplicates
+class_list = list(set(class_list))
+
+driver.get("https://tftactics.gg/db/champion-stats")
+time.sleep(2)
 
 sort_by_champion_button = driver.find_element_by_xpath(
     '//div[@class="rt-th -cursor-pointer"]'
@@ -150,6 +190,38 @@ sort_by_champion_button.click()
 origin_stats = [0] * len(champions_list)
 origin_stats = stats_gathering(origin_stats)
 
+logging.info("Validation of data in origin_stats in comparison with origin_list")
+for champ in origin_stats:
+    if champ[1] in origin_list:
+        logging.info("%s is in origin_list", champ[1])
+    else:
+        logging.error("%s is NOT in origin_list", champ[1])
+
+    if champ[2] in origin_list:
+        logging.info("%s is in origin_list, double origin there", champ[2])
+    else:
+        logging.info(
+            "%s is NOT in origin_list, single origin there, inserting None", champ[2]
+        )
+        champ.insert(2, "None")
+
+logging.info("Validation of data in origin_stats in comparison with class_list")
+for champ in origin_stats:
+    if champ[3] in class_list:
+        logging.info("%s is in class_list", champ[3])
+    elif champ[3] == "None":
+        logging.info("%s is None", champ[3])
+    else:
+        logging.error("%s is NOT in class_list", champ[3])
+
+    if champ[4] in class_list:
+        logging.info("%s is in class_list", champ[4])
+    else:
+        logging.info(
+            "%s is NOT in class_list, single class there, inserting None", champ[4]
+        )
+        champ.insert(4, "None")
+
 
 for champ in origin_stats:
     if len(champ) == 4:
@@ -157,56 +229,6 @@ for champ in origin_stats:
         champ.insert(2, "None")
         champ.insert(4, "None")
 
-origins_list = []
-for stat in origin_stats:
-    origins_list.append(stat[1])
-
-origins_list = sorted(list(set(origins_list)))
-
-class_list = []
-for stat in origin_stats:
-    if stat[2] == "None":
-        class_list.append(stat[3])
-        logging.info("stat[2]: %s, appending stat[3]: %s", stat[2], stat[3])
-        logging.info("%s", class_list)
-
-class_list = sorted(list(set(class_list)))
-
-
-new_classes = []
-for stat in origin_stats:
-    if stat[2] not in ["None"] + class_list:
-        if len(stat) == 5:
-            # double origin without secondary class
-            logging.info(
-                "Double origin for champ: %s, second origin: %s", stat[0], stat[2]
-            )
-            stat.insert(4, "None")
-            logging.info(
-                "Stats with none inserted as secondary class: %s, len: %s",
-                stat,
-                len(stat),
-            )
-    if stat[3] not in ["None"] + origins_list:
-        if len(stat) == 5:
-            # double class without secondary origin
-            logging.info(
-                "Double class for champ: %s,second class: %s", stat[0], stat[3]
-            )
-            if stat[3] not in ["None"] + origins_list + new_classes:
-                logging.info(
-                    "Class not seen yet appending into new_classes: %s", stat[3]
-                )
-                new_classes.append(stat[3])
-            stat.insert(2, "None")
-            logging.info(
-                "Stats with none inserted as secondary origin: %s, len: %s",
-                stat,
-                len(stat),
-            )
-
-class_list = class_list + new_classes
-class_list = sorted(list(set(class_list)))
 
 driver.get("https://tftactics.gg/tierlist/champions")
 
