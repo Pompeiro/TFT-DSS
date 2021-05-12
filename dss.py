@@ -40,6 +40,34 @@ CARDS_CENTER_LIST = [
 ]
 BUY_XP_CENTER = (400, 925)
 REFRESH_CENTER = (400, 995)
+
+CROPPING_X_CHAMPIONS = 450
+CROPPING_Y_CHAMPIONS = 1000
+CROPPING_WIDTH_CHAMPIONS = 1000
+CROPPING_HEIGHT_CHAMPIONS = 30
+
+CROPPING_X_ROUND = 760
+CROPPING_X_ROUND_FIRST = 820
+CROPPING_Y_ROUND = 30
+CROPPING_WIDTH_ROUND = 60
+CROPPING_HEIGHT_ROUND = 40
+
+CROPPING_X_GOLD = 820
+CROPPING_Y_GOLD = 850
+CROPPING_WIDTH_GOLD = 100
+CROPPING_HEIGHT_GOLD = 40
+
+screenshot = cv.imread("examples/windowed_pyauto_ss.jpg", cv.IMREAD_UNCHANGED)
+crop_img = cv.imread("examples/windowed_pyauto_ss.jpg", cv.IMREAD_UNCHANGED)
+ocr_results_champions = [
+    ([[67, 5], [113, 5], [113, 21], [67, 21]], "Leona", 0.9666508436203003),
+    ([[255, 5], [303, 5], [303, 23], [255, 23]], "Vayne", 0.995654284954071),
+    ([[445, 5], [507, 5], [507, 21], [445, 21]], "Vladimir", 0.9939249753952026),
+    ([[633, 5], [685, 5], [685, 21], [633, 21]], "Aatrox", 0.9471874833106995),
+    ([[823, 5], [889, 5], [889, 21], [823, 21]], "Warwick", 0.9830108880996704),
+]
+sorted_champions_to_buy = ["Brand", "Leona", "Udyr", "Vayne", "Soraka"]
+
 pyautogui.PAUSE = 0.02
 pyautogui.FAILSAFE = False
 
@@ -186,6 +214,147 @@ def sub(counter):
     logging.debug("Function sub() end")
 
 
+def imshow_fullscreen(window_name="img", image=[0]):
+    """
+    https://stackoverflow.com/questions/9446733/opencv-window-in-fullscreen-and-without-any-borders#comment97925305_53005272
+
+    Parameters
+    ----------
+    image : openCV image matrix.
+    window_name : string, name for hidden window. The default is "img".
+
+    Returns
+    -------
+    None.
+
+    """
+    cv.namedWindow(window_name, cv.WND_PROP_FULLSCREEN)
+    cv.setWindowProperty(window_name, cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
+    cv.imshow(window_name, image)
+
+
+def make_ss(
+    IMAGE_DEBUG_MODE_=IMAGE_DEBUG_MODE,
+    IMAGE_DEBUG_MODE_FULLSCREEN_=IMAGE_DEBUG_MODE_FULLSCREEN,
+):
+    """
+
+
+    Parameters
+    ----------
+    IMAGE_DEBUG_MODE_ : 0 or 1, calls cv.imshow().
+        The default is IMAGE_DEBUG_MODE.
+    IMAGE_DEBUG_MODE_FULLSCREEN_ : 0 or 1, calls dss.imshow_fullscreen().
+        The default is IMAGE_DEBUG_MODE_FULLSCREEN.
+
+    Returns
+    -------
+    screenshot : screenshot of game.
+
+    """
+    logging.debug("Function make_ss() called")
+    activate_window(mode="game", delay=0.2)
+    screenshot = pyautogui.screenshot()
+    screenshot = cv.cvtColor(np.array(screenshot), cv.COLOR_RGB2BGR)
+    activate_window(mode="dss", delay=0.2)
+    if IMAGE_DEBUG_MODE_:
+        if not IMAGE_DEBUG_MODE_FULLSCREEN_:
+            cv.imshow("make_ss() screenshot", screenshot)
+        else:
+            imshow_fullscreen(window_name="make_ss() screenshot", image=screenshot)
+    logging.debug("Function make_ss() end")
+    return screenshot
+
+
+def update_curent_ss():
+    """
+    Updates global state current screenshot.
+
+    Returns
+    -------
+    None.
+
+    """
+    global screenshot
+    logging.debug("Function update_curent_ss() called")
+    screenshot = make_ss(IMAGE_DEBUG_MODE_=1, IMAGE_DEBUG_MODE_FULLSCREEN_=0)
+    logging.debug("Function update_curent_ss() end")
+
+
+def crop_ss(
+    screenshot_=screenshot,
+    cropping_x=CROPPING_X_CHAMPIONS,
+    cropping_y=CROPPING_Y_CHAMPIONS,
+    cropping_width=CROPPING_WIDTH_CHAMPIONS,
+    cropping_height=CROPPING_HEIGHT_CHAMPIONS,
+    IMAGE_DEBUG_MODE_=IMAGE_DEBUG_MODE,
+    IMAGE_DEBUG_MODE_FULLSCREEN_=IMAGE_DEBUG_MODE_FULLSCREEN,
+):
+    logging.debug("Function crop_ss() called")
+
+    crop_img = screenshot_[
+        cropping_y : cropping_y + cropping_height,
+        cropping_x : cropping_x + cropping_width,
+    ]
+    if IMAGE_DEBUG_MODE_:
+        if not IMAGE_DEBUG_MODE_FULLSCREEN_:
+            cv.imshow("crop_ss() screenshot", screenshot_)
+            cv.imshow("crop_ss() crop_img", crop_img)
+        else:
+            imshow_fullscreen(window_name="crop_ss() screenshot", image=screenshot_)
+            cv.imshow("crop_ss() crop_img", crop_img)
+
+    logging.debug("Function crop_ss() end")
+    return crop_img
+
+
+def update_curent_cropped_ss_with_champions():
+    """
+    Crops global state current screenshot.
+
+    Returns
+    -------
+    None.
+
+    """
+    global crop_img
+    logging.debug("Function update_curent_cropped_ss_with_champions() called")
+    crop_img = crop_ss(screenshot_=screenshot)
+    logging.debug("Function update_curent_cropped_ss_with_champions() end")
+
+
+def ocr_on_cropped_img(cropped_ss_with_champion_card_names=None, reader_=None):
+    """
+
+
+    Parameters
+    ----------
+    cropped_ss_with_champion_card_names : for example if want to OCR card names then
+    input there crop_img which can be updated by update_curent_cropped_ss_with_champions().
+
+    Returns
+    -------
+    ocr_result :
+
+    """
+    logging.debug("Function ocr_on_cropped_img() called")
+
+    ocr_result = reader_.readtext(cropped_ss_with_champion_card_names)
+    logging.info("OCR results(return): %s", ocr_result)
+
+    logging.debug("Function ocr_on_cropped_img() end")
+    return ocr_result
+
+
+def update_ocr_results_champions(reader_=None):
+    global crop_img, ocr_results_champions
+    logging.debug("Function update_ocr_results_champions() called")
+    ocr_results_champions = ocr_on_cropped_img(
+        cropped_ss_with_champion_card_names=crop_img, reader_=reader_
+    )
+    logging.debug("Function update_ocr_results_champions() end")
+
+
 def sort_detected_champions_to_buy_by_position(
     ocr_results_sorted=None, champions_list_for_ocr_=None
 ):
@@ -196,7 +365,7 @@ def sort_detected_champions_to_buy_by_position(
 
     Parameters
     ----------
-    ocr_results_sorted : Typical == ocr_on_cropped_img(make_cropped_ss()).
+    ocr_results_sorted : Typical == ocr_results_champions which is global state.
     champions_list_for_ocr_ : Typical == champions_list_for_ocr.
 
     Returns
@@ -224,106 +393,26 @@ def sort_detected_champions_to_buy_by_position(
     return sorted_champions_to_buy
 
 
-def imshow_fullscreen(window_name="img", image=[0]):
+def update_sorted_champions_to_buy(champions_list_for_ocr_=None):
     """
-    https://stackoverflow.com/questions/9446733/opencv-window-in-fullscreen-and-without-any-borders#comment97925305_53005272
+    Updates sorted_champions_to_buy global state.
 
     Parameters
     ----------
-    image : openCV image matrix.
-    window_name : string, name for hidden window. The default is "img".
+    champions_list_for_ocr_ : The default is None.
 
     Returns
     -------
     None.
 
     """
-    cv.namedWindow(window_name, cv.WND_PROP_FULLSCREEN)
-    cv.setWindowProperty(window_name, cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
-    cv.imshow(window_name, image)
-
-
-def make_cropped_ss(
-    LOAD_IMAGE_=LOAD_IMAGE,
-    cropping_x=450,
-    cropping_y=1000,
-    cropping_width=1000,
-    cropping_height=30,
-    IMAGE_DEBUG_MODE_=IMAGE_DEBUG_MODE,
-    IMAGE_DEBUG_MODE_FULLSCREEN_=IMAGE_DEBUG_MODE_FULLSCREEN,
-):
-    """
-
-
-    Parameters
-    ----------
-    LOAD_IMAGE_ : If want to open without game then change to 1.
-        The default is 0.
-    window : Window to be captured, set to None if want to open without game.
-        The default is wincap.
-
-        Defaults to cropp screenshot from first to fifth(1-5) champion card name.
-    cropping_x :  The default is 450.
-    cropping_y :  The default is 1000.
-    cropping_width :  The default is 1000.
-    cropping_height :  The default is 30.
-
-    Returns
-    -------
-    crop_img : Cropped screenshot.
-
-    """
-    logging.debug("Function make_cropped_ss() called")
-
-    if LOAD_IMAGE_:
-        screenshot = cv.imread("examples/windowed_pyauto_ss.jpg", cv.IMREAD_UNCHANGED)
-    else:
-        activate_window(mode="game", delay=0.2)
-        screenshot = pyautogui.screenshot()
-        screenshot = cv.cvtColor(np.array(screenshot), cv.COLOR_RGB2BGR)
-        activate_window(mode="dss", delay=0.2)
-
-    crop_img = screenshot[
-        cropping_y : cropping_y + cropping_height,
-        cropping_x : cropping_x + cropping_width,
-    ]
-
-    if IMAGE_DEBUG_MODE_:
-        if not IMAGE_DEBUG_MODE_FULLSCREEN_:
-            cv.imshow("make_cropped_ss() screenshot", screenshot)
-            cv.imshow("make_cropped_ss() crop_img", crop_img)
-        else:
-            imshow_fullscreen(
-                window_name="make_cropped_ss() screenshot", image=screenshot
-            )
-            cv.imshow("make_cropped_ss() crop_img", crop_img)
-
-    logging.debug("Function make_cropped_ss() end")
-    return crop_img, screenshot
-
-
-def ocr_on_cropped_img(cropped_ss_with_champion_card_names=None, reader_=None):
-    """
-
-
-    Parameters
-    ----------
-    cropped_ss_with_champion_card_names : for example if want to OCR card names then
-    input there make_cropped_ss(LOAD_IMAGE_=0, window=wincap, cropping_x=450,
-                                cropping_y=1000, cropping_width=1000, cropping_height=30)
-
-    Returns
-    -------
-    ocr_result :
-
-    """
-    logging.debug("Function ocr_on_cropped_img() called")
-
-    ocr_result = reader_.readtext(cropped_ss_with_champion_card_names)
-    logging.info("OCR results(return): %s", ocr_result)
-
-    logging.debug("Function ocr_on_cropped_img() end")
-    return ocr_result
+    global ocr_results_champions, sorted_champions_to_buy
+    logging.debug("Function update_sorted_champions_to_buy() called")
+    sorted_champions_to_buy = sort_detected_champions_to_buy_by_position(
+        ocr_results_sorted=ocr_results_champions,
+        champions_list_for_ocr_=champions_list_for_ocr_,
+    )
+    logging.debug("Function update_sorted_champions_to_buy() end")
 
 
 def test(ocr_on_cropped_img, **kwargs):
@@ -344,11 +433,34 @@ def generate_list_of_champions_to_buy_this_turn(
 # generate_list_of_champions_to_buy_this_turn(sort_detected_champions_to_buy_by_position, ocr_results_sorted=ocr_on_cropped_img(make_cropped_ss(LOAD_IMAGE_=1)[0], reader_=reader),champions_list_for_ocr_=champions_list_for_ocr)
 
 
+def full_state_update_champions_ocr(reader_=None, champions_list_for_ocr_=None):
+    """
+    Updates sorted_champions_to_buy global variable.
+
+    Parameters
+    ----------
+    reader_ : easyOCR reader. The default is None.
+    champions_list_for_ocr_ : champions_list_for_ocr. The default is None.
+
+    Returns
+    -------
+    None.
+
+    """
+    
+    update_curent_ss()
+    update_curent_cropped_ss_with_champions()
+    update_ocr_results_champions(reader_=reader_)
+    update_sorted_champions_to_buy(
+        champions_list_for_ocr_=champions_list_for_ocr_
+    )
+
+
 def update_champions_to_buy_from_ocr_detection(
+    sorted_champions_to_buy_,
     champions_list_for_ocr__,
     origin_champs_counters_to_buy_,
-    sort_detected_champions_to_buy_by_position,
-    **kwargs,
+    reader_,
 ):
     """
     Add 1 to every champion to buy counter detected in ocr_result.
@@ -359,13 +471,14 @@ def update_champions_to_buy_from_ocr_detection(
     None.
 
     """
+    global sorted_champions_to_buy
     logging.debug("Function update_champions_to_buy_from_ocr_detection() called")
-
-    list_of_champs_to_buy_this_turn = sort_detected_champions_to_buy_by_position(
-        **kwargs,
+    full_state_update_champions_ocr(
+        reader_=reader_, champions_list_for_ocr_=champions_list_for_ocr__
     )
+
     champs_to_buy_indexes = []
-    for champ_to_buy in list_of_champs_to_buy_this_turn:
+    for champ_to_buy in sorted_champions_to_buy:
         for i, champ in enumerate(champions_list_for_ocr__):
             if champ_to_buy == champ:
                 logging.info(
@@ -378,7 +491,7 @@ def update_champions_to_buy_from_ocr_detection(
                 break
     logging.info("Champions to buy indexes: %s", champs_to_buy_indexes)
     logging.debug("Function update_champions_to_buy_from_ocr_detection() end")
-    return list_of_champs_to_buy_this_turn, champs_to_buy_indexes
+    return sorted_champions_to_buy, champs_to_buy_indexes
 
 
 def calculate_card_position_on_screen(
@@ -452,6 +565,7 @@ def build_list_of_champion_cards_rectangles(
 # https://stackoverflow.com/questions/6618515/sorting-list-based-on-values-from-another-list
 def draw_rectangles_show_points_show_buttons_reset_counters(
     rgb_colours_list_,
+    sorted_champions_to_buy_,
     champions_list_for_ocr_,
     origin_champs_counters_to_buy_,
     reader_,
@@ -491,13 +605,10 @@ def draw_rectangles_show_points_show_buttons_reset_counters(
         list_of_champs_to_buy_this_turn,
         index_list,
     ) = update_champions_to_buy_from_ocr_detection(
-        champions_list_for_ocr_,
-        origin_champs_counters_to_buy_,
-        sort_detected_champions_to_buy_by_position=sort_detected_champions_to_buy_by_position,
-        ocr_results_sorted=ocr_on_cropped_img(
-            cropped_ss_with_champion_card_names=make_cropped_ss()[0], reader_=reader_
-        ),
-        champions_list_for_ocr_=champions_list_for_ocr_,
+        sorted_champions_to_buy_=sorted_champions_to_buy_,
+        champions_list_for_ocr__=champions_list_for_ocr_,
+        origin_champs_counters_to_buy_=origin_champs_counters_to_buy_,
+        reader_=reader_,
     )
 
     champions_to_buy_in_order_as_in_screen = list_of_champs_to_buy_this_turn
@@ -554,7 +665,6 @@ def draw_rectangles_show_points_show_buttons_reset_counters(
         values_by_points_indexes_order_by_position_on_screen,
     )
     cards_rectangles = build_list_of_champion_cards_rectangles()
-    screenshot = make_cropped_ss()[1]
 
     # at the end
     # values_by_points_indexes_order_by_position_on_screen contains champions
