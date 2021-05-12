@@ -57,8 +57,10 @@ CROPPING_Y_GOLD = 850
 CROPPING_WIDTH_GOLD = 100
 CROPPING_HEIGHT_GOLD = 40
 
-screenshot = cv.imread("examples/windowed_pyauto_ss.jpg", cv.IMREAD_UNCHANGED)
-crop_img = cv.imread("examples/windowed_pyauto_ss.jpg", cv.IMREAD_UNCHANGED)
+# screenshot = cv.imread("examples/windowed_pyauto_ss.jpg", cv.IMREAD_UNCHANGED)
+screenshot = cv.imread("examples/pyautogui_ss_round_1.jpg", cv.IMREAD_UNCHANGED)
+crop_img_champions = cv.imread("examples/windowed_pyauto_ss.jpg", cv.IMREAD_UNCHANGED)
+crop_img_rounds = cv.imread("examples/windowed_pyauto_ss.jpg", cv.IMREAD_UNCHANGED)
 ocr_results_champions = [
     ([[67, 5], [113, 5], [113, 21], [67, 21]], "Leona", 0.9666508436203003),
     ([[255, 5], [303, 5], [303, 23], [255, 23]], "Vayne", 0.995654284954071),
@@ -66,6 +68,7 @@ ocr_results_champions = [
     ([[633, 5], [685, 5], [685, 21], [633, 21]], "Aatrox", 0.9471874833106995),
     ([[823, 5], [889, 5], [889, 21], [823, 21]], "Warwick", 0.9830108880996704),
 ]
+ocr_results_round = 11
 sorted_champions_to_buy = ["Brand", "Leona", "Udyr", "Vayne", "Soraka"]
 
 pyautogui.PAUSE = 0.02
@@ -281,6 +284,36 @@ def update_curent_ss():
     logging.debug("Function update_curent_ss() end")
 
 
+def update_ocr_results_round(reader_=None, round_counter=None):
+    logging.debug("Function get_round() called")
+
+    global crop_img_rounds, ocr_results_round
+    update_curent_cropped_ss_with_rounds(cropping_x__=CROPPING_X_ROUND)
+
+    OCRResult = ocr_on_cropped_img(
+        cropped_ss_with_champion_card_names=crop_img_rounds, reader_=reader_
+    )
+    if not OCRResult:
+        logging.warning("OCRResult is empty probably rounds from first stage 1-x")
+        update_curent_cropped_ss_with_rounds(cropping_x__=CROPPING_X_ROUND_FIRST)
+        OCRResult = ocr_on_cropped_img(
+            cropped_ss_with_champion_card_names=crop_img_rounds, reader_=reader_
+        )
+
+    try:
+        print(OCRResult[0][1])
+        ocr_results_round = OCRResult[0][1]
+        ocr_results_round = ocr_results_round.replace("-", "")
+        logging.info("Found round: %s", ocr_results_round)
+        logging.debug("Function get_round() end")
+        round_counter.set(ocr_results_round)
+        return ocr_results_round
+    except (IndexError):
+        logging.info("Couldnt find round")
+        logging.debug("Function get_round() end")
+        return None
+
+
 def crop_ss(
     screenshot_=screenshot,
     cropping_x=CROPPING_X_CHAMPIONS,
@@ -317,10 +350,33 @@ def update_curent_cropped_ss_with_champions():
     None.
 
     """
-    global crop_img
+    global crop_img_champions
     logging.debug("Function update_curent_cropped_ss_with_champions() called")
-    crop_img = crop_ss(screenshot_=screenshot)
+    crop_img_champions = crop_ss(screenshot_=screenshot)
     logging.debug("Function update_curent_cropped_ss_with_champions() end")
+
+
+def update_curent_cropped_ss_with_rounds(cropping_x__=CROPPING_X_ROUND):
+    """
+    Crops global state current screenshot.
+
+    Returns
+    -------
+    None.
+
+    """
+    global crop_img_rounds
+    logging.debug("Function update_curent_cropped_ss_with_rounds() called")
+    crop_img_rounds = crop_ss(
+        screenshot_=screenshot,
+        cropping_x=cropping_x__,
+        cropping_y=CROPPING_Y_ROUND,
+        cropping_width=CROPPING_WIDTH_ROUND,
+        cropping_height=CROPPING_HEIGHT_ROUND,
+        IMAGE_DEBUG_MODE_=IMAGE_DEBUG_MODE,
+        IMAGE_DEBUG_MODE_FULLSCREEN_=IMAGE_DEBUG_MODE_FULLSCREEN,
+    )
+    logging.debug("Function update_curent_cropped_ss_with_rounds() end")
 
 
 def ocr_on_cropped_img(cropped_ss_with_champion_card_names=None, reader_=None):
@@ -347,10 +403,10 @@ def ocr_on_cropped_img(cropped_ss_with_champion_card_names=None, reader_=None):
 
 
 def update_ocr_results_champions(reader_=None):
-    global crop_img, ocr_results_champions
+    global crop_img_champions, ocr_results_champions
     logging.debug("Function update_ocr_results_champions() called")
     ocr_results_champions = ocr_on_cropped_img(
-        cropped_ss_with_champion_card_names=crop_img, reader_=reader_
+        cropped_ss_with_champion_card_names=crop_img_champions, reader_=reader_
     )
     logging.debug("Function update_ocr_results_champions() end")
 
@@ -433,6 +489,24 @@ def generate_list_of_champions_to_buy_this_turn(
 # generate_list_of_champions_to_buy_this_turn(sort_detected_champions_to_buy_by_position, ocr_results_sorted=ocr_on_cropped_img(make_cropped_ss(LOAD_IMAGE_=1)[0], reader_=reader),champions_list_for_ocr_=champions_list_for_ocr)
 
 
+def full_state_update_rounds_ocr(reader_=None, round_counter=None):
+    """
+    Updates ocr_results_round global variable.
+
+    Parameters
+    ----------
+    reader_ : easyOCR reader. The default is None.
+
+    Returns
+    -------
+    None.
+
+    """
+
+    update_curent_ss()
+    update_ocr_results_round(reader_=reader_, round_counter=round_counter)
+
+
 def full_state_update_champions_ocr(reader_=None, champions_list_for_ocr_=None):
     """
     Updates sorted_champions_to_buy global variable.
@@ -447,13 +521,11 @@ def full_state_update_champions_ocr(reader_=None, champions_list_for_ocr_=None):
     None.
 
     """
-    
+
     update_curent_ss()
     update_curent_cropped_ss_with_champions()
     update_ocr_results_champions(reader_=reader_)
-    update_sorted_champions_to_buy(
-        champions_list_for_ocr_=champions_list_for_ocr_
-    )
+    update_sorted_champions_to_buy(champions_list_for_ocr_=champions_list_for_ocr_)
 
 
 def update_champions_to_buy_from_ocr_detection(
@@ -577,6 +649,7 @@ def draw_rectangles_show_points_show_buttons_reset_counters(
     origin_counters_,
     class_list_,
     class_counters_,
+    round_counter,
     mode="points",
     CARDS_TO_BUY_AMOUNT_=CARDS_TO_BUY_AMOUNT,
     LINE_TYPE_=LINE_TYPE,
@@ -723,6 +796,8 @@ def draw_rectangles_show_points_show_buttons_reset_counters(
         cv.imshow(
             "draw_rectangles_show_points_show_buttons_reset_counters()", screenshot
         )
+
+    update_ocr_results_round(reader_=reader_, round_counter=round_counter)
 
     logging.debug(
         "Function draw_rectangles_show_points_show_buttons_reset_counters() end"

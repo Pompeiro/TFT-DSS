@@ -963,6 +963,15 @@ LabelTitle.grid(row=1, column=ORIGIN_LABEL_POSITION_COLUMN)
 LabelTitle = tk.Label(MainWindow, text="Champions to buy", font=BOLDED_FONT)
 LabelTitle.grid(row=DOWNSIDE - 1, column=SHIFT_BETWEEN_ORIGINS * 5)
 
+LabelTitle = tk.Label(MainWindow, text="Captured round", font=BOLDED_FONT)
+LabelTitle.grid(row=DOWNSIDE - 1, column=SHIFT_BETWEEN_ORIGINS * 9)
+
+CounterOcrResultsRound = tk.IntVar()
+CounterOcrResultsRound.set(11)
+
+LabelTitle = tk.Label(MainWindow, textvariable=CounterOcrResultsRound, font=BOLDED_FONT)
+LabelTitle.grid(row=DOWNSIDE, column=SHIFT_BETWEEN_ORIGINS * 9)
+
 # CHAMPIONS
 for i in range(0, len(origin_champs_from_df_list), 1):
     dss.show_champions_from_origin(
@@ -1087,6 +1096,7 @@ ButtonCal = tk.Button(
         origin_counters_=origin_counters,
         class_list_=class_list,
         class_counters_=class_counters,
+        round_counter=CounterOcrResultsRound,
     ),
 )
 ButtonCal.grid(row=DOWNSIDE, column=30)
@@ -1119,6 +1129,7 @@ ButtonCal = tk.Button(
             origin_counters_=origin_counters,
             class_list_=class_list,
             class_counters_=class_counters,
+            round_counter=CounterOcrResultsRound,
         ),
     ],
 )
@@ -1326,6 +1337,7 @@ def create_new_window():
             origin_counters_=origin_counters,
             class_list_=class_list,
             class_counters_=class_counters,
+            round_counter=CounterOcrResultsRound,
         ),
     )
     ButtonCal.grid(row=6, column=1)
@@ -1592,9 +1604,33 @@ def create_new_window():
             origin_counters_=origin_counters,
             class_list_=class_list,
             class_counters_=class_counters,
+            round_counter=CounterOcrResultsRound,
         ),
     )
     ButtonCal.grid(row=14, column=1)
+
+    ButtonCal = tk.Button(
+        new_window, text="update_curent_ss()", command=lambda: dss.update_curent_ss()
+    )
+    ButtonCal.grid(row=10, column=2)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="update_ocr_results_round()",
+        command=lambda: dss.update_ocr_results_round(
+            reader_=reader, round_counter=CounterOcrResultsRound
+        ),
+    )
+    ButtonCal.grid(row=11, column=2)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="full_state_update_champions_ocr()",
+        command=lambda: dss.full_state_update_rounds_ocr(
+            reader_=reader, round_counter=CounterOcrResultsRound
+        ),
+    )
+    ButtonCal.grid(row=12, column=2)
 
     logging.debug("Function create_new_window() end")
 
