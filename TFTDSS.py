@@ -48,8 +48,8 @@ SHIFT_BETWEEN_ORIGINS = 6
 ORIGIN_LABEL_POSITION_COLUMN = 1
 CHAMPIONS_TO_BUY_VISIBLE = 0
 # CHAMPIONS_TO_BUY_VISIBLE = 1
-TEST_BUTTON_VISIBLE = 0
-# TEST_BUTTON_VISIBLE = 1
+# TEST_BUTTON_VISIBLE = 0
+TEST_BUTTON_VISIBLE = 1
 
 Champion = namedtuple(
     "Champion",
@@ -972,6 +972,15 @@ CounterOcrResultsRound.set(11)
 LabelTitle = tk.Label(MainWindow, textvariable=CounterOcrResultsRound, font=BOLDED_FONT)
 LabelTitle.grid(row=DOWNSIDE, column=SHIFT_BETWEEN_ORIGINS * 9)
 
+LabelTitle = tk.Label(MainWindow, text="Captured gold", font=BOLDED_FONT)
+LabelTitle.grid(row=DOWNSIDE - 1, column=SHIFT_BETWEEN_ORIGINS * 10)
+
+CounterOcrResultsGold = tk.IntVar()
+CounterOcrResultsGold.set(0)
+
+LabelTitle = tk.Label(MainWindow, textvariable=CounterOcrResultsGold, font=BOLDED_FONT)
+LabelTitle.grid(row=DOWNSIDE, column=SHIFT_BETWEEN_ORIGINS * 10)
+
 # CHAMPIONS
 for i in range(0, len(origin_champs_from_df_list), 1):
     dss.show_champions_from_origin(
@@ -1097,6 +1106,7 @@ ButtonCal = tk.Button(
         class_list_=class_list,
         class_counters_=class_counters,
         round_counter=CounterOcrResultsRound,
+        gold_counter=CounterOcrResultsGold,
     ),
 )
 ButtonCal.grid(row=DOWNSIDE, column=30)
@@ -1130,6 +1140,7 @@ ButtonCal = tk.Button(
             class_list_=class_list,
             class_counters_=class_counters,
             round_counter=CounterOcrResultsRound,
+            gold_counter=CounterOcrResultsGold,
         ),
     ],
 )
@@ -1338,6 +1349,7 @@ def create_new_window():
             class_list_=class_list,
             class_counters_=class_counters,
             round_counter=CounterOcrResultsRound,
+            gold_counter=CounterOcrResultsGold,
         ),
     )
     ButtonCal.grid(row=6, column=1)
@@ -1605,6 +1617,7 @@ def create_new_window():
             class_list_=class_list,
             class_counters_=class_counters,
             round_counter=CounterOcrResultsRound,
+            gold_counter=CounterOcrResultsGold,
         ),
     )
     ButtonCal.grid(row=14, column=1)
@@ -1616,12 +1629,19 @@ def create_new_window():
 
     ButtonCal = tk.Button(
         new_window,
+        text="update_curent_cropped_ss_with_rounds()",
+        command=lambda: dss.update_curent_cropped_ss_with_rounds(),
+    )
+    ButtonCal.grid(row=11, column=2)
+
+    ButtonCal = tk.Button(
+        new_window,
         text="update_ocr_results_round()",
         command=lambda: dss.update_ocr_results_round(
             reader_=reader, round_counter=CounterOcrResultsRound
         ),
     )
-    ButtonCal.grid(row=11, column=2)
+    ButtonCal.grid(row=12, column=2)
 
     ButtonCal = tk.Button(
         new_window,
@@ -1630,7 +1650,39 @@ def create_new_window():
             reader_=reader, round_counter=CounterOcrResultsRound
         ),
     )
-    ButtonCal.grid(row=12, column=2)
+    ButtonCal.grid(row=13, column=2)
+
+    ButtonCal = tk.Button(
+        new_window, text="update_curent_ss()", command=lambda: dss.update_curent_ss()
+    )
+    ButtonCal.grid(row=10, column=3)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="update_curent_cropped_ss_with_gold()",
+        command=lambda: dss.update_curent_cropped_ss_with_gold(),
+    )
+    ButtonCal.grid(row=11, column=3)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="update_ocr_results_gold()",
+        command=lambda: dss.update_ocr_results_gold(
+            reader_=reader,
+            gold_counter=CounterOcrResultsGold,
+        ),
+    )
+    ButtonCal.grid(row=12, column=3)
+
+    ButtonCal = tk.Button(
+        new_window,
+        text="full_state_update_gold_ocr()",
+        command=lambda: dss.full_state_update_gold_ocr(
+            reader_=reader,
+            gold_counter=CounterOcrResultsGold,
+        ),
+    )
+    ButtonCal.grid(row=13, column=3)
 
     logging.debug("Function create_new_window() end")
 

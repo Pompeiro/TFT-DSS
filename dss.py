@@ -61,6 +61,7 @@ CROPPING_HEIGHT_GOLD = 40
 screenshot = cv.imread("examples/pyautogui_ss_round_1.jpg", cv.IMREAD_UNCHANGED)
 crop_img_champions = cv.imread("examples/windowed_pyauto_ss.jpg", cv.IMREAD_UNCHANGED)
 crop_img_rounds = cv.imread("examples/windowed_pyauto_ss.jpg", cv.IMREAD_UNCHANGED)
+crop_img_gold = cv.imread("examples/windowed_pyauto_ss.jpg", cv.IMREAD_UNCHANGED)
 ocr_results_champions = [
     ([[67, 5], [113, 5], [113, 21], [67, 21]], "Leona", 0.9666508436203003),
     ([[255, 5], [303, 5], [303, 23], [255, 23]], "Vayne", 0.995654284954071),
@@ -69,6 +70,7 @@ ocr_results_champions = [
     ([[823, 5], [889, 5], [889, 21], [823, 21]], "Warwick", 0.9830108880996704),
 ]
 ocr_results_round = 11
+ocr_results_gold = 0
 sorted_champions_to_buy = ["Brand", "Leona", "Udyr", "Vayne", "Soraka"]
 
 pyautogui.PAUSE = 0.02
@@ -284,36 +286,6 @@ def update_curent_ss():
     logging.debug("Function update_curent_ss() end")
 
 
-def update_ocr_results_round(reader_=None, round_counter=None):
-    logging.debug("Function get_round() called")
-
-    global crop_img_rounds, ocr_results_round
-    update_curent_cropped_ss_with_rounds(cropping_x__=CROPPING_X_ROUND)
-
-    OCRResult = ocr_on_cropped_img(
-        cropped_ss_with_champion_card_names=crop_img_rounds, reader_=reader_
-    )
-    if not OCRResult:
-        logging.warning("OCRResult is empty probably rounds from first stage 1-x")
-        update_curent_cropped_ss_with_rounds(cropping_x__=CROPPING_X_ROUND_FIRST)
-        OCRResult = ocr_on_cropped_img(
-            cropped_ss_with_champion_card_names=crop_img_rounds, reader_=reader_
-        )
-
-    try:
-        print(OCRResult[0][1])
-        ocr_results_round = OCRResult[0][1]
-        ocr_results_round = ocr_results_round.replace("-", "")
-        logging.info("Found round: %s", ocr_results_round)
-        logging.debug("Function get_round() end")
-        round_counter.set(ocr_results_round)
-        return ocr_results_round
-    except (IndexError):
-        logging.info("Couldnt find round")
-        logging.debug("Function get_round() end")
-        return None
-
-
 def crop_ss(
     screenshot_=screenshot,
     cropping_x=CROPPING_X_CHAMPIONS,
@@ -379,6 +351,29 @@ def update_curent_cropped_ss_with_rounds(cropping_x__=CROPPING_X_ROUND):
     logging.debug("Function update_curent_cropped_ss_with_rounds() end")
 
 
+def update_curent_cropped_ss_with_gold():
+    """
+    Crops global state current screenshot.
+
+    Returns
+    -------
+    None.
+
+    """
+    global crop_img_gold
+    logging.debug("Function update_curent_cropped_ss_with_gold() called")
+    crop_img_gold = crop_ss(
+        screenshot_=screenshot,
+        cropping_x=CROPPING_X_GOLD,
+        cropping_y=CROPPING_Y_GOLD,
+        cropping_width=CROPPING_WIDTH_GOLD,
+        cropping_height=CROPPING_HEIGHT_GOLD,
+        IMAGE_DEBUG_MODE_=IMAGE_DEBUG_MODE,
+        IMAGE_DEBUG_MODE_FULLSCREEN_=IMAGE_DEBUG_MODE_FULLSCREEN,
+    )
+    logging.debug("Function update_curent_cropped_ss_with_gold() end")
+
+
 def ocr_on_cropped_img(cropped_ss_with_champion_card_names=None, reader_=None):
     """
 
@@ -409,6 +404,57 @@ def update_ocr_results_champions(reader_=None):
         cropped_ss_with_champion_card_names=crop_img_champions, reader_=reader_
     )
     logging.debug("Function update_ocr_results_champions() end")
+
+
+def update_ocr_results_round(reader_=None, round_counter=None):
+    logging.debug("Function update_ocr_results_round() called")
+
+    global crop_img_rounds, ocr_results_round
+    update_curent_cropped_ss_with_rounds(cropping_x__=CROPPING_X_ROUND)
+
+    OCRResult = ocr_on_cropped_img(
+        cropped_ss_with_champion_card_names=crop_img_rounds, reader_=reader_
+    )
+    if not OCRResult:
+        logging.warning("OCRResult is empty probably rounds from first stage 1-x")
+        update_curent_cropped_ss_with_rounds(cropping_x__=CROPPING_X_ROUND_FIRST)
+        OCRResult = ocr_on_cropped_img(
+            cropped_ss_with_champion_card_names=crop_img_rounds, reader_=reader_
+        )
+
+    try:
+        print("Round: ", OCRResult[0][1])
+        ocr_results_round = OCRResult[0][1]
+        ocr_results_round = ocr_results_round.replace("-", "")
+        logging.info("Found round: %s", ocr_results_round)
+        logging.debug("Function update_ocr_results_round() end")
+        round_counter.set(ocr_results_round)
+        return ocr_results_round
+    except (IndexError):
+        logging.info("Couldnt find round")
+        logging.debug("Function update_ocr_results_round() end")
+        return None
+
+
+def update_ocr_results_gold(reader_=None, gold_counter=None):
+    global crop_img_gold, ocr_results_gold
+    logging.debug("Function update_ocr_results_gold() called")
+    OCRResult = ocr_on_cropped_img(
+        cropped_ss_with_champion_card_names=crop_img_gold, reader_=reader_
+    )
+    try:
+        print("Gold: ", OCRResult[0][1])
+        ocr_results_gold = OCRResult[0][1]
+        logging.info("Found gold: %s", ocr_results_gold)
+        logging.debug("Function update_ocr_results_gold() end")
+        gold_counter.set(ocr_results_gold)
+        return ocr_results_gold
+    except (IndexError):
+        logging.info("Couldnt find gold")
+        logging.debug("Function update_ocr_results_gold() end")
+        return None
+
+    logging.debug("Function update_ocr_results_gold() end")
 
 
 def sort_detected_champions_to_buy_by_position(
@@ -489,24 +535,6 @@ def generate_list_of_champions_to_buy_this_turn(
 # generate_list_of_champions_to_buy_this_turn(sort_detected_champions_to_buy_by_position, ocr_results_sorted=ocr_on_cropped_img(make_cropped_ss(LOAD_IMAGE_=1)[0], reader_=reader),champions_list_for_ocr_=champions_list_for_ocr)
 
 
-def full_state_update_rounds_ocr(reader_=None, round_counter=None):
-    """
-    Updates ocr_results_round global variable.
-
-    Parameters
-    ----------
-    reader_ : easyOCR reader. The default is None.
-
-    Returns
-    -------
-    None.
-
-    """
-
-    update_curent_ss()
-    update_ocr_results_round(reader_=reader_, round_counter=round_counter)
-
-
 def full_state_update_champions_ocr(reader_=None, champions_list_for_ocr_=None):
     """
     Updates sorted_champions_to_buy global variable.
@@ -522,10 +550,53 @@ def full_state_update_champions_ocr(reader_=None, champions_list_for_ocr_=None):
 
     """
 
+    logging.debug("Function full_state_update_champions_ocr() called")
     update_curent_ss()
     update_curent_cropped_ss_with_champions()
     update_ocr_results_champions(reader_=reader_)
     update_sorted_champions_to_buy(champions_list_for_ocr_=champions_list_for_ocr_)
+    logging.debug("Function full_state_update_champions_ocr() end")
+
+
+def full_state_update_rounds_ocr(reader_=None, round_counter=None):
+    """
+    Updates ocr_results_round global variable.
+
+    Parameters
+    ----------
+    reader_ : easyOCR reader. The default is None.
+
+    Returns
+    -------
+    None.
+
+    """
+
+    logging.debug("Function full_state_update_rounds_ocr() called")
+    update_curent_ss()
+    update_ocr_results_round(reader_=reader_, round_counter=round_counter)
+    logging.debug("Function full_state_update_rounds_ocr() end")
+
+
+def full_state_update_gold_ocr(reader_=None, gold_counter=None):
+    """
+    Updates ocr_results_round global variable.
+
+    Parameters
+    ----------
+    reader_ : easyOCR reader. The default is None.
+
+    Returns
+    -------
+    None.
+
+    """
+
+    logging.debug("Function full_state_update_gold_ocr() called")
+    update_curent_ss()
+    update_curent_cropped_ss_with_gold()
+    update_ocr_results_gold(reader_=reader_, gold_counter=gold_counter)
+    logging.debug("Function full_state_update_gold_ocr() end")
 
 
 def update_champions_to_buy_from_ocr_detection(
@@ -650,6 +721,7 @@ def draw_rectangles_show_points_show_buttons_reset_counters(
     class_list_,
     class_counters_,
     round_counter,
+    gold_counter,
     mode="points",
     CARDS_TO_BUY_AMOUNT_=CARDS_TO_BUY_AMOUNT,
     LINE_TYPE_=LINE_TYPE,
@@ -798,6 +870,8 @@ def draw_rectangles_show_points_show_buttons_reset_counters(
         )
 
     update_ocr_results_round(reader_=reader_, round_counter=round_counter)
+    update_curent_cropped_ss_with_gold()
+    update_ocr_results_gold(reader_=reader_, gold_counter=gold_counter)
 
     logging.debug(
         "Function draw_rectangles_show_points_show_buttons_reset_counters() end"
