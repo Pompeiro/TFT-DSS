@@ -87,7 +87,8 @@ def start_tft_match(templates_list, delay=3):
                 # to avoid mouse on templates position
                 time.sleep(delay)
         else:
-            while GetWindowText(GetForegroundWindow()) == "League of Legends":
+            while client_match_template(finding_match_text) is not None:
+                logging.info("Already in queue waiting for match accept")
                 # if match will be accepted this loop will break
                 # bcs active window would change
                 # if match will be declined by someone then bot will try to accept again
@@ -95,10 +96,12 @@ def start_tft_match(templates_list, delay=3):
                 if point is not None:
                     pyautogui.click(point)
                     pyautogui.moveTo(900, 400)
+                    logging.info("Match accepted")
                     # to avoid mouse on templates position
                 else:
                     time.sleep(0.3)
                     # little bit pause for pc
+            return False
 
 
 def client_match_template(template_img_location, conf=0.8, region_=(0, 0, 1920, 1080)):
@@ -168,282 +171,6 @@ def unique_file(basename, ext):
     while os.path.exists(actualname):
         actualname = "%s%d.%s" % (basename, next(c), ext)
     return actualname
-
-
-def make_cropped_ss(
-    LOAD_IMAGE_=LOAD_IMAGE,
-    cropping_x=CROPPING_X_CHAMPIONS,
-    cropping_y=CROPPING_Y_CHAMPIONS,
-    cropping_width=CROPPING_WIDTH_CHAMPIONS,
-    cropping_height=CROPPING_HEIGHT_CHAMPIONS,
-    IMAGE_DEBUG_MODE_=IMAGE_DEBUG_MODE,
-    IMAGE_DEBUG_MODE_FULLSCREEN_=IMAGE_DEBUG_MODE_FULLSCREEN,
-):
-    """
-
-
-    Parameters
-    ----------
-    LOAD_IMAGE_ : If want to open without game then change to 1.
-        The default is 0.
-    window : Window to be captured, set to None if want to open without game.
-        The default is wincap.
-
-        Defaults to cropp screenshot from first to fifth(1-5) champion card name.
-    cropping_x :  The default is 450.
-    cropping_y :  The default is 1000.
-    cropping_width :  The default is 1000.
-    cropping_height :  The default is 30.
-
-    Returns
-    -------
-    crop_img : Cropped screenshot.
-
-    """
-    logging.debug("Function make_cropped_ss() called")
-
-    if LOAD_IMAGE_:
-        screenshot = cv.imread("examples/windowed_pyauto_ss.jpg", cv.IMREAD_UNCHANGED)
-    else:
-        dss.activate_window(mode="game", delay=0.2)
-        screenshot = pyautogui.screenshot()
-        screenshot = cv.cvtColor(np.array(screenshot), cv.COLOR_RGB2BGR)
-
-    crop_img = screenshot[
-        cropping_y : cropping_y + cropping_height,
-        cropping_x : cropping_x + cropping_width,
-    ]
-
-    if IMAGE_DEBUG_MODE_:
-        if not IMAGE_DEBUG_MODE_FULLSCREEN_:
-            cv.imshow("make_cropped_ss() screenshot", screenshot)
-            cv.imshow("make_cropped_ss() crop_img", crop_img)
-        else:
-            dss.imshow_fullscreen(
-                window_name="make_cropped_ss() screenshot", image=screenshot
-            )
-            cv.imshow("make_cropped_ss() crop_img", crop_img)
-
-    logging.debug("Function make_cropped_ss() end")
-    return crop_img, screenshot
-
-
-def make_ss(
-    IMAGE_DEBUG_MODE_=IMAGE_DEBUG_MODE,
-    IMAGE_DEBUG_MODE_FULLSCREEN_=IMAGE_DEBUG_MODE_FULLSCREEN,
-):
-    """
-
-
-    Parameters
-    ----------
-    IMAGE_DEBUG_MODE_ : 0 or 1, calls cv.imshow().
-        The default is IMAGE_DEBUG_MODE.
-    IMAGE_DEBUG_MODE_FULLSCREEN_ : 0 or 1, calls dss.imshow_fullscreen().
-        The default is IMAGE_DEBUG_MODE_FULLSCREEN.
-
-    Returns
-    -------
-    screenshot : screenshot of game.
-
-    """
-    logging.debug("Function make_ss() called")
-    dss.activate_window(mode="game", delay=0.2)
-    screenshot = pyautogui.screenshot()
-    screenshot = cv.cvtColor(np.array(screenshot), cv.COLOR_RGB2BGR)
-    if IMAGE_DEBUG_MODE_:
-        if not IMAGE_DEBUG_MODE_FULLSCREEN_:
-            cv.imshow("make_ss() screenshot", screenshot)
-        else:
-            dss.imshow_fullscreen(window_name="make_ss() screenshot", image=screenshot)
-    logging.debug("Function make_ss() end")
-    return screenshot
-
-
-def crop_ss(
-    screenshot_=screenshot,
-    cropping_x=CROPPING_X_CHAMPIONS,
-    cropping_y=CROPPING_Y_CHAMPIONS,
-    cropping_width=CROPPING_WIDTH_CHAMPIONS,
-    cropping_height=CROPPING_HEIGHT_CHAMPIONS,
-    IMAGE_DEBUG_MODE_=IMAGE_DEBUG_MODE,
-    IMAGE_DEBUG_MODE_FULLSCREEN_=IMAGE_DEBUG_MODE_FULLSCREEN,
-):
-    logging.debug("Function crop_ss() called")
-
-    crop_img = screenshot_[
-        cropping_y : cropping_y + cropping_height,
-        cropping_x : cropping_x + cropping_width,
-    ]
-    if IMAGE_DEBUG_MODE_:
-        if not IMAGE_DEBUG_MODE_FULLSCREEN_:
-            cv.imshow("crop_ss() screenshot", screenshot_)
-            cv.imshow("crop_ss() crop_img", crop_img)
-        else:
-            dss.imshow_fullscreen(window_name="crop_ss() screenshot", image=screenshot_)
-            cv.imshow("crop_ss() crop_img", crop_img)
-
-    logging.debug("Function crop_ss() end")
-    return crop_img
-
-
-def make_cropped_ss_and_get_champions_to_buy(reader_=None):
-    crop_img = make_cropped_ss(
-        LOAD_IMAGE_=LOAD_IMAGE,
-        cropping_x=CROPPING_X_CHAMPIONS,
-        cropping_y=CROPPING_Y_CHAMPIONS,
-        cropping_width=CROPPING_WIDTH_CHAMPIONS,
-        cropping_height=CROPPING_HEIGHT_CHAMPIONS,
-    )[0]
-    OCRResult = dss.ocr_on_cropped_img(
-        cropped_ss_with_champion_card_names=crop_img, reader_=reader_
-    )
-    print(OCRResult)
-
-
-def make_cropped_ss_and_get_gold(reader_=None):
-    crop_img = make_cropped_ss(
-        LOAD_IMAGE_=LOAD_IMAGE,
-        cropping_x=CROPPING_X_GOLD,
-        cropping_y=CROPPING_Y_GOLD,
-        cropping_width=CROPPING_WIDTH_GOLD,
-        cropping_height=CROPPING_HEIGHT_GOLD,
-    )[0]
-    OCRResult = dss.ocr_on_cropped_img(
-        cropped_ss_with_champion_card_names=crop_img, reader_=reader_
-    )
-    try:
-        print(OCRResult[0][1])
-        goldAmount = OCRResult[0][1]
-    except (IndexError):
-        print("Couldnt find the gold")
-        goldAmount = 500
-    return goldAmount
-
-
-def make_cropped_ss_and_get_round(reader_=None, crop_x=CROPPING_X_ROUND):
-    crop_img = make_cropped_ss(
-        LOAD_IMAGE_=LOAD_IMAGE,
-        cropping_x=crop_x,
-        cropping_y=CROPPING_Y_ROUND,
-        cropping_width=CROPPING_WIDTH_ROUND,
-        cropping_height=CROPPING_HEIGHT_ROUND,
-    )[0]
-
-    cv.imshow("make_cropped_ss_and_get_round", crop_img)
-    OCRResult = dss.ocr_on_cropped_img(
-        cropped_ss_with_champion_card_names=crop_img, reader_=reader_
-    )
-    try:
-        print(OCRResult[0][1])
-        currentRound = OCRResult[0][1]
-        return currentRound.replace("-", "")  ######### delete -
-    except (IndexError):
-        print("Couldnt find round")
-        return None
-
-
-def filling_list_with_counter_for_namedtuple(field_to_check, input_list):
-    """
-
-
-    Parameters
-    ----------
-    field_to_check : {4:"origin_prim", 5:"origin_sec", 6:"class_prim",
-                           7:"class_sec"}
-    input_list : List with 4,5,6,7 field == field_to_check. The default is champion_info.
-
-    Returns
-    -------
-    list_of_counters : List of GUI counters
-
-    """
-    logging.debug("Function filling_list_with_counter_for_namedtuple() called")
-    field_to_check_2_string = {
-        4: "origin_prim",
-        5: "origin_sec",
-        6: "class_prim",
-        7: "class_sec",
-    }
-    field_to_check_2_check_list = {
-        4: origin_list,
-        5: origin_list,
-        6: class_list,
-        7: class_list,
-    }
-    field_to_check_2_check_list_string = {
-        4: "origin_list",
-        5: "origin_list",
-        6: "class_list",
-        7: "class_list",
-    }
-    field_to_check_2_counters_list = {
-        4: origin_counters,
-        5: origin_counters,
-        6: class_counters,
-        7: class_counters,
-    }
-    list_of_counters = [None] * len(df.champion)
-    for i, champ in enumerate(df.champion):
-        if input_list[i][field_to_check] == "None":
-            logging.info("Champion name: %s, champion index = %d", champ, i)
-            logging.info(
-                "Field with index %d == 'NONE' filling None as %sCounter",
-                field_to_check,
-                field_to_check_2_string[field_to_check],
-            )
-            list_of_counters[i] = None
-        else:
-            logging.info("%s IS NOT 'NONE'", field_to_check_2_string[field_to_check])
-            for j, class_or_origin in enumerate(
-                field_to_check_2_check_list[field_to_check]
-            ):
-                if input_list[i][field_to_check] == class_or_origin:
-                    logging.info("Champion name: %s, champion index = %d", champ, i)
-                    logging.info(
-                        "Found match in champion %s and %s for : %s",
-                        field_to_check_2_string[field_to_check],
-                        field_to_check_2_check_list_string[field_to_check],
-                        class_or_origin,
-                    )
-                    logging.info(
-                        "Filling %s counter: %s",
-                        field_to_check_2_string[field_to_check],
-                        field_to_check_2_counters_list[field_to_check][j],
-                    )
-                    list_of_counters[i] = field_to_check_2_counters_list[
-                        field_to_check
-                    ][j]
-    logging.debug("Function filling_list_with_counter_for_namedtuple() end")
-    return list_of_counters
-
-
-def append_counters_to_input_list(input_list):
-    """
-
-
-    Parameters
-    ----------
-    input_list : Appending counters to list with fields like {4:"origin_prim",
-    5:"origin_sec", 6:"class_prim", 7:"class_sec"}.
-
-    Returns
-    -------
-    None.
-
-    """
-
-    logging.debug("Function filling_list_with_counter_for_namedtuple() called")
-
-    counters_to_append = [4, 5, 6, 7]
-    for j in counters_to_append:
-        list_of_counters_to_append = filling_list_with_counter_for_namedtuple(
-            j, input_list
-        )
-        for i, champ in enumerate(input_list):
-            champ.append(list_of_counters_to_append[i])
-
-    logging.debug("Function filling_list_with_counter_for_namedtuple() end")
 
 
 def update_origins():
@@ -585,41 +312,6 @@ def additional_points_from_champions_in_pool(champion_position):
     return champion_pool_bonus
 
 
-def update_champions_to_buy_from_ocr_detection(
-    champions_list_for_ocr__,
-    sort_detected_champions_to_buy_by_position,
-    **kwargs,
-):
-    """
-    Add 1 to every champion to buy counter detected in ocr_result.
-    champion to buy counters GLOBAL STATE CHANGE !!!!!!!!!!!!!!!!!!!!
-
-    Returns
-    -------
-    None.
-
-    """
-    logging.debug("Function update_champions_to_buy_from_ocr_detection() called")
-
-    list_of_champs_to_buy_this_turn = sort_detected_champions_to_buy_by_position(
-        **kwargs,
-    )
-    champs_to_buy_indexes = []
-    for champ_to_buy in list_of_champs_to_buy_this_turn:
-        for i, champ in enumerate(champions_list_for_ocr__):
-            if champ_to_buy == champ:
-                logging.info(
-                    "IF inside for loop in update_champions_to_buy_from_ocr_detection()"
-                )
-                logging.info("Index in champions_list_for_ocr that is detected: %d", i)
-                logging.info("Champ name in this index: %s", champ)
-                champs_to_buy_indexes.append(i)
-                break
-    logging.info("Champions to buy indexes: %s", champs_to_buy_indexes)
-    logging.debug("Function update_champions_to_buy_from_ocr_detection() end")
-    return list_of_champs_to_buy_this_turn, champs_to_buy_indexes
-
-
 def show_points_for_nonzero_counters(row_offset=2, show_mode=1):
     """It shows up champions POINTS to buy that counters are nonzero, as a text.
     Doesnt disappear currently, should be fixed.
@@ -627,17 +319,15 @@ def show_points_for_nonzero_counters(row_offset=2, show_mode=1):
     logging.debug("Function show_points_for_nonzero_counters() called")
     position_on_screen = [0, 1, 2, 3, 4]
     points_for_champion_to_buy = [0] * 5
-    champion_position_in_list_ordered_by_origin = update_champions_to_buy_from_ocr_detection(
-        champions_list_for_ocr__=champions_list_for_ocr,
-        sort_detected_champions_to_buy_by_position=dss.sort_detected_champions_to_buy_by_position,
-        ocr_results_sorted=dss.ocr_on_cropped_img(
-            cropped_ss_with_champion_card_names=make_cropped_ss()[0],
+    champion_position_in_list_ordered_by_origin = (
+        dss.update_champions_to_buy_from_ocr_detection(
+            sorted_champions_to_buy_=dss.sorted_champions_to_buy,
+            champions_list_for_ocr__=champions_list_for_ocr,
+            origin_champs_counters_to_buy_=None,
             reader_=reader,
-        ),
-        champions_list_for_ocr_=champions_list_for_ocr,
-    )[
-        1
-    ]
+            DSS_ON_=0,
+        )[1]
+    )
     for i in range(0, len(champion_position_in_list_ordered_by_origin), 1):
         points_for_champion_to_buy[i] = (
             df.points[champion_position_in_list_ordered_by_origin[i]]
@@ -733,7 +423,7 @@ def buy_best_available_champions_by_points_threshold(
         pyautogui.moveTo(300, 300)
         update_champion_counter(points_zip[i])
 
-        ss_to_save = make_cropped_ss()[1]
+        ss_to_save = dss.make_ss(DSS_ON=0)
         cv.imwrite(
             unique_file((current_bot_images_directory / "ssIlony"), "jpg"), ss_to_save
         )
@@ -747,17 +437,8 @@ def boost_up_points_for_class(clas='"Brawler"'):
 
 
 def check_round_change(roundCurr):
-    roundLocal = make_cropped_ss_and_get_round(reader_=reader)
-    if roundLocal == None:  ########### different round placement on screen first rounds
-        roundLocal = make_cropped_ss_and_get_round(
-            reader_=reader, crop_x=CROPPING_X_ROUND_FIRST
-        )
-        try:
-            if "#" in roundLocal:
-                print("# in roundLocal something went wrong from check round change")
-                roundLocal = None
-        except (TypeError):
-            roundLocal = None
+    dss.full_state_update_rounds_ocr(DSS_ON_=0, reader_=reader, round_counter=None)
+    roundLocal = dss.ocr_results_round
     if roundLocal:
         try:
             roundCapturedNow = int(roundLocal)
@@ -785,11 +466,14 @@ tft_mode_button = "examples/bot/tft_mode_button.jpg"
 confrimation_game_mode_button = "examples/bot/confrimation_game_mode_button.jpg"
 find_match_button = "examples/bot/find_match_button.jpg"
 accept_match_button = "examples/bot/accept_match_button.jpg"
+finding_match_text = "examples/bot/in_queue_finding_match_text.jpg"
 
+ok_button = "examples/bot/ok_button.jpg"
 play_again_button = "examples/bot/play_again_button.jpg"
 
 # play again is first to find next match after finished one
 templates_to_start_match_list = [
+    ok_button,
     play_again_button,
     play_button_first,
     tft_mode_button,
@@ -798,11 +482,12 @@ templates_to_start_match_list = [
     accept_match_button,
 ]
 
-start_tft_match(templates_to_start_match_list)
+while not ("League of Legends (TM) Client" in WindowCapture.list_window_names()):
+    logging.info("League of Legends (TM) Client not found in list window names.")
+    start_tft_match(templates_to_start_match_list)
+    # wait for client to start
+    time.sleep(5)
 
-# wait for client to start
-time.sleep(10)
-wincap = WindowCapture("League of Legends (TM) Client")
 
 buy_xp_button = "examples/bot/game/buy_xp_button.jpg"
 refresh_button = "examples/bot/game/refresh_button.jpg"
@@ -1226,7 +911,14 @@ for i, champ in enumerate(df.champion):
 logging.debug("First filling champion_info has ended.")
 
 
-append_counters_to_input_list(champion_info)
+dss.append_counters_to_input_list(
+    input_list=champion_info,
+    origin_list_=origin_list,
+    class_list_=class_list,
+    origin_counters_=origin_counters,
+    class_counters_=class_counters,
+    df_=df,
+)
 
 Champion = recordtype(
     "Champion",
@@ -1389,7 +1081,7 @@ championToBuyPositionOnGame = [
 ]
 
 
-boost_up_points_for_class(clas='"Assassin"')
+boost_up_points_for_class(clas='"Cavalier"')
 
 
 ROUNDSTOBUYREFRESH = [22, 25, 31, 32, 35, 41, 42, 45, 51, 52, 55, 61, 62, 65]
@@ -1422,7 +1114,10 @@ while True:
             )
 
             try:
-                capturedRound = make_cropped_ss_and_get_round(reader_=reader)
+                dss.full_state_update_rounds_ocr(
+                    DSS_ON_=0, reader_=reader, round_counter=None
+                )
+                capturedRound = dss.ocr_results_round
                 buy_best_available_champions_by_points_threshold()
                 if roundNow in ROUNDSTOBUYXP:
                     for i in range(0, 15, 1):

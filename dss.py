@@ -239,6 +239,7 @@ def imshow_fullscreen(window_name="img", image=[0]):
 
 
 def make_ss(
+    DSS_ON=1,
     IMAGE_DEBUG_MODE_=IMAGE_DEBUG_MODE,
     IMAGE_DEBUG_MODE_FULLSCREEN_=IMAGE_DEBUG_MODE_FULLSCREEN,
 ):
@@ -261,7 +262,8 @@ def make_ss(
     activate_window(mode="game", delay=0.2)
     screenshot = pyautogui.screenshot()
     screenshot = cv.cvtColor(np.array(screenshot), cv.COLOR_RGB2BGR)
-    activate_window(mode="dss", delay=0.2)
+    if DSS_ON:
+        activate_window(mode="dss", delay=0.2)
     if IMAGE_DEBUG_MODE_:
         if not IMAGE_DEBUG_MODE_FULLSCREEN_:
             cv.imshow("make_ss() screenshot", screenshot)
@@ -271,7 +273,7 @@ def make_ss(
     return screenshot
 
 
-def update_curent_ss():
+def update_curent_ss(DSS_ON_=1):
     """
     Updates global state current screenshot.
 
@@ -282,7 +284,9 @@ def update_curent_ss():
     """
     global screenshot
     logging.debug("Function update_curent_ss() called")
-    screenshot = make_ss(IMAGE_DEBUG_MODE_=1, IMAGE_DEBUG_MODE_FULLSCREEN_=0)
+    screenshot = make_ss(
+        DSS_ON=DSS_ON_, IMAGE_DEBUG_MODE_=1, IMAGE_DEBUG_MODE_FULLSCREEN_=0
+    )
     logging.debug("Function update_curent_ss() end")
 
 
@@ -295,6 +299,27 @@ def crop_ss(
     IMAGE_DEBUG_MODE_=IMAGE_DEBUG_MODE,
     IMAGE_DEBUG_MODE_FULLSCREEN_=IMAGE_DEBUG_MODE_FULLSCREEN,
 ):
+    """
+    Crops given screenshot.
+
+    Parameters
+    ----------
+    screenshot_ : OPENCV IMAGE, ss from game. The default is screenshot.
+    cropping_x : INT. The default is CROPPING_X_CHAMPIONS.
+    cropping_y : INT. The default is CROPPING_Y_CHAMPIONS.
+    cropping_width : INT. The default is CROPPING_WIDTH_CHAMPIONS.
+    cropping_height : INT. The default is CROPPING_HEIGHT_CHAMPIONS.
+    IMAGE_DEBUG_MODE_ : BOOLEAN, False no cv.imshow() call, True cv.imshow() is called.
+    The default is IMAGE_DEBUG_MODE.
+    IMAGE_DEBUG_MODE_FULLSCREEN_ : BOOLEAN, True opens cv.imshow() in fullscreen mode.
+    The default is IMAGE_DEBUG_MODE_FULLSCREEN.
+
+    Returns
+    -------
+    crop_img : OPENCV IMAGE
+        cropped img of given screenshot.
+
+    """
     logging.debug("Function crop_ss() called")
 
     crop_img = screenshot_[
@@ -428,8 +453,9 @@ def update_ocr_results_round(reader_=None, round_counter=None):
         ocr_results_round = ocr_results_round.replace("-", "")
         logging.info("Found round: %s", ocr_results_round)
         logging.debug("Function update_ocr_results_round() end")
-        round_counter.set(ocr_results_round)
-        return ocr_results_round
+        if round_counter:
+            round_counter.set(ocr_results_round)
+            return ocr_results_round
     except (IndexError):
         logging.info("Couldnt find round")
         logging.debug("Function update_ocr_results_round() end")
@@ -535,7 +561,9 @@ def generate_list_of_champions_to_buy_this_turn(
 # generate_list_of_champions_to_buy_this_turn(sort_detected_champions_to_buy_by_position, ocr_results_sorted=ocr_on_cropped_img(make_cropped_ss(LOAD_IMAGE_=1)[0], reader_=reader),champions_list_for_ocr_=champions_list_for_ocr)
 
 
-def full_state_update_champions_ocr(reader_=None, champions_list_for_ocr_=None):
+def full_state_update_champions_ocr(
+    DSS_ON_=1, reader_=None, champions_list_for_ocr_=None
+):
     """
     Updates sorted_champions_to_buy global variable.
 
@@ -551,14 +579,14 @@ def full_state_update_champions_ocr(reader_=None, champions_list_for_ocr_=None):
     """
 
     logging.debug("Function full_state_update_champions_ocr() called")
-    update_curent_ss()
+    update_curent_ss(DSS_ON_=DSS_ON_)
     update_curent_cropped_ss_with_champions()
     update_ocr_results_champions(reader_=reader_)
     update_sorted_champions_to_buy(champions_list_for_ocr_=champions_list_for_ocr_)
     logging.debug("Function full_state_update_champions_ocr() end")
 
 
-def full_state_update_rounds_ocr(reader_=None, round_counter=None):
+def full_state_update_rounds_ocr(DSS_ON_=1, reader_=None, round_counter=None):
     """
     Updates ocr_results_round global variable.
 
@@ -573,14 +601,14 @@ def full_state_update_rounds_ocr(reader_=None, round_counter=None):
     """
 
     logging.debug("Function full_state_update_rounds_ocr() called")
-    update_curent_ss()
+    update_curent_ss(DSS_ON_=DSS_ON_)
     update_ocr_results_round(reader_=reader_, round_counter=round_counter)
     logging.debug("Function full_state_update_rounds_ocr() end")
 
 
-def full_state_update_gold_ocr(reader_=None, gold_counter=None):
+def full_state_update_gold_ocr(DSS_ON_=1, reader_=None, gold_counter=None):
     """
-    Updates ocr_results_round global variable.
+    Updates ocr_results_gold global variable.
 
     Parameters
     ----------
@@ -593,7 +621,7 @@ def full_state_update_gold_ocr(reader_=None, gold_counter=None):
     """
 
     logging.debug("Function full_state_update_gold_ocr() called")
-    update_curent_ss()
+    update_curent_ss(DSS_ON_=DSS_ON_)
     update_curent_cropped_ss_with_gold()
     update_ocr_results_gold(reader_=reader_, gold_counter=gold_counter)
     logging.debug("Function full_state_update_gold_ocr() end")
@@ -604,6 +632,7 @@ def update_champions_to_buy_from_ocr_detection(
     champions_list_for_ocr__,
     origin_champs_counters_to_buy_,
     reader_,
+    DSS_ON_=1,
 ):
     """
     Add 1 to every champion to buy counter detected in ocr_result.
@@ -617,7 +646,9 @@ def update_champions_to_buy_from_ocr_detection(
     global sorted_champions_to_buy
     logging.debug("Function update_champions_to_buy_from_ocr_detection() called")
     full_state_update_champions_ocr(
-        reader_=reader_, champions_list_for_ocr_=champions_list_for_ocr__
+        DSS_ON_=DSS_ON_,
+        reader_=reader_,
+        champions_list_for_ocr_=champions_list_for_ocr__,
     )
 
     champs_to_buy_indexes = []
@@ -629,7 +660,8 @@ def update_champions_to_buy_from_ocr_detection(
                 )
                 logging.info("Index in champions_list_for_ocr that is detected: %d", i)
                 logging.info("Champ name in this index: %s", champ)
-                add(origin_champs_counters_to_buy_[i])
+                if origin_champs_counters_to_buy_:
+                    add(origin_champs_counters_to_buy_[i])
                 champs_to_buy_indexes.append(i)
                 break
     logging.info("Champions to buy indexes: %s", champs_to_buy_indexes)
