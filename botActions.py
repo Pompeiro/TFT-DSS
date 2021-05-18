@@ -36,10 +36,9 @@ logging.basicConfig(level=logging.DEBUG)
 logging.getLogger().setLevel(logging.DEBUG)
 
 LOAD_IMAGE = 0
-IMAGE_DEBUG_MODE = 1
 VARIABLE_PRINT_MODE = 0
-IMAGE_DEBUG_MODE = 1
-IMAGE_DEBUG_MODE_FULLSCREEN = 1
+IMAGE_DEBUG_MODE = 0
+IMAGE_DEBUG_MODE_FULLSCREEN = 0
 
 
 CROPPING_X_CHAMPIONS = 450
@@ -140,6 +139,9 @@ def click_button_in_game(mode="xp"):
     elif mode == "exit":
         template_button = "examples/bot/game/exit_now_button.jpg"
         regio = (680, 440, 960, 600)
+    elif mode == "continue":
+        template_button = "examples/bot/game/continue_button.jpg"
+        regio = (850, 550, 990, 700)
 
     EXIT_FLAG = False
     dss.activate_window("game")
@@ -155,7 +157,7 @@ def click_button_in_game(mode="xp"):
         pyautogui.mouseUp()
         # to avoid mouse on buttons
         pyautogui.moveTo(300, 300)
-        if point == (838, 543):
+        if point == (838, 543) or point == (960, 626):  # exit or continue center
             EXIT_FLAG = True
             logging.info("Clicked exit button return: %s", EXIT_FLAG)
 
@@ -163,6 +165,20 @@ def click_button_in_game(mode="xp"):
         logging.info("Button isnt available, couldnt find button or not enough gold.")
     logging.debug("Function click_button_in_game end.")
     return EXIT_FLAG
+
+
+def choose_item(item_position=2):
+    # starts from 0
+    x_cord = 500 + (item_position * 250)
+    y_cord = 960
+    point = (x_cord, y_cord)
+    dss.activate_window("game")
+    pyautogui.moveTo(300, 300)
+    pyautogui.moveTo(point)
+    pyautogui.mouseDown()
+    pyautogui.mouseUp()
+    pyautogui.moveTo(300, 300)
+    time.sleep(0.5)
 
 
 def unique_file(basename, ext):
@@ -395,7 +411,7 @@ def update_champion_counter(index_tuple):
 
 
 def buy_best_available_champions_by_points_threshold(
-    threshold=1.8,
+    threshold=2.6,
     mousePathDelay=0.05,
 ):
     dss.activate_window(mode="game")
@@ -492,6 +508,7 @@ while not ("League of Legends (TM) Client" in WindowCapture.list_window_names())
 buy_xp_button = "examples/bot/game/buy_xp_button.jpg"
 refresh_button = "examples/bot/game/refresh_button.jpg"
 exit_now_button = "examples/bot/game/exit_now_button.jpg"
+continue_button = "examples/bot/game/continue_button.jpg"
 
 
 # for i in range(0,5):
@@ -1090,6 +1107,8 @@ ROUNDSTOBUYXP = [26, 36, 46, 56, 66]
 
 SHUFFLEROUNDS = [23, 25, 26, 32, 33, 36, 37, 42, 43, 47, 51, 52, 53, 55, 61, 65]
 
+ROUNDSTOPICKITEM = [22, 32, 42, 52, 62]
+
 # update current champions to buy with ocr
 roundNow = None
 while True:
@@ -1105,6 +1124,16 @@ while True:
                 time.sleep(10)
                 logging.info("Exit from game succesfull")
                 break
+        else:
+            EXIT_FLAG_ = click_button_in_game("continue")
+            if EXIT_FLAG_ is True:
+                time.sleep(10)
+                if not (
+                    "League of Legends (TM) Client" in WindowCapture.list_window_names()
+                ):
+                    time.sleep(10)
+                    logging.info("Exit from game succesfull")
+                    break
 
         checkingRound = check_round_change(roundNow)
         if checkingRound[1]:
@@ -1118,6 +1147,8 @@ while True:
                     DSS_ON_=0, reader_=reader, round_counter=None
                 )
                 capturedRound = dss.ocr_results_round
+                if roundNow in ROUNDSTOPICKITEM:
+                    choose_item(item_position=2)
                 buy_best_available_champions_by_points_threshold()
                 if roundNow in ROUNDSTOBUYXP:
                     for i in range(0, 15, 1):
