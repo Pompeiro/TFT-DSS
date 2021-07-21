@@ -1,4 +1,4 @@
-# SET5 update released: 4th May 2021
+# SET5.5 update released: 21th July 2021
 
 # Community
 Help me to push this project forward by providing feedback in [Issues](https://github.com/Pompeiro/TFT-DSS/issues) or [Discussions](https://github.com/Pompeiro/TFT-DSS/discussions). U can even find me in Discord Papaj#3719, if u want to commit into the project.
