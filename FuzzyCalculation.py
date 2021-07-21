@@ -75,129 +75,66 @@ for i, name in enumerate(champion_stats_list[0]):
 
 # Champions
 Aatrox = Champion(*df.loc[0][0:])
-Aphelios = Champion(*df.loc[1][0:])
-Ashe = Champion(*df.loc[2][0:])
-Brand = Champion(*df.loc[3][0:])
-Darius = Champion(*df.loc[4][0:])
+Akshan = Champion(*df.loc[1][0:])
+Aphelios = Champion(*df.loc[2][0:])
+Ashe = Champion(*df.loc[3][0:])
+Brand = Champion(*df.loc[4][0:])
 Diana = Champion(*df.loc[5][0:])
 Draven = Champion(*df.loc[6][0:])
-Garen = Champion(*df.loc[7][0:])
-Gragas = Champion(*df.loc[8][0:])
-Hecarim = Champion(*df.loc[9][0:])
-Heimerdinger = Champion(*df.loc[10][0:])
-Ivern = Champion(*df.loc[11][0:])
-Jax = Champion(*df.loc[12][0:])
-Kalista = Champion(*df.loc[13][0:])
-Karma = Champion(*df.loc[14][0:])
-Katarina = Champion(*df.loc[15][0:])
-Kayle = Champion(*df.loc[16][0:])
-Kennen = Champion(*df.loc[17][0:])
-Khazix = Champion(*df.loc[18][0:])
-Kindred = Champion(*df.loc[19][0:])
-Kled = Champion(*df.loc[20][0:])
-Leblanc = Champion(*df.loc[21][0:])
-LeeSin = Champion(*df.loc[22][0:])
-Leona = Champion(*df.loc[23][0:])
-Lissandra = Champion(*df.loc[24][0:])
-Lulu = Champion(*df.loc[25][0:])
-Lux = Champion(*df.loc[26][0:])
-Mordekaiser = Champion(*df.loc[27][0:])
-Morgana = Champion(*df.loc[28][0:])
+Fiddlesticks = Champion(*df.loc[7][0:])
+Galio = Champion(*df.loc[8][0:])
+Garen = Champion(*df.loc[9][0:])
+Gragas = Champion(*df.loc[10][0:])
+Gwen = Champion(*df.loc[11][0:])
+Hecarim = Champion(*df.loc[12][0:])
+Heimerdinger = Champion(*df.loc[13][0:])
+Irelia = Champion(*df.loc[14][0:])
+Ivern = Champion(*df.loc[15][0:])
+Jax = Champion(*df.loc[16][0:])
+Kalista = Champion(*df.loc[17][0:])
+Karma = Champion(*df.loc[18][0:])
+Kayle = Champion(*df.loc[19][0:])
+Kennen = Champion(*df.loc[20][0:])
+Khazix = Champion(*df.loc[21][0:])
+Kled = Champion(*df.loc[22][0:])
+LeeSin = Champion(*df.loc[23][0:])
+Leona = Champion(*df.loc[24][0:])
+Lucian = Champion(*df.loc[25][0:])
+Lulu = Champion(*df.loc[26][0:])
+Lux = Champion(*df.loc[27][0:])
+MissFortune = Champion(*df.loc[28][0:])
 Nautilus = Champion(*df.loc[29][0:])
 Nidalee = Champion(*df.loc[30][0:])
 Nocturne = Champion(*df.loc[31][0:])
 Nunu = Champion(*df.loc[32][0:])
-Pantheon = Champion(*df.loc[33][0:])
+Olaf = Champion(*df.loc[33][0:])
 Poppy = Champion(*df.loc[34][0:])
-Rell = Champion(*df.loc[35][0:])
-Riven = Champion(*df.loc[36][0:])
-Ryze = Champion(*df.loc[37][0:])
-Sejuani = Champion(*df.loc[38][0:])
-Sett = Champion(*df.loc[39][0:])
-Soraka = Champion(*df.loc[40][0:])
-Syndra = Champion(*df.loc[41][0:])
-Taric = Champion(*df.loc[42][0:])
-Teemo = Champion(*df.loc[43][0:])
-Thresh = Champion(*df.loc[44][0:])
-Trundle = Champion(*df.loc[45][0:])
-Udyr = Champion(*df.loc[46][0:])
-Varus = Champion(*df.loc[47][0:])
-Vayne = Champion(*df.loc[48][0:])
-Velkoz = Champion(*df.loc[49][0:])
-Viego = Champion(*df.loc[50][0:])
-Viktor = Champion(*df.loc[51][0:])
+Pyke = Champion(*df.loc[35][0:])
+Rakan = Champion(*df.loc[36][0:])
+Rell = Champion(*df.loc[37][0:])
+Riven = Champion(*df.loc[38][0:])
+Sejuani = Champion(*df.loc[39][0:])
+Senna = Champion(*df.loc[40][0:])
+Sett = Champion(*df.loc[41][0:])
+Soraka = Champion(*df.loc[42][0:])
+Syndra = Champion(*df.loc[43][0:])
+Teemo = Champion(*df.loc[44][0:])
+Thresh = Champion(*df.loc[45][0:])
+Tristana = Champion(*df.loc[46][0:])
+Udyr = Champion(*df.loc[47][0:])
+Varus = Champion(*df.loc[48][0:])
+Vayne = Champion(*df.loc[49][0:])
+Velkoz = Champion(*df.loc[50][0:])
+Viego = Champion(*df.loc[51][0:])
 Vladimir = Champion(*df.loc[52][0:])
 Volibear = Champion(*df.loc[53][0:])
-Warwick = Champion(*df.loc[54][0:])
-Yasuo = Champion(*df.loc[55][0:])
-Ziggs = Champion(*df.loc[56][0:])
-Zyra = Champion(*df.loc[57][0:])
+Yasuo = Champion(*df.loc[54][0:])
+Ziggs = Champion(*df.loc[55][0:])
+Zyra = Champion(*df.loc[56][0:])
 
 
 for i, name in enumerate(champion_stats_list[0]):
     print(name.replace(" ", ""), end=", ")
-
-
-champions_list = [
-    Aatrox,
-    Aphelios,
-    Ashe,
-    Brand,
-    Darius,
-    Diana,
-    Draven,
-    Garen,
-    Gragas,
-    Hecarim,
-    Heimerdinger,
-    Ivern,
-    Jax,
-    Kalista,
-    Karma,
-    Katarina,
-    Kayle,
-    Kennen,
-    Khazix,
-    Kindred,
-    Kled,
-    Leblanc,
-    LeeSin,
-    Leona,
-    Lissandra,
-    Lulu,
-    Lux,
-    Mordekaiser,
-    Morgana,
-    Nautilus,
-    Nidalee,
-    Nocturne,
-    Nunu,
-    Pantheon,
-    Poppy,
-    Rell,
-    Riven,
-    Ryze,
-    Sejuani,
-    Sett,
-    Soraka,
-    Syndra,
-    Taric,
-    Teemo,
-    Thresh,
-    Trundle,
-    Udyr,
-    Varus,
-    Vayne,
-    Velkoz,
-    Viego,
-    Viktor,
-    Vladimir,
-    Volibear,
-    Warwick,
-    Yasuo,
-    Ziggs,
-    Zyra,
-]
 
 
 # Performance calculation
@@ -434,63 +371,62 @@ for i, name in enumerate(champion_stats_list[0]):
 
 
 SAatrox = ScaledChampion(*df.loc[0][0:])
-SAphelios = ScaledChampion(*df.loc[1][0:])
-SAshe = ScaledChampion(*df.loc[2][0:])
-SBrand = ScaledChampion(*df.loc[3][0:])
-SDarius = ScaledChampion(*df.loc[4][0:])
+SAkshan = ScaledChampion(*df.loc[1][0:])
+SAphelios = ScaledChampion(*df.loc[2][0:])
+SAshe = ScaledChampion(*df.loc[3][0:])
+SBrand = ScaledChampion(*df.loc[4][0:])
 SDiana = ScaledChampion(*df.loc[5][0:])
 SDraven = ScaledChampion(*df.loc[6][0:])
-SGaren = ScaledChampion(*df.loc[7][0:])
-SGragas = ScaledChampion(*df.loc[8][0:])
-SHecarim = ScaledChampion(*df.loc[9][0:])
-SHeimerdinger = ScaledChampion(*df.loc[10][0:])
-SIvern = ScaledChampion(*df.loc[11][0:])
-SJax = ScaledChampion(*df.loc[12][0:])
-SKalista = ScaledChampion(*df.loc[13][0:])
-SKarma = ScaledChampion(*df.loc[14][0:])
-SKatarina = ScaledChampion(*df.loc[15][0:])
-SKayle = ScaledChampion(*df.loc[16][0:])
-SKennen = ScaledChampion(*df.loc[17][0:])
-SKhazix = ScaledChampion(*df.loc[18][0:])
-SKindred = ScaledChampion(*df.loc[19][0:])
-SKled = ScaledChampion(*df.loc[20][0:])
-SLeblanc = ScaledChampion(*df.loc[21][0:])
-SLeeSin = ScaledChampion(*df.loc[22][0:])
-SLeona = ScaledChampion(*df.loc[23][0:])
-SLissandra = ScaledChampion(*df.loc[24][0:])
-SLulu = ScaledChampion(*df.loc[25][0:])
-SLux = ScaledChampion(*df.loc[26][0:])
-SMordekaiser = ScaledChampion(*df.loc[27][0:])
-SMorgana = ScaledChampion(*df.loc[28][0:])
+SFiddlesticks = ScaledChampion(*df.loc[7][0:])
+SGalio = ScaledChampion(*df.loc[8][0:])
+SGaren = ScaledChampion(*df.loc[9][0:])
+SGragas = ScaledChampion(*df.loc[10][0:])
+SGwen = ScaledChampion(*df.loc[11][0:])
+SHecarim = ScaledChampion(*df.loc[12][0:])
+SHeimerdinger = ScaledChampion(*df.loc[13][0:])
+SIrelia = ScaledChampion(*df.loc[14][0:])
+SIvern = ScaledChampion(*df.loc[15][0:])
+SJax = ScaledChampion(*df.loc[16][0:])
+SKalista = ScaledChampion(*df.loc[17][0:])
+SKarma = ScaledChampion(*df.loc[18][0:])
+SKayle = ScaledChampion(*df.loc[19][0:])
+SKennen = ScaledChampion(*df.loc[20][0:])
+SKhazix = ScaledChampion(*df.loc[21][0:])
+SKled = ScaledChampion(*df.loc[22][0:])
+SLeeSin = ScaledChampion(*df.loc[23][0:])
+SLeona = ScaledChampion(*df.loc[24][0:])
+SLucian = ScaledChampion(*df.loc[25][0:])
+SLulu = ScaledChampion(*df.loc[26][0:])
+SLux = ScaledChampion(*df.loc[27][0:])
+SMissFortune = ScaledChampion(*df.loc[28][0:])
 SNautilus = ScaledChampion(*df.loc[29][0:])
 SNidalee = ScaledChampion(*df.loc[30][0:])
 SNocturne = ScaledChampion(*df.loc[31][0:])
 SNunu = ScaledChampion(*df.loc[32][0:])
-SPantheon = ScaledChampion(*df.loc[33][0:])
+SOlaf = ScaledChampion(*df.loc[33][0:])
 SPoppy = ScaledChampion(*df.loc[34][0:])
-SRell = ScaledChampion(*df.loc[35][0:])
-SRiven = ScaledChampion(*df.loc[36][0:])
-SRyze = ScaledChampion(*df.loc[37][0:])
-SSejuani = ScaledChampion(*df.loc[38][0:])
-SSett = ScaledChampion(*df.loc[39][0:])
-SSoraka = ScaledChampion(*df.loc[40][0:])
-SSyndra = ScaledChampion(*df.loc[41][0:])
-STaric = ScaledChampion(*df.loc[42][0:])
-STeemo = ScaledChampion(*df.loc[43][0:])
-SThresh = ScaledChampion(*df.loc[44][0:])
-STrundle = ScaledChampion(*df.loc[45][0:])
-SUdyr = ScaledChampion(*df.loc[46][0:])
-SVarus = ScaledChampion(*df.loc[47][0:])
-SVayne = ScaledChampion(*df.loc[48][0:])
-SVelkoz = ScaledChampion(*df.loc[49][0:])
-SViego = ScaledChampion(*df.loc[50][0:])
-SViktor = ScaledChampion(*df.loc[51][0:])
+SPyke = ScaledChampion(*df.loc[35][0:])
+SRakan = ScaledChampion(*df.loc[36][0:])
+SRell = ScaledChampion(*df.loc[37][0:])
+SRiven = ScaledChampion(*df.loc[38][0:])
+SSejuani = ScaledChampion(*df.loc[39][0:])
+SSenna = ScaledChampion(*df.loc[40][0:])
+SSett = ScaledChampion(*df.loc[41][0:])
+SSoraka = ScaledChampion(*df.loc[42][0:])
+SSyndra = ScaledChampion(*df.loc[43][0:])
+STeemo = ScaledChampion(*df.loc[44][0:])
+SThresh = ScaledChampion(*df.loc[45][0:])
+STristana = ScaledChampion(*df.loc[46][0:])
+SUdyr = ScaledChampion(*df.loc[47][0:])
+SVarus = ScaledChampion(*df.loc[48][0:])
+SVayne = ScaledChampion(*df.loc[49][0:])
+SVelkoz = ScaledChampion(*df.loc[50][0:])
+SViego = ScaledChampion(*df.loc[51][0:])
 SVladimir = ScaledChampion(*df.loc[52][0:])
 SVolibear = ScaledChampion(*df.loc[53][0:])
-SWarwick = ScaledChampion(*df.loc[54][0:])
-SYasuo = ScaledChampion(*df.loc[55][0:])
-SZiggs = ScaledChampion(*df.loc[56][0:])
-SZyra = ScaledChampion(*df.loc[57][0:])
+SYasuo = ScaledChampion(*df.loc[54][0:])
+SZiggs = ScaledChampion(*df.loc[55][0:])
+SZyra = ScaledChampion(*df.loc[56][0:])
 
 
 for i, name in enumerate(champion_stats_list[0]):
@@ -499,60 +435,59 @@ for i, name in enumerate(champion_stats_list[0]):
 
 scaled_champions_list = [
     SAatrox,
+    SAkshan,
     SAphelios,
     SAshe,
     SBrand,
-    SDarius,
     SDiana,
     SDraven,
+    SFiddlesticks,
+    SGalio,
     SGaren,
     SGragas,
+    SGwen,
     SHecarim,
     SHeimerdinger,
+    SIrelia,
     SIvern,
     SJax,
     SKalista,
     SKarma,
-    SKatarina,
     SKayle,
     SKennen,
     SKhazix,
-    SKindred,
     SKled,
-    SLeblanc,
     SLeeSin,
     SLeona,
-    SLissandra,
+    SLucian,
     SLulu,
     SLux,
-    SMordekaiser,
-    SMorgana,
+    SMissFortune,
     SNautilus,
     SNidalee,
     SNocturne,
     SNunu,
-    SPantheon,
+    SOlaf,
     SPoppy,
+    SPyke,
+    SRakan,
     SRell,
     SRiven,
-    SRyze,
     SSejuani,
+    SSenna,
     SSett,
     SSoraka,
     SSyndra,
-    STaric,
     STeemo,
     SThresh,
-    STrundle,
+    STristana,
     SUdyr,
     SVarus,
     SVayne,
     SVelkoz,
     SViego,
-    SViktor,
     SVladimir,
     SVolibear,
-    SWarwick,
     SYasuo,
     SZiggs,
     SZyra,
