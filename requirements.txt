@@ -3,7 +3,7 @@ pandas==1.2.0
 pywin32==228
 opencv-python==4.5.1.48
 selenium==3.141.0
-numpy==1.19.5
+numpy==1.22.0
 scikit-fuzzy==0.4.2
 matplotlib==3.3.3
 pyautogui==0.9.52
